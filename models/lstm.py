@@ -4,7 +4,7 @@ import optuna
 
 from torch.utils.data import DataLoader
 from utils.train_predict import train_step, validate_step, predict
-from utils.metrics import get_features_mean
+from utils.metrics import *
 
 class LSTMClassifier(nn.Module):
     def __init__(self, input_size, hidden_size, output_size, num_layers=1):
@@ -38,7 +38,9 @@ def define_model(trial, input_size=2, output_size=1):
     num_layers = trial.suggest_int("n_layers", 1, 3)
     return LSTMClassifier(input_size, hidden_size, output_size, num_layers)
 
-def objective(trial, train_set, valid_set, class_weights):
+def objective(trial, train_set, valid_set, class_weights, metrics, **kwargs):
+    check_metrics(metrics, **kwargs)
+
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     model = define_model(trial).to(device)
@@ -56,36 +58,38 @@ def objective(trial, train_set, valid_set, class_weights):
     
     # Create the loaders
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-    valid_loader = DataLoader(valid_set, batch_size=batch_size, shuffle=False)
+    # valid_loader = DataLoader(valid_set, batch_size=batch_size, shuffle=False)
     
     # Get the averages for each period for the train loader
     X_train_tensor, y_train_tensor = train_set.tensors
-    train_features_mean = get_features_mean(X_train_tensor, y_train_tensor).to(device)
+    if 'avg_feats_diff' in metrics:
+        train_features_mean = get_features_mean(X_train_tensor, y_train_tensor).to(device)
 
     # Get the X_valid_tensor so then we can calculate the features mean for the
     # individuals of the validation set that the model predicted as 1
     X_valid_tensor, _ = valid_set.tensors
     X_valid_tensor = X_valid_tensor.to(device)
 
+    # Get the y_valid_tensor tensors so then we can calculate metrics
+    _, y_valid_tensor = valid_set.tensors
+
     # Loss function
     loss_fn = nn.BCEWithLogitsLoss(
         pos_weight=torch.tensor(class_weights[1], dtype=torch.float32)
     )
 
-    for epoch in range(epochs):
+    for _ in range(epochs):
         train_step(model, train_loader, loss_fn, optimizer)
-        # _, _ = validate_step(model, train_loader, loss_fn)
-        # _, _ = validate_step(model, valid_loader, loss_fn)
+        
+        logits = model(X_valid_tensor)
+        y_valid_pred = predict(logits, loss_fn).squeeze()
 
-        y_valid_pred = model(X_valid_tensor)
-        y_valid_pred = predict(y_valid_pred, loss_fn).squeeze()
-        valid_features_mean = get_features_mean(X_valid_tensor, y_valid_pred)
+        metrics_kwargs = {}
+        if 'avg_feats_diff' in metrics:
+            metrics_kwargs['X_valid'] = X_valid_tensor
+            metrics_kwargs['train_features_mean'] = train_features_mean
+        if 'f_beta_score' in metrics:
+            metrics_kwargs['beta'] = kwargs['beta']
+        metrics_values = compute_metrics(metrics, y_valid_tensor, y_valid_pred, **metrics_kwargs)
 
-        differences_sum = sum(abs(train_features_mean - valid_features_mean))
-
-        trial.report(differences_sum, epoch)
-
-        if trial.should_prune():
-            raise optuna.TrialPruned()
-
-    return differences_sum
+    return tuple(metrics_values.values())

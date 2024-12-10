@@ -1,25 +1,60 @@
 import matplotlib.pyplot as plt
 
 from sklearn.metrics import (
-    precision_score, recall_score, f1_score, accuracy_score, classification_report,
-    fbeta_score, ConfusionMatrixDisplay, roc_curve, RocCurveDisplay,
-    roc_auc_score
+    precision_score, recall_score, f1_score, accuracy_score, fbeta_score,
+    ConfusionMatrixDisplay, roc_curve, roc_auc_score
 )
 
-def standard_metrics(y_true, y_pred, beta=1):
-    return {
-        'precision':      precision_score(y_true, y_pred),
-        'recall':         recall_score(y_true, y_pred),
-        'f1_score':       f1_score(y_true, y_pred),
-        'accuracy':       accuracy_score(y_true, y_pred),
-        f'f{beta}_score': fbeta_score(y_true, y_pred, beta=beta)
-    }
+METRICS = {
+    'precision': lambda y, y_pred: precision_score(y, y_pred),
+    'recall': lambda y, y_pred: recall_score(y, y_pred),
+    'f1_score': lambda y, y_pred: f1_score(y, y_pred),
+    'accuracy': lambda y, y_pred: accuracy_score(y, y_pred),
+    'f_beta_score': lambda y, y_pred, beta: fbeta_score(y, y_pred, beta=beta),
+    'avg_feats_diff': lambda X_valid_tensor, y_valid_pred, train_features_mean:
+        avg_features_diffs(
+            X_valid_tensor, y_valid_pred, train_features_mean
+        )
+}
+
+def check_metrics(metrics, **kwargs):
+    for metric in metrics:
+        if metric == 'f_beta_score' and 'beta' not in kwargs:
+            raise ValueError("You must provide the beta parameter for the f_beta_score metric")
+        if metric not in METRICS:
+            raise ValueError(f"Metric {metric} is not valid. Choose one of {METRICS.keys()}")
+
+
+def compute_metrics(metrics, y_valid, y_valid_pred, **kwargs):
+    metrics_dict = {metric: None for metric in metrics}
+    for metric in metrics:
+        if metric == 'avg_feats_diff':
+            if 'X_valid' not in kwargs or 'train_features_mean' not in kwargs:
+                raise ValueError(
+                    "You must provide the X_valid and train_features_mean parameters "
+                    "to calculate the avg_feats_diff metric"
+                )
+            metrics_dict[metric] = METRICS[metric](
+                kwargs['X_valid'], y_valid_pred, kwargs['train_features_mean']
+            )
+        elif metric == 'f_beta_score':
+            if 'beta' not in kwargs:
+                raise ValueError(
+                    "You must provide the beta parameter for the f_beta_score metric"
+                )
+            metrics_dict[metric] = METRICS[metric](
+                y_valid, y_valid_pred, beta=kwargs['beta']
+            )
+        else:
+            metrics_dict[metric] = METRICS[metric](y_valid_pred, y_valid)
+    return metrics_dict
 
 
 def confusion_matrix_plot(y, y_pred):
     ConfusionMatrixDisplay.from_predictions(y, y_pred)
     plt.title("Matriz de confusión")
-    plt.show()
+    fig = plt.gcf()
+    return fig
 
 
 def roc_curve_plot(y, y_pred):
@@ -71,4 +106,14 @@ def get_features_mean(X, y):
     X_pos = X_pos[:, :, 1]
     # Calculate the mean of each feature
     features_mean = X_pos.mean(dim=0)
+    if features_mean is None:
+        print(len(X_pos))
     return features_mean
+
+
+def avg_features_diffs(
+    X_valid_tensor, y_valid_pred, train_features_mean
+):
+    valid_features_mean = get_features_mean(X_valid_tensor, y_valid_pred)
+    differences_sum = sum(abs(train_features_mean - valid_features_mean))
+    return differences_sum.item()

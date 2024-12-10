@@ -24,9 +24,9 @@ def train_step(model, dataloader, loss_fn, optimizer):
         optimizer.step()            # Update weights
         optimizer.zero_grad()       # Reset the gradients to zero
         
-        total_loss += loss.item()
+        # total_loss += loss.item()
 
-    avg_loss = total_loss / num_batches
+    # avg_loss = total_loss / num_batches
     # print(f"Train loss: {avg_loss:.4f}")
 
 
@@ -84,47 +84,6 @@ def train_validate_loop(
 
     print("Training finished!")
     return model, y_train_accs, train_losses, y_test_accs, test_losses
-
-
-# def train_validate_loop(
-#     model, train_dataloader, test_dataloader, optimizer, loss_fn, num_epochs,
-#     early_stopper: EarlyStopping=None
-# ):
-#     y_train_accs, train_losses = [], []
-#     y_test_accs , test_losses  = [], []
-    
-#     for epoch in tqdm(range(1, num_epochs+1)):
-#         tqdm.write(f"Epoch {epoch}")
-#         train_step(model, train_dataloader, loss_fn, optimizer)
-        
-#         train_acc, train_loss = validate_step(model, train_dataloader, loss_fn)
-#         test_acc , test_loss  = validate_step(model, test_dataloader , loss_fn)
-        
-#         tqdm.write(f"Train loss: {train_loss:.4f} | Train accuracy: {train_acc:.4f}")
-#         tqdm.write(f"Test loss : {test_loss:.4f} | Test accuracy : {test_acc:.4f}")
-#         tqdm.write("----------------------------------------------------------------")
-
-#         # The Early Stopping applies to the test set
-#         if early_stopper:
-#             early_stop = early_stopper(test_acc, test_loss, model)
-#             if early_stop:
-#                 print(f"Early stopping... Stopped at epoch {epoch}")
-#                 break
-
-#         y_train_accs.append(train_acc)
-#         train_losses.append(train_loss)
-#         y_test_accs.append(test_acc)
-#         test_losses.append(test_loss)
-
-#     if early_stopper.best_model_state:
-#         model.load_state_dict(early_stopper.best_model_state)
-
-#     print(f"Training finished! Stopped at epoch {epoch}.")
-#     print(
-#         f"Best test loss: {early_stopper.best_test_loss:.4f}, "
-#         f"Best test accuracy: {early_stopper.best_test_acc:.4f}"
-#     )
-#     return model, y_train_accs, train_losses, y_test_accs, test_losses
 
 
 def predict(model_output, loss_fn):
