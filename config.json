@@ -1,0 +1,13 @@
+{
+    "group": "Grupo1",
+    "simulation": "Simulacion_1.dta",
+    "required_periods": 4,
+    "partitions": {
+        "train": {"type1": 80, "type2": 0   , "type3": 300},
+        "valid": {"type1": 20, "type2": 0   , "type3": 100},
+        "test" : {"type1": 0 , "type2": 100 , "type3": 400}
+    },
+    "metrics": ["accuracy", "avg_feats_diff"],
+    "directions": ["maximize", "minimize"],
+    "beta": 0.5
+}

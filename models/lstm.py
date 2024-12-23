@@ -61,17 +61,15 @@ def objective(trial, train_set, valid_set, class_weights, metrics, **kwargs):
     # valid_loader = DataLoader(valid_set, batch_size=batch_size, shuffle=False)
     
     # Get the averages for each period for the train loader
-    X_train_tensor, y_train_tensor = train_set.tensors
+    X_train, y_train = train_set.tensors
     if 'avg_feats_diff' in metrics:
-        train_features_mean = get_features_mean(X_train_tensor, y_train_tensor).to(device)
+        train_features_mean = get_features_mean(X_train, y_train).to(device)
 
     # Get the X_valid_tensor so then we can calculate the features mean for the
     # individuals of the validation set that the model predicted as 1
-    X_valid_tensor, _ = valid_set.tensors
-    X_valid_tensor = X_valid_tensor.to(device)
-
-    # Get the y_valid_tensor tensors so then we can calculate metrics
-    _, y_valid_tensor = valid_set.tensors
+    # And get the y_valid_tensor tensors so then we can calculate metrics
+    X_valid, y_valid = valid_set.tensors
+    X_valid = X_valid.to(device)
 
     # Loss function
     loss_fn = nn.BCEWithLogitsLoss(
@@ -81,15 +79,17 @@ def objective(trial, train_set, valid_set, class_weights, metrics, **kwargs):
     for _ in range(epochs):
         train_step(model, train_loader, loss_fn, optimizer)
         
-        logits = model(X_valid_tensor)
+        logits = model(X_valid)
         y_valid_pred = predict(logits, loss_fn).squeeze()
 
         metrics_kwargs = {}
         if 'avg_feats_diff' in metrics:
-            metrics_kwargs['X_valid'] = X_valid_tensor
+            metrics_kwargs['X_valid'] = X_valid
             metrics_kwargs['train_features_mean'] = train_features_mean
         if 'f_beta_score' in metrics:
             metrics_kwargs['beta'] = kwargs['beta']
-        metrics_values = compute_metrics(metrics, y_valid_tensor, y_valid_pred, **metrics_kwargs)
+        metrics_values = compute_metrics(
+            metrics, y_valid, y_valid_pred, **metrics_kwargs
+        )
 
     return tuple(metrics_values.values())

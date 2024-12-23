@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import torch
 
 from sklearn.metrics import (
     precision_score, recall_score, f1_score, accuracy_score, fbeta_score,
@@ -25,7 +26,13 @@ def check_metrics(metrics, **kwargs):
             raise ValueError(f"Metric {metric} is not valid. Choose one of {METRICS.keys()}")
 
 
-def compute_metrics(metrics, y_valid, y_valid_pred, **kwargs):
+def compute_metrics(metrics, y_true, y_pred, **kwargs):
+    # Scikit learn metrics require the labels to be numpy arrays in the CPU
+    if isinstance(y_true, torch.Tensor):
+        y_true = y_true.cpu().numpy()
+    if isinstance(y_pred, torch.Tensor):
+        y_pred = y_pred.cpu().numpy()
+
     metrics_dict = {metric: None for metric in metrics}
     for metric in metrics:
         if metric == 'avg_feats_diff':
@@ -35,7 +42,7 @@ def compute_metrics(metrics, y_valid, y_valid_pred, **kwargs):
                     "to calculate the avg_feats_diff metric"
                 )
             metrics_dict[metric] = METRICS[metric](
-                kwargs['X_valid'], y_valid_pred, kwargs['train_features_mean']
+                kwargs['X_valid'], y_pred, kwargs['train_features_mean']
             )
         elif metric == 'f_beta_score':
             if 'beta' not in kwargs:
@@ -43,10 +50,10 @@ def compute_metrics(metrics, y_valid, y_valid_pred, **kwargs):
                     "You must provide the beta parameter for the f_beta_score metric"
                 )
             metrics_dict[metric] = METRICS[metric](
-                y_valid, y_valid_pred, beta=kwargs['beta']
+                y_true, y_pred, beta=kwargs['beta']
             )
         else:
-            metrics_dict[metric] = METRICS[metric](y_valid_pred, y_valid)
+            metrics_dict[metric] = METRICS[metric](y_true, y_pred)
     return metrics_dict
 
 
@@ -106,8 +113,6 @@ def get_features_mean(X, y):
     X_pos = X_pos[:, :, 1]
     # Calculate the mean of each feature
     features_mean = X_pos.mean(dim=0)
-    if features_mean is None:
-        print(len(X_pos))
     return features_mean
 
 
