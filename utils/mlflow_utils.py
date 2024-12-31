@@ -43,3 +43,9 @@ def log_json(json_content, filename):
         with open(file_path, "w") as f:
             json.dump(json_content, f)
         mlflow.log_artifact(file_path)
+
+def log_model_architecture(model):
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp, "model_architecture.txt")
+        path.write_text(str(model))
+        mlflow.log_artifact(path)

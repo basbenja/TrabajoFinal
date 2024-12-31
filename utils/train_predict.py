@@ -15,14 +15,14 @@ def train_step(model, dataloader, loss_fn, optimizer):
     model_device = next(model.parameters()).device
     for batch, (X, y) in enumerate(dataloader):
         X, y = X.to(model_device), y.to(model_device)
-        y_pred = model(X)           # Forward pass
+        y_pred = model(X)
         if isinstance(loss_fn, nn.BCEWithLogitsLoss):
             loss = loss_fn(y_pred.view(-1), y)
         else:
             loss = loss_fn(y_pred, y)
-        loss.backward()             # Backward pass
-        optimizer.step()            # Update weights
-        optimizer.zero_grad()       # Reset the gradients to zero
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
         
         # total_loss += loss.item()
 

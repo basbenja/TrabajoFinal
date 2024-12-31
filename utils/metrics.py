@@ -7,14 +7,14 @@ from sklearn.metrics import (
 )
 
 METRICS = {
-    'precision': lambda y, y_pred: precision_score(y, y_pred),
+    'precision': lambda y, y_pred: precision_score(y, y_pred, zero_division=0),
     'recall': lambda y, y_pred: recall_score(y, y_pred),
     'f1_score': lambda y, y_pred: f1_score(y, y_pred),
     'accuracy': lambda y, y_pred: accuracy_score(y, y_pred),
     'f_beta_score': lambda y, y_pred, beta: fbeta_score(y, y_pred, beta=beta),
-    'avg_feats_diff': lambda X_valid_tensor, y_valid_pred, train_features_mean:
+    'avg_feats_diff': lambda X_valid, y_valid_pred, train_features_mean:
         avg_features_diffs(
-            X_valid_tensor, y_valid_pred, train_features_mean
+            X_valid, y_valid_pred, train_features_mean
         )
 }
 
@@ -26,7 +26,7 @@ def check_metrics(metrics, **kwargs):
             raise ValueError(f"Metric {metric} is not valid. Choose one of {METRICS.keys()}")
 
 
-def compute_metrics(metrics, y_true, y_pred, **kwargs):
+def compute_metrics(metrics, y_true, y_pred, **kwargs) -> dict[str, float]:
     # Scikit learn metrics require the labels to be numpy arrays in the CPU
     if isinstance(y_true, torch.Tensor):
         y_true = y_true.cpu().numpy()
@@ -110,15 +110,13 @@ def get_features_mean(X, y):
     # Get the inputs whose output is 1
     X_pos = X[y == 1]
     # Keep only the temporal features. Each column represents a feature
-    X_pos = X_pos[:, :, 1]
+    X_pos = X_pos[:, :, 0]
     # Calculate the mean of each feature
     features_mean = X_pos.mean(dim=0)
     return features_mean
 
 
-def avg_features_diffs(
-    X_valid_tensor, y_valid_pred, train_features_mean
-):
-    valid_features_mean = get_features_mean(X_valid_tensor, y_valid_pred)
+def avg_features_diffs(X_valid, y_valid_pred, train_features_mean):
+    valid_features_mean = get_features_mean(X_valid, y_valid_pred)
     differences_sum = sum(abs(train_features_mean - valid_features_mean))
     return differences_sum.item()

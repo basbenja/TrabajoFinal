@@ -61,3 +61,30 @@ Vamos a tener entonces:
 |Entrenamiento|80|0|300|380|%79-%21|
 |Validación|20|0|100|120|%83-%17|
 |Test|0|100|400|500|%80-%20|
+
+
+# **Usar KFold durante la optimización de hiperparámetros**
+Hasta ahora, lo que venía haciendo era:
+* Usar el conjunto de entrenamiento para entrenar el modelo.
+* Usar el conjunto de validación para hacer la optimización de hiperparámetros con Optuna.
+* Usar el conjunto de test para evaluar el rendimiento final del modelo.
+
+Ahora, lo que quiero hacer es:
+* Por un lado, tener el conjunto de test para evaluar el rendimiento final del modelo. En este conjunto de test, tienen que estar todos los individuos de tipo 2 (que son 100) y algunos de tipo 3.
+* Por otro lado, juntar los que anteriormente eran los conjuntos de entrenamiento y validación para hacer la optimización de hiperparámetros con KFold. En este conjunto, tienen que estar todos los individuos de tipo 1 (que son 100) y algunos de tipo 3.
+
+Para hacerlo:
+1. Separo los individuos de distintos tipos:
+```python
+type1_df, type2_df, type3_df = get_dfs(stata_filepath, required_periods)
+```
+2. Creo el conjunto de test:
+```python
+type3_test = type3_df.sample(n=400, random_state=42)
+type3_df = type3_df.drop(type3_test.index)
+test_df = pd.concat([type2_df, type3_test])
+```
+3. Creo el conjunto de entrenamiento, sobre el cual voy a hacer KFold:
+```python
+train_df = pd.concat([type1_df, type3_df])
+```

@@ -69,9 +69,12 @@ def get_dfs(stata_path, required_periods=4):
 def get_lstm_input(df, time_steps, num_features) -> torch.Tensor:
     n = len(df)
     data = np.zeros((n, time_steps, num_features))
-    data[:, :, 0] = df['inicio_prog'].values.reshape(-1, 1)
     time_features = [f'y(t-{i})' for i in range(time_steps, 0, -1)]
-    data[:, :, 1] = df[time_features].values
+    if num_features == 1:
+        data[:, :, 0] = df[time_features].values
+    elif num_features > 1:
+        data[:, :, 0] = df[time_features].values
+        data[:, :, 1] = df['inicio_prog'].values.reshape(-1, 1)
     data_tensor = torch.tensor(data, dtype=torch.float32)
     return data_tensor
 
@@ -106,7 +109,8 @@ def build_train_valid_test_dfs(type1_df, type2_df, type3_df, partitions):
         for split, split_dfs in zip(['train', 'valid', 'test'], [train_dfs, valid_dfs, test_dfs]):
             num_samples = partitions[split][type_name]
             split_dfs.append(sample_rows(type_df, num_samples))
-            type_df = type_df.drop(split_dfs[-1].index)  # Drop sampled rows to avoid duplicates
+            # Drop sampled rows to avoid duplicates
+            type_df = type_df.drop(split_dfs[-1].index)
 
     # Concatenate the DataFrames for each split
     train_df = pd.concat(train_dfs).reset_index(drop=True)
