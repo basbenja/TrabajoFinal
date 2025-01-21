@@ -8,7 +8,7 @@
         "test" : {"type1": 0 , "type2": 100 , "type3": 400}
     },
     "model_arch": "lstm_v1",
-    "metrics": ["accuracy"],
+    "metrics": ["f1_score"],
     "directions": ["maximize"],
     "beta": 0.5
 }

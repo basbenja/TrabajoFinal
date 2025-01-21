@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-def transform(individual_data, start, required_periods):
+def transform(individual_data, start, required_periods, is_control=None):
     periods = individual_data['t']
     periods = individual_data[periods.between(start-required_periods, start-1)]
 
@@ -11,28 +11,38 @@ def transform(individual_data, start, required_periods):
             'id': individual_data['id'].iloc[0],
             'inicio_prog': start,
             'tratado': individual_data['tratado'].iloc[0],
-            'control': individual_data['control'].iloc[0],
+            'control': individual_data['control'].iloc[0] if is_control is None else is_control,
         }
         for i in range(required_periods):
             row[f"y(t-{required_periods-i})"] = periods['y'].values[i]
-        return row
+    else:
+        raise ValueError(f"Individual {individual_data['id'].iloc[0]} does not have enough periods.")
+    return row
 
 def transform_treated(treated_data, required_periods):
     transformed_treated = []
     for _, individual in treated_data.groupby('id'):
         start = individual['inicio_prog'].iloc[0]
         row = transform(individual, start, required_periods)
-        if row:
-            transformed_treated.append(row)
+        transformed_treated.append(row)
     return pd.DataFrame(transformed_treated)
+
+def transform_control(control_data, min_start, max_start, required_periods):
+    transformed_control = []
+    for _, individual in control_data.groupby('id'):
+        inicio_prog = individual['inicio_prog'].iloc[0]
+        for assumed_start in range(min_start, max_start + 1):
+            is_control = (1 if assumed_start == inicio_prog else 0)
+            row = transform(individual, assumed_start, required_periods, is_control)
+            transformed_control.append(row)
+    return pd.DataFrame(transformed_control)
 
 def transform_untreated(untreated_data, min_start, max_start, required_periods):
     transformed_untreated = []
-    for assumed_start in range(min_start, max_start + 1):
-        for _, individual in untreated_data.groupby('id'):
+    for _, individual in untreated_data.groupby('id'):
+        for assumed_start in range(min_start, max_start + 1):
             row = transform(individual, assumed_start, required_periods)
-            if row:
-                transformed_untreated.append(row)
+            transformed_untreated.append(row)
     return pd.DataFrame(transformed_untreated)
 
 def add_target_column(df):
@@ -40,21 +50,17 @@ def add_target_column(df):
     df.drop(columns=['tratado', 'control'], inplace=True)
 
 
-def get_dfs(stata_path, required_periods=4):
-    data = pd.read_stata(stata_path)
-    
-    type1_data = data[data['tratado'] == 1]
+def get_dfs(data, required_periods=4):
+    type1_data = data[data['tipo'] == 1]
     type1_df = transform_treated(type1_data, required_periods)
 
+    type2_data = data[data['tipo'] == 2]
     min_start = type1_df['inicio_prog'].min()
     max_start = type1_df['inicio_prog'].max()
+    type2_df = transform_control(type2_data, min_start, max_start, required_periods)
     
-    untreated_data = data[data['tratado'] == 0]
-    untreated_df = transform_untreated(
-        untreated_data, min_start, max_start, required_periods
-    )
-    type2_df = untreated_df[untreated_df['control'] == 1]
-    type3_df = untreated_df[untreated_df['control'] == 0]
+    type3_data = data[data['tipo'] == 3]
+    type3_df = transform_untreated(type3_data, min_start, max_start, required_periods)
 
     final_dfs = []
     for df in [type1_df, type2_df, type3_df]:

@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from tqdm.notebook import tqdm
 from utils.early_stopping import EarlyStopping
+from utils.metrics import compute_metrics
 
 def train_step(model, dataloader, loss_fn, optimizer):
     """
@@ -28,6 +29,29 @@ def train_step(model, dataloader, loss_fn, optimizer):
 
     # avg_loss = total_loss / num_batches
     # print(f"Train loss: {avg_loss:.4f}")
+
+def validate_step_with_metrics(
+    model, X, y, loss_fn, metrics, **kwargs
+):
+    """
+    Validate the model after one epoch. Compute every metric in `metrics`.
+    """
+    model.eval()
+    with torch.no_grad():
+        logits = model(X)
+        y_valid_pred = predict(logits, loss_fn).squeeze()
+
+    metrics_kwargs = {}
+    if 'avg_feats_diff' in metrics:
+        metrics_kwargs['X_valid'] = X
+        metrics_kwargs['train_features_mean'] = kwargs['train_features_mean']
+    if 'f_beta_score' in metrics:
+        metrics_kwargs['beta'] = kwargs['beta']
+    metrics_values = compute_metrics(
+        metrics, y, y_valid_pred, **metrics_kwargs
+    )
+    return metrics_values
+
 
 
 def validate_step(model, dataloader, loss_fn):

@@ -5,7 +5,7 @@ import torch.nn as nn
 import numpy as np
 
 from torch.utils.data import DataLoader, TensorDataset
-from utils.train_predict import train_step, predict
+from utils.train_predict import train_step, validate_step_with_metrics
 from utils.metrics import check_metrics, get_features_mean, compute_metrics
 from sklearn.model_selection import StratifiedKFold
 
@@ -40,20 +40,9 @@ def objective(
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
     for epoch in range(epochs):
         train_step(model, train_loader, loss_fn, optimizer)
-        
-        model.eval()
-        with torch.no_grad():
-            logits = model(X_valid)
-            y_valid_pred = predict(logits, loss_fn).squeeze()
-
-        metrics_kwargs = {}
-        if 'avg_feats_diff' in metrics:
-            metrics_kwargs['X_valid'] = X_valid
-            metrics_kwargs['train_features_mean'] = train_features_mean
-        if 'f_beta_score' in metrics:
-            metrics_kwargs['beta'] = kwargs['beta']
-        metrics_values = compute_metrics(
-            metrics, y_valid, y_valid_pred, **metrics_kwargs
+        metrics_values = validate_step_with_metrics(
+            model, X_valid, y_valid, loss_fn, metrics, 
+            train_features_mean=train_features_mean, beta=kwargs['beta']
         )
 
         if len(metrics) == 1:
@@ -98,27 +87,16 @@ def objective_cv(
             train_features_mean = get_features_mean(X_train_fold, y_train_fold).to(device)
 
         # Train model with the hyperparameters of the trial
-        for epoch in range(epochs):
+        for _ in range(epochs):
             train_step(model, train_loader, loss_fn, optimizer)
         
-        # Validate (use DataLoader for validation?)
-        model.eval()
-        with torch.no_grad():
-            logits = model(X_valid_fold)
-            y_valid_pred = predict(logits, loss_fn).squeeze()
-
-            metrics_kwargs = {}
-            if 'avg_feats_diff' in metrics:
-                metrics_kwargs['X_valid'] = X_valid_fold
-                metrics_kwargs['train_features_mean'] = train_features_mean
-            if 'f_beta_score' in metrics:
-                metrics_kwargs['beta'] = kwargs['beta']
-            metrics_values = compute_metrics(
-                metrics, y_valid_fold, y_valid_pred, **metrics_kwargs
-            )
-            
-            for metric, value in metrics_values.items():
-                scores[metric].append(value)
+        metrics_values = validate_step_with_metrics(
+            model, X_valid_fold, y_valid_fold, loss_fn, metrics, 
+            train_features_mean=train_features_mean if 'avg_feats_diff' in metrics else None,
+            beta=kwargs['beta']
+        )
+        for metric, value in metrics_values.items():
+            scores[metric].append(value)
 
     # Aggregate scores across folds
     aggregated_scores = {metric: np.mean(values) for metric, values in scores.items()}
@@ -129,7 +107,6 @@ def objective_cv(
     #         raise optuna.TrialPruned()
 
     return tuple(aggregated_scores.values())
-
 
 
 def get_all_studies(storage):

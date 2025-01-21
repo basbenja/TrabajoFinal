@@ -18,4 +18,4 @@ EXPERIMENT_TAGS = {
 }
 
 # Simulated databases related
-DATA_DIR = "/users/bbas/TrabajoFinal/databases"
+DATA_DIR = "/users/bbas/TrabajoFinal/databases/new"
