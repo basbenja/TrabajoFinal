@@ -10,7 +10,7 @@ Trabajo Final de Grado de la Licenciatura en Ciencias de la Computación
 ## Servidor de `mlflow`
 ```bash
 # Activar un entorno virtual en donde esté mlflow instalado
-pyenv activate RedesNeuronales
+pyenv activate TrabajoFinal
 
 # Correr con nohup y con > mlflow.log 2>&1 & para correrlo en background y no ver
 # el log
@@ -20,7 +20,7 @@ nohup mlflow server --host 127.0.0.1 --port 8080 --backend-store-uri ./mlflow-st
 ## Dashboard de optuna
 ```bash
 # Activar un entorno virtual en donde esté optuna-dashboard instalado
-pyenv activate RedesNeuronales
+pyenv activate TrabajoFinal
 
 # Correr con nohup y con > optuna.log 2>&1 & para correrlo en background y no ver
 # el log

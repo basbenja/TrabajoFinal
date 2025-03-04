@@ -1,30 +1,18 @@
 import torch
 import torch.nn as nn
 
-class LSTMClassifier_v2(nn.Module):
-    """
-    This neural network processes the dynamic variable through an LSTM and then
-    adds the static variable to the end to make the classification.
-    """
-    
-    def __init__(self, input_size, hidden_size, static_size, num_layers, dropout=0.4):
-        super().__init__()
-        self.hidden_size = hidden_size
-        self.num_layers = num_layers
-
-        # LSTM Layer
+class LSTMBlock(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, dropout):
+        super(LSTMBlock, self).__init__()
         self.lstm = nn.LSTM(
-            input_size, hidden_size, num_layers, batch_first=True, dropout=dropout
+            input_size=input_size,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+            dropout=dropout
         )
-
-        self.fc = nn.Sequential(
-            nn.Linear(hidden_size + static_size, 128),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(128, 1)
-        )
-
-    def forward(self, x_dynamic, x_static):
+    
+    def forward(self, x):
         """
         x should be of shape (batch_size, seq_length, input_size), where input_size
         is the amount of features in each time step.
@@ -36,29 +24,48 @@ class LSTMClassifier_v2(nn.Module):
             the hidden state for each element in the sequence.
           - c_n: tensor of shape (num_layers, batch_size, hidden_size) containing
             the final cell state for each element in the sequence.
-        
-        The fully connected layer is applied to the last hidden state of the sequence.
-        
-        x_dynamic: (batch_size, seq_length, input_size)
-        x_static: (batch_size, static_size)
         """
         # Set initial hidden and cell states
-        h0 = torch.zeros(self.num_layers, x_dynamic.size(0), self.hidden_size).to(x_dynamic.device)
-        c0 = torch.zeros(self.num_layers, x_dynamic.size(0), self.hidden_size).to(x_dynamic.device)
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        _, (hidden_state, _) = self.lstm(x, (h0, c0))
+        lstm_out = hidden_state[-1] # Use the last hidden_state
+        return lstm_out
 
-        # Forward propagate through LSTM
-        _, (hidden_state, _) = self.lstm(x_dynamic, (h0, c0))
-        # Use the last hidden_state
-        lstm_out = hidden_state[-1]
-        
-        combined = torch.cat((lstm_out, x_static), dim=1)
-        
-        logits = self.fc(combined)
-        return logits
+
+class LSTMClassifier_v2(nn.Module):
+    def __init__(
+        self, lstm_input_size, lstm_hidden_size, lstm_num_layers, n_static_feats, dropout
+    ):
+        super(LSTMClassifier_v2, self).__init__()
+        self.lstm = LSTMBlock(
+            input_size=lstm_input_size,
+            hidden_size=lstm_hidden_size,
+            num_layers=lstm_num_layers,
+            dropout=dropout
+        )
+        self.fc = nn.Sequential(
+            nn.Linear(lstm_hidden_size+n_static_feats, 128),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(128, 1)
+        )
+
+    def forward(self, x_temp, x_static):
+        lstm_out = self.lstm(x_temp)
+        x = torch.cat((lstm_out, x_static), dim=1)
+        x = self.fc(x)
+        return x
 
 
 def define_lstm_v2_model(trial):
     hidden_size = trial.suggest_int("hidden_size", 16, 128)
     num_layers = trial.suggest_int("n_layers", 1, 3)
-    dropout = trial.suggest_float("dropout", 0.1, 0.5)
-    return LSTMClassifier_v2(1, hidden_size, 1, num_layers, dropout)
+    dropout = trial.suggest_float("dropout", 0.3, 0.8)
+    return LSTMClassifier_v2(
+        lstm_input_size=1,
+        lstm_hidden_size=hidden_size,
+        lstm_num_layers=num_layers,
+        n_static_feats=1,
+        dropout=dropout
+    )

@@ -72,17 +72,24 @@ def get_dfs(data, required_periods=4):
     return final_dfs
 
 
-def get_lstm_input(df, time_steps, num_features) -> torch.Tensor:
+def get_lstm_input(df, time_feats, static_feats=None) -> torch.Tensor:
+    """
+    Transforms the features in the dataframe into a format compatible with the
+    LSTM module. The LSTM module requires the input to be in format:
+        (batch_size, seq_len, num_features)
+    
+    If we are using the static feature, the value of it replicates along the
+    different time steps.
+    """
     n = len(df)
-    data = np.zeros((n, time_steps, num_features))
-    time_features = [f'y(t-{i})' for i in range(time_steps, 0, -1)]
-    if num_features == 1:
-        data[:, :, 0] = df[time_features].values
-    elif num_features > 1:
-        data[:, :, 0] = df[time_features].values
-        data[:, :, 1] = df['inicio_prog'].values.reshape(-1, 1)
-    data_tensor = torch.tensor(data, dtype=torch.float32)
-    return data_tensor
+    num_features = 1 if static_feats is None else 2
+    data = np.zeros((n, len(time_feats), num_features))
+    if not static_feats:
+        data[:, :, 0] = df[time_feats].values
+    else:
+        data[:, :, 0] = df[time_feats].values
+        data[:, :, 1] = df[static_feats].values.reshape(-1, 1)
+    return torch.tensor(data, dtype=torch.float32)
 
 
 def build_train_valid_test_dfs(type1_df, type2_df, type3_df, partitions):
