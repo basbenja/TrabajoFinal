@@ -1,0 +1,49 @@
+\ProvidesPackage{preamble}
+
+% \documentclass[format=acmlarge]{acmart}
+%\usepackage{amsfonts,amsmath}
+%\DeclareMathOperator{\sgn}{sgn}
+%\usepackage{amsthm}
+%\usepackage{amstex, amssymb}
+\usepackage{graphicx, float}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bigfoot}
+\usepackage{comment}
+\usepackage{array}
+%\usepackage{enumerate}
+%\usepackage{verbatim}
+
+%\usepackage{makeidx}
+%\usepackage{url}
+%\usepackage{graphicx}
+%\usepackage{float}
+%\graphicspath{{/home/pablo/Dropbox/tfcomp/}{./}}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\usepackage{adjustbox}
+\usepackage{cite}
+\usepackage{subfiles}
+
+\newlength{\ancho}
+\setlength{\ancho}{\paperwidth}
+\addtolength{\ancho}{-2in}
+\textwidth=\ancho
+\evensidemargin=0mm
+\oddsidemargin=0mm
+\pagenumbering{arabic}
+
+%
+% Estilo
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\remark}[1]{}%\marginpar{\tiny{#1}}}
+\newcommand{\teoref}[1]{teorema \ref{#1}}
+\newcommand{\propref}[1]{proposición \ref{#1}}
+\newcommand{\lemaref}[1]{lema \ref{#1}}
+\newcommand{\cororef}[1]{corolario \ref{#1}}
+\newcommand{\quotes}[1]{``#1''}

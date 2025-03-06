@@ -1,0 +1,18 @@
+\documentclass[../../main.tex]{subfiles}
+% \graphicspath{{\subfix{../images/}}}
+
+\begin{document}
+Una \textbf{serie de tiempo} es una secuencia \textbf{ordenada} de valores medidos sucesivamente en intervalos de tiempo igualmente espaciados \cite{khan2021-bilstm-for-unitsc}. Este tipo de datos está presente en distintos fenómenos, como lecturas meteorológicas, registros financieros, señales fisiológicas, y observaciones industriales \cite{wang2016timeseriesclassificationscratch}. 
+
+% Encerrarlo en un tag de definición ?
+Formalmente, una serie de tiempo \textbf{univariada} \(U\) es un conjunto ordenado de valores reales \(U = (x_1, x_2, ..., x_N\), y su dimensión está dada por la cantidad \(N\) de valores \cite{khan2021-bilstm-for-unitsc}.
+
+Dicho esto, la \textbf{Clasificación de Series de Tiempo} (CST) consiste en: dado un conjunto de clases o categorías \(Y\), y un conjunto de datos \(D\) formado por series de tiempo univariadas \(U_i\) donde a cada una le corresponde una etiqueta \(y(U_i) \in Y\), el objetivo es encontrar una función \(f\), a la que llamaremos ``clasificador'' o ``modelo'' de forma tal que \(f(U) = y(U)\) \cite{khan2021-bilstm-for-unitsc}. Un buen modelo será uno que pueda capturar y generalizar el el patrón de las series de datos de forma tal que sea capaz de clasificar correctamente nuevos datos. El repositorio que se suele tomar como referencia para evaluar los diferentes modelos de CST es el de la Universidad de California Riverside, llamado \textit{UCR Time Series Classification Archive} \cite{UCRArchive2018}.
+
+Durante las últimas décadas, se han propuestos diferentes métodos para afrontar este problema. Los primeros trabajaban directamente sobre las series de tiempo utilizando alguna medida de similitud predefinida que pueda capturar la similitud entre ellas, como por ejemplo la distancia euclideana o la deformación dinámica del tiempo (\textit{Dynamic Time Warping}) \cite{wang2016timeseriesclassificationscratch}. 
+
+Se han desarrollado también algoritmos basados en características o \textit{features}, en donde cada serie temporal es convertida en un conjunto de features globales, que es posteriormente usando para definir la semejanza entre pares de series de tiempo \cite{khan2021-bilstm-for-unitsc}. Algunos de los más conocidos son ...
+
+El gran problema de todas las estrategias mencionadas es que requieren un gran preprocesamiento de los datos y una ingeniería de atributos (\textit{feature engineering}) \cite{wang2016timeseriesclassificationscratch}, para lo cual generalmente se necesita tener un buen conocimiento de campo sobre las series sobre las que se está trabajando. Es por esto que recientemente, las redes neuronales profundas han comenzado a ser utilizadas para clasificar series temporales \cite{wang2016timeseriesclassificationscratch} ya que permiten trabajar de forma directa con los datos, y se encargan de detectar automáticamente cuáles son las características que distinguen a las series. Algunas arquitecturas utilizadas hasta el momento son el perceptrón multicapa \cite{wang2016timeseriesclassificationscratch}, redes neuronales convolucionales \cite{wang2016timeseriesclassificationscratch}, y estas últimas combinadas con unidades LSTM unidireccionales \cite{Karim_2018} y bidireccionales \cite{khan2021-bilstm-for-unitsc}.
+
+\end{document}

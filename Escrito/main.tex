@@ -1,0 +1,129 @@
+\documentclass[a4paper,12pt,spanish]{book}
+\usepackage{preamble}
+
+\title{
+    \vspace{-5cm}
+    \includegraphics[scale=.25]{logos/FAMAF_UNC.png} \\
+    Aprendizaje Automático para \\
+    la Selección de Grupos de Control en \\
+    Evaluación de Impacto
+    \thanks{
+        {
+        {\protect\includegraphics[height=7mm]{logos/creative-commons.png}} \fontsize{10}{11}\selectfont  Esta obra está bajo una \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional.}
+        }
+    }
+}
+
+\author{
+    Autor: Benjam\'in Bas Peralta.\\
+    Directores: Dr. Martín A. Domínguez, Mgter. David Giuliodori.\\ 
+    Facultad de Matemática, Astronomía, Física y Computación\\
+    Universidad Nacional de Córdoba
+}
+
+\begin{document}
+
+\maketitle
+
+\cleardoublepage
+
+\begin{center}
+\textbf{Resumen}
+\subfile{secciones/0-abstract.tex}
+\end{center}
+
+
+
+\smallskip
+\vspace{2cm}
+
+
+\smallskip
+\vspace{2cm}
+
+\textbf{Palabras Clave:}Análisis de Redes Sociales, Aprendizaje Automático, Detección de influenciadores, Detección de comunidades, Modelos de predicción, Twitter
+\\
+
+\cleardoublepage
+
+
+\thispagestyle{empty}
+\phantom{a}
+\vfill
+\newpage
+\vfill
+\noindent\textbf{\Large Agradecimientos}
+
+-- TO DO --
+% universidad pública y gratuita
+% flia y gente que me apoyó
+% directores!!!
+
+
+\bigskip
+
+\smallskip
+\tableofcontents
+\cleardoublepage
+
+\chapter{Introducción}
+\subfile{secciones/1-introduccion.tex}
+
+
+\chapter{Marco Teórico}
+
+\section{Evaluación de Impacto}
+\subfile{secciones/2-marco-teorico/1-eval-impacto}
+
+\section{Inteligencia Artificial}
+\subfile{secciones/2-marco-teorico/2-ia}
+
+\section{Redes Neuronales Recurrentes}
+\subfile{secciones/2-marco-teorico/3-recurrentes}
+
+\section{Clasificación de Series de Tiempo}
+\subfile{secciones/2-marco-teorico/4-clasif-series-de-tiempo}
+
+
+\chapter{Presentación del problema}
+\subfile{secciones/3-problema}
+
+
+\chapter{Marco Experimental}
+
+\section{Conjuntos de Datos}
+\subfile{secciones/4-marco-experimental/1-datos}
+
+\section{Arquitecturas de Redes Neuronales}
+\subfile{secciones/4-marco-experimental/2-arquitecturas}
+
+\section{Herramientas}
+\subfile{secciones/4-marco-experimental/3-herramientas}
+
+% \subsection{Clasificación de Series de Tiempo?}
+
+\chapter{Resultados}
+
+
+\chapter{Conclusiones y Trabajos Futuros}
+
+\newpage
+\footnotesize
+\bibliographystyle{apalike}
+\bibliography{refs}
+
+\newpage
+% \thispagestyle{empty}
+% Los abajo firmantes, miembros del Tribunal de Evaluación de tesis, damos Fe que el presente ejemplar impreso, se corresponde con el aprobado por éste Tribunal
+% \vfill
+\newpage
+\vfill
+\addtocounter{page}{-1}
+\clearpage
+\thispagestyle{empty}
+\phantom{a}
+\vfill
+\newpage
+\vfill
+\addtocounter{page}{-1}
+\end{document}
