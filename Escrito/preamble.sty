@@ -29,6 +29,10 @@
 \usepackage{cite}
 \usepackage{subfiles}
 
+% \usepackage[numbers]{natbib}  % or [authoryear] depending on your style
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{refs.bib}
+
 \newlength{\ancho}
 \setlength{\ancho}{\paperwidth}
 \addtolength{\ancho}{-2in}
