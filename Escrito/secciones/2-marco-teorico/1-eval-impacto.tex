@@ -53,17 +53,16 @@ De nuevo, el problema fundamental de la evaluación de impacto es que se intenta
     \label{eq:observed-result}
 \end{equation}
 
-En la ecuación \ref{eq:ite}, el término \(Y_i(0) = Y_i|D_i=0\) representa el contrafactual, es decir \textit{cuál habría sido el resultado si la unidad no hubiera participado en el programa}. Al ser imposible observar directamente el contrafactual, es necesario \textbf{estimarlo}. La forma más directa de solucionar este problema sería hallando un ``clon perfecto'' para cada uno de los individuos participantes del programa, lo cual resulta bastante difícil. Por lo tanto, el primer paso para lograr esta estimación consiste en \textbf{desplazarse desde el nivel individual al nivel del grupo} \cite{gertler-2016}, concentrando el análisis en el impacto o efecto \textit{promedio} (y no individual).
+Si nos concentramos en las unidades tratadas, en la ecuación \ref{eq:ite}, el término \(Y_i(0) = (Y_i|D_i=0)\) representa el contrafactual, es decir \textit{cuál habría sido el resultado si la unidad no hubiera participado en el programa}. Al ser imposible observar directamente el contrafactual, es necesario \textbf{estimarlo}. La forma más directa de solucionar este problema sería hallando un ``clon perfecto'' para cada uno de los individuos participantes del programa, lo cual resulta bastante difícil. Por lo tanto, el primer paso para lograr esta estimación consiste en \textbf{desplazarse desde el nivel individual al nivel del grupo} \cite{gertler-2016}, concentrando el análisis en el impacto o efecto \textit{promedio} (y no individual).
 
 En primera instancia, se puede estimar el \textit{impacto promedio del programa \textbf{sobre la población}} (o \(ATE\)):
-
 \begin{equation}
     ATE = \mathbb{E}\left[Y_i(1)-Y_i(0)\right]
 \end{equation}
 
-El \(ATE\) se interpreta como el cambio promedio en la variable de resultado cuando un individuo escogido al azar pasa aleatoriamente de ser participante a ser no participante \cite{bernal}. Esta medida es relevante en el caso de la evaluación de un programa universal. Sin embargo, en la mayoría de los casos, el tratamiento solo está disponible para un subconjunto de la población. En este caso, es posible utilizar un estimador que únicamente promedie el efecto sobre la población elegible \cite{bernal}. 
+El \(ATE\) se interpreta como el cambio promedio en la variable de resultado cuando un individuo escogido al azar pasa aleatoriamente de ser participante a ser no participante \cite{bernal}. Esta medida es relevante en el caso de la evaluación de un programa universal.
 
-De esta forma, definimos el \textit{impacto promedio del programa \textbf{sobre los tratados}} (o \(ATT\)), que es en general el parámetro de mayor interés en una evaluación de impacto, y representa el efecto esperado del tratamiento en el subconjunto de individuos que fueron efectivamente tratados:
+Sin embargo, en la mayoría de los casos, el tratamiento solo está disponible para un subconjunto de la población, por lo cual resulta más preciso utilizar un estimador que únicamente promedie el efecto sobre la población elegible \cite{bernal}. De esta forma, definimos el \textit{impacto promedio del programa \textbf{sobre los tratados}} (o \(ATT\)), que es en general el parámetro de mayor interés en una evaluación de impacto, y representa el efecto esperado del tratamiento en el subconjunto de individuos que fueron efectivamente tratados:
 
 \begin{equation}
     ATT = \mathbb{E} \left[Y_i(1)-Y_i(0)|D_i=1\right] = \mathbb{E} \left[Y_i(1)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=1\right]
@@ -72,28 +71,12 @@ De esta forma, definimos el \textit{impacto promedio del programa \textbf{sobre 
 
 Es decir, el \(ATT\) es la diferencia entre la media de la variable de resultado en el grupo de los participantes y la media que hubieran obtenido los participantes si el programa no hubiera existido \cite{bernal}.
 
-Notemos que podemos reescribir la ecuación \ref{eq:ATT} de la siguiente manera:
-\begin{equation}
-    ATT + \mathbb{E} \left[Y_i(0)|D_i=1\right] = \mathbb{E} \left[Y_i(1)|D_i=1\right] 
-    \label{eq:ATT2}
-\end{equation}
+\begin{comment}
 
-Si ahora restamos \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) a ambos lados, obtenemos:
-\begin{equation}
-    ATT + \mathbb{E} \left[Y_i(0)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\ = \mathbb{E} \left[Y_i(1)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\
-    \label{eq:ATT3}
-\end{equation}
-
-De aquí se deduce que utilizar \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) como aproximación del contrafactual \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) permite recuperar el \(ATT\) si y solo si:
-\begin{equation}
-    \mathbb{E} \left[Y_i(0)|D_i=1\right]\ - \mathbb{E} \left[Y_i(0)|D_i=0\right]\ = 0
-    \label{eq:supuesto1}
-\end{equation}
-
-Dicho esto, el principal reto de la evaluación de impacto es justamente determinar las condiciones bajo las cuales se cumple \ref{eq:supuesto1}, es decir que \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) sea una aproximación válida de \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) \cite{bernal}.
+\end{comment}
 
 \subsection{El Grupo de Control como Estimador del Contrafactual}
-En la ecuación \ref{eq:ATT}, el término \(\mathbb{E} \left[Y_i(1)|D_i=1\right]\) es un resultado observable mientras que \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) es el promedio contrafactual que debemos aproximar. Para ello, se construye lo que se conoce como grupo de control, formado por individuos que no participan del programa pero que, idealmente, son estadísticamente similares \cite{gertler-2016} al grupo de tratamiento, compuesto por quienes sí recibieron el programa.
+En la ecuación \ref{eq:ATT}, el término \(\mathbb{E} \left[Y_i(1)|D_i=1\right]\) es un resultado observable mientras que \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) es el promedio contrafactual que debemos aproximar. Para ello, se construye lo que se conoce como \textbf{grupo de control}, formado por individuos que no participan del programa pero que, idealmente, son estadísticamente similares \cite{gertler-2016} al \textbf{grupo de tratamiento}, compuesto por quienes sí recibieron el programa.
 
 \begin{figure}[h!]
     \centering
@@ -114,53 +97,74 @@ Para que un grupo de comparación sea válido, debe satisfacer lo siguiente \cit
 Cuando el grupo de comparación no produce una estimación precisa del contrafactual, no se puede establecer el verdadero impacto del programa. A continuación, se presentan dos situaciones en las que el grupo de comparación seleccionado conduce a una estimación incorrecta del contrafactual.
 
 \subsubsection{Comparaciones antes-después}
-Este tipo de comparaciones intenta establecer el impacto de un programa a partir de un seguimientos de los cambios en los resultados en los participantes del programa a lo largo del tiempo. Consideran el contrafactual como el resultado para el grupo de tratamiento antes que comience la intervención, momento también conocido como \textbf{línea de base}. Esta comparación supone que si el programa no hubiera existido, el resultado para los participantes del programa habría sido igual a su situación antes del programa, lo cual en la mayoría de los tratamientos este supuesto no puede sostenerse \cite{gertler-2016}.
+Este tipo de comparaciones intenta establecer el impacto de un programa a partir de un seguimiento de los cambios en los resultados en los participantes del programa a lo largo del tiempo. Consideran el contrafactual como el resultado para el grupo de tratamiento antes que comience la intervención, momento también conocido como \textbf{línea de base}. Esta comparación supone que si el programa no hubiera existido, el resultado para los participantes del programa habría sido igual a su situación antes del programa, lo cual en la mayoría de los tratamientos este supuesto no puede sostenerse \cite{gertler-2016}.
 
 \subsubsection{Comparaciones de inscritos y no inscritos: Sesgo de autoselección}
-Una de las formas más directas de solucionar el problema del contrafactual podría ser simplemente utilizar el promedio de la variable de resultado entre los individuos no participantes del programa pero elegibles para participar. Es decir, se estaría usando a \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\), que sí se puede observar, como una aproximación de \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) \cite{bernal}. Sin embargo, esto podría generar estimaciones inexactas del efecto del programa, dado que los participantes y los no participantes generalmente son diferentes (en características observadas y no observadas), aún en ausencia del programa, y es justamente por tal motivo que unos \textit{eligen} participar y otros no \cite{bernal}. Este problema se conoce como \textbf{sesgo de autoselección}, ya que el grupo se \textit{autoselecciona} para no participar de un programa. Más concretamente, este sesgo se produce cuando los motivos por los que un individuo participa en un programa, usualmente no observables y difíciles de medir, están correlacionados con los resultados \cite{gertler-2016}, y por ende, es muy probable que la variable de resultado del grupo de tratamiento y del grupo de control sean diferentes, \textit{aún si el programa no existiera} \cite{bernal}.
+Una de las formas más directas de solucionar el problema del contrafactual podría ser simplemente utilizar el promedio de la variable de resultado entre los individuos no participantes del programa pero elegibles para participar. Es decir, podríamos utilizar a \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\), que sí se puede observar, como una aproximación de \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) \cite{bernal}. Sin embargo, esto podría generar estimaciones inexactas del efecto del programa, dado que los participantes y los no participantes generalmente son diferentes (en características observadas y no observadas), aún en ausencia del programa, y es justamente por tal motivo que unos \textit{eligen} participar y otros no \cite{bernal}. Este problema se conoce como \textbf{sesgo de autoselección}, ya que el grupo se \textit{autoselecciona} para no participar de un programa. Más concretamente, este sesgo se produce cuando los motivos por los que un individuo participa en un programa, usualmente no observables y difíciles de medir, están correlacionados con los resultados \cite{gertler-2016}, y por ende, es muy probable que la variable de resultado del grupo de tratamiento y del grupo de control sean diferentes, \textit{aún si el programa no existiera} \cite{bernal}.
 
-A modo de ejemplo, se puede pensar en un programa de nutrición infantil. Podría ocurrir que las madres de familia participantes del programa sean más proactivas respecto al desarrollo de sus hijos, por lo cual se preocuparon en lograr la participación en el programa. El problema de autoselección en este caso radica en que la motivación de las madres (que no se observa y es difícil de medir) afecta no solo la probabilidad de participar en el programa, sino también el estado nutricional de los niños ya que estas podrían vigilar mejor la dieta de sus hijos. De esta forma, la diferencia observada en el estado nutricional de los niños de los dos grupos podría deberse parcialmente a la diferencia en el nivel de compromiso de las madres, y no exclusivamente a que un grupo participa en el programa y el otro no \cite{bernal}.
+A modo de ejemplo, se puede pensar en un programa de nutrición infantil. Podría ocurrir que las madres de familias participantes del programa sean más proactivas respecto al desarrollo de sus hijos, por lo cual se preocuparon en lograr la participación en el programa. El problema de autoselección en este caso radica en que la motivación de las madres (que no se observa y es difícil de medir) afecta no solo la probabilidad de participar en el programa, sino también el estado nutricional de los niños ya que estas podrían vigilar mejor la dieta de sus hijos. De esta forma, la diferencia observada en el estado nutricional de los niños de los dos grupos podría deberse parcialmente a la diferencia en el nivel de compromiso de las madres, y no exclusivamente a que un grupo participa en el programa y el otro no \cite{bernal}.
 
-\begin{comment}
-Es importante en este punto identificar claramente los diferentes resultados que hemos mencionado hasta el momento, los cuales se encuentran en la tabla \ref{tab:different-estimations}.
+Habiendo presentado este problema, volvamos a la fórmula del \(ATT\) (\ref{eq:ATT}), y notemos que la podemos reescribir de la siguiente manera:
+\begin{equation}
+    ATT + \mathbb{E} \left[Y_i(0)|D_i=1\right] = \mathbb{E} \left[Y_i(1)|D_i=1\right] 
+    \label{eq:ATT2}
+\end{equation}
+Si ahora restamos \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) a ambos lados, obtenemos:
+\begin{equation}
+    ATT + \mathbb{E} \left[Y_i(0)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\ = \mathbb{E} \left[Y_i(1)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\
+    \label{eq:ATT3}
+\end{equation}
 
+De aquí se deduce que utilizar \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) como aproximación del contrafactual \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) permite recuperar el \(ATT\) si y solo si:
+\begin{equation}
+    \mathbb{E} \left[Y_i(0)|D_i=1\right]\ - \mathbb{E} \left[Y_i(0)|D_i=0\right]\ = 0
+    \label{eq:supuesto1}
+\end{equation}
+
+Y es justamente este el gran desafío de la evaluación de impacto: determinar las condiciones o supuestos bajo los cuales se cumple \ref{eq:supuesto1}, es decir que \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) sea una aproximación válida de \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) \cite{bernal}.
+
+\bigskip
+Es importante en este punto identificar claramente los diferentes resultados que hemos mencionado hasta el momento, los cuales se encuentran en la tabla \ref{tab:distinciones}.
 \begin{table}[h]
     \centering
     \begin{tabular}{p{7cm}m{7cm}}  % Set fixed column widths
         \hline
-        \textbf{Lo que se desea medir} (efecto promedio sobre los tratados, \(ATT\)) & \(\mathbb{E} \left[Y_i(1)-Y_i(0)|D_i=1\right]\) \\
+        \textbf{Lo que se desea medir}: el \(ATT\). & \(\mathbb{E} \left[Y_i(1)-Y_i(0)|D_i=1\right]\) \\
         \hline
-        \textbf{Lo que observamos} (el promedio de la diferencia entre los resultados de los tratados y el grupo de control) & \(\mathbb{E} \left[Y_i(1)-C_i(0)\right]\) \\
+        \textbf{Lo que se observa}: el promedio de la diferencia entre los resultados de los tratados y el grupo de control. & \(\mathbb{E} \left[Y_i(1)-C_i(0)\right]\) \\
         \hline
-        \textbf{El promedio de la diferencia potencial entre lo que observamos y lo que se desea medir} (``sesgo de selección'') & \(\mathbb{E} \left[\left(Y_i(1)-Y_i(0)\right) - \left(Y_i(1)-C_i(0)\right)\right] = \mathbb{E} \left[C_i(0)-Y_i(0)\right]\) \\
+        \textbf{El sesgo de selección}: el promedio de la diferencia potencial entre lo que se observa y lo que se desea medir. & \(\mathbb{E} \left[\left(Y_i(1)-Y_i(0)\right) - \left(Y_i(1)-C_i(0)\right)\right] = \mathbb{E} \left[C_i(0)-Y_i(0)\right]\) \\
         \hline
     \end{tabular}
-    \caption{Your caption here}
-    \label{tab:different-estimations}
+    \caption{Distinción entre las diferentes comparaciones presentes en una evaluación de impacto.}
+    \label{tab:distinciones}
 \end{table}
-\end{comment}
-
+Teniendo en cuenta las fórmulas expuestas en esta tabla, podemos enunciar de otra forma lo que dijimos anteriormente: la calidad de una evaluación de impacto dependerá de los supuestos necesarios para asegurar que no hay sesgo de selección, es decir que \(\mathbb{E} \left[C_i(0)-Y_i(0)\right] = 0\).
 
 % Los distintos tipos de experimentos?
 \bigskip
-Las reglas de un programa para seleccionar a los participantes, también llamadas \textbf{reglas de asignación}, constituyen el parámetro clave para determinar el método de evaluación de impacto. A continuación, presentamos las distintas reglas y los métodos de evaluación que se utilizan en la práctica la trabajar con cada una de ellas.
+Las reglas de un programa para seleccionar a los participantes, también llamadas \textbf{reglas de asignación}, constituyen el parámetro clave para determinar el método de evaluación de impacto. A continuación, presentamos las distintas reglas y los métodos de evaluación que se utilizan en la práctica al trabajar con cada una de ellas.
 
 \subsection{Evaluaciones Experimentales o Aleatorias}
-En este tipo de evaluaciones, los beneficiarios del programa en cuestión son seleccionados al azar, es decir mediante un sorteo. De esta forma, todas las unidades elegibles tienen la misma probabilidad de ser seleccionadas para el programa.
+En este tipo de evaluaciones, los beneficiarios del programa en cuestión son seleccionados al azar, es decir mediante un sorteo. La asignación aleatoria se considera la regla de oro de la evaluación de impacto ya que no solo proporciona a los administradores del programa una regla imparcial y transparente para asignar recursos escasos entre poblaciones igualmente merecedoras de ellos, sino que también representa el método más sólido para evaluar el impacto de un programa \cite{gertler-2016}.
 
-La asignación aleatoria se considera la regla de oro de la evaluación de impacto ya que no solo proporciona a los administradores del programa una regla imparcial y transparente para asignar recursos escasos entre poblaciones igualmente merecedoras de ellos, sino que también representa el método más sólido para evaluar el impacto de un programa \cite{gertler-2016}. 
+La asignación aletoria trae dos consecuencias importantes: las unidades ya no pueden \textit{elegir} si participar o no, y además todas tienen la misma probabilidad de ser seleccionadas para el programa. De esta forma, el resultado potencial de cada individuo es independiente de sus condiciones previas, ya que la asignación al tratamiento no está determinada por sus características, sino por el azar.
 
 Como explicamos anteriormente, el grupo de comparación ideal sería lo más similar posible al grupo de tratamiento en todos los sentidos, excepto con respecto a su participación en el programa que se evalúa. Ahora bien, el proceso de asignación aleatoria producirá dos grupos que tienen una alta probabilidad de ser estadísticamente idénticos en todas sus características (observables y no observables), siempre que el número de unidades sea suficientemente grande \cite{gertler-2016}. Esto es así ya que en general, si la población de unidades elegibles es lo suficientemente grande, este mecanismo asegura que cualquier rasgo de la población se transfiera a ambos grupos. Dicho esto, lo que ocurre en estos casos es que todos aquellos individuos que no resultaron ser beneficiarios del programa conforman un grupo de control que resulta ser naturalmente un excelente estimador del contrafactual \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\). Es decir, mediante este tipo de asignación, se asegura que:
-
 \begin{equation}
     \mathbb{E} \left[Y_i(0)|D_i=1\right]\ = \mathbb{E} \left[Y_i(0)|D_i=0\right]\
-    \label{eq:asig_aleatoria}
+    \label{eq:asig_aleatoria1}
 \end{equation}
+o, en otros téminos:
+\begin{equation}
+    \mathbb{E} \left[C_i(0)-Y_i(0)\right] = 0
+    \label{eq:asig_aleatoria2}
+\end{equation}
+es decir, que no hay sesgo de selección presente.
 
 La asignación aleatoria puede utilizarse como regla de asignación de un programa en dos escenarios específicos: cuando la población elegible es mayor que el número de plazas disponibles del programa, o  cuando sea necesario ampliar un programa de manera progresiva hasta que cubra a toda la población elegible \cite{gertler-2016}. Además, la asignación aleatoria podría hacerse a nivel individual (por ejemplo, a nivel de hogares), o a nivel de conglomerado (por ejemplo, comunidades) \cite{bernal}.
 
-Una vez que se haya asignado el tratamiento de manera aleatoria, gracias a \ref{eq:asig_aleatoria}, es bastante sencillo estimar el impacto del programa. Después de que el programa ha funcionado durante un tiempo, tendrán que medirse los resultados de las unidades de tratamiento y de comparación. El impacto del programa es sencillamente la diferencia entre el resultado promedio para el grupo de tratamiento y el resultado promedio para el grupo de comparación, es decir:
-
+Una vez que se haya asignado el tratamiento de manera aleatoria, gracias a \ref{eq:asig_aleatoria1}, es bastante sencillo estimar el impacto del programa. Después de que el programa ha funcionado durante un tiempo, tendrán que medirse los resultados de las unidades de tratamiento y de comparación. El impacto del programa es sencillamente la diferencia entre el resultado promedio para el grupo de tratamiento y el resultado promedio para el grupo de comparación, es decir:
 \[
 \mathbb{E} \left[Y_i(1)|D_i=1\right]\ - \mathbb{E} \left[Y_i(0)|D_i=0\right]\
 \]
