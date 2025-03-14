@@ -169,12 +169,20 @@ Una vez que se haya asignado el tratamiento de manera aleatoria, gracias a \ref{
 \mathbb{E} \left[Y_i(1)|D_i=1\right]\ - \mathbb{E} \left[Y_i(0)|D_i=0\right]\
 \]
 
+Resulta claro que las evaluaciones experimentales tienen varias ventajas: por diseño, resuelven el problema del sesgo de selección, y además los resultados obtenidos son transparentes, intuitivos y no es necesario utilizar herramientas econométricas sofisticadas para alcanzarlos \cite{bernal}. Esto hace que contribuyan a la transparencia de las políticas públicas y a la rendición de cuentas \cite{bernal}.
 
-\subsection{Evaluaciones Cuasiexperimentales}
+Sin embargo, este tipo de evaluaciones sufre varias limitaciones que hace que no sea tan común en la práctica. Por un lado, pueden ser costosas y de difícil implementación \cite{bernal}. Esto se debe a que en general, el experimento aleatorio se hace específicamente para evaluar una intervención, por lo que es necesario destinar recursos para la prueba piloto, la recolección de información, los seguimientos, y a veces incluso la implementación del programa \cite{bernal}. Otro problema que tienen, y probablemente el más importante, es que por pertenecer al grupo de control, se \textit{excluye} a un segmento de la población, igualmente vulnerable y elegible, de los beneficios de la intervención \cite{bernal}. Además, dada la imposibilidad de negar los beneficios a un grupo de control por largos períodos, con frecuencia es imposible estimar los impacto de largo lazo \cite{bernal}.   
+
+
+\subsection{Evaluaciones Cuasi-experimentales}
 \begin{comment}
     Profundizar en diferencias en diferencias y en PSM
     Mencionar variables instrumentales y regresión discontinua
 \end{comment}
+Las evaluaciones cuasi-experimentales son justamente aquellas que utilizan un contrafactual, pero se diferencian de las experimentales en el sentido de que no se basan en la asignación aleatoria de la intervención \cite{gertler-2016}, debido a que realizarla no es posible o no es ético. Las técnicas cuasi-experimentales intentan \textit{simular} la aleatorización para estimar el impacto causal de la intervención.
+
+
+Puede que los métodos cuasi-experimentales sean más adecuados en algunos contextos operativos, pero requieren más supuestos con el fin de que el grupo de comparación provea una estimación válida del contrafactual, como veremos a continuación al profundizar en algunos de estos métodos.
 
 \subsubsection{Diferencias en Diferencias}
 

@@ -2,11 +2,21 @@
 \usepackage{preamble}
 
 \title{
-    \vspace{-5cm}
-    \includegraphics[scale=.25]{logos/FAMAF_UNC.png} \\
+    % Logos side by side
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{logos/famaf.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{logos/unc.png}
+    \end{minipage}
+    
     Aprendizaje Automático para \\
     la Selección de Grupos de Control en \\
     Evaluación de Impacto
+    
     \thanks{
         {
         {\protect\includegraphics[height=7mm]{logos/creative-commons.png}} \fontsize{10}{11}\selectfont  Esta obra está bajo una \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional.}
@@ -23,52 +33,29 @@
 
 \begin{document}
 
+% Carátula
 \maketitle
-
 \cleardoublepage
 
-\begin{center}
-\textbf{Resumen}
+% Resumen
+\section*{Resumen}
 \subfile{secciones/0-abstract.tex}
-\end{center}
-
-
-
-\smallskip
-\vspace{2cm}
-
-
-\smallskip
-\vspace{2cm}
-
-\textbf{Palabras Clave:}Análisis de Redes Sociales, Aprendizaje Automático, Detección de influenciadores, Detección de comunidades, Modelos de predicción, Twitter
-\\
-
-\cleardoublepage
-
-
-\thispagestyle{empty}
-\phantom{a}
-\vfill
-\newpage
-\vfill
-\noindent\textbf{\Large Agradecimientos}
-
--- TO DO --
-% universidad pública y gratuita
-% flia y gente que me apoyó
-% directores!!!
-
-
 \bigskip
+\textbf{Palabras Clave}: Análisis de Redes Sociales, Aprendizaje Automático, Detección de influenciadores, Detección de comunidades, Modelos de predicción, Twitter
+\clearpage
 
-\smallskip
+% Agradecimientos
+\thispagestyle{empty}
+\section*{Agradecimientos}
+-- TO DO --
+\clearpage
+
+% Indice
 \tableofcontents
-\cleardoublepage
+\clearpage
 
 \chapter{Introducción}
 \subfile{secciones/1-introduccion.tex}
-
 
 \chapter{Marco Teórico}
 
@@ -78,11 +65,14 @@
 \section{Inteligencia Artificial}
 \subfile{secciones/2-marco-teorico/2-ia}
 
+\section{Redes Neuronales Convolucionales}
+\subfile{secciones/2-marco-teorico/3-convolucionales}
+
 \section{Redes Neuronales Recurrentes}
-\subfile{secciones/2-marco-teorico/3-recurrentes}
+\subfile{secciones/2-marco-teorico/4-recurrentes}
 
 \section{Clasificación de Series de Tiempo}
-\subfile{secciones/2-marco-teorico/4-clasif-series-de-tiempo}
+\subfile{secciones/2-marco-teorico/5-clasif-series-de-tiempo}
 
 
 \chapter{Presentación del problema}

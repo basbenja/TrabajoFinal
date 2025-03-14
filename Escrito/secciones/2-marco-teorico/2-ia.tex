@@ -2,40 +2,33 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-Si bien existen distintos enfoques sobre qué es realmente el campo de la Inteligencia Artificial (IA), la definición más general establece que es el área de las Ciencias de la Computación que se enfoca tanto en entender como en crear sistemas que simulen comportamientos \textit{inteligentes}, es decir máquinas que sean capaces de computar cómo actuar de manera efectiva y segura en una gran variedad de situaciones \cite{ai-a-modern-approach}. 
+La definición más general acerca del campo de la Inteligencia Artificial (IA) establece que es el área de las Ciencias de la Computación que se enfoca tanto en entender como en crear sistemas que simulen comportamientos \textit{inteligentes}. Si bien existen distintas perspectivas sobre qué significa que una computadora actúe de manera inteligente, la que más ha prevalecido a lo largo de los años es aquel que refiere con la capacidad de computar cómo actuar de la mejor manera posible en una determinada situación \cite{ai-a-modern-approach}. 
 
-La IA actualmente abarca una diversidad de tareas, que van desde lo general (aprendizaje, razonamiento, percepción, entre otros) hasta lo específico, como probar teoremas matemáticos, escribir poesía, manejar vehículos, o incluso diagnosticar enfermedades \cite{ai-a-modern-approach}.
+En sus comienzos, los métodos desarrollados en el área de la IA estaban principalmente \textbf{basados en conocimiento}, es decir reglas matemáticas formales que permitían a las computadoras llevar a cabo inferencias lógicas y de esta forma resolver problemas que eran intelectualmente difíciles para los humanos \cite{deep-learning}.
 
-% Escribir un poco más. Capaz hablar un poco de los métodos más "primitivos" de IA, como las regresiones
+Sin embargo, determinar reglas que describan la complejidad y diversidad de la realidad no era una tarea fácil. De esta manera, con el objetivo de hacer a estos sistemas más flexibles y capaces de adaptarse y entender diferentes situaciones, se transicionó hacia un enfoque en el que estos pudieran obtener su propio conocimiento aprendiendo patrones directamente a partir de los datos en lugar de depender exclusivamente de reglas predefinidas. Este cambio de paradigma dio lugar a lo que hoy se conoce como \textbf{Aprendizaje Automático}, la subdisciplina de la IA que permite a los algoritmos mejorar su desempeño en una tarea específica automáticamente a partir de la experiencia. Diversos factores como la creciente disponibilidad de datos, el aumento en la capacidad computacional, y los avances en los algoritmos de optimización \cite{deep-learning} han hecho que esta área sea la que mayor desarrollo e impacto ha tenido durante las últimas décadas. 
+
+Actualmente, la IA abarca una diversidad de tareas, que van desde lo general, como son las habilidades de aprendizaje, razonamiento, y percepción, entre otras; hasta lo específico, como probar teoremas matemáticos, diagnosticar enfermedades, manejar vehículos, mejorar procesos industriales o incluso diagnosticar enfermedades.
 
 \subsection{Aprendizaje Automático (\textit{Machine Learning})}
-% Qué es el aprendizaje automático
-El Aprendizaje Automático, más conocido por su nombre en inglés \textit{Machine Learning} (ML), es un campo dentro de la IA cuyo objetivo es desarrollar técnicas que permitan que las computadoras \textit{aprendan} automáticamente a partir de la \textit{experiencia}, sin la necesidad de ser explícitamente programadas para hacerlo. Los algoritmos de ML son comúnmente llamados \textit{modelos}.
+El Aprendizaje Automático, más conocido por su nombre en inglés \textit{Machine Learning} (ML), es un campo dentro de la IA cuyo objetivo es desarrollar técnicas que permitan que las computadoras \textit{aprendan} automáticamente a partir de la \textit{experiencia}, sin la necesidad de ser explícitamente programadas para hacerlo. Los algoritmos de ML son comúnmente llamados \textbf{modelos}.
 
 En 1997, Tom Mitchell definió en su libro \textit{Machine Learning} \cite{ml-tom-mitchell} el concepto de ``aprender'' de la siguiente manera: ``Se dice que un programa de computadora aprende de la experiencia E con respecto a una clase de tareas T y una medida de desempeño P, si su desempeño en las tareas de T, medido por P, mejora con la experiencia E''. Para tener un mejor entendimiento, nos enfocamos a continuación en cada uno de estos tres componentes.
 
-% Clasificación y regresión
-Las tareas de ML se describen usualmente en términos de cómo el sistema debería procesar un \textit{ejemplo} o \textit{entrada}, entendiendo a este como un conjunto de características (o \textit{features}) medidas cuantitativamente a partir de un cierto objeto o evento \cite{deep-learning}. Dentro de las tareas más comunes que pueden ser resueltas por un sistema de ML se encuentran las siguientes:
+Las tareas de ML se describen usualmente en términos de cómo el sistema debería procesar un \textit{ejemplo} o \textit{entrada}, entendiendo a esta como un conjunto de características (o en inglés, \textit{features}) medidas cuantitativamente a partir de un cierto objeto o evento \cite{deep-learning}. Dentro de las tareas que pueden ser resueltas por un sistema de ML se encuentran la clasificación, la regresión, la traducción, la detección de objetos en imágenes, la generación de nuevos datos, la detección de valores atípicos, entre muchas otras.
+
+La experiencia hace referencia al tipo de información que el modelo ``puede ver'' durante su proceso de aprendizaje o \textit{entrenamiento} \cite{hands-on-ML-sklearn-tf}. A esta información se la conoce como ``conjunto (de datos) de entrenamiento'', y es un subconjunto de todos los datos con los que se cuentan (\textit{dataset}). En base a la experiencia, los algoritmos de ML se clasifican en dos grandes categorías:
 \begin{itemize}
-    \item \textbf{Clasificación}: dada una entrada, consiste en predecir a qué categoría, de un cierto conjunto preestablecido de categorías, pertenece. Algunos ejemplos clásicos son la detección automática de correos spam, de potenciales deudores, e incluso de tumores.
-    \item \textbf{Regresión}: en este caso, el sistema predice un valor continuo. Por ejemplo, la predicción de la temperatura del día siguiente a partir de las de los últimos días, del costo de un activo financiero, la edad de una persona a partir de una imagen, entre otros.
-    \item \textbf{Transcripción}: dentro de esta tarea, se encuentran el reconocimiento de caracteres y de discurso. Aquí se le pide al algoritmo que, a partir de información desestructurada de algún tipo, la convierte a un formato de texto.
-    \item \textbf{Traducción}
-    \item \textbf{Generación de nuevos datos}
-    \item \textbf{Detección de valores atípicos}
+    \item \textbf{Algoritmos de Aprendizaje Supervisado}: experimentan un dataset que contiene pares de entrada-salida, esto es cada ejemplo contiene sus features pero también su ``etiqueta'', que vendría a ser la ``respuesta correcta'' para dicha entrada. El algoritmo aprende una función que asigna (\textit{mapea}) entradas a salidas. Las tareas más comunes llevadas a cabo con este tipo de aprendizaje son las de regresión y clasificación.
+    \item \textbf{Algoritmos de Aprendizaje No Supervisado}: ven un dataset que cuenta solamente con características de cada entrada pero sin etiquetas, e intentan aprender automáticamente patrones y propiedades útiles de la estructura de los datos. Algunas tareas que se llevan a cabo con este tipo de aprendizaje son \textit{clustering}, reducción de dimensionalidad, y detección de anomalías.
 \end{itemize}
-
-La experiencia hace referencia al tipo de información que el modelo ``puede ver'' durante su proceso de aprendizaje o \textit{entrenamiento} \cite{hands-on-ML-sklearn-tf}. A esta información se la conoce como ``conjunto (de datos) de entrenamiento'', y es un subconjunto de todos los datos con los que se cuentan (\textit{dataset}).
-
-En base a esto, los algoritmos se pueden clasificar en \textbf{supervisados} y \textbf{no supervisados}. En los primeros, el modelo experimenta un dataset que contiene pares de entrada-salida, cada ejemplo contiene sus features pero también su ``etiqueta'', que vendría a ser la ``respuesta correcta'' para dicha entrada. Lo que aprende el algoritmo en este caso es correspondencias (\textit{mappings}) de entrada a salida. Por ejemplo, se pueden utilizar imágenes como entrada y los objetos que se observan como salida, o una reseña y si es positiva o negativa, entre muchas otras. Las tareas más comunes llevadas a cabo con este tipo de aprendizaje son las de regresión y clasificación.
-
-Por otro lado, en el aprendizaje no supervisado, el modelo ve solamente un dataset que cuenta con características pero sin etiquetas, e intenta aprender automáticamente patrones y propiedades útiles de la estructura de los datos. Algunas tareas que se llevan a cabo con este tipo de aprendizaje son \textit{clustering} y la generación de nuevos datos estadísticamente indistinguibles de los de entrenamiento \cite{prince2024understanding}, una que ha cobrado especial importancia en los últimos años.
+También existen otros tipos de algoritmos, como los de \textbf{Aprendizaje Semi-supervisado}, en donde el dataset contiene algunos ejemplos etiquetados y otros sin etiquetas; y los de \textbf{Aprendizaje por Refuerzo}, en donde el algoritmo aprende la mejor estrategia para una situación a partir de la interacción con su entorno en forma de recompensas y castigos.
 
 Por último, para medir el desempeño de estos modelos, se definen métricas cuantitativas que dependen de la tarea que se esté realizando y del objetivo que se intente lograr. Por ejemplo, en clasificación, una de las más comunes es la de exactitud - \textit{accuracy} -, que es la proporción de ejemplos para los cuales el modelo predijo la salida correcta (dada por el dataset); aunque también existen otras como la precisión, sensibilidad, especificidad, y el puntaje F1. Por otro lado, en tareas de regresión, la métrica que se suele utilizar es la de Error Cuadrático Medio. 
 
-El objetivo fundamental del ML es \textbf{generalizar} más allá de los ejemplos del conjunto de entrenamiento \cite{pedro-domingos}. Por lo tanto, para evaluar qué tan bien se comporta el modelo y poder comparar su desempeño con otros, su rendimiento se mide en otro subconjunto del dataset, distinto con el que aprendió, llamado ``conjunto de test''.
+El objetivo fundamental del ML es que un algoritmo actúe correctamente antes nuevas entradas aún no vistas, es decir que \textbf{generalice} más allá de los ejemplos del conjunto de entrenamiento. Por lo tanto, para evaluar qué tan bien se comporta el modelo y poder comparar su desempeño con otros, su rendimiento se mide en otro subconjunto del dataset, distinto con el que aprendió, llamado ``conjunto de test''. Como buen práctica, este conjunto no debe ser mostrado al modelo en ningún momento durante su entrenamiento.
 
-\subsection{Redes Neuronales Artificiales}
+\subsection{Redes Neuronales Artificiales - Aprendizaje Profundo}
 Las Redes Neuronales Artificiales (RNAs) son un modelo específico dentro del ML, cuya estructura y funcionamiento están inspirados en los del cerebro. Durante los últimos años, ha sido el área que más desarrollo e impacto ha tenido, principalmente gracias a su versatilidad, potencia y escalabilidad, cualidades que hacen que sean capaces de enfrentar problemas grandes y complejos \cite{hands-on-ML-sklearn-tf}.
 
 % Reseña histórica?
@@ -47,9 +40,13 @@ Posteriormente, en 1958, Frank Rosenblatt \cite{rosenblatt1958perceptron} presen
 Más tarde, se descubrió que los problemas que no podían ser resueltos por el Perceptrón, sí podían ser resueltos ``apilando'' múltiples perceptrones, lo cual llevó a la invención del ``Perceptrón Multicapa'' (PMC), también conocido como ``Redes Neuronales de Propagación Directa'' (del inglés \textit{Feedforward Neural Networks}) \cite{deep-learning}. 
 
 \subsubsection{Elementos de una RNA Feedforward}
-% Forma en que funciona una neurona biológica
-
-% Forma en que el Perceptrón de 
+% Breve Contexto Histórico
+% Neurona Artificial
+% Función de costo: back-propagation
+% Optimizador
+% Hiperparámetros: conjunto de validación, cross-validation
+% Pesos
+% Otras optimizaciones: lotes, detención temprana, dropout
 
 
 El elemento básico de cualquier red neuronal es la \textbf{neurona}, que es la que lleva a cabo el ``cómputo''. Una neurona está conectada con otras, de las cuales recibe información y a quienes también les envía. Estas conexiones representan las \textbf{sinapsis} y cada una tiene asociada un determinado número llamado \textbf{peso}, que simboliza la intensidad de la conexión. De esta manera, el trabajo que lleva a cabo una neurona es primero computar una suma pesada de sus entradas: \(z = w_1x_1 + w_2x_2 + … + w_nx_n = w^T x\), donde \(x_i\) representa la entrada proveniente de la neurona \(i\) y \(w_i\) es el peso asociado a esta conexión. Y sobre este valor resultante, aplica una \textbf{función de activación} \(h\), siendo como resultado final de la neurona \(h(z) = h(w^T x)\). Esto se puede ver gráficamente en la figura \ref{fig:neuron}.
