@@ -2,13 +2,9 @@
     "group": "Grupo1",
     "simulation": "Simulacion_1.dta",
     "required_periods": 4,
-    "partitions": {
-        "train": {"type1": 60, "type2": 0   , "type3": 300},
-        "valid": {"type1": 40, "type2": 0   , "type3": 100},
-        "test" : {"type1": 0 , "type2": 100 , "type3": 400}
-    },
     "model_arch": "lstm_v1",
     "metrics": ["f1_score"],
     "directions": ["maximize"],
-    "beta": 0.5
+    "beta": 0.5,
+    "log_to_mlflow": "False"
 }

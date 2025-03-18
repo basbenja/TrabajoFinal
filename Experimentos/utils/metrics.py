@@ -57,8 +57,10 @@ def compute_metrics(metrics, y_true, y_pred, **kwargs) -> dict[str, float]:
     return metrics_dict
 
 
-def confusion_matrix_plot(y, y_pred):
-    ConfusionMatrixDisplay.from_predictions(y, y_pred)
+def confusion_matrix_plot(y, y_pred, normalize='true'):
+    ConfusionMatrixDisplay.from_predictions(
+        y, y_pred, labels=["No Control", "Control"], normalize=normalize
+    )
     plt.title("Matriz de confusión")
     fig = plt.gcf()
     return fig

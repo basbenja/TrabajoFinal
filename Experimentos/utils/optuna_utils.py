@@ -64,8 +64,8 @@ def objective_cv(
     optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "RMSprop", "SGD"])
     lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
     optimizer = getattr(torch.optim, optimizer_name)(model.parameters(), lr=lr)
-    epochs = trial.suggest_int("n_epochs", 100, 300)
-    batch_size = trial.suggest_int("batch_size", 16, 128)
+    epochs = trial.suggest_int("n_epochs", 300, 1500)
+    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128])
     loss_fn = nn.BCEWithLogitsLoss(
         pos_weight=torch.tensor(class_weights[1], dtype=torch.float32)
     )
