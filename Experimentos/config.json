@@ -1,6 +1,6 @@
 {
-    "group": "Grupo1",
-    "simulation": "Simulacion_1.dta",
+    "group": "1",
+    "simulation": "1",
     "required_periods": 4,
     "model_arch": "lstm_v1",
     "metrics": ["f1_score"],
