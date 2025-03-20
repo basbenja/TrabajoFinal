@@ -7,15 +7,13 @@ from sklearn.metrics import (
 )
 
 METRICS = {
-    'precision': lambda y, y_pred: precision_score(y, y_pred, zero_division=0),
-    'recall': lambda y, y_pred: recall_score(y, y_pred),
-    'f1_score': lambda y, y_pred: f1_score(y, y_pred),
-    'accuracy': lambda y, y_pred: accuracy_score(y, y_pred),
-    'f_beta_score': lambda y, y_pred, beta: fbeta_score(y, y_pred, beta=beta),
+    'precision':      lambda y, y_pred: precision_score(y, y_pred, zero_division=0),
+    'recall':         lambda y, y_pred: recall_score(y, y_pred),
+    'f1_score':       lambda y, y_pred: f1_score(y, y_pred),
+    'accuracy':       lambda y, y_pred: accuracy_score(y, y_pred),
+    'f_beta_score':   lambda y, y_pred, beta: fbeta_score(y, y_pred, beta=beta),
     'avg_feats_diff': lambda X_valid, y_valid_pred, train_features_mean:
-        avg_features_diffs(
-            X_valid, y_valid_pred, train_features_mean
-        )
+                        avg_features_diffs(X_valid, y_valid_pred, train_features_mean)
 }
 
 def check_metrics(metrics, **kwargs):
@@ -108,7 +106,7 @@ def epochs_vs_loss_acc_plot(train_accs, train_avg_losses, test_accs, test_avg_lo
 def get_features_mean(X, y):
     """
     Get the mean of the features for each period.
-    """ 
+    """
     # Get the inputs whose output is 1
     X_pos = X[y == 1]
     # Keep only the temporal features. Each column represents a feature

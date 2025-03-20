@@ -1,10 +1,10 @@
 {
-    "n_simulations": 10,
-    "n_total": 5000,
+    "n_simulations": 1,
+    "n_total": 10000,
     "treated_pctg": 0.10,
     "control_pctg": 0.10,
-    "T": 20,
-    "first_tr_period": 12,
+    "T": 50,
+    "first_tr_period": 30,
     "n_cohorts": 3,
-    "n_per_dep": 3
+    "n_per_dep": 10
 }

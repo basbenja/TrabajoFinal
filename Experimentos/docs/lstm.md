@@ -15,7 +15,7 @@ Definimos la red neuronal. Por ahora la vamos a hacer bien simple:
 El módulo LSTM de PyTorch toma 3 parámetros principales (después hay alguno más que son más finos y los podríamos ver pero vamos con los obligatorios):
 * `input_size`: el número de features en el input `x`. En nuestro caso, van a ser 2.
 * `hidden_size`: el número de features en el estado oculto `h`. Se refiere a la dimensionalidad de los vecores de estado oculto, que son usados internamente por la LSTM para almacenar información de la secuencia que está procesando.
-* `num_layers`: el número de capas recurrentes.
+* `n_layers`: el número de capas recurrentes.
 
 Algunas notas sobre `hidden_size` (fuente: ChatGPT):
 * Una número mayor le da a la LSTM mayor memoria para capturar patrones más complejos en los datos, pero también incrementa el número de parámetros del modelo.

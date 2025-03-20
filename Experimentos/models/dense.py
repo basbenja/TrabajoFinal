@@ -20,9 +20,9 @@ class DenseClassifier(nn.Module):
 
 
 def define_dense_model(trial, input_size=5):
-    num_layers = trial.suggest_int("n_layers", 1, 6)
+    n_layers = trial.suggest_int("n_layers", 1, 6)
     hidden_sizes = [
-        trial.suggest_int(f"n_units_l{i}", 16, 128) for i in range(num_layers)
+        trial.suggest_int(f"n_units_l{i}", 16, 128) for i in range(n_layers)
     ]
     dropout = trial.suggest_float("dropout", 0.1, 0.5)
     return DenseClassifier(input_size, hidden_sizes, dropout)

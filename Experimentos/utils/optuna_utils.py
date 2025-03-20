@@ -15,9 +15,9 @@ def objective(
     check_metrics(metrics, **kwargs)
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    
+
     model = define_model(trial).to(device)
-    
+
     optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "RMSprop", "SGD"])
     lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
     optimizer = getattr(torch.optim, optimizer_name)(model.parameters(), lr=lr)
@@ -26,7 +26,7 @@ def objective(
     loss_fn = nn.BCEWithLogitsLoss(
         pos_weight=torch.tensor(class_weights[1], dtype=torch.float32)
     )
-    
+
     X_train, y_train = train_set.tensors
     if 'avg_feats_diff' in metrics:
         train_features_mean = get_features_mean(X_train, y_train).to(device)
@@ -41,7 +41,7 @@ def objective(
     for epoch in range(epochs):
         train_step(model, train_loader, loss_fn, optimizer)
         metrics_values = validate_step_with_metrics(
-            model, X_valid, y_valid, loss_fn, metrics, 
+            model, X_valid, y_valid, loss_fn, metrics,
             train_features_mean=train_features_mean, beta=kwargs['beta']
         )
 
@@ -59,7 +59,7 @@ def objective_cv(
     check_metrics(metrics, **kwargs)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = define_model(trial).to(device)
-    
+
     # Hyperparameters
     optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "RMSprop", "SGD"])
     lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
@@ -79,7 +79,7 @@ def objective_cv(
         X_train_fold, y_train_fold = X_train[train_idx], y_train[train_idx]
         train_data = TensorDataset(X_train_fold, y_train_fold)
         train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
-        
+
         X_valid_fold, y_valid_fold = X_train[valid_idx], y_train[valid_idx]
         X_valid_fold, y_valid_fold = X_valid_fold.to(device), y_valid_fold.to(device)
 
@@ -88,10 +88,10 @@ def objective_cv(
 
         # Train model with the hyperparameters of the trial
         for _ in range(epochs):
-            train_step(model, train_loader, loss_fn, optimizer)
-        
+            _ = train_step(model, train_loader, loss_fn, optimizer)
+
         metrics_values = validate_step_with_metrics(
-            model, X_valid_fold, y_valid_fold, loss_fn, metrics, 
+            model, X_valid_fold, y_valid_fold, loss_fn, metrics,
             train_features_mean=train_features_mean if 'avg_feats_diff' in metrics else None,
             beta=kwargs['beta']
         )
@@ -100,7 +100,7 @@ def objective_cv(
 
     # Aggregate scores across folds
     aggregated_scores = {metric: np.mean(values) for metric, values in scores.items()}
-    
+
     # if len(metrics) == 1:
     #     trial.report(metrics_values[metrics[0]], epoch)
     #     if trial.should_prune():
@@ -122,7 +122,7 @@ def get_all_studies(storage):
         data.append([study_name, start_date, best_trial_id, best_value])
 
     optuna_studies_df = pd.DataFrame(
-        data, 
+        data,
         columns=["Study name", "Start date", "Best trial id", "Best objective value"]
     )
     return optuna_studies_df
@@ -148,3 +148,17 @@ def get_best_trials_info(study, metrics):
             "values": trial_values
         })
     return best_trials_list
+
+
+def select_trial(best_trials_numbers):
+    while True:
+        try:
+            selected_trial = int(input(
+                f"Enter the trial number. Choose from {best_trials_numbers}: "
+            ))
+            if selected_trial in best_trials_numbers:
+                return selected_trial
+            else:
+                print(f"Invalid input. Please select a number from {best_trials_numbers}.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
