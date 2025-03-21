@@ -176,18 +176,16 @@ Resulta claro que las evaluaciones experimentales tienen varias ventajas: por di
 Sin embargo, este tipo de evaluaciones sufre varias limitaciones que hace que no sea tan común en la práctica. Por un lado, pueden ser costosas y de difícil implementación \cite{bernal}. Esto se debe a que en general, el experimento aleatorio se hace específicamente para evaluar una intervención, por lo que es necesario destinar recursos para la prueba piloto, la recolección de información, los seguimientos, y a veces incluso la implementación del programa \cite{bernal}. Otro problema que tienen, y probablemente el más importante, es que por pertenecer al grupo de control, se \textit{excluye} a un segmento de la población, igualmente vulnerable y elegible, de los beneficios de la intervención \cite{bernal}. Además, dada la imposibilidad de negar los beneficios a un grupo de control por largos períodos, con frecuencia es imposible estimar los impacto de largo lazo \cite{bernal}.   
 
 \subsection{Evaluaciones Cuasi-experimentales}
-Las evaluaciones cuasi-experimentales son aquellas que buscan estimar el impacto causal, pero se diferencian de las experimentales en el sentido que no se basan en la asignación aleatoria de la intervención \cite{gertler-2016}, debido a que realizarla no es posible o no es ético. En estos casos, la regla de asignación suele ser menos clara, por lo que se considera una incógnita más en la evaluación, acerca de la cual se deben formular supuestos \cite{gertler-2016}.
+Las evaluaciones cuasi-experimentales son aquellas que buscan estimar el impacto causal, pero a diferencia de las experimentales, no se basan en la asignación aleatoria de la intervención \cite{gertler-2016}, ya sea porque esta no es factible o porque plantea problemas éticos. En estos casos, la regla de asignación suele ser menos clara, por lo que se convierte en una incógnita adicional en la evaluación, acerca de la cual se deben formular supuestos \cite{gertler-2016}. Para ello, estos métodos intentan \textit{simular} la aleatorización de un diseño experimental controlando las diferencias entre los individuos tratados y no tratados bajo diferentes hipótesis.
 
-Las técnicas cuasi-experimentales intentan \textit{simular} un diseño experimental intentando controlar las diferencias entre los individuos tratados y no tratados bajo diferentes supuestos.
-
-Si bien los métodos cuasi-experimentales pueden ser más adecuados en algunos contextos operativos, requieren más supuestos para garantizar que el grupo de comparación provea una estimación válida del contrafactual, como veremos a continuación al profundizar en algunos de ellos.
+Si bien los métodos cuasi-experimentales suelen ser más adecuados en algunos contextos operativos, su desventaja es que requieren más condiciones para garantizar que el grupo de comparación provea una estimación válida del contrafactual, como veremos a continuación al profundizar en algunos de ellos.
 
 \subsubsection{Diferencias en Diferencias}
-El modelo de diferencias-en-diferencias (DED) es una manera de controlar la estimación del impacto por las diferencias preexistentes entre el grupo de tratamiento y el de control, que estará formado por todos aquellos individuos elegibles que no recibieron el tratamiento. Es decir, el DED no propone una forma de construir el grupo de control sino una para tener en cuenta las diferencias entre los participantes y no participantes. A grandes rasgos, combina las comparaciones antes-después con las comparaciones de inscritos y no inscritos. 
+El modelo de diferencias-en-diferencias (DD) es una manera de controlar la estimación del impacto por las diferencias preexistentes entre el grupo de tratamiento y el de control, que estará formado por todos aquellos individuos elegibles que no recibieron el tratamiento. Es decir, el DD no propone una forma de construir un grupo de control adecuado sino una manera de aproximar el impacto que tenga en cuenta las diferencias entre participantes y no participantes. A grandes rasgos, combina las comparaciones antes-después con las comparaciones de inscritos y no inscritos, ambas discutidas anteriormente. 
 
-Este modelo es simplemente el cambio esperado en la variable de resultado \(Y\) entre el período posterior y el período anterior a la implementación del tratamiento en el grupo de tratamiento, menos la diferencia esperada en \(Y\) en el grupo de control en el mismo período \cite{bernal}. Es decir, compara los cambios en los resultados a lo largo del tiempo entre unidades participantes y no participantes. 
+Dada una variable de resultado \(Y\), este modelo establece el impacto simplemente como el cambio esperado en \(Y\) entre el período posterior y el período anterior a la implementación del tratamiento en el grupo de tratamiento, menos la diferencia esperada en \(Y\) en el grupo de control en el mismo período \cite{bernal}. Es decir, \textbf{compara los cambios en los resultados a lo largo del tiempo} entre unidades participantes y no participantes. 
 
-Si denotamos con \(Y_1\) al valor de la variable \(Y\) en la línea de base, es decir justo antes de la implementación del programa, y con \(Y_2\) al valor de la misma variable en una período posterior a la implementación (también llamado período de seguimiento), entonces el impacto del programa por el método de DED estaría dado por:
+Si denotamos con \(Y_1\) al valor de la variable \(Y\) en la línea de base, es decir justo antes de la implementación del programa, y con \(Y_2\) al valor de la misma variable en una período posterior a la implementación (también llamado período de seguimiento), entonces el impacto del programa por el método de DD estaría dado por:
 \begin{equation}
     \tau_{DED} = 
         \left(
@@ -196,14 +194,29 @@ Si denotamos con \(Y_1\) al valor de la variable \(Y\) en la línea de base, es 
         \left(
             \mathbb{E}\left[Y_2|D=0\right] - \mathbb{E}\left[Y_1|D=0\right]
         \right)
+        \label{eq:dif-en-dif-1}
 \end{equation}
 
-La diferencia en los resultados antes-después para el grupo inscrito controla por factores que son constantes a lo largo del tiempo en ese grupo, puesto que se está comparando el propio grupo consigo mismo. Sin embargo, todavía quedan los factores externos variables en el tiempo en este grupo. La manera que propone el DID de capturar esos factores es medir el cambio antes-después en los resultados de un grupo que no se recibió el programa pero que estuvo expuesto al mismo conjunto de condiciones ambientales (la segunda diferencia). Si se ``limpia'' la primera diferencia de otros factores variables en el tiempo que influyen en el resultado de interés sustrayendo la segunda diferencia, se habrá eliminado una fuente de sesgo \cite{gertler-2016}.
+Es importante señalar que el contrafactual que se estima en este caso es el cambio en los resultados del grupo de tratamiento, y su estimación se logra midiendo el cambio en los resultados del grupo de comparación \cite{gertler-2016}. En lugar de contrastar los resultados entre los grupos de tratamiento y comparación después de la intervención, la técnica de DD estudia las tendencias entre los grupos de tratamiento y comparación \cite{gertler-2016}.
 
-Es importante señalar que el contrafactual que se estima en este caso es el cambio en los resultados del grupo de tratamiento, y su estimación se logra midiendo el cambio en los resultados del grupo de comparación \cite{gertler-2016}. En lugar de contrastar los resultados entre los grupos de tratamiento y comparación después de la intervención, la técnica de DED estudia las tendencias entre los grupos de tratamiento y comparación \cite{gertler-2016}.
+Como explicamos con anterioridad, el principal problema de las comparaciones antes-después en el grupo de tratamiento es que se asume que lo único que hizo cambiar la variable de resultado fue el programa, cuando en realidad puede haber sido por factores externos. El DD busca solucionar este problema basándose en la idea que la diferencia en los resultados antes-después para el grupo de tratamiento controla por factores que son constantes a lo largo del tiempo en ese grupo, y la manera de capturar los factores variables en el tiempo es medir el cambio antes-después en los resultados de un grupo que no se inscribió en el programa pero que estuvo expuesto al mismo conjunto de condiciones ambientales. De esta forma, si se ``limpia'' la primera diferencia de otros factores variables en el tiempo que influyen en el resultado de interés sustrayendo la segunda diferencia, se habrá eliminado una fuente de sesgo \cite{gertler-2016}.
+
+Por otro lado, en las comparaciones de inscritos y no inscritos, el gran inconveniente era el sesgo de autoselección. Para entender mejor la solución que el DD propone a esto, resulta conveniente reescribir el estimador como:
+\begin{equation}
+    \tau_{DED} = 
+        \left(
+            \mathbb{E}\left[Y_2|D=1\right] - \mathbb{E}\left[Y_2|D=0\right]
+        \right) -
+        \left(
+            \mathbb{E}\left[Y_1|D=1\right] - \mathbb{E}\left[Y_1|D=0\right]
+        \right)
+        \label{eq:dif-en-dif-2}
+\end{equation}
+De aquí se puede ver lo que plantea es restarle al cambio visto en la variable entre tratados y no tratados luego de la implementación del programa (\(Y_2\)), las diferencias que ya pueda haber habido entre ellos en la línea de base (\(Y_1\)). Es decir, desde este punto de vista, se utiliza a \(\mathbb{E}\left[Y_1|D=1\right] - \mathbb{E}\left[Y_1|D=0\right]\) como un estimador de las diferencias preexistentes entre el grupo de tratamiento y el grupo de control.
+
+Ahora bien, volviendo a la Ecuación \ref{eq:dif-en-dif-1}, el supuesto que permite utilizar la diferencia en el grupo de no inscritos para controlar los factores externos que afectan a los inscritos es que, en ausencia del programa, dichos factores habrían impactado a los tratados de la misma manera que a los no tratados. En otras palabras, se asume que, sin la intervención, los resultados en el grupo tratado habrían evolucionado en paralelo con los del grupo de control, aumentando o disminuyendo en la misma proporción. Esto se conoce como \textbf{supuesto de tendencias paralelas}, y es sobre el se hay que basarse al trabajar con este método ya que claramente no es posible observar qué habría ocurrido con el grupo tratado en ausencia del programa.
 
 % AGREGAR UN EJEMPLO
-
 
 
 \subsubsection{Efectos Fijos}
