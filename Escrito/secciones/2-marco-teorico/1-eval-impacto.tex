@@ -99,9 +99,9 @@ Como explicamos anteriormente, el término \(\mathbb{E} \left[Y_i(0)|D_i=1\right
 Por lo tanto, podríamos tomar a todo el conjunto de los no participantes como grupo de control y solucionar el problema del contrafactual utilizando \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) como estimador, es decir podríamos asumir lo siguiente:  
 \begin{equation}
     \mathbb{E} \left[Y_i(0)|D_i=1\right]\ = \mathbb{E} \left[Y_i(0)|D_i=0\right]\
-    \label{eq:supuesto-IC}  % IC: Independencia Condicional
+    \label{eq:supuesto-1}  % IC: Independencia Condicional
 \end{equation}
-Esto quiere decir que el valor esperado de la variable de resultado en ausencia del programa (\(\mathbb{E}\left[Y_i(0)\right]\)) es idéntico para el grupo de tratados (\(D = 1\)) y para el de no tratados (\(D = 0\)), lo que se conoce como el \textbf{supuesto de Independencia Condicional}. Indica que los individuos que participan en el programa no son sistemáticamente distintos de los que no lo hacen \cite{bernal} o, en otras palabras, que la decisión de participar en el programa no está determinada por factores que también influyen en la variable de resultado.
+Esto quiere decir que el valor esperado de la variable de resultado en ausencia del programa (\(\mathbb{E}\left[Y_i(0)\right]\)) es idéntico para el grupo de tratados (\(D = 1\)) y para el de no tratados (\(D = 0\)). Indica que los individuos que participan en el programa no son sistemáticamente distintos de los que no lo hacen \cite{bernal} o, en otras palabras, que la decisión de participar en el programa no está determinada por factores que también influyen en la variable de resultado.
 
 De esta forma, podríamos calcular el \(ATT\) como:
 \begin{equation}
@@ -109,7 +109,7 @@ De esta forma, podríamos calcular el \(ATT\) como:
     \label{eq:ATT-con-supuesto-IC}
 \end{equation}
 
-Sin embargo, el supuesto de Independencia Condicional se viola toda vez que la participación en el programa es una \textit{elección} del individuo elegible \cite{bernal}. La razón es que los participantes y los no participantes generalmente son diferentes, aún en ausencia del programa, y son justamente esas diferencias que llevan a que algunos individuos escojan participar y otros no. Por lo tanto, si en estos casos se toma como grupo de control a todos aquellos que no decidieron participar y se mide el impacto con respecto a ellos, puede ocurrir que la diferencia en los resultados se deba a características propias de los individuos que llevaron a unos a anotarse y a otros no.
+Sin embargo, el supuesto de la Ecuación \ref{eq:supuesto-1} se viola toda vez que la participación en el programa es una \textit{elección} del individuo elegible \cite{bernal}. La razón es que los participantes y los no participantes generalmente son diferentes, aún en ausencia del programa, y son justamente esas diferencias que llevan a que algunos individuos escojan participar y otros no. Por lo tanto, si en estos casos se toma como grupo de control a todos aquellos que no decidieron participar y se mide el impacto con respecto a ellos, puede ocurrir que la diferencia en los resultados se deba a características propias de los individuos que llevaron a unos a anotarse y a otros no.
 
 Este problema se conoce como \textbf{sesgo de autoselección}, ya que los integrantes del grupo de control se \textit{autoseleccionaron} para no participar del programa. Más concretamente, este sesgo se produce cuando los motivos por los que un individuo participa en un programa, usualmente no observables y difíciles de medir, están correlacionados con los resultados \cite{gertler-2016}, y por ende, es muy probable que la variable de resultado del grupo de tratamiento y del grupo de control sean diferentes, \textit{aún si el programa no existiera} \cite{bernal}. Intuitivamente, si hay variables que explican tanto la participación como la variable de resultado, la comparación de medias puede estar atribuyendo al programa un efecto que en realidad se debe a las diferencias preexistentes entre el grupo de tratamiento y el grupo de control \cite{bernal}.
 
@@ -162,7 +162,7 @@ La asignación aletoria trae dos consecuencias importantes: las unidades ya no p
 
 Como explicamos anteriormente, el grupo de comparación ideal sería lo más similar posible al grupo de tratamiento en todos los sentidos, excepto con respecto a su participación en el programa que se evalúa. Ahora bien, el proceso de asignación aleatoria producirá dos grupos que tienen una alta probabilidad de ser estadísticamente idénticos en todas sus características (observables y no observables), siempre que el número de unidades sea suficientemente grande \cite{gertler-2016}. Esto es así ya que en general, si la población de unidades elegibles es lo suficientemente grande, este mecanismo asegura que cualquier rasgo de la población se transfiere a ambos grupos. Sin embargo, en la práctica, este supuesto debería comprobarse empíricamente con los datos de línea de base de ambos grupos.
 
-Dicho esto, lo que ocurre en estos casos es que todos aquellos individuos que no resultaron ser beneficiarios del programa conforman un grupo de control que resulta ser naturalmente un excelente estimador del contrafactual \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\). Es decir, mediante este tipo de asignación, se asegura que se cumple el supuesto de Independencia Condicional, dado por la ecuación \ref{eq:supuesto-IC}.
+Dicho esto, lo que ocurre en estos casos es que todos aquellos individuos que no resultaron ser beneficiarios del programa conforman un grupo de control que resulta ser naturalmente un excelente estimador del contrafactual \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\). Es decir, mediante este tipo de asignación, se asegura que se cumple el supuesto de la Ecuación \ref{eq:supuesto-1}.
 
 La asignación aleatoria puede utilizarse como regla de asignación de un programa en dos escenarios específicos: cuando la población elegible es mayor que el número de plazas disponibles del programa, o  cuando sea necesario ampliar un programa de manera progresiva hasta que cubra a toda la población elegible \cite{gertler-2016}. Además, la asignación aleatoria podría hacerse a nivel individual (por ejemplo, a nivel de hogares), o a nivel de conglomerado (por ejemplo, comunidades) \cite{bernal}.
 
@@ -231,7 +231,50 @@ Ahora bien, volviendo a la Ecuación \ref{eq:dif-en-dif-1}, el supuesto que perm
       
       ... - Presentar ventajas y desventajas.
 \end{comment}
+Otro enfoque para lograr una buena aproximación del contrafactual consiste en construir un grupo de comparación artificial, a partir del conjunto de individuos que no recibieron el tratamiento. En esto se basa un método conocido como \textbf{pareamiento} o \textbf{emparejamiento}, que utiliza técnicas estadísticas y grandes bases de datos para construir el mejor grupo de comparación posible sobre la base de características observables \cite{gertler-2016}. La principal utilidad de este método es que puede aplicarse en el contexto de casi todas las reglas de asignación de un programa, siempre que se cuente con un grupo que no haya participado en el mismo \cite{gertler-2016}.
 
+El supuesto que utilizan estas técnicas para basarse en características observables al construir el grupo de control es que tanto la participación en el programa como los resultados potenciales están únicamente determinados por estas. En otras palabras, se asume que al condicionar los resultados potenciales de tratados y no tratados en determinadas variables observables (pertinentes en el programa bajo estudio), el sesgo de autoselección es igual a cero. Formalmente, si denotamos con \(X\) a los rasgos observables, este supuesto se escribe de la siguiente forma:
+\begin{equation}
+    \mathbb{E}\left[Y_i(0)|D_i=1, X\right] = \mathbb{E}\left[Y_i(0)|D_i=0, X\right],
+\end{equation}
+y se lo conoce como \textbf{supuesto de Independencia Condicional} (IC). 
 
+La versión más directa de esta metodología consiste en encontrar un ``clon'' \textit{para cada individuo} tratado en el grupo de no tratados y contrastar las variables de resultados de ambos \cite{bernal}. Un clon en este caso quiere decir un individuo (o grupo de individuos) con características observables \(X\) lo más parecidas posible, como pueden ser el ingreso de una persona, su nivel de educación, edad, sexo, o cualquier variable que sea pertinente para el programa bajo estudio \cite{bernal}. 
+
+Notemos entonces que la búsqueda de una buena pareja para cada participante del programa requiere aproximarse todo lo posible a las características que explican la decisión del individuo de inscribirse en el programa \cite{gertler-2016}. Sin embargo, en la práctica esto es más difícil. Si la lista de características observables relevantes es muy grande, o si cada característica adopta muchos valores, puede que sea complicado identificar una pareja para cada una de las unidades del grupo de tratamiento \cite{gertler-2016}. Esta situación es conocida como \textit{el problema de la dimensionalidad}.
+
+Este problema puede solucionarse utilizando un método denominado pareamiento por puntajes de propensión (\textit{Propensity Score Matching}, PSM). Consiste en emparejar individuos ya no con base en \(X\), sino en su probabilidad estimada de participación en el programa, dadas sus características observables, es decir en:
+\[P(X) = P(D_i = 1|X)\]
+donde \(P\) denota el operador de probabilidad de un evento. Este valor es conocido como \textbf{probabilidad de participación} o \textbf{puntaje de propensión}. De esta forma, el clon adecuado para cada individuo del grupo de tratamiento será aquel del grupo de no tratados con una probabilidad de participación en el programa suficientemente cercana \cite{bernal}. La ventaja de emparejar a partir de \(P(X)\), a diferencia de \(X\), es que \(P(X)\) es un número, mientras que \(X\) puede tener una dimensión muy grande \cite{bernal}. Cabe aclarar que para calcular este puntaje, solo deberían utilizarse las características en la línea de base, ya que post-tratamiento, estas pueden haberse visto afectadas por el propio programa \cite{gertler-2016}.
+
+\begin{comment}
+A grandes rasgos, la forma en la que se procede al utilizar el PSM es la siguiente:
+\begin{enumerate}
+    \item Computar el puntaje de propensión de todas las unidades.
+    \item Parear las unidades del conjunto de tratamiento con unidades en el conjunto de no tratados que tienen los puntajes de propensión más cercanos. Estas unidades próximas se convierten en el grupo de control.
+    \item Generar la estimación del programa como la diferencia promedio en los resultados entre las unidades del tratamiento y sus unidades de comparación correspondientes.
+\end{enumerate}
+\end{comment}
+
+Ahora bien, puede surgir la siguiente pregunta: ¿es posible encontrar al menos una pareja para todos los individuos tratados? Y la respuesta es no, y para aquellos individuos no será posible estimar el impacto del programa. Lo que puede ocurrir en la práctica es que para algunas unidades inscritas, no haya unidades en el conjunto de no inscritos que tengan puntajes de propensión similares. En términos técnicos, puede que se produzca una falta de \textbf{rango o soporte común}.
+
+La condición de soporte común (SC) establece que individuos con el mismo vector de variables \(X\) tienen probabilidad positiva de ser tanto participantes como no participantes del programa \cite{bernal}. Esto es, fijado un vector de variables \(\hat{X}\):
+\[0 < P(D_i=1|\hat{X}) < 1\]
+Si esta condición no se cumple, sería posible encontrar una combinación particular de características que predice perfectamente la participación en el programa, y por tanto, no existiría un individuo que fuera un buen control (o viceversa) \cite{bernal}.
+
+El SC implica que solo se utilizan en la estimación aquellos individuos tratados para los cuales se pueda encontrar uno no tratado con un puntaje de propensión similar. Por ejemplo, si existen individuos del grupo de tratamiento con una probabilidad de participación muy alta, pero ningún individuo no participante exhibe un puntaje tan alto, entonces estos individuos tratados se descartarán a la hora de hacer el emparejamiento.
+
+Asumiendo que se cumplen las condiciones de CI y SC, el estimador del \(ATT\) por PSM estaría dado por:
+\[
+ATT_{PSM} = \mathbb{E}_{P(X)|D=1}
+    \left\{
+        \mathbb{E}\left[Y_i(1)|D_i=1, P(X)\right] - \mathbb{E}\left[Y_i(0)|D_i=0, P(X)\right]
+    \right\}
+\]
+donde \(\mathbb{E}_{P(X)|D_i=1}\) es el valor esperado con respecto a la probabilidad de participación \(P(X)\), condicional en ser participante del programa \cite{bernal}. Es decir, un promedio ponderado de las diferencias entre corchetes, donde los ponderadores son funciones de la probabilidad de participación en el programa \cite{bernal}.
+
+% Resumir los dos supuestos: menciuonar que no pueden ser probados directamente con los datos, pero existen aproximaciones como saber del area de estudio (filminas de David) o calcular diferencias en las variables observables X.
+
+% Resumir los pasos
 
 \end{document}
