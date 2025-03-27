@@ -19,6 +19,3 @@ EXPERIMENT_TAGS = {
 
 # Simulated databases related
 DATA_DIR = "/home/basbenja/Facultad/TrabajoFinal/data"
-
-# Stata related
-STATA_PATH = "/usr/local/stata17"
