@@ -3,13 +3,22 @@
 
 \begin{document}
 
-A continuación, detallamos la metodología utilizada para llevar a cabo las simulaciones y medir el desempeño de las redes, y explicamos cómo este problema se termina enmarcando dentro de una clasificación de series de tiempo.
+A continuación, detallamos la metodología utilizada para llevar a cabo las simulaciones y
+medir el desempeño de las redes, y explicamos cómo este problema se termina enmarcando
+dentro de una clasificación de series de tiempo.
 
 % LA SIGUIENTE PARTE LA SAQUE DEL PAPER QUE ME MANDO DAVID
 % REVISAR SI CORRESPONDE QUE VAYA ACA O EN OTRO LADO
-El primer paso para poder llevar a cabo los experimentos es contar con datos. Nuestro entorno - \textit{framework} - de simulación está diseñado para generar \textbf{datos sintéticos} que imiten escenarios reales en donde la asignación al tratamiento es no aleatoria, escalonada y potencialmente dependiente de resultados pasados.
+El primer paso para poder llevar a cabo los experimentos es contar con datos. Nuestro
+entorno - \textit{framework} - de simulación está diseñado para generar \textbf{datos
+sintéticos} que imiten escenarios reales en donde la asignación al tratamiento es no
+aleatoria, escalonada y potencialmente dependiente de resultados pasados.
 
-El proceso de generación de datos involucra la creación de una serie de tiempo univariada para cada individuo, que incorpora efectos fijos, componentes autoregresivos e impactos del tratamiento. Trabajamos bajo el supuesto que el comportamiento dinámico de la variable modelada para cada unidad es el que determina si esta ingresa al tratamiento o no, y es la misma sobre la que se espera que el tratamiento tenga un efecto.
+El proceso de generación de datos involucra la creación de una serie de tiempo univariada
+para cada individuo, que incorpora efectos fijos, componentes autoregresivos e impactos
+del tratamiento. Trabajamos bajo el supuesto que el comportamiento dinámico de la variable
+modelada para cada unidad es el que determina si esta ingresa al tratamiento o no, y es la
+misma sobre la que se espera que el tratamiento tenga un efecto.
 
 Los parámetros para la generación de los datos son los siguientes:
 \begin{itemize}
@@ -18,38 +27,63 @@ Los parámetros para la generación de los datos son los siguientes:
     \item \texttt{treated\_pct}: porcentaje de individuos tratados.
     \item \texttt{control\_pct}: porcentaje de individuos de control.
     \item \texttt{T}: cantidad de períodos observados de cada individuo.
-    \item \texttt{first\_tr\_period}: primer período de tratamiento (o único, dependiendo de la cantidad de cohortes).
+    \item \texttt{first\_tr\_period}: primer período de tratamiento (o único, dependiendo
+    de la cantidad de cohortes).
     \item \texttt{n\_cohorts}: cantidad de cohortes.
     \item \texttt{phiT}: persistencia auto-regresiva para los tratados.
     \item \texttt{phiC}: persistencia auto-regresiva para los controles.
-    \item \texttt{n\_dep\_periods}: cantidad de períodos de dependencia para la participación en el tratamiento.
+    \item \texttt{n\_dep\_periods}: cantidad de períodos de dependencia para la
+    participación en el tratamiento.
 \end{itemize}
 
-El resultado de la simulación es un conjunto de datos de panel compuesto por series de tiempo univariadas de longitud \texttt{T} para los distintos tipos de individuos:
+El resultado de la simulación es un conjunto de datos de panel compuesto por series de
+tiempo univariadas de longitud \texttt{T} para los distintos tipos de individuos:
 \begin{itemize}
     \setlength{\itemsep}{0pt}
     \setlength{\parsep}{0pt}
-    \item \textbf{Individuos de tipo 1}: son aquellos que han recibido el tratamiento en algún período. Notar que en una situación real, son datos con los que contamos. Los llamaremos también ``tratados''.
-    \item \textbf{Individuos de tipo 2}: son aquellos que en los datos sintéticos, sabemos que forman parte del grupo de control. Es importante notar que en un escenario real, no sabemos quiénes son estos individuos sino que son los que tratamos de identificar. Nos referiremos a ellos también como ``controles''.
-    \item \textbf{Individuos de tipo 3}: son aquellas unidades que no han sido tratadas y que en los datos sintéticos, sabemos que no forman parte del grupo de control. A estos también los mencionaremos como ``NiNi'' (ni tratado ni control). 
+    \item \textbf{Individuos de tipo 1}: son aquellos que han recibido el tratamiento en
+    algún período. Notar que en una situación real, son datos con los que contamos. Los
+    llamaremos también ``tratados''.
+    \item \textbf{Individuos de tipo 2}: son aquellos que en los datos sintéticos, sabemos
+    que forman parte del grupo de control. Es importante notar que en un escenario real,
+    no sabemos quiénes son estos individuos sino que son los que tratamos de identificar.
+    Nos referiremos a ellos también como ``controles''.
+    \item \textbf{Individuos de tipo 3}: son aquellas unidades que no han sido tratadas y
+    que en los datos sintéticos, sabemos que no forman parte del grupo de control. A estos
+    también los mencionaremos como ``NiNi'' (ni tratado ni control). 
 \end{itemize}
 
-En el dataset, cada individuo tiene un identificador y su tipo; y aquellos de tipo 1 y 2 tienen como feature extra el período (desde \texttt{first\_tr\_period} hasta \texttt{first\_tr\_period + n\_cohorts}) en el que ingresaron al programa. A continuación, se muestran algunos ejemplos, tomando \texttt{T = 6}, \texttt{first\_tr\_period = 3} y \texttt{n\_cohorts = 2}:
+En el dataset, cada individuo tiene un identificador y su tipo; y aquellos de tipo 1 y 2
+tienen como feature extra el período (desde \texttt{first\_tr\_period} hasta
+\texttt{first\_tr\_period + n\_cohorts}) en el que ingresaron al programa. A continuación,
+se muestran algunos ejemplos, tomando \texttt{T = 6}, \texttt{first\_tr\_period = 3} y
+\texttt{n\_cohorts = 2}:
 
-En este punto cabe recordar cuál es nuestra meta: a partir de información sobre los individuos que fueron tratados, queremos identificar de entre los no tratados, quiénes son los que podrían formar parte del grupo de control.
+En este punto cabe recordar cuál es nuestra meta: a partir de información sobre los
+individuos que fueron tratados, queremos identificar de entre los no tratados, quiénes son
+los que podrían formar parte del grupo de control.
 
-También resulta muy importante tener en cuenta que en los datos generados sintéticamente, sabemos quiénes son los controles, pero en la realidad esto es justamente lo que queremos identificar.
+También resulta muy importante tener en cuenta que en los datos generados sintéticamente,
+sabemos quiénes son los controles, pero en la realidad esto es justamente lo que queremos
+identificar.
 
-Ahora bien, para entrenar y evaluar a nuestros modelos, tomamos en cuenta lo que ocurriría en un escenario real, en el que sabríamos solamente quiénes son los tratados y quiénes los no tratados. Por lo tanto, construimos el conjunto de entrenamiento con la totalidad de los individuos de tipo 1 con etiqueta 1 y algunos de tipo 3 con etiqueta 0, y en el conjunto de test colocamos a todos los de tipo 2, queriendo predecir en ellos un 1, y al resto de tipo 3, queriendo predecir en ellos un 0. 
+Ahora bien, para entrenar y evaluar a nuestros modelos, tomamos en cuenta lo que ocurriría
+en un escenario real, en el que sabríamos solamente quiénes son los tratados y quiénes los
+no tratados. Por lo tanto, construimos el conjunto de entrenamiento con la totalidad de
+los individuos de tipo 1 con etiqueta 1 y algunos de tipo 3 con etiqueta 0, y en el
+conjunto de test colocamos a todos los de tipo 2, queriendo predecir en ellos un 1, y al
+resto de tipo 3, queriendo predecir en ellos un 0.
 
-Más aún, como queremos identificar a los grupos de control de cada cohorte, 
+Más aún, como queremos identificar a los grupos de control de cada cohorte,
 
 
 
 \begin{comment}
-Dicho esto, la metodología empleada para evaluar el desempeño de las redes neuronales a la hora de identificar los individuos de control consistió en construir el conjunto de entrenamiento con la totalidad de individuos tratados y algunos de tipo 3 (notar que en un escenario real, podemos identificar a todos estos individuos), y utilizamos todos los controles y el resto de tipo 3 como conjunto de testeo.  
+Dicho esto, la metodología empleada para evaluar el desempeño de las redes neuronales a la
+hora de identificar los individuos de control consistió en construir el conjunto de
+entrenamiento con la totalidad de individuos tratados y algunos de tipo 3 (notar que en un
+escenario real, podemos identificar a todos estos individuos), y utilizamos todos los
+controles y el resto de tipo 3 como conjunto de testeo.
 \end{comment}
-
-\
 
 \end{document}
