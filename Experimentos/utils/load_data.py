@@ -2,48 +2,51 @@ import numpy as np
 import pandas as pd
 import torch
 
-def transform(individual_data, start, required_periods, is_control=None):
-    periods = individual_data['t']
-    periods = individual_data[periods.between(start-required_periods, start-1)]
+def transform(id, data, start, required_periods):
+    relevant_periods = data['t'].between(start-required_periods, start-1)
+    relevant_data = data[relevant_periods]
 
-    if len(periods) == required_periods:
+    if sum(relevant_periods) == required_periods:
         row = {
-            'id': individual_data['id'].iloc[0],
+            'id': id,
             'inicio_prog': start,
-            'tratado': individual_data['tratado'].iloc[0],
-            'control': individual_data['control'].iloc[0] if is_control is None else is_control,
+            'tratado': relevant_data['tipo'].iloc[0]
         }
         for i in range(required_periods):
-            row[f"y(t-{required_periods-i})"] = periods['y'].values[i]
+            row[f"y(t-{required_periods-i})"] = relevant_data['y'].values[i]
     else:
-        raise ValueError(f"Individual {individual_data['id'].iloc[0]} does not have enough periods.")
+        raise ValueError(f"Individual {data['id'].iloc[0]} does not have enough periods.")
     return row
 
-def transform_treated(treated_data, required_periods):
+
+def transform_treated(treated_df, required_periods):
     transformed_treated = []
-    for _, individual in treated_data.groupby('id'):
-        start = individual['inicio_prog'].iloc[0]
-        row = transform(individual, start, required_periods)
+    for id, data in treated_df.groupby('id'):
+        treatment_start = data['inicio_prog'].iloc[0]
+        row = transform(id, data, treatment_start, required_periods)
         transformed_treated.append(row)
     return pd.DataFrame(transformed_treated)
 
-def transform_control(control_data, min_start, max_start, required_periods):
+
+def transform_control(control_df, min_start, max_start, required_periods):
     transformed_control = []
-    for _, individual in control_data.groupby('id'):
-        inicio_prog = individual['inicio_prog'].iloc[0]
+    for id, data in control_df.groupby('id'):
+        treatment_start = data['inicio_prog'].iloc[0]
         for assumed_start in range(min_start, max_start + 1):
-            is_control = (1 if assumed_start == inicio_prog else 0)
-            row = transform(individual, assumed_start, required_periods, is_control)
+            is_control = (1 if assumed_start == treatment_start else 0)
+            row = transform(id, data, assumed_start, required_periods, is_control)
             transformed_control.append(row)
     return pd.DataFrame(transformed_control)
 
-def transform_untreated(untreated_data, min_start, max_start, required_periods):
+
+def transform_untreated(untreated_df, min_start, max_start, required_periods):
     transformed_untreated = []
-    for _, individual in untreated_data.groupby('id'):
+    for id, data in untreated_df.groupby('id'):
         for assumed_start in range(min_start, max_start + 1):
-            row = transform(individual, assumed_start, required_periods)
+            row = transform(id, data, assumed_start, required_periods)
             transformed_untreated.append(row)
     return pd.DataFrame(transformed_untreated)
+
 
 def add_target_column(df):
     df['target'] = df['tratado'] | df['control']
@@ -51,16 +54,16 @@ def add_target_column(df):
 
 
 def get_dfs(data, required_periods=4):
-    type1_data = data[data['tipo'] == 1]
-    type1_df = transform_treated(type1_data, required_periods)
+    type1_df = data[data['tipo'] == 1]
+    type1_df = transform_treated(type1_df, required_periods)
 
-    type2_data = data[data['tipo'] == 2]
     min_start = type1_df['inicio_prog'].min()
     max_start = type1_df['inicio_prog'].max()
-    type2_df = transform_control(type2_data, min_start, max_start, required_periods)
+    type2_df = data[data['tipo'] == 2]
+    type2_df = transform_control(type2_df, min_start, max_start, required_periods)
     
-    type3_data = data[data['tipo'] == 3]
-    type3_df = transform_untreated(type3_data, min_start, max_start, required_periods)
+    type3_df = data[data['tipo'] == 3]
+    type3_df = transform_untreated(type3_df, min_start, max_start, required_periods)
 
     final_dfs = []
     for df in [type1_df, type2_df, type3_df]:
