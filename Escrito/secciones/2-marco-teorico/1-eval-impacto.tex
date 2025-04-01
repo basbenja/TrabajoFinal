@@ -486,8 +486,6 @@ ocurrido con el grupo tratado en ausencia del programa.
 % AGREGAR UN EJEMPLO
 
 
-\subsubsection{Efectos Fijos}
-
 \subsubsection{Propensity Score Matching}
 \begin{comment}
     ESQUEMA:
@@ -505,7 +503,7 @@ ocurrido con el grupo tratado en ausencia del programa.
 \end{comment}
 Otro enfoque para lograr una buena aproximación del contrafactual consiste en construir un
 grupo de comparación artificial, a partir del conjunto de individuos que no recibieron el
-tratamiento. En esto se basa un método conocido como \textbf{pareamiento} o
+tratamiento. En esto se basa el método conocido como \textbf{pareamiento} o
 \textbf{emparejamiento}, que utiliza técnicas estadísticas y grandes bases de datos para
 construir el mejor grupo de comparación posible sobre la base de características
 observables \cite{gertler-2016}. La principal utilidad de este método es que puede
@@ -514,39 +512,42 @@ que se cuente con un grupo que no haya participado en el mismo \cite{gertler-201
 
 El supuesto que utilizan estas técnicas para basarse en características observables al
 construir el grupo de control es que tanto la participación en el programa como los
-resultados potenciales están únicamente determinados por estas. En otras palabras, se
-asume que al condicionar los resultados potenciales de tratados y no tratados en
-determinadas variables observables (pertinentes en el programa bajo estudio), el sesgo de
-autoselección es igual a cero. Formalmente, si denotamos con \(X\) a los rasgos
-observables, este supuesto se escribe de la siguiente forma:
+resultados potenciales están únicamente determinados por estas. O, en otras palabras que
+no están determinados por variables no observables (o no medidas).
+
+De esta forma, se asume que al condicionar los resultados potenciales de tratados y no
+tratados en determinadas características observables (pertinentes en el programa bajo
+estudio), el sesgo de autoselección es igual a cero. Formalmente, si denotamos con \(X\) a
+los rasgos observables que se están teniendo en cuenta, este supuesto se escribe de la
+siguiente forma:
 \begin{equation}
     \mathbb{E}\left[Y_i(0)|D_i=1, X\right] = \mathbb{E}\left[Y_i(0)|D_i=0, X\right],
 \end{equation}
-y se lo conoce como \textbf{supuesto de Independencia Condicional} (IC). 
+y se lo conoce como \textbf{supuesto de Independencia Condicional} (IC).
 
-La versión más directa de esta metodología consiste en encontrar un ``clon'' \textit{para
-cada individuo} tratado en el grupo de no tratados y contrastar las variables de
-resultados de ambos \cite{bernal}. Un clon en este caso quiere decir un individuo (o grupo
-de individuos) con características observables \(X\) lo más parecidas posible, como pueden
-ser el ingreso de una persona, su nivel de educación, edad, sexo, o cualquier variable que
-sea pertinente para el programa bajo estudio \cite{bernal}. 
+Con esto en mente, la versión más directa de esta metodología consiste en encontrar un
+``clon'' \textit{para cada individuo tratado} en el grupo de no tratados y contrastar las
+variables de resultado de ambos \cite{bernal}. Un clon en este caso quiere decir, una vez
+fijadas las características que el investigador cree que explican la decisión del de
+inscribirse en el programa, un individuo (o grupo de individuos) con exactamente las
+mismas características observables \(X\).
 
-Notemos entonces que la búsqueda de una buena pareja para cada participante del programa
-requiere aproximarse todo lo posible a las características que explican la decisión del
-individuo de inscribirse en el programa \cite{gertler-2016}. Sin embargo, en la práctica
-esto es más difícil. Si la lista de características observables relevantes es muy grande,
-o si cada característica adopta muchos valores, puede que sea complicado identificar una
-pareja para cada una de las unidades del grupo de tratamiento \cite{gertler-2016}. Esta
-situación es conocida como \textit{el problema de la dimensionalidad}.
+Sin embargo, en la práctica esto resulta difícil. Si la lista de características
+observables relevantes es muy grande, o si cada característica adopta muchos valores,
+puede resultar computacionalmente complejo identificar una pareja para cada una de las
+unidades del grupo de tratamiento. Esta situación es conocida como \textit{el problema de
+la dimensionalidad}.
 
 Este problema puede solucionarse utilizando un método denominado pareamiento por puntajes
 de propensión (\textit{Propensity Score Matching}, PSM). Consiste en emparejar individuos
 ya no con base en \(X\), sino en su probabilidad estimada de participación en el programa,
 dadas sus características observables, es decir en:
-\[P(X) = P(D_i = 1|X)\]
+\[P(X) = P(D = 1|X)\] \footnote{Notar que se omite el subíndice \(i\) por simplicidad.}
 donde \(P\) denota el operador de probabilidad de un evento. Este
 valor es conocido como \textbf{probabilidad de participación} o \textbf{puntaje de
-propensión}. De esta forma, el clon adecuado para cada individuo del grupo de tratamiento
+propensión}.
+
+De esta forma, el clon adecuado para cada individuo del grupo de tratamiento
 será aquel del grupo de no tratados con una probabilidad de participación en el programa
 suficientemente cercana \cite{bernal}. La ventaja de emparejar a partir de \(P(X)\), a
 diferencia de \(X\), es que \(P(X)\) es un número, mientras que \(X\) puede tener una
@@ -566,7 +567,7 @@ A grandes rasgos, la forma en la que se procede al utilizar el PSM es la siguien
 \end{enumerate}
 \end{comment}
 
-Ahora bien, puede surgir la siguiente pregunta: ¿es posible encontrar al menos una pareja
+Ahora bien, puede surgir la siguiente pregunta: ¿es posible encontrar (al menos) una pareja
 para todos los individuos tratados? Y la respuesta es no, y para aquellos individuos no
 será posible estimar el impacto del programa. Lo que puede ocurrir en la práctica es que
 para algunas unidades inscritas, no haya unidades en el conjunto de no inscritos que
@@ -577,33 +578,92 @@ La condición de soporte común (SC) establece que individuos con el mismo vecto
 variables \(X\) tienen probabilidad positiva de ser tanto participantes como no
 participantes del programa \cite{bernal}. Esto es, fijado un vector de variables
 \(\hat{X}\):
-\[0 < P(D_i=1|\hat{X}) < 1\]
-Si esta condición no se cumple, sería posible encontrar una
-combinación particular de características que predice perfectamente la participación en el
-programa, y por tanto, no existiría un individuo que fuera un buen control (o viceversa)
-\cite{bernal}.
+\[0 < P(D=1|\hat{X}) < 1\]
+Si esta condición no se cumple, sería posible encontrar una combinación particular de
+características que predice perfectamente la participación en el programa, y por tanto,
+no existiría un individuo que fuera un buen control (o viceversa) \cite{bernal}.
 
-El SC implica que solo se utilizan en la estimación aquellos individuos tratados para los
-cuales se pueda encontrar uno no tratado con un puntaje de propensión similar. Por
+El SC implica que solo se utilizarán en la estimación aquellos individuos tratados para
+los cuales se pueda encontrar uno no tratado con un puntaje de propensión similar. Por
 ejemplo, si existen individuos del grupo de tratamiento con una probabilidad de
 participación muy alta, pero ningún individuo no participante exhibe un puntaje tan alto,
 entonces estos individuos tratados se descartarán a la hora de hacer el emparejamiento.
 
 Asumiendo que se cumplen las condiciones de CI y SC, el estimador del \(ATT\) por PSM
 estaría dado por:
-\[
+\begin{equation}
 ATT_{PSM} = \mathbb{E}_{P(X)|D=1}
     \left\{
-        \mathbb{E}\left[Y_i(1)|D_i=1, P(X)\right] - \mathbb{E}\left[Y_i(0)|D_i=0, P(X)\right]
+        \mathbb{E}\left[Y(1)|D=1, P(X)\right] - \mathbb{E}\left[Y(0)|D=0, P(X)\right]
     \right\}
-\]
-donde \(\mathbb{E}_{P(X)|D_i=1}\) es el valor esperado con respecto a la probabilidad de
+    \label{ATT-PSM}
+\end{equation}
+donde \(\mathbb{E}_{P(X)|D=1}\) es el valor esperado con respecto a la probabilidad de
 participación \(P(X)\), condicional en ser participante del programa \cite{bernal}. Es
 decir, un promedio ponderado de las diferencias entre corchetes, donde los ponderadores
 son funciones de la probabilidad de participación en el programa \cite{bernal}.
 
-% Resumir los dos supuestos: menciuonar que no pueden ser probados directamente con los datos, pero existen aproximaciones como saber del area de estudio (filminas de David) o calcular diferencias en las variables observables X.
-
 % Resumir los pasos
+Los pasos a seguir a la hora de aplicar la técnica de PSM se pueden resumir en los
+siguientes puntos:
+\begin{enumerate}
+    \item Identificar las unidades que se inscribieron en el programa y las que no lo
+    hicieron.
+    \item Definir el conjunto de variables observables \(X\) que se utilizarán para
+    calcular el puntaje de propensión \(P(X)\).
+    \item Calcular el puntaje de propensión \(P(X)\) para cada individuo, tratados
+    y no tratados.
+    \item Restringir la muestra al soporte común con respecto a la distribución
+    del puntaje de propensión.
+    \item Seleccionar un algoritmo de emparejamiento para emparejar a cada individuo
+    tratado con un individuo o grupo de individuos no tratados que tenga una probabilidad
+    de participación similar.
+    \item Se calcula el impacto del programa como el promedio apropiadamente
+    ponderado de la diferencia entre la variable de resultado de los tratados y
+    sus parejas no tratadas (Ecuación \ref{ATT-PSM}).
+\end{enumerate}
+A continuación, se detalla un poco más en profundidad algunos de estos pasos.
+
+% Hablar de la selección de las variables observables?
+
+
+% Hablar de cómo se calcula el puntaje de propensión?
+Con respecto al cálculo del puntaje de propensión, la idea es especificar un modelo
+\(P(D=1|X) = f(X)\), es decir, la probabiliad de participación como una función
+que puede ser lineal o no lineal en las características observables de los individuos,
+\(X\) \cite{bernal}. Con frecuencia se prefieren los modelos de regresión logística
+(\textit{logit}) o de probabilidad (\textit{probit}) \cite{bernal}.
+
+% Hablar de cómo se hace el emparejamiento?
+
+
+% Conclusión: ventajas y desventajas
+Como mencionamos anteriormente, la gran ventaja del método de PSM es que es flexible,
+pudiéndose utilizar en numerosos contextos, independientemente de la regla de asignación
+de un programa. Además, se puede aplicar a un único levantamiento de información, siempre
+y cuando exista información para los grupos de tratamiento y de no tratamiento
+\cite{bernal}. Por lo tanto, se emplea con frecuencia \cite{bernal}.
+
+Sin embargo, es muy importante notar que los resultados arrojados por el PSM serán
+confiables solamente si se cumple el supuesto de IC \footnotemark. Es decir, cuando
+existan razones para pensar que las variables no observables o no disponibles en la base
+de datos no son un determinante fundamental tanto de la participación en el programa como
+de las variables de resultado potenciales. En otros términos, cuando no haya diferencias
+sistemáticas en las características no observables entre las unidades tratadas y las de
+comparación pareadas que puedan influir en el resultado. \footnotetext{Si bien es deseable
+que se cumpla el supuesto de SC, para ``solucionarlo'' basta con restringir la muestra a
+aquellos individuos tratados para los que sí se pudo encontrar un control adecuado.}
+
+Cabe aclarar que el supuesto de IC no puede ser demostrado, ya que no se puede verificar
+si lo no observado afecta o no la decisión de participación, pero su plausibilidad puede
+ser argumentada basándose en el conocimiento sustantivo del área de estudio. Otra
+alternativa que se lleva a cabo en la práctica es calcular las diferencias en las
+variables observables \(X\); si los dos grupos son demasiados diferentes en estas, esto
+podría ser evidencia de que es probable que también existan diferencias entre los dos
+grupos en características no observadas \cite{bernal}.
+
+En este trabajo, utilizaremos al PSM como referencia para compararlo con nuestro
+enfoque, como explicaremos más en detalle en la sección \ref{}.
+
 
 \end{document}
