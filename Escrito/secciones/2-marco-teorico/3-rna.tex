@@ -246,7 +246,7 @@ por:
 En las redes, se estipula que cada unidad tiene una entrada extra desde una neurona
 \textit{dummy} de la capa anterior, para la cual utilizaremos el subíndice 0, cuyo valor
 está fijado en 1 y su peso correspondiente será \(w^{(k)}_{0,j}\) para una neurona \(j\)
-de una capa \(k\). Esto permite que la entrada a dicha neurona sea distinta de 0
+de una capa \(k\)\footnotemark. Esto permite que la entrada a dicha neurona sea distinta de 0
 incluso cuando todas las salidas de la capa anterior sean 0 \cite{ai-a-modern-approach} y
 agregándolo podemos escribir la Ecuación \ref{eq:neuron} de forma vectorizada:
 \begin{equation}
@@ -255,6 +255,14 @@ agregándolo podemos escribir la Ecuación \ref{eq:neuron} de forma vectorizada:
 donde \(\mathbf{W}^{(k)}_j\) es el vector de todos los pesos que se dirigen a la unidad \(j\) de
 la capa \(k\) (incluyendo \(w_{0,j}\)) y \(\mathbf{x}^{(k)}_j\) es el vector de todas las entradas
 de la unidad \(j\) de la capa \(k\) (incluyendo el 1 fijo de la neurona dummy).
+\footnotetext{En la bibliografía sobre redes neuronales, también se suele presentar
+a este peso como un ``sesgo'' (\textit{bias}) de la neurona, y se lo denota como
+\(b^{(k)}_j\). En este caso, la ecuación de la neurona se escribiría como:
+\[
+    s^{(k)}_j = a^{(k)}_j \left( \sum_i w^{(k-1)}_{i,j} s^{(k-1)}_i + b^{(k)}_j \right)
+\]
+}
+
 
 Si tomamos nuevamente a \(f^{(2)}_1\), tenemos:
 \begin{quote}
