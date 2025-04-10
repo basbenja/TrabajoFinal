@@ -130,9 +130,8 @@ donde el operador \(\mathbb{E}\) representa la media de una variable aleatoria.
 El \(ATE\) se interpreta como el cambio promedio en la variable de resultado cuando un
 individuo escogido al azar pasa aleatoriamente de ser participante a ser no participante
 \cite{bernal}, es decir representa el efecto esperado del tratamiento si toda la población
-fuera tratada. Esta medida es relevante en el caso de la evaluación de un programa
-universal. Es importante notar que para calcularlo, habría que estimar un contrafactual
-tanto para los tratados como para los no tratados.
+fuera tratada. Es importante notar que para calcularlo, habría que estimar un
+contrafactual tanto para los tratados como para los no tratados.
 
 Sin embargo, en la mayoría de los casos, el tratamiento solo está disponible para un
 subconjunto de la población, ya sea por restricciones presupuestarias o criterios de
@@ -203,7 +202,7 @@ del tiempo. Consideran el contrafactual como el resultado para el grupo de trata
 antes que comience la intervención, momento también conocido como \textbf{línea de base}.
 Esta comparación supone que si el programa no hubiera existido, el resultado para los
 participantes del programa habría sido igual a su situación antes del programa, lo cual en
-la mayoría de los tratamientos este supuesto no puede sostenerse \cite{gertler-2016}.
+la mayoría de los tratamientos no puede sostenerse \cite{gertler-2016}.
 
 \subsubsection{Comparaciones de inscritos y no inscritos: Sesgo de autoselección}
 Como explicamos anteriormente, el término \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) de la
@@ -271,8 +270,8 @@ del \(ATT\) (\ref{eq:ATT}) de la siguiente manera:
 \end{equation}
 Si ahora restamos \(\mathbb{E} \left[Y_i(0)|D_i=0\right]\) a ambos lados, obtenemos:
 \begin{equation}
-    \mathbb{E} \left[Y_i(1)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\ =
-    ATT + \mathbb{E} \left[Y_i(0)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\
+    ATT + \mathbb{E} \left[Y_i(0)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\ =
+    \mathbb{E} \left[Y_i(1)|D_i=1\right] - \mathbb{E} \left[Y_i(0)|D_i=0\right]\
     \label{eq:ATT3}
 \end{equation}
 
@@ -323,12 +322,12 @@ evaluación de impacto. A continuación, presentamos las distintas reglas y los 
 evaluación que se utilizan en la práctica al trabajar con cada una de ellas.
 
 \subsection{Evaluaciones Experimentales o Aleatorias}
-En este tipo de evaluaciones, los beneficiarios del programa en cuestión son seleccionados
-al azar, es decir mediante un sorteo. La asignación aleatoria se considera la regla de oro
-de la evaluación de impacto ya que no solo proporciona a los administradores del programa
-una regla imparcial y transparente para asignar recursos escasos entre poblaciones
-igualmente merecedoras de ellos, sino que también representa el método más sólido para
-evaluar el impacto de un programa \cite{gertler-2016}.
+Este tipo de evaluaciones se utiliza cuando los beneficiarios del programa en cuestión son
+seleccionados al azar, es decir mediante un sorteo. La asignación aleatoria se considera
+la regla de oro de la evaluación de impacto ya que no solo proporciona a los
+administradores del programa una regla imparcial y transparente para asignar recursos
+escasos entre poblaciones igualmente merecedoras de ellos, sino que también representa el
+método más sólido para evaluar el impacto de un programa \cite{gertler-2016}.
 
 La asignación aletoria trae dos consecuencias importantes: las unidades ya no pueden
 \textit{elegir} si participar o no, y además todas tienen la misma probabilidad de ser
@@ -385,17 +384,18 @@ más importante, es que por pertenecer al grupo de control, se \textit{excluye} 
 segmento de la población, igualmente vulnerable y elegible, de los beneficios de la
 intervención \cite{bernal}. Además, dada la imposibilidad de negar los beneficios a un
 grupo de control por largos períodos, con frecuencia es imposible estimar los impacto de
-largo lazo \cite{bernal}.
+largo plazo \cite{bernal}.
 
 \subsection{Evaluaciones Cuasi-experimentales}
-Las evaluaciones cuasi-experimentales son aquellas que buscan estimar el impacto causal,
-pero a diferencia de las experimentales, no se basan en la asignación aleatoria de la
-intervención \cite{gertler-2016}, ya sea porque esta no es factible o porque plantea
-problemas éticos. En estos casos, la regla de asignación suele ser menos clara, por lo que
-se convierte en una incógnita adicional en la evaluación, acerca de la cual se deben
-formular supuestos \cite{gertler-2016}. Para ello, estos métodos intentan \textit{simular}
-la aleatorización de un diseño experimental controlando las diferencias entre los
-individuos tratados y no tratados bajo diferentes hipótesis.
+Cuando la asignación aleatoria de los participantes no es factible o plantea problemas
+éticos, se emplean las llamadas evaluaciones o técnicas cuasi-experimentales, que son
+aquellas que buscan estimar el impacto causal, pero a diferencia de las experimentales, no
+se basan en la asignación aleatoria de la intervención \cite{gertler-2016}. En estos
+casos, la regla de asignación suele ser menos clara, por lo que se convierte en una
+incógnita adicional en la evaluación, acerca de la cual se deben formular supuestos
+\cite{gertler-2016}. Para ello, estos métodos intentan \textit{simular} la aleatorización
+de un diseño experimental controlando las diferencias entre los individuos tratados y no
+tratados bajo diferentes hipótesis.
 
 Si bien los métodos cuasi-experimentales suelen ser más adecuados en algunos contextos
 operativos, su desventaja es que requieren más condiciones para garantizar que el grupo de
@@ -424,7 +424,7 @@ antes de la implementación del programa, y con \(Y_2\) al valor de la misma var
 una período posterior a la implementación (también llamado período de seguimiento),
 entonces el impacto del programa por el método de DD estaría dado por:
 \begin{equation}
-    \tau_{DED} =
+    \tau_{DD} =
         \left(
             \mathbb{E}\left[Y_2|D=1\right] - \mathbb{E}\left[Y_1|D=1\right]
         \right) -
@@ -479,7 +479,7 @@ que afectan a los inscritos es que, en ausencia del programa, dichos factores ha
 impactado a los tratados de la misma manera que a los no tratados. En otras palabras, se
 asume que, sin la intervención, los resultados en el grupo tratado habrían evolucionado en
 paralelo con los del grupo de control, aumentando o disminuyendo en la misma proporción.
-Esto se conoce como \textbf{supuesto de tendencias paralelas}, y es sobre el se hay que
+Esto se conoce como \textbf{supuesto de tendencias paralelas}, y es sobre el que hay que
 basarse al trabajar con este método ya que claramente no es posible observar qué habría
 ocurrido con el grupo tratado en ausencia del programa.
 

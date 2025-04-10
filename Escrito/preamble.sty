@@ -17,6 +17,7 @@
 \usepackage{subfiles}
 \usepackage{listofitems}
 \usepackage{csquotes}
+\usepackage{setspace}
 
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{refs.bib}
@@ -55,6 +56,8 @@
 % STYLES
 \usepackage{tikz}
 \usetikzlibrary{babel, positioning, calc, arrows.meta, chains}
+\usepackage[outline]{contour}
+\contourlength{1pt}
 \tikzset{
     >=latex, % for default LaTeX arrow head
     node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
@@ -69,3 +72,5 @@
     node 3/.style={node out}
 }
 \def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+
+\allowdisplaybreaks

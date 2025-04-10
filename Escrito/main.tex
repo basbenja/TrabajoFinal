@@ -1,61 +1,21 @@
 \documentclass[a4paper,12pt,spanish]{book}
 \usepackage{preamble}
 
-\title{
-    % Logos side by side
-    \begin{minipage}{0.4\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{logos/famaf.png}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.4\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{logos/unc.png}
-    \end{minipage}
-
-    \textbf{
-        Aprendizaje Automático para \\
-        la Selección de Grupos de Control en \\
-        Evaluación de Impacto
-    }
-    \thanks{{
-        {
-            \protect\includegraphics[height=7mm]{logos/creative-commons.png}
-        }
-        \fontsize{10}{11}\selectfont  Esta obra está bajo una
-        \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}
-        {Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional.}
-    }}
-}
-
-\author{
-    Autor: Benjam\'in Bas Peralta.\\
-    Directores: Dr. Martín A. Domínguez, Mgter. David Giuliodori.\\
-    Facultad de Matemática, Astronomía, Física y Computación\\
-    Universidad Nacional de Córdoba
-}
-
 \begin{document}
 
-% Carátula
-\maketitle
+\input{caratula.tex}
+
 \cleardoublepage
 
-% Resumen
-\section*{Resumen}
+% Resumen - Palabras clave - Abstract - Keywords
 \subfile{secciones/0-abstract.tex}
-\bigskip
-\textbf{Palabras Clave}: Análisis de Redes Sociales, Aprendizaje Automático, Detección de
-influenciadores, Detección de comunidades, Modelos de predicción, Twitter
 \clearpage
 
 % Agradecimientos
 \thispagestyle{empty}
-\section*{Agradecimientos}
--- TO DO --
+\chapter*{Agradecimientos}
 \clearpage
 
-% Indice
 \tableofcontents
 \clearpage
 
@@ -63,7 +23,30 @@ influenciadores, Detección de comunidades, Modelos de predicción, Twitter
 \subfile{secciones/1-introduccion.tex}
 
 \chapter{Marco Teórico}
+En este capítulo, presentamos los conceptos teóricos necesarios para entender el contexto
+del problema y cuál es la solución que planteamos.
 
+Primeramente, explicamos la Evaluación de Impacto, que es el campo de aplicación sobre
+el que vamos a trabajar. Describimos qué es una Evaluación de Impacto, en qué consiste,
+cuáles son los problemas involucrados, y las distintas técnicas que se utilizan para
+llevarla a cabo. Al final de esta sección, presentamos el método de \textit{Propensity Score Matching},
+que es el que tomaremos como parámetro para evaluar nuestra solución propuesta.
+
+Luego, nos abordamos al campo de la Inteligencia Artificial, enfocándonos particularmente
+en el campo de los algoritmos de Aprendizaje Automático. Explicamos cómo funcionan estos y
+cuáles son los elementos presentes en ellos haciendo especial enfásis en los algoritmos
+de Aprendizaje Supervisado, dentro de los cuales se enmarca nuestra propuesta.
+
+A continuación, hablamos sobre un \textit{modelo} particular dentro del Aprendizaje
+Automático que ha cobrado particular importancia en los últimos años: las Redes
+Neuronales Artificiales. Partimos explicando las de tipo \textit{Feedforward} para Luego
+introducir otras más específicas como son las Convolucionales y las Recurrentes, de las
+cuales haremos uso en nuestros experimentos.
+
+Por último, y para combinar el método de solución propuesto junto con el área de aplicación,
+hablamos sobre las series de tiempo. Mencionamos qué son y cuáles son los parámetros
+involucrados en ellas, y repasamos los últimos trabajos llevados a cabo que utilizan
+Inteligencia Artificial para resolver el problema de clasificación de series de tiempo.
 
 
 \section{Evaluación de Impacto}
@@ -77,13 +60,13 @@ influenciadores, Detección de comunidades, Modelos de predicción, Twitter
 
 
 \section{Redes Neuronales Convolucionales}
-\subfile{secciones/2-marco-teorico/3-convolucionales}
+\subfile{secciones/2-marco-teorico/4-convolucionales}
 
 \section{Redes Neuronales Recurrentes}
-\subfile{secciones/2-marco-teorico/4-recurrentes}
+\subfile{secciones/2-marco-teorico/5-recurrentes}
 
 \section{Clasificación de Series de Tiempo}
-\subfile{secciones/2-marco-teorico/5-clasif-series-de-tiempo}
+\subfile{secciones/2-marco-teorico/6-series-de-tiempo}
 
 
 \chapter{Presentación del problema}
