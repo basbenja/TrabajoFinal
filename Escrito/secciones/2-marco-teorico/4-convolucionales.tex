@@ -1,26 +1,7 @@
 \documentclass[../../main.tex]{subfiles}
 % \graphicspath{{\subfix{../images/}}}
 
-\begin{comment}
-En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
-de las que hacemos uso en este trabajo: las Redes Neuronales Convolucionales y las Redes
-Neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
-específico de datos. Las convolucionales son ideales para procesar datos estructurados en
-forma de grilla, mientras que las recurrentes son adecuadas para secuencias temporales.
-Presentaremos la intuición sobre detrás de ellas y nos concentraremos en su aplicación
-sobre series de tiempo, relevante para nuestro trabajo.
-\end{comment}
-
 \begin{document}
-\begin{comment}
-Qué son
-La idea
-Cuándo surgen
-Sirven para procesar imágenes blanco y negro (grilla), a color (3 escalas) y
-series de tiempo
-La idea de filtros
-EJEMPLOS! Profundizar en los que sirven para series de tiempo unidimensionales
-\end{comment}
 Como mencionamos anteriormente, las Redes Neuronales Convolucionales (RNC) son un tipo
 especializado de redes neuronales pensadas para el procesamiento de datos que tienen una
 estructura de grilla \cite{deep-learning}. Ejemplos de estos datos son las series de
@@ -51,10 +32,10 @@ operación que está presente en estas redes es una relacionada con la convoluci
 
 La convolución toma dos argumentos: por un lado, la \textit{entrada} y por otro lado, un
 \textit{filtro} o \textit{kernel}. En el contexto del ML, ambos son usualmente arreglos
-multidimensionales, también comúnmente llamados tensores \cite{deep-learning}.
-Intuitivamente, la operación consiste en ``deslizar'' el filtro sobre la entrada, y en
-cada momento calcular el producto escalar. Para verlo más claramente en el caso
-unidimensional, tomemos un ejemplo.
+multidimensionales de números reales, también comúnmente llamados tensores
+\cite{deep-learning}. Intuitivamente, la operación consiste en ``deslizar'' el filtro
+sobre la entrada, y en cada momento calcular el producto escalar. Para verlo más
+claramente en el caso unidimensional, tomemos un ejemplo.
 
 Dado como entrada a la convolución un vector \(\mathbf{x}\), si tomamos un filtro de
 tamaño 3, dado por \(\bm{w}=(w_1, w_2, w_3)^T\), entonces el resultado de la convolución
@@ -63,7 +44,6 @@ entradas ``cercanas'':
 \[z_i = w_1 x_{i-1} + w_2 x_{i} + w_3 x_{i+1}\]
 \footnotetext[3]{Por conveniencia, el primer elemento de los vectores será indexado en 1,
 y no en 0.}
-
 En la Figura \ref{fig:conv1d-example}, se puede ver cómo se computan \(z_2\) y \(z_3\).
 
 \begin{figure}
@@ -112,13 +92,14 @@ específica en la entrada. Y por lo tanto, diferentes filtros actuando en conjun
 detectar diferentes características puntuales.
 
 Ahora que ya tenemos una intuición clara sobre qué hace una convolución, veamos
-cómo esta operación se traslada a las redes neuronales. Como dijimos anteriormente,
-las capas de la red que realizan la convolución son llamadas capas convolucionales.
+cómo esta operación se traslada a las redes neuronales. Para empezar, lo que va a
+ocurrir ahora es que los parámetros a optimizar van a ser los pesos involucrados
+en cada filtro.
 
 Las redes convolucionales son un ejemplo de red feedforward, ya que la información fluye
 en una sola dirección. Ahora bien, vimos que en las redes totalmente conectadas, cada
 neurona de una capa está conectada con todas las de la capa anterior. En cambio, en las
-capas convolucionales lo que ocurre es que cada neurona está conectada con un conjunto de
+capas convolucionales lo que ocurre es que cada neurona está conectada con un subconjunto de
 neuronas (consecutivas) de la capa anterior, sobre las cuales aplicará el filtro, y que
 recibe el nombre de \textbf{campo receptivo}. Es importante notar que cada neurona de una
 capa convolucional aplica el mismo filtro, por lo tanto todas ellas comparten los mismos
@@ -140,12 +121,24 @@ Este comportamiento se puede ver en la Figura \ref{fig:fully-connected-vs-conv}.
     \label{fig:fully-connected-vs-conv}
 \end{figure}
 
+Con esta idea de campo receptivo, podemos pensar en una red con dos capas convolucionales
+seguidas y en las que se aplica un filtro de tamaño 3. Lo que va a ocurrir entonces es que
+las neuronas de la primera capa oculta toman una suma pesada de conjuntos de 3 neuronas
+consecutivas de la capa de entrada. Luego, las unidades de la segunda capa oculta toman
+una suma pesada de conjuntos de 3 neuronas consecutivas de la primera capa oculta, que son
+a su vez sumas pesadas de 3 neuronas de entrada. Por lo tanto, las neuronas de la segunda
+capa oculta en realidad tienen un campo receptivo de 5 neuronas. De esta forma, el campo
+receptivo de las unidades en las capas siguientes va aumentando \cite{prince2024understanding}.
+Esto provoca que la primera capa oculta se concentre en características de bajo nivel,
+más específicas, luego la siguiente en otras de mayor nivel como resultado de integrar
+las anteriores, y así sucesivamente \cite{hands-on-ML-sklearn-tf}.
+
 Hasta ahora vimos una capa convolucional que aplica solamente un filtro, lo que nos va a
 dar como resultado solamente un mapa de características. Sin embargo, una misma capa puede
 aplicar varios filtros (todos del mismo tamaño), cada uno de los cuales va a generar su
 propio feature map. Para esto, lo que se hace es darle a la capa una ``profundidad'' de
-tantos filtros como queramos aplicar sobre la entrada, obteniendo de esta forma un feature
-map para cada profundidad, cada uno capturando una característica puntual de la imagen.
+tantos filtros como querramos aplicar sobre la entrada, obteniendo de esta forma un feature
+map para cada nivel profundidad, cada uno capturando una característica puntual de la imagen.
 Así, se suele decir que una capa tiene varios \textit{canales}.
 
 Algo que cabe notar en este punto es que cuando una neurona aplica el filtro
@@ -157,7 +150,7 @@ Figura \ref{fig:conv-layer-multi-channel}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/conv-layer-multi-channel.png}
+    \includegraphics[width=0.4\textwidth]{figs/conv-layer-multi-channel.png}
     \caption{Fuente: \cite{prince2024understanding}. La capa de neuronas \(h_i\) tiene
     dos canales: aquel formado por las neuronas \(h_1\) a \(h_6\) y aquel formado
     por las neuronas \(h_7\) a \(h_{12}\). La capa de neuronas \(h'_i\) aplica un
@@ -168,39 +161,37 @@ Figura \ref{fig:conv-layer-multi-channel}.
 \end{figure}
 
 Además de la cantidad de filtros en una capa, y su tamaño \(l\), existen otros
-hiperparámetros de las capas convolucionales:
+hiperparámetros de las capas convolucionales: \vspace{-0.25cm}
 \begin{itemize}[noitemsep]
-    \item El \textit{stride}, que representa la distancia entre dos campos receptivos
-    consecutivos.
-    \item El \textit{padding}, 
+    \item El paso (\textit{stride}), que representa la distancia entre dos campos receptivos
+    consecutivos. Un stride igual a 1 quiere decir que el filtro se aplica en cada
+    posición de la entrda.
+    \item El relleno (\textit{padding}), que controla cuántos valores ``fantasma'' se agregan
+    artificialmente a los extremos de la entrada de forma tal que el tamaño de la salida
+    de la convolución no sea tanto menor al de la entrada. En la práctica, se usa el 0
+    para este relleno (\textit{zero-padding}).
+    \item La dilatación (\textit{dilation}), que determina cuántos 0s se intercalan
+    en los pesos del filtro. Con este parámetro, se puede convertir un filtro de \(l=5\)
+    a uno ``dilatado'' de tamaño 3 fijando el segundo y cuarto elementos en 0. Esto
+    permite seguir ``integrando'' la información de una región de la entrada de tamaño
+    5 pero requiriendo solamente 3 pesos para hacerlo \cite{prince2024understanding}.
 \end{itemize}
-\cite{deep-learning-with-pytorch}.
 
 Otros de los componentes particulares de las RNCs son las capas de \textit{pooling}, cuyo
 objetivo principal es reducir el tamaño del mapa producido por la convolución
-\cite{hands-on-ML-sklearn-tf}. Lo hace reemplazando los valores presentes en una
-determinada sección del mapa por una medida resumen de ellos, entre las cuales algunas
-comúnmente utilizadas son el máximo (\textit{max pooling}) y el promedio (\textit{average
-pooling}). Esta reducción de tamaño no solo disminuye la cantidad de parámetros sino que
-también hace a la red más robusta ante desplazamientos de la imagen
-\cite{hands-on-ML-sklearn-tf}.
+\cite{hands-on-ML-sklearn-tf}. Es decir, se aplican luego de la convolución y lo que hacen
+es reemplazar valores contiguos presentes en una determinada sección del mapa por una medida
+resumen de ellos, entre las cuales algunas comúnmente utilizadas son el máximo
+(\textit{max pooling}) y el promedio (\textit{average pooling}). Esta reducción de tamaño
+no solo disminuye la cantidad de parámetros sino que también hace a la red más robusta
+ante desplazamientos de la imagen \cite{hands-on-ML-sklearn-tf}.
 
 Una capa convolucional típica de una RNC se compone de tres etapas: en primer lugar, se
 producen las convoluciones, que se encargan de producir activaciones lineales; luego, cada
 una de estas activaciones pasa por una función de activación no lineal; y finalmente se
 aplica pooling para reducir (aún más) el tamaño de la salida \cite{deep-learning}.
 
-% Con esto en mente, supongamos que tenemos dos capas convolucionales seguidas y en cada una
-% de ellas se aplica un filtro de tamaño 3, es decir el campo receptivo de cada neurona en
-% cada capa es de 3. Lo que va a ocurrir entonces es que las neuronas de la primera capa
-% oculta toman una suma pesada de conjuntos de 3 neuronas consecutivas de la capa de
-% entrada. Luego, las unidades de la segunda capa oculta toman una suma pesada de conjuntos
-% de 3 neuronas consecutivas de la primera capa oculta, que son a su vez sumas pesadas de 3
-% neuronas de entrada. Por lo tanto, las neuronas de la segunda capa oculta en realidad
-% tienen un campo receptivo de 5 neuronas. De esta forma, el campo receptivo de las unidades
-% en las capas siguientes va aumentando, y la información 
-
-% En estas redes, los pesos de los filtros son los parámetros que la
-% red aprende durante su entrenamiento para llevar a cabo su tarea específica.
+De esta froma, una red neuronal convolucional profunda se compone de varias de estas
+capas.
 
 \end{document}

@@ -59,24 +59,23 @@ funciones que proveen está formado en realidad por la composición de varias fu
 \cite{deep-learning}. Por ejemplo, podríamos tener la composición de tres funciones
 \(f^{(1)}\), \(f^{(2)}\) y \(f^{(3)}\) para formar la siguiente función:
 \begin{equation}
-    f(\mathbf{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\mathbf{x})))
+    f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))
     \label{eq:fun-composition}
 \end{equation}
-donde \(\mathbf{x}\) es un vector de dimensión \(n\) de números reales: \(\mathbf{x}=(x_1,
-x_2, ..., x_n)\), es decir \(\mathbf{x} \in \mathbb{R}^m\).
+donde \(\bm{x}\) es un vector de dimensión \(n\) de números reales: \(\bm{x}=(x_1,
+x_2, ..., x_n)\), es decir \(\bm{x} \in \mathbb{R}^n\).
 
 Usualmente, se dice que las redes están organizadas en \textbf{capas}. De esta forma, en
-la ecuación anterior, a la función \(f^{(1)}\), que es la primera que se aplica sobre
-\(\mathbf{x}\), se la llama \textbf{capa de entrada}, a \(f^{(2)}\) \textbf{capa oculta o
-intermedia}, y a \(f^{(3)}\), que es la que produce el resultado final, \textbf{capa de
-salida}. La longitud de esta cadena de funciones es la que va a dar la
-\textbf{profundidad} de la red.
+la ecuación anterior, a \(\bm{x}\) se la conoce como \textbf{capa de entrada}, a las
+funciones \(f^{(1)}\) y \(f^{(2)}\) como \textbf{capa ocultas o intermedias}, y a
+\(f^{(3)}\), que es la que produce el resultado final, como \textbf{capa de salida}. La
+longitud de esta cadena de funciones es la que va a dar la \textbf{profundidad} de la red.
 
-En general, las RNAs tienen una capa de entrada y una de salida, pero pueden tener una o
-más ocultas. Cuando tienen una capa oculta, se las llama ``superficiales'' (o poco
-profundas, del inglés \textit{shallow}), y cuando tienen más de una \textit{profundas}. Es
-por esto que al hablar de redes neuronales, muchas veces se hablahace referencia al
-término \textbf{Aprendizaje Profundo}.
+Las RNAs tienen una capa de entrada y una de salida, pero el número de capas ocultas
+depende de quien la diseñe. Cuando tienen una capa oculta, se las llama ``superficiales''
+(o poco profundas, del inglés \textit{shallow}), y cuando tienen más de una
+\textit{profundas}. Es por esto que al hablar de redes neuronales, muchas veces se
+hablahace referencia al término \textbf{Aprendizaje Profundo}.
 
 Lo interesante de estos modelos es que si bien el conjunto de entrenamiento especifica qué
 tiene que producir la capa de salida ante cada entrada particular, no determina cuál debe
@@ -96,12 +95,12 @@ siguiente manera:
         thickborder/.style={draw, circle, minimum size=1cm, align=center, line width=0.5mm}
     ]
         % Nodes
-        \node (n1) [thickborder] {\( f^{(1)} \)};
-        \node (n2) [thickborder, right=of n1] {\( f^{(2)} \)};
-        \node (n3) [thickborder, right=of n2] {\( f^{(3)} \)};
+        \node [node hidden] (n1) [thickborder] {\( f^{(1)} \)};
+        \node [node hidden] (n2) [thickborder, right=of n1] {\( f^{(2)} \)};
+        \node [node out] (n3) [thickborder, right=of n2] {\( f^{(3)} \)};
 
-        \node (x) [left=of n1 ] {\(\mathbf{x}\)};
-        \node (y) [right=of n3] {\( y \)};
+        \node [node in] (x) [left=of n1 ] {\(\bm{x}\)};
+        \node (y) [right=of n3] {\(\bm{\hat{y}}\)};
 
         % Edges
         \draw [connect arrow] (x.east) -- (n1.west);
@@ -111,10 +110,10 @@ siguiente manera:
     \end{tikzpicture}
 \end{center}
 
-En este caso, la entrada \(\mathbf{x}\) va a la función \(f^{(1)}\), la salida de
-\(f^{(1)}(\mathbf{x})\) va a \(f^{(2)}\), y la salida de \(f^{(2)}(f^{(1)}(\mathbf{x}))\)
-va directamente a \(f^{(3)}\) para de esa forma producir el resultado final \(y =
-f(\mathbf{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\mathbf{x})))\).
+En este caso, la entrada \(\bm{x}\) va a la función \(f^{(1)}\), la salida de
+\(f^{(1)}(\bm{x})\) va a \(f^{(2)}\), y la salida de \(f^{(2)}(f^{(1)}(\bm{x}))\)
+va directamente a \(f^{(3)}\) para de esa forma producir el resultado final \(\hat{y} =
+f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))\).
 
 Es justamente el comportamiento anterior el que caracteriza a las redes neuronales de tipo
 \textbf{\textit{feedforward}}: los datos y resultados fluyen en una sola dirección; cada
@@ -130,7 +129,7 @@ reciben entradas (o estímulos) de otras unidades y computan su propio valor de 
 \cite{deep-learning}.
 
 Cabe aclarar que la capa de entrada va a tener tantas neuronas como la dimensión de los
-datos de entrada (\(\mathbf{x}\)). Es decir, si \(\mathbf{x}\) es de dimensión \(n\),
+datos de entrada (\(\bm{x}\)). Es decir, si \(\bm{x}\) es de dimensión \(n\),
 entonces la capa de entrada va a tener \(n\) unidades. Sin embargo, la cantidad de
 neuronas de cada capa oculta depende del diseño de la red, y la de la capa de salida
 depende sobre todo del problema que se esté tratando de resolver. Si se trata por ejemplo
@@ -142,61 +141,66 @@ conectadas} (\textit{fully connected}), que son aquellas en las que cada unidad 
 capa se conecta con todas las de la capa siguiente.
 
 Con esto en mente, podemos concretizar un poco más el ejemplo con el que venimos
-trabajando suponiendo que \(\mathbf{x}\) es un vector de dimensión 3, la capa oculta dada
-por \(f^{(2)}\) tiene 2 neuronas y la capa de salida tiene 1. Así, suponiendo que nuestra
-red es fully connected, nuestro grafo resultaría en:
-\begin{center}
+trabajando suponiendo que \(\bm{x}\) es un vector de dimensión 3, las capas ocultas
+dadas por \(f^{(1)}\) y \(f^{(2)}\) tienen 3 y 4 neuronas respectivamente y la capa de
+salida tiene 2. Así, suponiendo que nuestra red es fully connected, nuestro grafo
+resultaría en:
+\begin{figure}
+    \centering
+    % NEURAL NETWORK with coefficients, arrows
     \begin{tikzpicture}[
-        node distance=1.5cm,
-        every node/.style={draw, circle, minimum size=1cm, align=center},
+        x=2.2cm,
+        y=1.4cm
     ]
-        % Inputs
-        \node (x1) {\(x_1\)};
-        \node (x2) [below=of x1] {\(x_2\)};
-        \node (x3) [below=of x2] {\(x_3\)};
+        \readlist\Nnod{3,4,3,2} % array of number of nodes per layer
 
-        % Input layer
-        \node (f11) [right=of x1] {\(f^{(1)}_1\)};
-        \node (f12) [right=of x2] {\(f^{(1)}_2\)};
-        \node (f13) [right=of x3] {\(f^{(1)}_3\)};
+        \foreachitem \N \in \Nnod{ % loop over layers
+            \edef\lay{\Ncnt} % alias of index of current layer
+            \message{\lay,}
+            \pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+            \foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+                % NODES
+                \ifnum\lay = 1 % input layer
+                    \node[node \n] (N\lay-\i) at (\x,\y) {$x_\i$};
+                \else
+                    \node[node \n] (N\lay-\i) at (\x,\y) {$f_\i^{(\prev)}$};
+                \fi
+                % CONNECTIONS
+                \ifnum\lay > 1 % connect to previous layer
+                    \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
+                        \draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+                    }
+                \fi % else: nothing to connect first layer
+            }
+        }
 
-        % Hidden layer
-        \node (f21) [right=of $(f11)!0.5!(f12)$] {\(f^{(2)}_1\)};
-        \node (f22) [below=of f21] {\(f^{(2)}_2\)};
+        % Add output nodes to the left of each final layer neuron
+        \node[node out, right=of N\Nnodlen-1] (y1) {\(\hat{y}_1\)};
+        \node[node out, right=of N\Nnodlen-2] (y2) {\(\hat{y}_2\)};
 
-        % Output layer
-        \node (f31) [right=of $(f21)!0.5!(f22)$] {\(f^{(3)}_1\)};
+        % Connect final layer neurons to their corresponding output nodes
+        \draw[connect arrow] (N\Nnodlen-1) -- (y1);
+        \draw[connect arrow] (N\Nnodlen-2) -- (y2);
 
-        % Output
-        \node (y) [right=of f31] {\( y \)};
-
-        % Edges
-        \draw [connect arrow] (x1.east) -- (f11.west);
-        \draw [connect arrow] (x2.east) -- (f12.west);
-        \draw [connect arrow] (x3.east) -- (f13.west);
-
-        \draw [connect arrow] (f11.east) -- (f21.west);
-        \draw [connect arrow] (f12.east) -- (f21.west);
-        \draw [connect arrow] (f13.east) -- (f21.west);
-        \draw [connect arrow] (f11.east) -- (f22.west);
-        \draw [connect arrow] (f12.east) -- (f22.west);
-        \draw [connect arrow] (f13.east) -- (f22.west);
-
-        \draw [connect arrow] (f21.east) -- (f31.west);
-        \draw [connect arrow] (f22.east) -- (f31.west);
-
-        \draw [connect arrow] (f31.east) -- (y.west);
+        % LABELS
+        % \node[above=1,align=center,mygreen!60!black] at (N1-1.90) {capa de\\entrada};
+        % \node[above=1,align=center,myblue!60!black] at (N3-1) {capas ocultas};
+        % \node[above=1,align=center,myred!60!black] at (N\Nnodlen-1.90) {capa\\de salida};
     \end{tikzpicture}
-\end{center}
+    \caption{Red Neuronal de tipo Feedforward con la capa de entrada formada por 3
+    neuronas, dos capas ocultas, cada una formada por 4 y 3 neuronas respectivamente, y la
+    capa de salida, formada por dos neuronas. En este caso, la red ``acepta'' entradas
+    \(\bm{x} \in \mathbb{R}^3\) y produce salidas \(\bm{\hat{y}} \in \mathbb{R}^2\).
+    Adaptado de \cite{tikz-neural-networks}.}
+    \label{fig:ff-neural-network}
+\end{figure}
 donde el superíndice de cada nodo indica el número de capa y subíndice hace referencia al
 número de neurona en esa capa.
 
-Vemos entonces que cada neurona de la capa de entrada se encarga de recibir una ``parte'' del
-vector de entrada \footnotemark, pero las neuronas de tanto la capa oculta como la de salida reciben las
-salidas de las neuronas de la capa anterior. Veamos entonces qué hace precisamente una
-neurona o unidad.
-\footnotetext{Esto hace que en general los nodos \(x_1\), \(x_2\) y \(x_3\) del diagrama
-... sean omitidos en los grafos de las redes.}
+Vemos entonces que cada neurona de la capa de entrada se encarga de recibir una ``parte''
+del vector de entrada\footnotemark, pero las neuronas de tanto la capa oculta como la de
+salida reciben las salidas de las neuronas de la capa anterior. Veamos entonces qué hace
+precisamente una neurona o unidad.
 
 Una neurona simplemente calcula una suma pesada de sus entradas, provenientes de las
 unidades de la capa anterior, y luego aplica una función \textbf{no lineal} que
@@ -204,8 +208,8 @@ denotaremos con \(a\) para producir su salida. Formalmente, si denotamos con:
 \begin{itemize}[itemsep=0.1cm]
     \item \(s^{(k)}_j\) a la salida de la unidad \(j\) de la capa \(k\)
     \item \(a^{(k)}_j\) a la función no lineal de la unidad \(j\) de la capa \(k\)
-    \item \(w^{(k-1)}_{i,j}\) la intensidad o \textbf{peso} de la conexión entre la
-    neurona \(i\) de la capa (\(k-1\)) y la \(j\) de la capa \(k\),
+    \item \(w^{(k)}_{i,j}\) la intensidad o \textbf{peso} de la conexión entre la
+    neurona \(i\) de la capa \(k\) y la \(j\) de la capa \((k+1)\),
 \end{itemize}
 tenemos que:
 \begin{equation}
@@ -222,8 +226,8 @@ La función \(a^{(k)}_j\) se denomina \textbf{función de activación}, y el hec
 lineal es importante ya que de no ser así, cualquier composición de unidades estaría
 representando una función lineal \cite{ai-a-modern-approach}. Es justamente esta no
 linealidad lo que permite a estos modelos representar funciones arbitrarias
-\cite{ai-a-modern-approach}. En general, se asume que todas las neuronas de una capa
-tienen la misma función de activación.
+\cite{ai-a-modern-approach} y complejas. En general, se asume que todas las neuronas de
+una capa tienen la misma función de activación.
 
 Algunas funciones de activación comunes son las siguientes:
 \begin{itemize}[itemsep=0.1cm]
@@ -234,6 +238,9 @@ Algunas funciones de activación comunes son las siguientes:
 \end{itemize}
 Actualmente, la más utilizada es la ReLU y variantes de ella.
 
+% Hablar en este punto que la función de activación se aplica en problemas de clasificación
+% es la sigmoide en la capa de salida?
+
 Si en nuestro ejemplo tomamos la neurona \(f^{(2)}_1\), tenemos que su salida estará dada
 por:
 \begin{align*}
@@ -241,121 +248,287 @@ por:
               &= a^{(2)}_1 \left( w^{(1)}_{1,1}s^{(1)}_1 +  w^{(1)}_{2,1}s^{(1)}_2 + w^{(1)}_{3,1}s^{(1)}_3 \right)
 \end{align*}
 
-% En el párrafo siguiente, agregar algo sobre la relación entre esta neurona dummy
-% y el umbral de activación de la neurona biológica.
 En las redes, se estipula que cada unidad tiene una entrada extra desde una neurona
 \textit{dummy} de la capa anterior, para la cual utilizaremos el subíndice 0, cuyo valor
-está fijado en 1 y su peso correspondiente será \(w^{(k)}_{0,j}\) para una neurona \(j\)
-de una capa \(k\)\footnotemark. Esto permite que la entrada a dicha neurona sea distinta de 0
-incluso cuando todas las salidas de la capa anterior sean 0 \cite{ai-a-modern-approach} y
-agregándolo podemos escribir la Ecuación \ref{eq:neuron} de forma vectorizada:
+de salida se fija en 1 y su peso correspondiente es \(w^{(k)}_{0,j}\) para una neurona
+\(j\) de una capa \(k\)\footnotemark. Este peso se suele llamar \textbf{bias} y permite
+que la entrada a dicha neurona sea distinta de 0 incluso cuando todas las salidas de la
+capa anterior sean 0 \cite{ai-a-modern-approach}. Agregándolo, podemos escribir la
+Ecuación \ref{eq:neuron} de forma vectorizada:
 \begin{equation}
-    s^{(k)}_j = a^{(k)}_j \left( \left( \mathbf{W}^{(k)}_j \right)^T \mathbf{x}^{(k)}_j \right)
+    s^{(k)}_j = a^{(k)}_j \left( \left( \bm{w}^{(k-1)}_j \right)^T \bm{s}^{(k-1)}_j \right)
 \end{equation}
-donde \(\mathbf{W}^{(k)}_j\) es el vector de todos los pesos que se dirigen a la unidad \(j\) de
-la capa \(k\) (incluyendo \(w_{0,j}\)) y \(\mathbf{x}^{(k)}_j\) es el vector de todas las entradas
-de la unidad \(j\) de la capa \(k\) (incluyendo el 1 fijo de la neurona dummy).
-\footnotetext{En la bibliografía sobre redes neuronales, también se suele presentar
-a este peso como un ``sesgo'' (\textit{bias}) de la neurona, y se lo denota como
-\(b^{(k)}_j\). En este caso, la ecuación de la neurona se escribiría como:
-\[
-    s^{(k)}_j = a^{(k)}_j \left( \sum_i w^{(k-1)}_{i,j} s^{(k-1)}_i + b^{(k)}_j \right)
-\]
-}
+donde \(\bm{w}^{(k-1)}_j\) es el vector de todos los pesos que salen de las neuronas de la
+capa \((k-1\)) y se dirigen a la unidad \(j\) de la capa \(k\) (incluyendo \(w_{0,j}\)) y
+\(\bm{s}^{(k-1)}_j\) es el vector de todas las salidas de la capa anterior que se
+dirigen a la unidad \(j\) de la capa \(k\) (incluyendo el 1 fijo de la neurona dummy).
+\footnotetext{En la bibliografía sobre redes neuronales, también se suele presentar a este
+peso como un elemento ``aparte'' de la neurona, no como un peso extra, y se lo denota como
+\(b^{(k)}_j\).}
 
-
-Si tomamos nuevamente a \(f^{(2)}_1\), tenemos:
+Si tomamos nuevamente a \(f^{(2)}_1\), los vectores involucrados van a ser \(\bm{w}^{(1)}_1\)
+y \(\bm{s}^{(1)}_1\), dados por:
 \begin{quote}
-    \(\mathbf{W}^{(2)}_1 = (w^{(1)}_{0,1}, w^{(1)}_{1,1}, w^{(1)}_{2,1}, w^{(1)}_{3,1})\),
-    \(\mathbf{X}^{(2)}_1 = (1, s^{(1)}_1, s^{(1)}_2, s^{(1)}_3)\)
+    \(\bm{w}^{(1)}_1 = (w^{(1)}_{0,1}, w^{(1)}_{1,1}, w^{(1)}_{2,1}, w^{(1)}_{3,1}, w^{(1)}_{3,1})\),
+    \(\bm{s}^{(1)}_1 = (1, s^{(1)}_1, s^{(1)}_2, s^{(1)}_3, s^{(1)}_4)\)
 \end{quote}
+
+Gráficamente:
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}[x=2.7cm,y=1.6cm]
+        \def\NI{4} % number of nodes in input layers
+        \def\NO{3} % number of nodes in output layers
+        \def\yshift{0.4} % shift last node for dots
+
+        % INPUT LAYER
+        \foreach \i in {0,...,\NI} {
+            \pgfmathsetmacro{\y}{\NI/2 - \i}
+            \ifnum\i=0
+                \node[node in,outer sep=0.6] (NI-\i) at (0,\y) {1};
+            \else
+                \node[node in,outer sep=0.6] (NI-\i) at (0,\y) {\(s^{(1)}_{\i}\)};
+            \fi
+        }
+
+        % OUTPUT LAYER
+        \foreach \i in {\NO,...,1}{ % loop over nodes
+            \pgfmathsetmacro{\y}{\NO/2 - \i}
+            \ifnum\i=1 % high-lighted node
+                \node[node hidden] (NO-\i) at (1,\y) {\(f^{(2)}_{\i}\)};
+                \foreach \j in {0,...,\NI}{ % loop over nodes in previous layer
+                    \draw[connect arrow] (NI-\j) -- (NO-\i)
+                        node[pos=0.50, fill=white] {\contour{white}{\footnotesize{\(w^{(1)}_{\j,\i}\)}}};
+                }
+            \else % other light-colored nodes
+                \node[node,blue!20!black!80,draw=myblue!20,fill=myblue!5]
+                (NO-\i) at (1,\y) {\(f^{(2)}_{\i}\)};
+                \foreach \j in {0,...,\NI}{ % loop over nodes in previous layer
+                    \draw[connect arrow,myblue!20] (NI-\j) -- (NO-\i);
+                }
+            \fi
+        }
+    \end{tikzpicture}
+    \caption{... Adaptado de \cite{tikz-neural-networks}.}
+    \label{}
+\end{figure}
+
 
 Así como utilizamos vectores para describir el cómputo de una neurona, podemos emplear
 matrices para describir el comportamiento de toda una capa. Para ello, tomemos la siguiente
-notación:
+notación, para lo cual resulta conveniente fijar una capa \(k\), que tiene \(m\)
+neuronas:
 \begin{itemize}[itemsep=0.1cm]
-    \item \(\mathbf{S}^{(k)}\) es el vector columna formado por las salidas de la capa
-    \(k\). Es decir: \(\mathbf{S}^{(k)} = (s_0^{(k)}, s_1^{(k)}, ..., s_m^{(k)})^T = (1,
-    s_1^{(k)}, ..., s_m^{(k)})^T\), donde \(m\) es la cantidad de neuronas de la capa
-    \(k\).
-    \item \(a^{(k)}\) es la función de activación de la capa \(k\), con una aplicación
-    elemento a elemento. Es decir: \(a^{(k)}(x_1, x_2, ..., x_m) = (a^{(k)}(x_1),
-    a^{(k)}(x_2), ..., a^{(k)}(x_m))\)
-    \item \(\mathbf{W}^{(k)}\) es la matriz de pesos que ``llegan'' a la capa \(k\). Cada
-    fila \(j\) de esta matriz corresponde a los pesos que llegan a la neurona \(j\) de la
-    capa \(k\), es decir cada fila es \(\mathbf{W}^{(k)}_j\) con \(j = 1,...,m\), con
-    \(m\) la cantidad de neuronas de la capa \(k\). De esta manera, la matriz \(\mathbf{W}^{(k)}\)
-    tiene dimensiones \(m \times (n + 1)\), siend \(n\) la cantidad de neuronas de la capa
-    \(k-1\) sin contar la dummy.
+    \item \(\bm{s}^{(k)}\) es el vector columna formado por las salidas de la capa
+    \(k\). Es decir: \(\bm{s}^{(k)} = (s_0^{(k)}, s_1^{(k)}, ..., s_m^{(k)})^T = (1,
+    s_1^{(k)}, ..., s_m^{(k)})^T\).
+    \item \(\bm{a}^{(k)}\) es la función de activación de la capa \(k\), con una aplicación
+    elemento a elemento. Es decir: \(\bm{a}^{(k)}(x_1, x_2, ..., x_m) = (a^{(k)}(x_1),
+    a^{(k)}(x_2), ..., a^{(k)}(x_m))\).
+    \item \(\mathbf{W}^{(k)}\) es la matriz de pesos que salen de la capa \(k\). Cada fila
+    \(j\) de esta matriz corresponde a los pesos que salen de cada neurona de la capa
+    \(k\) (incluyendo el bias) y se dirigen a la neurona \(j\) de la capa \((k+1)\). Es
+    decir cada fila es \(\bm{w}^{(k)}_j\) con \(j = 1,...,n\), y \(n\) la cantidad de
+    neuronas de la capa \((k+1)\). Así, esta matriz tiene dimensiones \(n \times m\).
 \end{itemize}
-Con esto, tenemos que la salida de una capa está dada por:
+Con esto, tenemos que la salida de una capa \(k\) está dada por:
 \[
-    \mathbf{S}^{(k)} = a^{(k)} \left( \mathbf{W}^{(k)} \mathbf{S}^{(k-1)} \right)
+    \bm{s}^{(k)} = \bm{a}^{(k)} \left( \mathbf{W}^{(k-1)} \bm{s}^{(k-1)} \right)
 \]
 
-% Escribir la composición final de la red de ejemplo en algún lado?
+Con todo esto en mente, veamos cuál es la función que describe la red neuronal presentada
+como ejemplo:
+\begin{align*}
+    \bm{\hat{y}} =\ & \bm{s}^{(3)} \\
+        =\ & \bm{a}^{(3)} \left( \mathbf{W}^{(2)} \bm{s}^{(2)} \right) \\
+        =\ & \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)} \bm{s}^{(1)}
+            \right)
+        \right) \\
+        =\ & \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)} \bm{a}^{(1)} \left( \mathbf{W}^{(0)} \bm{s}^{(0)} \right)
+            \right)
+        \right) \\
+        =\ & \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)} \bm{a}^{(1)} \left( \mathbf{W}^{(0)} \bm{x}^T \right)
+            \right)
+        \right)
+\end{align*}
+
+Y si queremos profundizar aún más esta ecuación para ver dónde aparece cada peso:
+\begin{align*}
+    \bm{\hat{y}}
+    &=\ \bm{a}^{(3)} \left(
+        \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+            \mathbf{W}^{(1)} \bm{a}^{(1)} \left( \mathbf{W}^{(0)} \bm{x}^T \right)
+        \right)
+    \right) \\
+    &=\ \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)} \bm{a}^{(1)} \left(
+                    \mathbf{W}^{(0)} \begin{bmatrix} 1 \\ x_1 \\ x_2 \\ x_3 \end{bmatrix}
+            \right)
+        \right)
+    \right) \\
+    &=\ \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)} \bm{a}^{(1)} \left(
+                    \begin{bmatrix}
+                        w_{0,1}^{(0)} & w_{1,1}^{(0)} & w_{2,1}^{(0)} & w_{3,1}^{(0)} \\
+                        w_{0,2}^{(0)} & w_{1,2}^{(0)} & w_{2,2}^{(0)} & w_{3,2}^{(0)} \\
+                        w_{0,3}^{(0)} & w_{1,3}^{(0)} & w_{2,3}^{(0)} & w_{3,3}^{(0)} \\
+                        w_{0,4}^{(0)} & w_{1,4}^{(0)} & w_{2,4}^{(0)} & w_{3,4}^{(0)}
+                    \end{bmatrix}
+                    \begin{bmatrix} 1 \\ x_1 \\ x_2 \\ x_3 \end{bmatrix}
+            \right)
+        \right)
+    \right) \\
+    &=\ \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)} \bm{a}^{(1)} \left(
+                    \begin{bmatrix}
+                        w_{0,1}^{(0)} + w_{1,1}^{(0)} x_1 + w_{2,1}^{(0)} x_2 + w_{3,1}^{(0)} x_3 \\
+                        w_{0,2}^{(0)} + w_{1,2}^{(0)} x_1 + w_{2,2}^{(0)} x_2 + w_{3,2}^{(0)} x_3 \\
+                        w_{0,3}^{(0)} + w_{1,3}^{(0)} x_1 + w_{2,3}^{(0)} x_2 + w_{3,3}^{(0)} x_3 \\
+                        w_{0,4}^{(0)} + w_{1,4}^{(0)} x_1 + w_{2,4}^{(0)} x_2 + w_{3,4}^{(0)} x_3
+                    \end{bmatrix}
+            \right)
+        \right)
+    \right) \\
+    &=\ \bm{a}^{(3)} \left(
+            \mathbf{W}^{(2)} \bm{a}^{(2)} \left(
+                \mathbf{W}^{(1)}
+                \begin{bmatrix}
+                    a^{(1)} \left( w_{0,1}^{(0)} + w_{1,1}^{(0)} x_1 + w_{2,1}^{(0)} x_2 + w_{3,1}^{(0)} x_3 \right) \\
+                    a^{(1)} \left( w_{0,2}^{(0)} + w_{1,2}^{(0)} x_1 + w_{2,2}^{(0)} x_2 + w_{3,2}^{(0)} x_3 \right) \\
+                    a^{(1)} \left( w_{0,3}^{(0)} + w_{1,3}^{(0)} x_1 + w_{2,3}^{(0)} x_2 + w_{3,3}^{(0)} x_3 \right) \\
+                    a^{(1)} \left( w_{0,4}^{(0)} + w_{1,4}^{(0)} x_1 + w_{2,4}^{(0)} x_2 + w_{3,4}^{(0)} x_3 \right)
+                \end{bmatrix}
+        \right)
+    \right) \\
+    &=\ \left( \dots \right)
+\end{align*}
+
+
+
 
 \subsubsection{Entrenamiento}
-% Retomar descenso por el gradiente
 En el caso de las redes neuronales, los parámetros a optimizar van a ser las intensidades
 de las conexiones entre las neuronas, también llamadas pesos. La gran mayoría de los
-algoritmos que se utilizan actualmente se basan en la regla del Descenso por el Gradiente.
+optimizadores que se utilizan actualmente se basan en la regla del DG, aunque con algunas
+mejoras que describiremos a continuación.
 
-Ahora bien, esta regla lo único que indica es cómo se deben modificar los pesos para
-garantizar que vamos en dirección decreciente, pero no establece cómo se calcula el
-gradiente de la función en cuestión, lo cual se vuelve complejo cuando se trata de redes
-neuronales. El algoritmo que soluciona este problema de manera eficiente es conocido como
-\textbf{retropropagación} (del inglés \textit{backpropagation} \cite{backprop-1986}). A
-continuación, describimos a grandes rasgos la idea de este algoritmo.
+Como mencionamos en la sección anterior, lo costoso de la regla del DG presentada hasta el
+momento es que requiere evaluar la función de pérdida considerando \textit{todas} las
+muestras del conjunto de entrenamiento. Para reducir esta carga, lo que se suele usar en
+realidad es una técnica conocida como \textbf{Descenso por el Gradiente Estocástico}
+(DGE), que permite obtener una aproximación del gradiente a partir del gradiente promedio
+de un subconjunto del conjunto de entrenamiento, que recibe el nombre de \textbf{lote}.
+Luego, se actualizan los pesos en base a este estimación. Cabe aclarar que el tamaño de
+lote, es decir la cantidad de ejemplos que se eligen cada vez, se mantiene fijo en todo el
+entrenamiento y constituye un hiperparámetro.
 
-El backpropagation se divide en dos etapas: primero, el paso hacia adelante (\textit{forward pass})
-y luego, el paso hacia atras (\textit{backward pass}).
+% Introducir Adam y citar el paper
 
-En el forward pass,
+Teniendo esto en cuenta, podemos definir el concepto de \textbf{época}. Una época se
+refiere al proceso completo en el cual el modelo se entrena utilizando \textbf{todos} los
+datos disponibles en el conjunto de entrenamiento una vez. A grandes rasgos, los pasos
+involucrados en una época son los siguientes:
+\begin{enumerate}[itemsep=0.05cm]
+    \item Mezclar el conjunto de entrenamiento. Este paso en realidad es opcional
+    pero evita que el modelo aprenda patrones no deseados debido al orden de los datos.
+    \item Seleccionar un lote del tamaño predefinido del conjunto de datos de entrenamiento.
+    \item Para cada ejemplo del lote:
+    \vspace{-0.2cm}
+    \begin{enumerate}[noitemsep]
+        \item Computar la predicción del modelo.
+        \item Calcular la pérdida.
+    \end{enumerate}
+    \item Promediar el error a lo largo de todos los ejemplos del lote.
+    \item Calcular el gradiente.
+    \item Actualizar los pesos.
+    \item Volver a 2.
+    \item Una vez que se han recorrido todos los lotes, finaliza la época.
+\end{enumerate}
 
-% Retomar las dos "mejoras": estocástico y por lote
-% Introducir el concepto de época
-% Introducir el concepto de hiperparámetros: acá decir que se suele hacer un conjunto
-% intermedio (el de validación) o técnicas como cross-validation
+Ahora bien, un paso fundamental en el entrenamiento de las redes neuronales y del que vale
+la pena profundizar es el del cálculo del gradiente. De hecho, no encontrar una solución
+eficiente para lograrlo frenó el avance de estos modelos durante varios años. El algoritmo
+que vino a dar respuesta y que es el utilizado hasta hoy es conocido como
+\textbf{retropropagación} (del inglés \textit{backpropagation} y fue presentado en el año
+1986 \cite{backprop-1986}).
+
+El backpropagation se divide en dos etapas: primero, el paso hacia adelante
+(\textit{forward pass}) y luego, el paso hacia atras (\textit{backward pass}).
+Para entender estas etapas, supondremos que solamente una entrada es provista a
+la red.
+
+En el forward pass, la red simplemente lleva a cabo una predicción para la entrada,
+realizando todo el cómputo intermedio necesario para llegar a producir una salida.
+
+El backward pass comienza por calcular el error cometido por la red para la entrada dada,
+y consiste en propagar este error desde la capa de salida hasta la de entrada, midiendo la
+contribución al error de cada conexión \cite{hands-on-ML-sklearn-tf}. Este paso se basa
+fuertemente en la idea que un pequeño cambio en uno de los pesos causa un efecto cadena
+sobre el cómputo restante de la red \cite{prince2024understanding}. Para verlo,
+supongamos que tenemos una red neuronal con tres capas ocultas, que denotaremos con
+\(\mathbf{h}_1\), \(\mathbf{h}_2\) y \(\mathbf{h}_3\), y veamos cómo computaríamos el
+efecto de un cambio en un peso \cite{prince2024understanding}:
+\begin{itemize}
+    \item Para calcular cómo un cambio en un peso que se dirige a \(\mathbf{h}_3\)
+    modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en \(\mathbf{h}_3\)
+    modifica la salida \(\mathbf{f}\) del modelo y (ii) cómo un cambio en la salida
+    modifica la pérdida.
+    \item Para calcular cómo un cambio en un peso que se dirige a \(\mathbf{h}_2\)
+    modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en
+    \(\mathbf{h}_2\) afecta a \(\mathbf{h}_3\), (ii) cómo un cambio en \(\mathbf{h}_3\)
+    modifica la salida \(\mathbf{f}\) del modelo y (iii) cómo un cambio en la salida
+    modifica la pérdida.
+    \item Para calcular cómo un cambio en un peso que se dirige a \(\mathbf{h}_1\)
+    modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en
+    \(\mathbf{h}_1\) afecta a \(\mathbf{h}_2\), (ii) cómo un cambio en
+    \(\mathbf{h}_2\) afecta a \(\mathbf{h}_3\), (iii) cómo un cambio en \(\mathbf{h}_3\)
+    modifica la salida \(\mathbf{f}\) del modelo y (iv) cómo un cambio en la salida
+    modifica la pérdida.
+\end{itemize}
+Mientras nos movemos hacia las primeras capas de la red, vemos que la mayoría de los
+términos que se necesitan ya han sido calculados en pasos anteriores, por lo que no es
+necesario recomputarlos. Justamente calcular los efectos de los cambios (que son
+básicamente las derivadas parciales) de esta manera es conocido como el backward pass.
+
+El paso final del backpropagation es actualizar los pesos con los gradientes calculados
+en el backward pass y utilizando la regla del DG.
 
 \subsubsection{Hiperparámetros}
+Al entrenar un modelo, existen ciertos ajustes que son utilizados para controlar el
+proceso de entrenamiento y son llamados \textbf{hiperparámetros}. Los valores de los
+hiperparámetros no son aprendidos por el modelo \cite{deep-learning}, sino que se fijan de
+antemano y no se modifican a lo largo del entrenamiento.
 
+Algunos de estos hiperparámetros son los siguientes:
+\begin{itemize}[itemsep=0.1cm]
+    \item La cantidad de capas ocultas de la red.
+    \item La cantidad de neuronas en cada capa oculta.
+    \item La función de activación de cada capa.
+    \item La tasa de aprendizaje del optimizador.
+    \item El número de épocas de entrenamiento.
+    \item El tamaño de lote.
+\end{itemize}
 
+Todos estos pueden contribuir a que el modelo mejore su desempeño, por lo que surge
+el problema de cómo hacer para encontrar el valor óptimo de cada uno. Una técnica para
+hacerlo consiste en construir una tercera partición del conjunto de datos, además
+de la de entrenamiento y la de test, llamada \textbf{conjunto de validación}.
+
+Otra estrategia se denomina \textbf{validación cruzada} (\textit{cross-validation}) y
+consiste en dividir el conjunto de entrenamiento en \(k\) partes, y luego entrenar el
+modelo \(k\) veces, cada vez utilizando \(k-1\) partes para el entrenamiento y la parte
+restante para la validación.
 
 \begin{comment}
-Actualmente, se utilizan otros optimizadores más sofisticados y eficientes, pero que todos
-parten de la idea del Descenso por el Gradiente. Los que usaremos en los experimentos son
-el Descenso por el Gradiente Estocástico (\textit{Stochastic Gradient Descent}, SGD) y
-Adam (\textit{Adaptive Moment Estimation}), de los cuales se puede leer más en el Capítulo
-8 de \cite{deep-learning}.
-
-Ahora bien, recordando que la función \(f\) está fija en todas las entradas y salidas del
-conjunto de entrenamiento, hay algoritmos de optimización que utilizan todos estos datos
-para  calcular el gradiente, otros que utilizan de a un ejemplo a la vez para calcular el
-gradiente y otros que están entre medio de los dos anteriores, es decir utilizan un
-subconjunto del conjunto de datos para calcular el gradiente (esto es lo que hace SGD).
-
-Es necesario en este punto introducir el concepto de ``\textbf{época}'' y de
-``\textbf{lote}''. Un lote es simplemente una subdivisión de tamaño fijo del conjunto de
-entrenamiento (o de test). Dicho esto, se llama época al proceso completo en el cual el
-modelo entrena utilizando \textbf{todos} los datos disponibles en el conjunto de
-entrenamiento una vez, ya sea recorriéndolos de a lotes o todos de una vez. Si el conjunto
-está efectivamente dividido en lotes, una época va a consistir de: \textbf{para cada
-lote}, calcular las predicciones en base a los pesos actuales, obtener los errores de cada
-muestra del lote, computar los gradientes en base a los ejemplos del lote y actualizar los
-pesos. Si no, se hacen los mismos pasos pero para todos los datos de una vez.
-
-Al entrenar un modelo, existen ciertos ajustes que son utilizados para controlar su
-comportamiento llamados \textbf{hiperparámetros}. Los valores de los hiperparámetros no
-son aprendidos por el modelo \cite{deep-learning}, sino que se fijan de antemano y no se
-modifican a lo largo del entrenamiento. Algunos de estos son: la cantidad de neuronas en
-cada capa oculta, la función de activación utilizada en cada capa, el optimizador, la tasa
-de aprendizaje, el número de épocas, el tamaño de lote, entre otros. Todos estos pueden
-contribuir a que el modelo mejore su desempeño. Para probar distintos valores de
-hiperparámetros, que es lo que haremos a continuación, se utiliza un conjunto de datos
-extra además del de entrenamiento y el de test, llamado de \textbf{validación} que sirve
-justamente para encontrar los hiperparámetros óptimos.
-
 % Mejoras extras: detención temprana, dropout
 Otras mejoras que se han implementado para mejorar la eficacia de los modelos, y que
 emplearemos en los experimentos, son las nombradas a continuación. Por un lado, tenemos la
@@ -366,5 +539,14 @@ una mejora son nuevos hiperparámetros). Y por otro lado, el \textbf{dropout}, q
 algoritmo que implica suprimir un cierto número de neuronas de una capa de manera
 aleatoria \cite{apuntes-redes-neuronales}.
 \end{comment}
+
+\bigskip
+En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
+de las que hacemos uso en este trabajo: las Redes Neuronales Convolucionales y las Redes
+Neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
+específico de datos. Las convolucionales son ideales para procesar datos estructurados en
+forma de grilla, mientras que las recurrentes son adecuadas para secuencias temporales.
+Presentaremos la intuición sobre detrás de ellas y nos concentraremos en su aplicación
+sobre series de tiempo, relevante para nuestro trabajo.
 
 \end{document}

@@ -164,8 +164,10 @@ Por ejemplo, si suponemos que cada entrada \(\mathbf{x} \in \mathbb{R}\), y esta
 como espacio el conjunto de funciones lineales, entonces la forma de \(h\) será:
 \[h(\mathbf{x}) = w_1 \mathbf{x} + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1)\). Este caso
 es comúnmente conocido como regresión lineal unidimensional (ya que la entrada es
-simplemente un número real). Modelos particulares dentro de este espacio son \(h(x) = 5
-\mathbf{x} + 13\), \(h(\mathbf{x}) = \pi \mathbf{x} + 1.25\), entre muchos otros.
+simplemente un número real). Dentro de este espacio, distintas asignaciones de valores
+a los parámetros generan distintos modelos. Por ejemplo, tomando la asignación
+\(\), tenemos el modelo \(h(x) = 5\mathbf{x} + 13\), y tomando \(\),
+\(h(\mathbf{x}) = \pi \mathbf{x} + 1.25\), entre muchos otros.
 
 En cambio, si tomamos el conjunto de polinomios de grado 2 y seguimos suponiendo
 \(\mathbf{x} \in \mathbb{R}\), entonces la forma de \(h\) será:
@@ -173,7 +175,7 @@ En cambio, si tomamos el conjunto de polinomios de grado 2 y seguimos suponiendo
 \(\bm{w}=(w_0, w_1, w_2)\). A este caso se lo suele llamar regresión polinómica de segundo
 grado unidimensional.
 
-Otro caso un poco más ``complejo'' podría ser el que \(\mathbf{x} \in \mathbb{R}^3\), es decir
+Otro caso un poco más ``complejo'' podría ser en el que \(\mathbf{x} \in \mathbb{R}^3\), es decir
 \(\mathbf{x}=(x_1, x_2, x_3)\) y seguimos tomando una relación lineal. Aquí, \(h\) sería:
 \[h(\mathbf{x}) = w_1 x_1 + w_2 x_2 + w_3 x_3 + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1,
 w_2, w_3)\)\footnotemark. \footnotetext{Para simplificar la notación, lo que se suele hacer
@@ -257,12 +259,10 @@ puede demostrar que la solución cerrada es:
 Sin embargo, si la función de costo tiene muchas variables (parámetros) o los modelos son
 complejos, resulta más útil recurrir a métodos numéricos para aproximar este mínimo.
 
-El algoritmo por defecto que se utiliza para resolver este problema de optimización es el
+El algoritmo más genérico que se utiliza para resolver este problema de optimización es el
 llamado \textbf{Descenso por el Gradiente} (DG). Es muy potente ya que se puede aplicar a
 cualquier función de pérdida \cite{ai-a-modern-approach}, sin importar el espacio de
 funciones elegido.
-
-% Mencionar que en funciones de perdida convexas garantiza llegar a un mínimo global?
 
 La idea del DG es ir modificando los parámetros iterativamente hasta eventualmente llegar
 a un ``valle'' de la función de pérdida. El algoritmo se basa en que la dirección dada por
@@ -278,8 +278,9 @@ v_M)\), el \textbf{gradiente} de \(g\) es el vector formado por las derivadas pa
 \]
 donde la notación \(\frac{\partial g}{\partial v_i}\) representa la \textbf{derivada
 parcial} de \(g\) con respecto a \(v_i\), que mide cómo cambia \(g\) cuando se varía
-\(v_i\) mientras se mantienen constantes las demás variables. Este vector apunta en la
-dirección de mayor crecimiento de \(g\).}
+\(v_i\) mientras se mantienen constantes las demás variables. Algo a notar es que
+el vector resultante es un vector de funciones, y cuando se lo evalúa en un punto,
+da la dirección de mayor crecimiento de \(g\) desde ese punto.}
 
 Concretamente, se empieza con un vector de parámetros \(\bm{w}\) con valores arbitrarios que
 va mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente, con
@@ -287,7 +288,7 @@ el objetivo de reducir el valor de la función de pérdida, hasta que el algorit
 \textit{converja} a un mínimo (local) de la función de pérdida.
 
 Un hiperparámetro\footnotemark{} determinante en el algoritmo del DG es el tamaño de los
-pasos llamado \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\alpha\) y
+pasos, llamado \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\alpha\) y
 supondremos por el momento que se mantiene constante en todo el proceso. Si el valor
 \(\alpha\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas
 iteraciones para converger \cite{hands-on-ML-sklearn-tf}. Si en cambio el valor es muy
@@ -296,7 +297,7 @@ función, haciendo que el algoritmo diverja \cite{hands-on-ML-sklearn-tf}.
 \footnotetext{Hablaremos más adelante sobre qué es un hiperparámetro, pero lo importante
 es que no es un parámetro que se aprende, como lo son los contenidos en el vector \(\bm{w}\).}
 
-La regla del DG está dada por:
+De esta forma, la regla del DG está dada por:
 \[
 \bm{w}_{p+1} = \bm{w}_{p} - \alpha \nabla L(\bm{w})
 \]
@@ -304,14 +305,14 @@ donde \(p\) indica el número de iteración actual, \(\nabla L\) representa el
 gradiente de la función \(L\), y \(\nabla L(\bm{w})\) es el gradiente evaluado
 en los pesos del modelo.
 
-La parte más ``pesada'' computacionalmente de este algoritmo es que en la función de
-pérdida, de la forma en la que la definimos hasta ahora, están incluidas todas las
-muestras del conjunto de entrenamiento. Es decir, en cada iteración, el cálculo del
-gradiente requiere evaluar la contribución de cada una de las muestras, lo que puede ser
-caro cuando \(N\) es muy grande. Para mitigar este problema, existen variantes del
-algoritmo que buscan aproximar el gradiente utilizando subconjuntos del conjunto de
-entrenamiento, como el Descenso por el Gradiente Estocástico y el Descenso por el
-Gradiente por Mini-Lotes. Retomaremos este tema en la proxima sección de Redes Neuronales.
+Algo importante a notar es que en la forma que lo presentamos hasta ahora, el cómputo del
+gradiente de la función de peso involucra recorrer todas las muestras del conjunto de
+entrenamiento, lo cual computacionalmente es ``pesado'' y puede demorar el tiempo de
+entrenamiento. Es decir, en cada iteración, el cálculo del gradiente requiere evaluar la
+contribución de cada una de las muestras, lo que puede ser caro cuando \(N\) es muy
+grande. Para mitigar este problema, existen variantes del DG que buscan aproximar
+el gradiente utilizando subconjuntos del conjunto de entrenamiento. Retomaremos este tema
+en la proxima sección de Redes Neuronales.
 
 \subsubsection{Resumen}
 Hasta aquí hemos hablado de cómo está compuesto prácticamente cualquier algoritmo de
