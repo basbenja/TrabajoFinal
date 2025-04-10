@@ -7,7 +7,9 @@ import time
 from pathlib import Path
 
 class MLflowLogger:
-    def __init__(self, enable_logging, tracking_server_uri, experiment_name, experiment_tags):
+    def __init__(
+        self, enable_logging, tracking_server_uri, experiment_name, experiment_tags
+    ):
         self.enable_logging = enable_logging
         if enable_logging:
             mlflow.set_tracking_uri(tracking_server_uri)
@@ -49,7 +51,7 @@ class MLflowLogger:
 
     def log_params(self, params):
         if self.enable_logging:
-            self.log_params(params)
+            mlflow.log_params(params)
 
     def log_metric(self, key, value):
         if self.enable_logging:

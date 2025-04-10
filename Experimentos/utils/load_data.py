@@ -6,11 +6,13 @@ def transform(id, data, start, required_periods):
     relevant_periods = data['t'].between(start-required_periods, start-1)
     relevant_data = data[relevant_periods]
 
+    # relevant_periods is a boolean series, that's why we can sum it
     if sum(relevant_periods) == required_periods:
         row = {
             'id': id,
             'inicio_prog': start,
-            'tratado': relevant_data['tipo'].iloc[0]
+            'tratado': relevant_data['tratado'].iloc[0],
+            'control': relevant_data['control'].iloc[0],
         }
         for i in range(required_periods):
             row[f"y(t-{required_periods-i})"] = relevant_data['y'].values[i]
@@ -31,21 +33,19 @@ def transform_treated(treated_df, required_periods):
 def transform_control(control_df, min_start, max_start, required_periods):
     transformed_control = []
     for id, data in control_df.groupby('id'):
-        treatment_start = data['inicio_prog'].iloc[0]
         for assumed_start in range(min_start, max_start + 1):
-            is_control = (1 if assumed_start == treatment_start else 0)
-            row = transform(id, data, assumed_start, required_periods, is_control)
+            row = transform(id, data, assumed_start, required_periods)
             transformed_control.append(row)
     return pd.DataFrame(transformed_control)
 
 
-def transform_untreated(untreated_df, min_start, max_start, required_periods):
-    transformed_untreated = []
-    for id, data in untreated_df.groupby('id'):
+def transform_nini(nini_df, min_start, max_start, required_periods):
+    transformed_nini = []
+    for id, data in nini_df.groupby('id'):
         for assumed_start in range(min_start, max_start + 1):
             row = transform(id, data, assumed_start, required_periods)
-            transformed_untreated.append(row)
-    return pd.DataFrame(transformed_untreated)
+            transformed_nini.append(row)
+    return pd.DataFrame(transformed_nini)
 
 
 def add_target_column(df):
@@ -53,20 +53,20 @@ def add_target_column(df):
     df.drop(columns=['tratado', 'control'], inplace=True)
 
 
-def get_dfs(data, required_periods=4):
-    type1_df = data[data['tipo'] == 1]
-    type1_df = transform_treated(type1_df, required_periods)
+def get_dfs(df, required_periods=4):
+    treated_df = df[df['tratado'] == 1]
+    treated_df = transform_treated(treated_df, required_periods)
 
-    min_start = type1_df['inicio_prog'].min()
-    max_start = type1_df['inicio_prog'].max()
-    type2_df = data[data['tipo'] == 2]
-    type2_df = transform_control(type2_df, min_start, max_start, required_periods)
+    min_start = treated_df['inicio_prog'].min()
+    max_start = treated_df['inicio_prog'].max()
+    control_df = df[df['control'] == 1]
+    control_df = transform_control(control_df, min_start, max_start, required_periods)
     
-    type3_df = data[data['tipo'] == 3]
-    type3_df = transform_untreated(type3_df, min_start, max_start, required_periods)
+    nini_df = df[(df['tratado'] == 0) & (df['control'] == 0)]
+    nini_df = transform_nini(nini_df, min_start, max_start, required_periods)
 
     final_dfs = []
-    for df in [type1_df, type2_df, type3_df]:
+    for df in [treated_df, control_df, nini_df]:
         df = df.copy()
         df.set_index('id', inplace=True)
         add_target_column(df)

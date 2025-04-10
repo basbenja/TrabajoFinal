@@ -1,74 +1,26 @@
 import optuna
 import pandas as pd
 import torch
-import torch.nn as nn
 import numpy as np
 
-from torch.utils.data import DataLoader, TensorDataset
-from utils.train_predict import train_step, validate_step_with_metrics
-from utils.metrics import check_metrics, get_features_mean, compute_metrics
+from constants import N_EPOCHS, OPTIMIZER
+from optuna.visualization import plot_pareto_front
 from sklearn.model_selection import StratifiedKFold
-
-def objective(
-    trial, define_model, train_set, valid_set, class_weights, metrics, **kwargs
-):
-    check_metrics(metrics, **kwargs)
-
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    model = define_model(trial).to(device)
-
-    optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "RMSprop", "SGD"])
-    lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
-    optimizer = getattr(torch.optim, optimizer_name)(model.parameters(), lr=lr)
-    epochs = trial.suggest_int("n_epochs", 100, 300)
-    batch_size = trial.suggest_int("batch_size", 16, 128)
-    loss_fn = nn.BCEWithLogitsLoss(
-        pos_weight=torch.tensor(class_weights[1], dtype=torch.float32)
-    )
-
-    X_train, y_train = train_set.tensors
-    if 'avg_feats_diff' in metrics:
-        train_features_mean = get_features_mean(X_train, y_train).to(device)
-
-    # Get the X_valid tensor so then we can calculate the features mean for the
-    # individuals of the validation set that the model predicted as 1
-    # And get the y_valid_tensor tensors so then we can calculate metrics
-    X_valid, y_valid = valid_set.tensors
-    X_valid = X_valid.to(device)
-
-    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-    for epoch in range(epochs):
-        train_step(model, train_loader, loss_fn, optimizer)
-        metrics_values = validate_step_with_metrics(
-            model, X_valid, y_valid, loss_fn, metrics,
-            train_features_mean=train_features_mean, beta=kwargs['beta']
-        )
-
-        if len(metrics) == 1:
-            trial.report(metrics_values[metrics[0]], epoch)
-            if trial.should_prune():
-                raise optuna.TrialPruned()
-
-    return tuple(metrics_values.values())
+from torch.utils.data import DataLoader, TensorDataset
+from utils.train_predict import train_step, validate_step
+from utils.metrics import check_metrics, get_features_mean
 
 
 def objective_cv(
-    trial, define_model, train_set, class_weights, metrics, **kwargs
+    trial, define_model, input_size, train_set, loss_fn, metrics, **kwargs
 ):
     check_metrics(metrics, **kwargs)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = define_model(trial).to(device)
+    model = define_model(trial, input_size).to(device)
 
-    # Hyperparameters
-    optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "RMSprop", "SGD"])
-    lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
-    optimizer = getattr(torch.optim, optimizer_name)(model.parameters(), lr=lr)
-    epochs = trial.suggest_int("n_epochs", 300, 1500)
+    lr = trial.suggest_categorical("lr", [1e-4, 1e-3, 1e-2])
     batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128])
-    loss_fn = nn.BCEWithLogitsLoss(
-        pos_weight=torch.tensor(class_weights[1], dtype=torch.float32)
-    )
+    optimizer = getattr(torch.optim, OPTIMIZER)(model.parameters(), lr=lr)
 
     # Cross-validation
     skf = StratifiedKFold(n_splits=3, shuffle=True, random_state=13)
@@ -77,29 +29,33 @@ def objective_cv(
     X_train, y_train = train_set.tensors
     for train_idx, valid_idx in skf.split(X_train, y_train):
         X_train_fold, y_train_fold = X_train[train_idx], y_train[train_idx]
-        train_data = TensorDataset(X_train_fold, y_train_fold)
-        train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
+        train_dataset = TensorDataset(X_train_fold, y_train_fold)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
         X_valid_fold, y_valid_fold = X_train[valid_idx], y_train[valid_idx]
-        X_valid_fold, y_valid_fold = X_valid_fold.to(device), y_valid_fold.to(device)
-
-        if 'avg_feats_diff' in metrics:
-            train_features_mean = get_features_mean(X_train_fold, y_train_fold).to(device)
+        valid_dataset = TensorDataset(X_valid_fold, y_valid_fold)
+        valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
 
         # Train model with the hyperparameters of the trial
-        for _ in range(epochs):
+        for _ in range(N_EPOCHS):
             _ = train_step(model, train_loader, loss_fn, optimizer)
 
-        metrics_values = validate_step_with_metrics(
-            model, X_valid_fold, y_valid_fold, loss_fn, metrics,
-            train_features_mean=train_features_mean if 'avg_feats_diff' in metrics else None,
-            beta=kwargs['beta']
+        train_features_mean = (
+            get_features_mean(X_train_fold, y_train_fold).to(device) 
+            if 'avg_feats_diff' in metrics else None
         )
+        _, metrics_values = validate_step(
+            model, valid_loader, loss_fn, metrics,
+            train_features_mean=train_features_mean, beta=kwargs['beta']
+        )
+        
         for metric, value in metrics_values.items():
-            scores[metric].append(value)
+            scores[metric].append(round(value, 6))
 
     # Aggregate scores across folds
-    aggregated_scores = {metric: np.mean(values) for metric, values in scores.items()}
+    aggregated_scores = {
+        metric: round(np.mean(values), 6) for metric, values in scores.items()
+    }
 
     # if len(metrics) == 1:
     #     trial.report(metrics_values[metrics[0]], epoch)
@@ -162,3 +118,20 @@ def select_trial(best_trials_numbers):
                 print(f"Invalid input. Please select a number from {best_trials_numbers}.")
         except ValueError:
             print("Invalid input. Please enter a valid number.")
+
+
+def pareto_front(study, metrics, directions):
+    print(f"Number of trials on the Pareto front: {len(study.best_trials)}")
+    for i, (metric, direction) in enumerate(zip(metrics, directions)):
+        if direction == 'maximize':
+            best_trial = max(study.best_trials, key=lambda t: t.values[i])
+        elif direction == 'minimize':
+            best_trial = min(study.best_trials, key=lambda t: t.values[i])
+        print(f"Metric: {metric}")
+        print(f"\tDirection: {direction}")
+        print(f"\tTrial number: {best_trial.number}")
+        print(f"\tValues: {best_trial.values}")
+        print(f"\tParams: {best_trial.params}")
+    
+    fig = plot_pareto_front(study, target_names=metrics)
+    return fig
