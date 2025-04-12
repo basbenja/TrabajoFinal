@@ -13,10 +13,11 @@ def train_step(model, dataloader, loss_fn, optimizer):
     total_samples = 0
     total_loss = 0
 
-    for X, y in dataloader:
-        curr_batch_size = X.size(0)
-        X, y = X.to(model_device), y.to(model_device)
-        logits = model(X)
+    for batch in dataloader:
+        *X, y = [x.to(model_device) for x in batch]
+        curr_batch_size = len(y)
+
+        logits = model(*X)
 
         if isinstance(loss_fn, nn.BCEWithLogitsLoss):
             loss = loss_fn(logits.view(-1), y)
@@ -49,10 +50,11 @@ def validate_step(model, dataloader, loss_fn, metrics, **metrics_kwargs):
     all_labels = []
 
     with torch.no_grad():
-        for X, y in dataloader:
-            curr_batch_size = X.size(0)
-            X, y = X.to(model_device), y.to(model_device)
-            logits = model(X)
+        for batch in dataloader:
+            *X, y = [x.to(model_device) for x in batch]
+            curr_batch_size = len(y)
+
+            logits = model(*X)
 
             if isinstance(loss_fn, nn.BCEWithLogitsLoss):
                 loss = loss_fn(logits.view(-1), y)

@@ -1,15 +1,20 @@
 import torch
 import torch.nn as nn
 
+from constants import *
+
 class LSTMBlock(nn.Module):
-    def __init__(self, input_size, hidden_size, n_layers, dropout):
+    def __init__(self, input_size, hidden_size, num_layers, dropout):
         super(LSTMBlock, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        
         self.lstm = nn.LSTM(
             input_size=input_size,
             hidden_size=hidden_size,
-            n_layers=n_layers,
+            num_layers=num_layers,
             batch_first=True,
-            dropout=dropout
+            dropout=dropout if num_layers > 1 else 0,
         )
 
     def forward(self, x):
@@ -20,14 +25,14 @@ class LSTMBlock(nn.Module):
         The outputs of the LSTM layer are:
           - out: tensor of shape (batch_size, seq_length, hidden_size) containing
             the output features (h_t) from the last layer of the LSTM, for each t.
-          - h_n: tensor of shape (n_layers, batch_size, hidden_size) containing
+          - h_n: tensor of shape (num_layers, batch_size, hidden_size) containing
             the hidden state for each element in the sequence.
-          - c_n: tensor of shape (n_layers, batch_size, hidden_size) containing
+          - c_n: tensor of shape (num_layers, batch_size, hidden_size) containing
             the final cell state for each element in the sequence.
         """
         # Set initial hidden and cell states
-        h0 = torch.zeros(self.n_layers, x.size(0), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.n_layers, x.size(0), self.hidden_size).to(x.device)
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
         _, (hidden_state, _) = self.lstm(x, (h0, c0))
         lstm_out = hidden_state[-1] # Use the last hidden_state
         return lstm_out
@@ -35,13 +40,13 @@ class LSTMBlock(nn.Module):
 
 class LSTMClassifier_v2(nn.Module):
     def __init__(
-        self, lstm_input_size, lstm_hidden_size, lstm_n_layers, n_static_feats, dropout
+        self, lstm_input_size, lstm_hidden_size, lstm_num_layers, n_static_feats, dropout
     ):
         super(LSTMClassifier_v2, self).__init__()
         self.lstm = LSTMBlock(
             input_size=lstm_input_size,
             hidden_size=lstm_hidden_size,
-            n_layers=lstm_n_layers,
+            num_layers=lstm_num_layers,
             dropout=dropout
         )
         self.fc = nn.Sequential(
@@ -58,14 +63,13 @@ class LSTMClassifier_v2(nn.Module):
         return x
 
 
-def define_lstm_v2_model(trial):
-    hidden_size = trial.suggest_int("hidden_size", 16, 128)
-    n_layers = trial.suggest_int("n_layers", 1, 3)
-    dropout = trial.suggest_float("dropout", 0.3, 0.8)
+def define_lstm_v2_model(trial, input_size):
+    hidden_size = trial.suggest_categorical("hidden_size", [16, 32, 64, 128])
+    dropout = trial.suggest_categorical("dropout", [0.3, 0.5, 0.7, 0.8])
     return LSTMClassifier_v2(
-        lstm_input_size=1,
+        lstm_input_size=input_size,
         lstm_hidden_size=hidden_size,
-        lstm_n_layers=n_layers,
+        lstm_num_layers=N_LAYERS,
         n_static_feats=1,
         dropout=dropout
     )

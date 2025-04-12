@@ -6,7 +6,7 @@ import numpy as np
 from constants import N_EPOCHS, OPTIMIZER
 from optuna.visualization import plot_pareto_front
 from sklearn.model_selection import StratifiedKFold
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader, Subset
 from utils.train_predict import train_step, validate_step
 from utils.metrics import check_metrics, get_features_mean
 
@@ -26,27 +26,22 @@ def objective_cv(
     skf = StratifiedKFold(n_splits=3, shuffle=True, random_state=13)
     # Track metrics for all folds
     scores = {metric: [] for metric in metrics}
-    X_train, y_train = train_set.tensors
-    for train_idx, valid_idx in skf.split(X_train, y_train):
-        X_train_fold, y_train_fold = X_train[train_idx], y_train[train_idx]
-        train_dataset = TensorDataset(X_train_fold, y_train_fold)
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-        X_valid_fold, y_valid_fold = X_train[valid_idx], y_train[valid_idx]
-        valid_dataset = TensorDataset(X_valid_fold, y_valid_fold)
-        valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
+    labels = train_set.labels if hasattr(train_set, 'labels') else train_set.tensors[1]
+    for train_idx, valid_idx in skf.split(np.arange(len(labels)), labels):
+        train_subset = Subset(train_set, train_idx)
+        valid_subset = Subset(train_set, valid_idx)
+
+        train_loader = DataLoader(train_subset, batch_size=batch_size, shuffle=True)
+        valid_loader = DataLoader(valid_subset, batch_size=batch_size, shuffle=False)
 
         # Train model with the hyperparameters of the trial
         for _ in range(N_EPOCHS):
             _ = train_step(model, train_loader, loss_fn, optimizer)
 
-        train_features_mean = (
-            get_features_mean(X_train_fold, y_train_fold).to(device) 
-            if 'avg_feats_diff' in metrics else None
-        )
         _, metrics_values = validate_step(
             model, valid_loader, loss_fn, metrics,
-            train_features_mean=train_features_mean, beta=kwargs['beta']
+            train_features_mean=None, beta=kwargs['beta']
         )
         
         for metric, value in metrics_values.items():
@@ -66,7 +61,6 @@ def objective_cv(
 
 
 def get_all_studies(storage):
-    # Get all study summaries
     study_summaries = optuna.get_all_study_summaries(storage)
 
     data = []
