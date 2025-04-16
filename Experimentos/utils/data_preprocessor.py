@@ -69,8 +69,8 @@ class DataPreprocessor:
         return train_set, test_set
 
     def _prepare_dense(self, X_train_df, X_test_df):
-        X_train_tensor = torch.tensor(X_train_df, dtype=torch.float32)
-        X_test_tensor  = torch.tensor(X_test_df, dtype=torch.float32)
+        X_train_tensor = torch.tensor(X_train_df.values, dtype=torch.float32)
+        X_test_tensor  = torch.tensor(X_test_df.values, dtype=torch.float32)
         train_set = TensorDataset(X_train_tensor, self.y_train_tensor)
         test_set  = TensorDataset(X_test_tensor , self.y_test_tensor)
         return train_set, test_set
