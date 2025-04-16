@@ -13,7 +13,7 @@ def instantiate_model(model_arch, input_size, hyperparams):
             model = DenseClassifier(
                 input_size=input_size,
                 hidden_sizes=hidden_sizes,
-                dropout=hidden_sizes,
+                dropout=dropout,
             )
         case 'lstm_v1':
             num_layers = hyperparams['num_layers']
