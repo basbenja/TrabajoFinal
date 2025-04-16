@@ -91,3 +91,12 @@ class MLflowLogger:
                 mlflow.data.from_pandas(df, targets=target_label),
                 context=context,
             )
+
+    def log_model(self, model, model_name, input_example):
+        if self.enable_logging:
+            mlflow.pytorch.log_model(
+                model.to("cpu"),
+                model_name,
+                pip_requirements=None,
+                input_example=input_example
+            )
