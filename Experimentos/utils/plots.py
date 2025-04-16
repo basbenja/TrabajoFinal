@@ -26,7 +26,10 @@ def plot_time_series(df, n, label):
 
     ax.set_xlabel("$t$ (relativo al inicio del tratamiento)", fontsize=12)
     ax.set_ylabel("$y(t)$", fontsize=12)
-    ax.set_title(f"Individuos {label}", fontsize=14, fontweight='bold', pad=20)
+    ax.set_title(
+        f"Individuos {label}",
+        fontsize=14, fontweight='bold', pad=20
+    )
     ax.axvline(x=0, color='r', linestyle='--', label="Inicio de tratamiento")
     ax.legend()
     ax.grid(True)
@@ -44,7 +47,10 @@ def confusion_matrix_plot(y_true, y_pred, normalize):
     )
     disp.plot(ax=ax, cmap='viridis')
     
-    ax.set_title("Matriz de confusión")
+    ax.set_title(
+        "Matriz de confusión",
+        fontsize=14, fontweight='bold', pad=20
+    )
     ax.set_xlabel("Predicción")
     ax.set_ylabel("Verdadero")
     ax.set_yticklabels(ax.get_yticklabels(), rotation=90, va="center")
@@ -52,42 +58,65 @@ def confusion_matrix_plot(y_true, y_pred, normalize):
 
 
 def roc_curve_plot(y, y_pred):
+    fig, ax = plt.subplots(figsize=(8, 5))
+    
     fpr, tpr, thresholds = roc_curve(y, y_pred)
     roc_auc = roc_auc_score(y, y_pred)
-    plt.figure(figsize=(8, 6))
-    plt.plot(
-        fpr, tpr, color='blue', lw=2, label='Area bajo la curva = %0.2f)' % roc_auc
+
+    ax.plot(
+        fpr, tpr, color='blue', label=f"Área bajo la curva = {roc_auc:.2f}"
     )
-    plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel("Ratio de Falsos Positivos")
-    plt.ylabel("Ratio de Verdaderos Positivos")
-    plt.title('Receiver Operating Characteristic (ROC) Curve')
-    plt.legend(loc='lower right')
-    plt.show()
+    ax.plot([0, 1], [0, 1], color='gray', linestyle='--')
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
+    ax.set_xlabel("Ratio de Falsos Positivos", fontsize=12)
+    ax.set_ylabel("Ratio de Verdaderos Positivos", fontsize=12)
+    ax.set_title(
+        "Característica Operativa del Receptor (ROC)",
+        fontsize=14, fontweight='bold', pad=20
+    )
+    ax.grid()
+    ax.legend(loc='lower right')
+
+    return fig, ax
 
 
-def epochs_vs_loss_acc_plot(train_accs, train_avg_losses, test_accs, test_avg_losses):
-    num_epochs = len(train_accs)
-    num_epochs = range(1, num_epochs+1)
+def epoch_vs_loss_plot(epoch_losses_train, epoch_losses_test):
+    fig, ax = plt.subplots(figsize=(8, 5))
 
-    fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(14, 6))
+    epochs = len(epoch_losses_train)
 
-    axes[0].plot(num_epochs, train_accs, label="Train")
-    axes[0].plot(num_epochs, test_accs, label="Test")
-    axes[0].set_xlabel("Epochs")
-    axes[0].set_ylabel("Accuracy")
-    axes[0].legend()
-    axes[0].grid()
+    ax.plot(range(epochs), epoch_losses_train, label="Entrenamiento")
+    ax.plot(range(epochs), epoch_losses_test, label="Test")
+    ax.set_xlabel("Época", fontsize=12)
+    ax.set_ylabel("Pérdida promedio", fontsize=12)
+    ax.set_title(
+        "Pérdida promedio por época en conjuntos de entrenamiento y de test",
+        fontsize=14, fontweight='bold', pad=20
+    )
+    ax.legend()
+    ax.grid(True)
+    ax.set_xlim(1, epochs)
+    ax.set_xticks(range(0, epochs+1, 10))
 
-    axes[1].plot(num_epochs, train_avg_losses, label="Train")
-    axes[1].plot(num_epochs, test_avg_losses, label="Test")
-    axes[1].set_xlabel("Epochs")
-    axes[1].set_ylabel("Loss")
-    axes[1].legend()
-    axes[1].grid()
+    return fig, ax
 
-    plt.tight_layout()
-    plt.show()
 
+def epoch_vs_metric_plot(metric_name, epoch_metrics):
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    epochs = len(epoch_metrics)
+
+    ax.plot(range(epochs), epoch_metrics, label="Entrenamiento")
+    ax.set_xlabel("Época", fontsize=12)
+    ax.set_ylabel(metric_name, fontsize=12)
+    ax.set_title(
+        f"{metric_name} por época en conjunto de test",
+        fontsize=14, fontweight='bold', pad=20
+    )
+    ax.legend()
+    ax.grid(True)
+    ax.set_xlim(1, epochs)
+    ax.set_xticks(range(0, epochs+1, 10))
+
+    return fig, ax
