@@ -60,7 +60,9 @@ compuesta por los datos de un hogar, como la cantidad de habitaciones y de baño
 patio o no, el tamaño de la cocina, etcétera. Dentro de las tareas que pueden ser
 resueltas por un sistema de ML se encuentran la clasificación, la regresión, la
 traducción, la detección de objetos en imágenes, la generación de nuevos datos, la
-detección de valores atípicos, entre muchas otras.
+detección de valores atípicos, entre muchas otras. Siguiendo con el ejemplo, podríamos
+querer que, en base a las features de las casa, el sistema nos provea un estimado
+de su valor.
 
 La experiencia hace referencia al tipo de información que el algoritmo ``puede ver''
 durante su proceso de aprendizaje o \textit{entrenamiento} \cite{hands-on-ML-sklearn-tf}.
@@ -70,15 +72,16 @@ datos con los que se cuenta. En base a la experiencia, los algoritmos de ML se c
 en dos grandes categorías:
 \begin{itemize}
     \item \textbf{Algoritmos de Aprendizaje Supervisado}: experimentan un dataset que
-    contiene pares de entrada-salida, esto es cada ejemplo contiene sus features pero
+    contiene pares de entrada-salida, esto es cada ejemplo contiene sus características pero
     también su ``etiqueta'', que vendría a ser la ``respuesta correcta'' para dicha
-    entrada. El algoritmo aprende una función que asigna (\textit{mapea}) entradas a
-    salidas. Las tareas más comunes llevadas a cabo con este tipo de aprendizaje son las
-    de regresión, en donde la etiqueta corresponde a un valor continuo; y clasificación,
-    en donde la solución viene dada por la categoría (dentro de un conjunto predefinido de
-    categorías) a la que pertenece un ejemplo.
+    entrada, y la que se espera que el sistema aprenda. De esta forma, el algoritmo
+    aprende una función que asigna (\textit{mapea}) entradas a salidas. Las tareas más
+    comunes llevadas a cabo con este tipo de aprendizaje son las de regresión, en donde la
+    etiqueta corresponde a un valor continuo; y clasificación, en donde la solución viene
+    dada por la categoría (dentro de un conjunto predefinido de categorías) a la que
+    pertenece un ejemplo.
     \item \textbf{Algoritmos de Aprendizaje No Supervisado}: ven un dataset que cuenta
-    solamente con características de cada entrada pero sin etiquetas, e intentan aprender
+    solamente con features de cada entrada pero sin etiquetas, e intentan aprender
     automáticamente patrones y propiedades útiles de la estructura de los datos. Algunas
     tareas que se llevan a cabo con este tipo de aprendizaje son \textit{clustering},
     reducción de dimensionalidad, y detección de anomalías.
@@ -94,9 +97,10 @@ que dependen de la tarea que se esté realizando y del objetivo que se intente l
 ejemplo, en clasificación, una de las más comunes es la de exactitud (\textit{accuracy}),
 que es la proporción de ejemplos para los cuales se predijo la salida correcta (dada por
 el dataset); aunque también existen otras como la precisión, sensibilidad, especificidad,
-y el puntaje F1, que pueden resultar más adecuadas según el dominio del problema. Por otro
-lado, en tareas de regresión, algunas métricas que se suelen utilizar son el Error
-Cuadrático Medio y el Error Absoluto Medio.
+y el puntaje F1, que pueden resultar más adecuadas según el dominio del
+problema\footnotetext{Hablaremos de estas más adelante, dando sus fórmulas y lo que
+representan.}. Por otro lado, en tareas de regresión, algunas métricas que se suelen
+utilizar son el Error Cuadrático Medio y el Error Absoluto Medio.
 
 El objetivo fundamental del ML es que un algoritmo actúe correctamente ante nuevas
 entradas desconocidas, es decir que \textbf{generalice} más allá de los ejemplos del
@@ -123,30 +127,30 @@ Resulta conveniente introducir en este punto un término muy utilizado en el ML:
 \textbf{modelo}. Un modelo es simplemente una ecuación matemática, que se presenta como
 una forma simplificada de describir hechos de la realidad. En este contexto, será una
 manera de intentar capturar las relaciones entre los datos, con el objetivo de hacer
-predicciones basadas en los patrones aprendidos de ejemplos previos. Habiendo presentado
-este concepto, en general se suele utilizar la palabra modelo para referirse a la función
-de la que hablamos en el párrafo anterior.
+predicciones basadas en los patrones aprendidos de ejemplos previos. En general, se suele
+utilizar la palabra modelo para referirse a la función de la que hablamos en el párrafo
+anterior.
 
 Formalmente, una tarea de Aprendizaje Supervisado es la siguiente:
 \begin{quote}
     Dado un conjunto de entrenamiento de \(N\) ejemplos de entrada-salida:
-    \[(\mathbf{x}_1, \mathbf{y}_1), (\mathbf{x}_2, \mathbf{y}_2), ..., (\mathbf{x}_N,
-    \mathbf{y}_N)\] donde cada \(\mathbf{x}_i\) es un vector de características
-    (\(\mathbf{x}_i \in \mathbb{R}^n\) para algún \(n \in \mathbb{N}\)) e \(\mathbf{y}_i\)
-    es la salida correspondiente (\(\mathbf{y}_i \in \mathbb{R}^m\) para algún \(m \in
+    \[(\bm{x}_1, \bm{y}_1), (\bm{x}_2, \bm{y}_2), ..., (\bm{x}_N,
+    \bm{y}_N)\] donde cada \(\bm{x}_i\) es un vector de características
+    (\(\bm{x}_i \in \mathbb{R}^n\) para algún \(n \in \mathbb{N}\)) e \(\bm{y}_i\)
+    es la salida correspondiente (\(\bm{y}_i \in \mathbb{R}^m\) para algún \(m \in
     \mathbb{N}\)), y cada par fue generado por una \textbf{función desconocida}
-    \(\mathbf{\mathbf{y}}=f(\mathbf{x})\), descubrir una función \(h\) que aproxime a la
+    \(\bm{\bm{y}}=f(\bm{x})\), descubrir una función \(h\) que aproxime a la
     función real \(f\) \cite{ai-a-modern-approach}.\\
-    Denotaremos con \(\mathbf{X}\) al vector de entradas del conjunto de entrenamiento, y
-    con \(\mathbf{Y}\) al vector de salidas, ambos de tamaño \(N\) y bien ordenados. Es
+    Denotaremos con \(\bm{X}\) al vector de entradas del conjunto de entrenamiento, y
+    con \(\bm{Y}\) al vector de salidas, ambos de tamaño \(N\) y bien ordenados. Es
     decir:
     \begin{quote}
-        \(\mathbf{X}=(\mathbf{x}_1, \mathbf{x}_2, ..., \mathbf{x}_N)\)\\
-        \(\mathbf{Y}=(\mathbf{y}_1, \mathbf{y}_2, ..., \mathbf{y}_N)\)
+        \(\bm{X}=(\bm{x}_1, \bm{x}_2, ..., \bm{x}_N)\)\\
+        \(\bm{Y}=(\bm{y}_1, \bm{y}_2, ..., \bm{y}_N)\)
     \end{quote}
 \end{quote}
-De esta forma, el modelo es la función \(h\), que toma un vector de entrada \(\mathbf{x}\)
-y devuelve una salida \(\mathbf{y}\), y se presenta como una \textbf{hipótesis} de \(f\).
+De esta forma, el modelo es la función \(h\), que toma un vector de entrada \(\bm{x}\)
+y devuelve una salida \(\bm{y}\), y se presenta como una \textbf{hipótesis} de \(f\).
 La suposición sobre la que se trabaja es que si el modelo funciona bien para los pares de
 entrenamiento, entonces se espera que va a realizar buenas predicciones para nuevas
 entradas cuya etiqueta se desconoce.
@@ -156,82 +160,99 @@ que es elegido por quien diseña el modelo. Este espacio podría ser el conjunto
 funciones lineales, de polinomios de grado 2, de polinomios de grado 3, etcétera. Por lo
 tanto, el espacio determina la forma o ``\textbf{arquitectura}'' que va a tener la función
 \(h\), y consecuentemente cuáles son sus parámetros, cuyo vector denotaremos con la letra
-\(\bm{\bm{w}}\), y a los que también se suele llamar ``''\textbf{pesos}''. De esta forma,
+\(\bm{\bm{w}}\), y a los que también se suele llamar ``\textbf{pesos}''. De esta forma,
 este espacio determina la familia de posibles relaciones entre entradas y salidas, y los
 parámetros especifican la relación particular (el modelo).
 
-Por ejemplo, si suponemos que cada entrada \(\mathbf{x} \in \mathbb{R}\), y establecemos
+Por ejemplo, si suponemos que cada entrada \(\bm{x} \in \mathbb{R}\), y establecemos
 como espacio el conjunto de funciones lineales, entonces la forma de \(h\) será:
-\[h(\mathbf{x}) = w_1 \mathbf{x} + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1)\). Este caso
+\[h(\bm{x}) = w_1 \bm{x} + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1)\). Este caso
 es comúnmente conocido como regresión lineal unidimensional (ya que la entrada es
 simplemente un número real). Dentro de este espacio, distintas asignaciones de valores
 a los parámetros generan distintos modelos. Por ejemplo, tomando la asignación
-\(\), tenemos el modelo \(h(x) = 5\mathbf{x} + 13\), y tomando \(\),
-\(h(\mathbf{x}) = \pi \mathbf{x} + 1.25\), entre muchos otros.
+\(\bm{w}=(13, 5)\), tenemos el modelo \(h(x) = 5\bm{x} + 13\), y tomando \(\bm{w}=(1{.}25, \pi)\),
+\(h(\bm{x}) = \pi \bm{x} + 1{.}25\), entre muchos otros.
 
 En cambio, si tomamos el conjunto de polinomios de grado 2 y seguimos suponiendo
-\(\mathbf{x} \in \mathbb{R}\), entonces la forma de \(h\) será:
-\[h(\mathbf{x}) = w_2 \mathbf{x}^2 + w_1 \mathbf{x} + w_0\] y sus parámetros
+\(\bm{x} \in \mathbb{R}\), entonces la forma de \(h\) será:
+\[h(\bm{x}) = w_2 \bm{x}^2 + w_1 \bm{x} + w_0\] y sus parámetros
 \(\bm{w}=(w_0, w_1, w_2)\). A este caso se lo suele llamar regresión polinómica de segundo
 grado unidimensional.
 
-Otro caso un poco más ``complejo'' podría ser en el que \(\mathbf{x} \in \mathbb{R}^3\), es decir
-\(\mathbf{x}=(x_1, x_2, x_3)\) y seguimos tomando una relación lineal. Aquí, \(h\) sería:
-\[h(\mathbf{x}) = w_1 x_1 + w_2 x_2 + w_3 x_3 + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1,
+Otro caso un poco más ``complejo'' podría ser en el que \(\bm{x} \in \mathbb{R}^3\), es decir
+\(\bm{x}=(x_1, x_2, x_3)\) y seguimos tomando una relación lineal. Aquí, \(h\) sería:
+\[h(\bm{x}) = w_1 x_1 + w_2 x_2 + w_3 x_3 + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1,
 w_2, w_3)\)\footnotemark. \footnotetext{Para simplificar la notación, lo que se suele hacer
-es asumir que la entrada \(\mathbf{x}\) tiene un componente adicional constante \(x_0\)
-con el valor 1, es decir \(\mathbf{x}=(x_0, x_1, x_2, x_3)=(1, x_1, x_2, x_3)\). De esta
-forma, podríamos escribir: \(h(\mathbf{x}) = \mathbf{x} \cdot \bm{w}\), donde el operador
-\(\cdot\) representa el producto escalar. Retomaremos esta idea más adelante.}
+es asumir que la entrada \(\bm{x}\) tiene un componente adicional constante \(x_0\)
+con el valor 1, es decir \(\bm{x}=(x_0, x_1, x_2, x_3)=(1, x_1, x_2, x_3)\). De esta
+forma, podríamos escribir: \(h(\bm{x}) = \bm{x} \cdot \bm{w}\), donde el operador
+\(\cdot\) representa el producto escalar. Retomaremos esta idea más adelante al hablar
+sobre Redes Neuronales.}
 
 Notemos entonces que, fijado un espacio de funciones, quienes van a determinar qué modelo
 es ``mejor'' que otro en este espacio, es decir qué modelo aproxima mejor a \(f\), son los
 valores de los parámetros \(w_i\). Por lo tanto, \(h\) en realidad es una función de la
-entrada \(\mathbf{x}\) pero también de los parámetros, establecidos por el espacio de funciones
+entrada \(\bm{x}\) pero también de los parámetros, establecidos por el espacio de funciones
 elegido:
-\[h(\mathbf{x}, \bm{w})\]
-Y lo que querremos idealmente es:
-\[f(\mathbf{x}) \approx h(\mathbf{x}, \bm{w})\]
+\[h(\bm{x}, \bm{w})\]
+
+Y lo que querremos idealmente es hallar el vector de parámetros \(\bm{w}^*\) que hagan que
+el modelo resultante cumpla:
+\[f(\bm{x}) \approx h(\bm{x}, \bm{w}^*)\]
+para cada \(\bm{x}\) en el conjunto de entrenamiento.
 
 Entonces, cuando un modelo se entrena o aprende, lo que realmente hace es intentar
 encontrar los valores de los parámetros que describan la verdadera relación entre entradas
 y salidas \cite{prince2024understanding}. Un algoritmo de aprendizaje toma el conjunto de
-entrenamiento y manipula los parámetros hasta que las predicciones dadas por él sean lo
-más cercanas posible a las etiquetas verdaderas.
+entrenamiento y manipula los parámetros de forma iterativa hasta que las predicciones
+dadas por él sean lo más cercanas posible a las etiquetas verdaderas.
 
 Para que el algoritmo sepa cómo modificar estos parámetros para mejorar sus predicciones,
-necesita una forma de saber cómo está siendo su desempeño. Para esto, se define lo que se
+necesita una forma de conocer cómo está siendo su desempeño. Para esto, se define lo que se
 conoce como \textbf{función de pérdida} o \textbf{función de error}, que denotaremos con
 la letra \(L\) y que justamente hace eso: retorna un número que resume qué tan bien o mal
-está funcionando el modelo con sus parámetros \(\bm{w}\) actuales, en términos de qué tan
+está funcionando el modelo con sus parámetros \(\bm{w}'\) actuales, en términos de qué tan
 lejos están sus predicciones de las respuestas reales del conjunto de entrenamiento.
 
-Una vez establecida su forma, la \textit{performance} del modelo va a estar dada por los
-valores actuales de sus parámetros. Por lo tanto, tiene sentido tratar a la función de
-pérdida como una que depende de los parámetros del modelo, es decir
-\(L(\bm{w})\)\footnotemark. \footnotetext{En realidad la función de pérdida también depende
-de los datos de entrenamiento, por lo que si somos estrictos deberíamos escribir
-\(L(\left\{\mathbf{X}, \mathbf{Y}\right\}, \bm{w}\)). Sin embargo, como estos datos están
-fijos durante todo el proceso de aprendizaje, podemos omitirlos.} A continuación, se
-mencionan dos ejemplos de funciones de error:
+Como venimos enfatizando, lo que caracteriza al modelo en cada iteración es el valor de
+sus parámetros. Por lo tanto, tiene sentido tratar a la función de pérdida como una que
+depende de estos, es decir \(L(\bm{w})\)\footnotemark. \footnotetext{En realidad la
+función de pérdida también depende de los datos de entrenamiento, por lo que si somos
+estrictos deberíamos escribir \(L(\left\{\bm{X}, \bm{Y}\right\}, \bm{w}\)). Sin
+embargo, como estos datos están fijos durante todo el proceso de aprendizaje, podemos
+omitirlos.} A continuación, se mencionan dos ejemplos de funciones de error:
 \begin{itemize}
     \item Una función de pérdida que se es común usar en problemas de regresión es la de
     Error Cuadrático Medio (ECM), dada por:
     \[
-    ECM(\bm{w}) = \frac{1}{N} \sum_{i=1}^{N} \left(h(\mathbf{x}_i, \bm{w}) - \mathbf{y}_i\right)^2
+    ECM(\bm{w}) = \frac{1}{N} \sum_{i=1}^{N} \left(h(\bm{x}_i, \bm{w}) - \bm{y}_i\right)^2
     \]
     \item Para problemas de clasificación binaria como el que tratamos en este trabajo, vamos a tener
-    \(\mathbf{y}_i \in \mathbb{R}\), y se suele emplear la Entropía Cruzada Binaria (ECB), dada por:
+    \(\bm{y}_i \in \mathbb{R}\), y se suele emplear la Entropía Cruzada Binaria (ECB), dada por:
     \[
     ECB(\bm{w}) = -\frac{1}{N} \sum_{i=1}^{N}
         \left[
-            \mathbf{y}_i\ log(h(\mathbf{x}_i, \bm{w})) + (1 - \mathbf{y}_i)\ log(1 - h(\mathbf{x}_i, \bm{w}))
+            \bm{y}_i\ ln(h(\bm{x}_i, \bm{w})) + (1 - \bm{y}_i)\ ln(1 - h(\bm{x}_i, \bm{w}))
         \right]
     \]
-    Sin entrar en detalles, lo que mide esta función es la diferencia entre dos
-    distribuciones de probabilidad, que en este caso son la distribución real de los datos
-    dada por el conjunto de entrenamiento y la distribución predicha por el modelo en su
-    estado actual.
+    donde \(ln\) es la función de logaritmo natural. A grandes rasgos, lo que mide esta
+    función es la diferencia entre dos distribuciones de probabilidad, que en este caso
+    son la distribución real de los datos dada por el conjunto de entrenamiento y la
+    distribución predicha por el modelo en su estado actual.
+
+    Para comprender un poco mejor cómo funciona de manera intuitiva, tomemos un ejemplo
+    simple. Supongamos que tenemos una entrada \(\bm{x}'\) cuya etiqueta es \(\bm{y}'=1\),
+    y que la salida del modelo es \(h(\bm{x}', \bm{w}') = 0{.}95\). En primera instancia,
+    vamos a tener que el lado derecho del término de la sumatoria directamente se anula
+    (ya que \(1-\bm{y}' = 1-1 = 0\)). Y, para ver qué pasa con el lado izquierdo, notemos
+    que \(ln(h(\bm{x}', \bm{w}')) = ln(0{.}95) \approx -0{.}05\), por lo que multiplicando
+    por el (\(-1\)) del comienzo de la fórmula, vamos a tener como resultado \(0{.}05\),
+    lo cual es bajo e indica una buena predicción del modelo. Si en cambio la predicción
+    hubiera sido \(h(\bm{x}', \bm{w}') = 0{.}25\), tendríamos \(ln(h(\bm{x}', \bm{w}')) =
+    ln(0{.}25) \approx -1{.}39\), dando una pérdida de \(1{.}39\).
+
+    Lo que se puede ver es que el lado izquierdo influye cuando la salida esperada para la
+    entrada actual es 1, y el lado derecho lo hará cuando la salida esperada es 0.
 \end{itemize}
 
 En general, se asume que un valor más bajo de \(L(\bm{w})\) indica un mejor desempeño del
@@ -241,28 +262,26 @@ modelo, y por lo tanto el objetivo del proceso de entrenamiento se convierte en
 \[
 \bm{w}^* = \arg\min_{\bm{w}} L(\bm{w})
 \]
+donde el operador \(\arg\min_{\alpha} g(\alpha)\) da el valor de \(\alpha\)
+que minimiza \(g(\alpha)\).
+
 Si luego de la minimización la pérdida es baja, quiere decir que hemos encontrado
-parámetros que predicen precisamente las salidas de entrenamiento \(\mathbf{y}_i\) a partir de los
-entradas \(\mathbf{x}_i\) (con \(i=1,...,N\)). Sin embargo, como explicamos previamente, la
-evaluación final del modelo se debe hacer con el conjunto de test, sobre el cual se puede
-también calcular la pérdida.
+parámetros que hacen que el modelo prediga precisamente las salidas de entrenamiento
+\(\bm{y}_i\) a partir de los entradas \(\bm{x}_i\) (con \(i=1,...,N\)). Sin
+embargo, como explicamos previamente, la evaluación final del modelo se debe hacer con el
+conjunto de test, sobre el cual se puede también calcular la pérdida.
 
 La pregunta que surge entonces es cómo hacer para lograr esta minimización. Dependiendo
 del espacio de funciones y de la función de costo seleccionada, puede que exista una
-fórmula cerrada para \(\bm{w}^*\), que se calcule analíticamente. Por ejemplo, en el
-caso de la regresión lineal multivariada y tomando como función de pérdida el ECM, se
-puede demostrar que la solución cerrada es:
-\[
-    \bm{w}^* = \left(\mathbf{X}^T \mathbf{X}\right)^{-1} \mathbf{X}^T \mathbf{Y}
-\]
+fórmula cerrada para \(\bm{w}^*\), que se calcule analíticamente.
 
 Sin embargo, si la función de costo tiene muchas variables (parámetros) o los modelos son
 complejos, resulta más útil recurrir a métodos numéricos para aproximar este mínimo.
 
-El algoritmo más genérico que se utiliza para resolver este problema de optimización es el
-llamado \textbf{Descenso por el Gradiente} (DG). Es muy potente ya que se puede aplicar a
-cualquier función de pérdida \cite{ai-a-modern-approach}, sin importar el espacio de
-funciones elegido.
+El algoritmo por defecto que se utiliza para resolver este problema de optimización es el
+llamado \textbf{Descenso por el Gradiente} (DG), y es muy potente ya que se puede aplicar a
+una gran variedad de funciones de pérdida \cite{ai-a-modern-approach}, siempre que esta
+sea diferenciable (a continuación veremos por qué).
 
 La idea del DG es ir modificando los parámetros iterativamente hasta eventualmente llegar
 a un ``valle'' de la función de pérdida. El algoritmo se basa en que la dirección dada por
@@ -282,15 +301,15 @@ parcial} de \(g\) con respecto a \(v_i\), que mide cómo cambia \(g\) cuando se 
 el vector resultante es un vector de funciones, y cuando se lo evalúa en un punto,
 da la dirección de mayor crecimiento de \(g\) desde ese punto.}
 
-Concretamente, se empieza con un vector de parámetros \(\bm{w}\) con valores arbitrarios que
-va mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente, con
-el objetivo de reducir el valor de la función de pérdida, hasta que el algoritmo
-\textit{converja} a un mínimo (local) de la función de pérdida.
+Concretamente, se empieza con un vector de parámetros \(\bm{w}_0\) con valores arbitrarios
+que va mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente,
+con el objetivo de reducir el valor de la función de pérdida, hasta que el algoritmo
+\textit{converja} a un mínimo (local o global) de la función de pérdida.
 
 Un hiperparámetro\footnotemark{} determinante en el algoritmo del DG es el tamaño de los
-pasos, llamado \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\alpha\) y
+pasos, llamado \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\eta\) y
 supondremos por el momento que se mantiene constante en todo el proceso. Si el valor
-\(\alpha\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas
+\(\eta\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas
 iteraciones para converger \cite{hands-on-ML-sklearn-tf}. Si en cambio el valor es muy
 alto, entonces puede ser que vayamos ``saltando'' de un lado a otro de un valle de la
 función, haciendo que el algoritmo diverja \cite{hands-on-ML-sklearn-tf}.
@@ -299,11 +318,11 @@ es que no es un parámetro que se aprende, como lo son los contenidos en el vect
 
 De esta forma, la regla del DG está dada por:
 \[
-\bm{w}_{p+1} = \bm{w}_{p} - \alpha \nabla L(\bm{w})
+\bm{w}^{(p+1)} = \bm{w}^{(p)} - \eta \nabla L(\bm{w}^{(p)})
 \]
-donde \(p\) indica el número de iteración actual, \(\nabla L\) representa el
-gradiente de la función \(L\), y \(\nabla L(\bm{w})\) es el gradiente evaluado
-en los pesos del modelo.
+donde \(p\) indica el número de iteración actual, y \(\nabla L(\bm{w}^{(p)})\) es el
+gradiente de la función de error con respecto a los pesos del modelo, evaluado en los
+valores de los pesos de la iteración actual.
 
 Algo importante a notar es que en la forma que lo presentamos hasta ahora, el cómputo del
 gradiente de la función de peso involucra recorrer todas las muestras del conjunto de
@@ -323,7 +342,8 @@ Aprendizaje Supervisado. Los distintos elementos presentes son:
     y nos dará una noción de su capacidad de \textbf{generalización} una vez entrenado.
     \item Un \textbf{espacio de funciones}, que determina la forma de la función \(h\) y los
     parámetros \(\bm{w}\).
-    \item Una \textbf{función de pérdida} \(L(\bm{w})\), que mide el desempeño del modelo.
+    \item Una \textbf{función de pérdida} \(L(\bm{w})\), que mide el desempeño del modelo
+    y ayuda a guiar el entrenamiento.
     \item Un \textbf{algoritmo de optimización}, que busca minimizar la función de pérdida,
     siendo el más común el Descenso por el Gradiente.
 \end{itemize}
@@ -339,27 +359,55 @@ modelo tendrá una buena capacidad de generalización. Es decir, habiendo llegad
 conjunto de test.
 
 \bigskip
-Algo que no hemos discutido hasta el momento es de la correspondencia del espacio de
+Algo que no hemos discutido hasta el momento es la correspondencia del espacio de
 funciones con el conjunto de datos con el que estamos tratando.
 
-El éxito del Aprendizaje Supervisado depende en gran medida de elegir un espacio de
-funciones adecuado que sea capaz de capturar la distribución de los datos. Por ejemplo, si
-elegimos un modelo lineal cuando los datos tienen una relación cuadrática, el modelo no
-podrá representar correctamente la estructura del problema. Por otro lado, si
-seleccionamos un espacio de funciones altamente flexibles - o \textit{expresivas} -, como
-polinomios de grado alto, puede ocurrir que el modelo termine describiendo peculiaridades
-de los datos de entrenamiento que son atípicas y llevan a predicciones inusuales
-\cite{prince2024understanding}.
+Como venimos enfatizando, el principal desafío del ML es hacer que un modelo tenga una
+buena capacidad de generalización, es decir que actúe de manera correcta ante entradas aún
+no vistas. Por un lado, esto depende de qué tan representativo es el conjunto de
+entrenamiento. Per por otro, también depende de la elección de un espacio de
+funciones adecuado, cuyos modelos sean lo suficientemente \textit{expresivos} como para
+capturar la distribución de los datos. Nos centraremos en este último aspecto.
+
+A grandes rasgos, los factores que determinan qué tan bien un algoritmo de ML
+se va a desempeñar son sus capacidades para \cite{deep-learning}:
+\begin{itemize}[itemsep=0.1cm]
+    \item Reducir el error en el conjunto de entrenamiento.
+    \item Reducir la brecha entre el error en el conjunto de entrenamiento y en el de
+    test.
+\end{itemize}
+
+Estos dos factores están relacionados con dos conceptos fundamentales en el ML: el
+\textbf{subajuste} (\textit{underfitting}) y el \textbf{sobreajuste}
+(\textit{overfitting}).
+
+El underfitting ocurre cuando el modelo no es lo suficientemente ``potente'' como para
+lograr tener un error bajo en el conjunto de entrenamiento. Generalmente, esto sucede
+porque las funciones del espacio elegido son demasiado simples como para lograr aprender
+correctamente la estructura subyacente del problema. Un ejemplo podría ser elegir un modelo
+lineal cuando los datos en realidad tienen una relación cuadrática.
+
+Por otro lado, si seleccionamos un espacio de funciones altamente flexibles como pueden
+ser polinomios de grado alto, puede ocurrir que el modelo aprenda tan bien los datos de
+entrenamiento que termine describiendo peculiaridades atípicas de ellos que posteriormente
+llevan a predicciones inusuales sobre nuevos datos \cite{prince2024understanding}. Es
+decir, en estos casos la brecha entre el error en el conjunto de entrenamiento y el de
+test sea probablemente grande. Esta situación es lo que se llama sobreajuste.
 
 Si bien existen otros modelos que permiten identificar relaciones no lineales y no
 polinómicas, varios de ellos requieren tener un buen conocimiento sobre la estructura de
-los datos, y muchas veces su desempeño está condicionado a ciertas transformaciones,
-proceso que se conoce por su nombre en inglés \textit{feature engineering}.
+los datos, y muchas veces su desempeño está condicionado a ciertas transformaciones sobre
+los mismos, proceso que se conoce por su nombre en inglés \textit{feature engineering}.
 
-En este punto es donde aparecen los modelos conocidos como \textbf{Redes Neuronales}, que
-permiten describir un espacio de funciones complejas, expresivas, y no lineales sin la
-necesidad de tener un conocimiento profundo sobre los datos. En cambio, son capaces de
-aprender las representaciones subyacentes automáticamente. En la sección siguiente,
-explicaremos el funcionamiento de estos algoritmos.
+Más allá de la expresividad que otorgue el espacio de funciones y de la representatividad
+del conjunto de entrenamiento, existe otra variable presente, que es la dimensionalidad
+de los datos. La capacidad de generalizar se vuelve aún más complicada cuando los datos
+son de altas dimensiones, es decir cada entrada contiene muchas características.
+
+En este contexto, aparecen los modelos conocidos como \textbf{Redes Neuronales}, que
+no solo permiten describir conjuntos de funciones complejas, expresivas, y no lineales
+sin la necesidad de tener un conocimiento profundo sobre los datos, sino que también son
+capaces de trabajar con espacios de alta dimensión. En la sección siguiente, explicaremos
+el funcionamiento de estos modelos.
 
 \end{document}
