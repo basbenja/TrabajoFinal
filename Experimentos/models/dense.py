@@ -1,5 +1,7 @@
 import torch.nn as nn
 
+from constants import N_LAYERS
+
 class DenseClassifier(nn.Module):
     def __init__(self, input_size, hidden_sizes, dropout):
         super(DenseClassifier, self).__init__()
@@ -19,10 +21,9 @@ class DenseClassifier(nn.Module):
         return logits
 
 
-def define_dense_model(trial, input_size=5):
-    n_layers = trial.suggest_int("n_layers", 1, 6)
+def define_dense_model(trial, input_size):
     hidden_sizes = [
-        trial.suggest_int(f"n_units_l{i}", 16, 128) for i in range(n_layers)
+        trial.suggest_categorical(f"n_units_l{i}", [16, 32, 64, 128]) for i in range(N_LAYERS)
     ]
-    dropout = trial.suggest_float("dropout", 0.1, 0.5)
+    dropout = trial.suggest_categorical("dropout", [0.1, 0.3, 0.5, 0.7])
     return DenseClassifier(input_size, hidden_sizes, dropout)
