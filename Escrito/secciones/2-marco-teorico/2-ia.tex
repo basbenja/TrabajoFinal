@@ -333,6 +333,53 @@ grande. Para mitigar este problema, existen variantes del DG que buscan aproxima
 el gradiente utilizando subconjuntos del conjunto de entrenamiento. Retomaremos este tema
 en la proxima sección de Redes Neuronales.
 
+\subsubsection{Hiperparámetros}
+La mayoría de los algoritmos de ML tienen \textbf{hiperparámetros}, que son ajustes que
+permiten controlar tanto la capacidad del modelo como el proceso de entrenamiento. Los
+valores de los hiperparámetros no son aprendidos por el algoritmo \cite{deep-learning},
+sino que se fijan de antemano y no se modifican a lo largo del entrenamiento.
+
+Con lo visto hasta ahora, podemos pensar en dos ejemplos: el grado del polinomio
+con el cual ajustar los datos, y la tasa de aprendizaje del DG. En la sección anterior,
+veremos que existen varios más.
+
+Los hiperparámetros pueden contribuir a que el modelo mejore su desempeño, por lo que
+surge el problema de cómo hacer para encontrar el valor óptimo de cada uno. La respuesta a
+esto es un proceso llamado \textbf{búsqueda u optimización de hiperparámetros}.
+
+Esta búsqueda se hace de forma empírica: se entrenan distintos modelos con diferentes
+hiperparámetros sobre el mismo conjunto de entrenamiento, se mide el desempeño de cada
+uno de ellos, y se elige el mejor. Ahora bien, el desempeño no se mide sobre el
+conjunto de test, ya que esto admitiría la posibilidad que los hiperparámetros elegidos
+funcionen bien para ese conjunto, pero no permitan al modelo generalizar a nuevos
+datos \cite{prince2024understanding}.
+
+Por lo tanto, una técnica para realizar correctamente esta búsqueda consiste en construir
+una tercera partición del conjunto de datos, además de la de entrenamiento y la de test,
+llamada \textbf{conjunto de validación}. De esta forma, en la búsqueda de hiperparámetros,
+el modelo se sigue entrenando con el conjunto de entrenamiento, pero su performance se
+mide en el de validación, dejando al de test como si no existiese. Una vez que se han
+elegido los mejores hiperparámetros, se entrena el modelo con el conjunto de entrenamiento
+y se mide su capacidad real de generalización sobre el conjunto de test.
+
+Otra estrategia para llevar a cabo esta optimización se denomina \textbf{validación
+cruzada} (\textit{cross-validation}). Consiste en dividir el conjunto de entrenamiento en
+\(k\) partes (disjuntas), y luego entrenar el modelo \(k\) veces, cada vez utilizando
+\(k-1\) partes para el entrenamiento y la parte restante para la validación. En este caso,
+habiendo seleccionado una métrica particular, el rendimiento del modelo con ciertos
+hiperparámetros va a estar dado por el promedio del puntaje obtenido en cada partición. Al
+igual que antes, una vez que se han elegido los mejores hiperparámetros, se entrena el
+modelo con el conjunto de entrenamiento (sin particionar) y se mide su capacidad real de
+generalización sobre el conjunto de test.
+
+Algo a tener en cuenta es que aunque el espacio de hiperparámetros suele ser más pequeño
+que el de los parámetros del modelo en sí, puede seguir siendo lo suficientemente grande
+como para probar cada combinación de manera exhaustiva \cite{prince2024understanding}.
+Ante esto, existen algoritmos de optimización de hiperparámetros que eligen
+inteligentemente qué combinaciones ir probando, con base en resultados anteriores
+\cite{prince2024understanding}. Sin embargo, cabe notar que esta parte del entrenamiento
+de un modelo es una de las más costosas computacionalmente y en tiempo.
+
 \subsubsection{Resumen}
 Hasta aquí hemos hablado de cómo está compuesto prácticamente cualquier algoritmo de
 Aprendizaje Supervisado. Los distintos elementos presentes son:
