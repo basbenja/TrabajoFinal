@@ -2,15 +2,63 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-% El problema que abordamos en este proyecto se enmarca dentro de lo que se conoce como \textbf{Clasificación de Series de Tiempo} (CST).
+Como explicamos anteriormente, en cualquier evaluación de impacto, para poder calcular el
+efecto de un programa, se debe obtener una estimación apropiada del contrafactual: ¿qué
+hubiera pasado con la variable de objetivo de los beneficiarios del programa si el mismo
+no hubiera existido? Vimos también que para lograrlo, se construye un grupo de control,
+formado por individuos que no han sido tratados pero que idealmente, son estadísticamente
+similares a los que sí lo fueron.
 
-Como explicamos anteriormente, el principal problema en la Evaluación de Impacto de
-tratamientos sin asignación aleatoria es el de la identificación de un grupo de control o
-comparación adecuado, que cumpla las características descritas previamente.
+En esto, aparece el problema del sesgo de autoselección, que consiste en no tomar en
+cuenta las diferencias preexistentes entre tratados y no tratados, que pueden haber
+afectado tanto a la decisión de participar en el programa como a los resultados
+potenciales posteriores.
 
-Cuando el ingreso al tratamiento por parte de los individuos se realiza en un único
-instante de tiempo, el grupo de control obtenido mediante la técnica de PSM conforma el
-mejor estimador del contrafactual. Sin embargo, cuando la entrada al programa ocurre de
+En evaluaciones sobre programas con asignación aleatoria, este grupo se obtiene
+directamente tomando todos los individuos que no fueron tratados y el problema de
+autoselección se soluciona naturalmente. Sin embargo, en las evaluaciones
+cuasi-experimentales, hechas sobre tratamientos en donde la asignación al tratamiento no
+fue aleatoria y se desconocen los motivos que han llevado a los individuos a inscribirse o
+recibir el tratamiento, construir un grupo de control adecuado constituye un gran desafío.
+Este es uno de los focos centrales de este trabajo.
+
+Una técnica estadística muy potente para abordar este problema es el PSM. Esta técnica
+empareja individuos tratados con no tratados basándose en su probabilidad estimada de
+participación, calculada a partir de un conjunto de variables que se consideran
+influyentes en el programa bajo cuestión.
+
+Estas variables pueden representar tanto características observadas en un instante
+determinado como también compartamientos a lo largo del tiempo. Por ejemplo, si
+consideramos un tratamiento a empresas, se puede tomar como variable el número de
+empleados solamente en el mes anterior al inicio del programa, o se podría tomar esta
+cantidad observada durante diez meses previos al comienzo. De esta forma, es posible
+incluir series de tiempo en el cálculo del puntaje de propensión, tomando como variables
+varios períodos de la misma característica. Esto permite capturar no solo un estado
+puntual de las unidades sino también como ha sido su evolución, lo cual puede contribuir
+a un mejor emparejamiento y a una estimación más precisa. En este trabajo, nos enfocamos
+particularmente en esta última elección de variables.
+
+Otra cuestión a tener en cuenta a la hora de identificar los individuos de control es la
+forma de implementación del programa con respecto al tiempo. Hay unos en los que el
+ingreso al tratamiento por parte de los individuos se realiza en un único instante de
+tiempo, pero en otros la entrada al programa ocurre de manera secuencial. En este último
+caso, se habla de \textbf{cohorte} para referirse al conjunto de individuos que ingresaron
+al programa en el mismo momento. Nosotros consideraremos programas con este tipo
+de entradas.
+
+% De hecho, cuando el ingreso
+% al tratamiento por parte de los individuos se realiza en un único instante de tiempo, el
+% grupo de control obtenido mediante su uso conforma el mejor estimador del contrafactual.
+% No obstante, cuando la entrada al programa ocurre de manera secuencial, los modelos
+% logísticos no son capaces de gestionar esa probabilidad variable en el tiempo.
+
+% Objetivos
+
+
+% Hipótesis
+
+\begin{comment}
+ Sin embargo, cuando la entrada al programa ocurre de
 manera secuencial, los modelos logísticos no son capaces de gestionar esa probabilidad
 variable en el tiempo. Lo que se hace entonces es estimar la probabilidad por camada de
 ingreso al programa, es decir se agrupan individuos que hayan ingresado al tratamiento en
@@ -27,8 +75,6 @@ tratamiento. El principal objetivo es evaluar el potencial y la efectividad de e
 para capturar dependencias dinámicas y características temporales inherentes a los datos
 observados, para de esta forma mejorar el proceso de inferencia causal en la evaluación de
 impacto.
-
-% \textbf{Nuestra principal hipótesis es que ... ¿PONERLO?}.
-
+\end{comment}
 
 \end{document}
