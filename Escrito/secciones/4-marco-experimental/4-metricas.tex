@@ -1,0 +1,82 @@
+\documentclass[../../main.tex]{subfiles}
+% \graphicspath{{\subfix{../images/}}}
+
+\begin{document}
+En problemas de clasificación binaria, existen diferentes métricas para evaluar el
+desempeño del modelo. Las que más relevancia tendrán depende del problema. Para
+describirlas, utilizaremos la siguiente notación, asumiendo que la etiqueta 1 coresponde a
+la clase ``positiva'' y la 0 a la ``negativa'':
+\begin{itemize}
+    \item \(VP\): Verdaderos Positivos. Es la cantidad de predicciones correctas para la
+    clase positiva. Es decir, aquellos datos de entrada cuya etiqueta verdadera es 1 y que
+    el modelo también clasificó como 1. En nuestro caso, los \(VP\) son los indiviudos de
+    control que el modelo identificó correctamente como de control.
+    \item \(VN\): Verdaderos Negativos. Es la cantidad de predicciones correctas para la
+    clase negativa. Es decir, aquellos datos de entrada cuya etiqueta verdadera es 0 y que
+    el modelo también clasificó como 0. En nuestro caso, los \(VN\) son los indiviudos NiNi
+    que el modelo identificó correctamente como NiNi.
+    \item \(FP\): Falsos Positivos. Es la cantidad de predicciones incorrectas para la
+    clase negativa. Es decir, aquellos datos de entrada cuya etiqueta verdadera es 0 pero
+    que el modelo clasificó como 1. En nuestro caso, los \(FP\) son los indiviudos NiNi que el
+    modelo identificó como incorrectamente de control.
+    \item \(FN\): Falsos Negativos. Es la cantidad de predicciones incorrectas para la
+    clase positiva. Es decir, aquellos datos de entrada cuya etiqueta verdadera es 1 pero
+    que el modelo clasificó como 0. En nuestro caso, los \(FN\) son los indiviudos de control
+    que el modelo identificó incorrectamente como NiNi.
+\end{itemize}
+
+Todas estas cantidades se suelen presentar de forma conjunta en lo que se denomina
+\textbf{matriz de confusión}:
+
+Con estos conceptos en mente, las distintas métricas que hay son las siguientes:
+\subsection{Exactitud}
+Es la proporción de entradas para las cuales el modelo predijo la salida correcta.
+Su fórmula está dada por:
+\[
+    Exactitud = \frac{VP + VN}{VP + VN + FP + FN}
+\]
+
+Utilizar esta medida no es recomendable en datasets desbalanceados, es decir en aquellos
+en donde hay un alto porcentaje de una clase pero bajo de otra. Veamos por qué con un
+ejemplo.
+
+Supongamos que tenemos un dataset de 100 muestras en donde el 90\% de los datos tienen
+etiqueta 0 y el restante 10\% tiene etiqueta 1. Se puede ver que si el modelo predice un
+valor de 0 para cualquier entrada, entonces tendría una exactitud del 90\%, que es un
+porcentaje bastante alto, pero se habrá equivocado en todas las instancias negativas.
+
+Por esto, y particularmente en datasets balanceados como son con los que trabajamos
+nosotros, es necesario prestar atención a otros valores.
+
+\subsection{Precisión}
+Es la proporción de verdaderos positivos sobre todos los positivos detectados por el
+modelo. Una precisión de 1 indica que cada elemento predicho como 1 efectivamente
+era un 1. Su fórmula está dada por:
+\[
+    Precisi\acute{o}n = \frac{VP}{VP + FP}
+\]
+
+Nuevamente, utilizar solamente la precisión es engañoso. Una forma de tener una precisión
+perfecta es crear un clasificador que siempre prediga un valor de 0, excepto en única
+instancia de la que esté más seguro de predecir 1 \cite{hands-on-ML-sklearn-tf}. Si esta
+predicción es correcta, entonces tendríamos \(VP=1\), \(FP=0\), dando de esta forma una
+precisión de 1. Por esto, se la suele combinar con otra proporción llamada sensibilidad.
+
+\subsection{Sensbilidad o Ratio de Verdaderos Positivos}
+Es la proporción de instancias positivas predichas corrctamente por el modelo. Su
+fórmula está dada por:
+\[
+    Sensibilidad = \frac{VP}{VP + FN}
+\]
+
+Prestar atención solamente a la sensibilidad también es riesgoso. Si volvemos al dataset
+de 100 muestras donde el 90\% del dataset tiene etiqueta 0 y el restante 10\% tiene
+etiqueta 1, podemos obtener una sensibilidad de 1 simplemente construyendo un modelo que
+siempre prediga 1, ya que tendríamos \(VP=10\) y \(FN=0\). Sin embargo, tendríamos
+una precisión de 0.1, ya que \(FP=90\).
+
+Dicho esto, existe una medida que combina a estas dos métricas.
+
+\subsection{Puntaje F Beta}
+
+\end{document}
