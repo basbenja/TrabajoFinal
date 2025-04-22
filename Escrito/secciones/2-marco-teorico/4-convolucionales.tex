@@ -37,33 +37,38 @@ multidimensionales de números reales, también comúnmente llamados tensores
 sobre la entrada, y en cada momento calcular el producto escalar. Para verlo más
 claramente en el caso unidimensional, tomemos un ejemplo.
 
-Dado como entrada a la convolución un vector \(\mathbf{x}\), si tomamos un filtro de
+Dado como entrada a la convolución un vector \(\bm{x}\), si tomamos un filtro de
 tamaño 3, dado por \(\bm{w}=(w_1, w_2, w_3)^T\), entonces el resultado de la convolución
-es un vector \(\mathbf{z}\) en donde cada componente \(z_i\) es una suma pesada de las
+es un vector \(\bm{z}\) en donde cada componente \(z_i\) es una suma pesada de las
 entradas ``cercanas'':
 \[z_i = w_1 x_{i-1} + w_2 x_{i} + w_3 x_{i+1}\]
 \footnotetext[3]{Por conveniencia, el primer elemento de los vectores será indexado en 1,
 y no en 0.}
+
 En la Figura \ref{fig:conv1d-example}, se puede ver cómo se computan \(z_2\) y \(z_3\).
+Un detalle a notar aquí es que al calcular \(z_2\) y \(z_3\), el filtro ``entra''
+por completo en la entrada, pero si quisiéramos calcular \(z_1\), pareciera que \(w_1\)
+no puede multiplicarse por nada. Existen alternativas para solucionar este problema,
+que detallaremos más adelante.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/conv1d-example1.png}
+    \includegraphics[width=0.65\textwidth]{figs/conv1d-example1.png}
     \caption{Fuente: \cite{prince2024understanding}. Ejemplo de convolución unidimensional
     con un filtro \(\bm{w}\) de tamaño 3.}
     \label{fig:conv1d-example}
 \end{figure}
 
-Si generalizamos y tomamos un vector \(\mathbf{x}\) de tamaño \(n\) correspondiente
-a la entrada y un vector \(\mathbf{w}\) de tamaño \(l\) correspondiente al kernel,
-entonces el resultado de la convolución es un vector \(\mathbf{z}\) donde:
+Si generalizamos y tomamos un vector \(\bm{x}\) de tamaño \(n\) correspondiente
+a la entrada y un vector \(\bm{w}\) de tamaño \(l\) correspondiente al kernel,
+entonces el resultado de la convolución es un vector \(\bm{z}\) donde:
 \begin{equation}
     z_i = \sum_{j=1}^l w_j x_{j+i-(l+1)/2}
     \label{eq:convolution}
 \end{equation}
 En otras palabras, para generar cada componente \(i\) de la salida, se toma el producto
-escalar entre el kernel \(\mathbf{w}\) y una parte de \(\mathbf{x}\) de largo \(l\)
-centrada en \(x_i\) \cite{ai-a-modern-approach}.
+escalar entre el kernel \(\bm{w}\) y una parte de \(\bm{x}\) de largo \(l\) centrada en
+\(x_i\) \cite{ai-a-modern-approach}.
 
 A partir de aquí, se puede ver que aplicar una convolución resulta en una salida
 usualmente de menor tamaño que la entrada. La salida de la convolución suele llamarse
@@ -96,7 +101,7 @@ cómo esta operación se traslada a las redes neuronales. Para empezar, lo que v
 ocurrir ahora es que los parámetros a optimizar van a ser los pesos involucrados
 en cada filtro.
 
-Las redes convolucionales son un ejemplo de red feedforward, ya que la información fluye
+Las redes convolucionales son un ejemplo de red Feedforward, ya que la información fluye
 en una sola dirección. Ahora bien, vimos que en las redes totalmente conectadas, cada
 neurona de una capa está conectada con todas las de la capa anterior. En cambio, en las
 capas convolucionales lo que ocurre es que cada neurona está conectada con un subconjunto de
@@ -109,15 +114,15 @@ Este comportamiento se puede ver en la Figura \ref{fig:fully-connected-vs-conv}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/fully-connected-vs-conv.png}
+    \includegraphics[width=0.7\textwidth]{figs/fully-connected-vs-conv.png}
     \caption{Fuente: \cite{prince2024understanding}. Capas de una red fully connected
-    (izquierda) vs capas convolucionales (derecha). Asumimos por comodidad que la capa de
-    las neuronas \(x_i\) es la capa de entrada y la de las \(h_i\) es la primera oculta.
-    En las capas de la fully connected, vemos que cada neurona de la capa \(x\) está
-    conectada con todas las neuronas de la capa \(h\), habiendo un total de \(6 \times 6 =
-    36\) pesos entre ellas. En cambio, en la convolucional, asumiendo que se aplica
-    un filtro de tamaño \(l=3\), tenemos que cada neurona de la capa \(h\) computa una
-    suma pesada (con los mismos pesos) de \(l=3\) neuronas consecutivas de la capa \(x\).}
+    (izquierda) vs capas convolucionales (derecha). Denotamos con \(x\) a la capa de la
+    izquierda, y con \(h\) a la de la derecha, en ambos casos. En las capas de la fully
+    connected, vemos que cada neurona de la capa \(x\) está conectada con todas las
+    neuronas de la capa \(h\), habiendo un total de \(6 \times 6 = 36\) pesos entre ellas.
+    En cambio, en la convolucional, asumiendo que se aplica un filtro de tamaño \(l=3\),
+    tenemos que cada neurona de la capa \(h\) computa una suma pesada (con los mismos
+    pesos) de \(l=3\) neuronas consecutivas de la capa \(x\).}
     \label{fig:fully-connected-vs-conv}
 \end{figure}
 
@@ -145,8 +150,8 @@ Algo que cabe notar en este punto es que cuando una neurona aplica el filtro
 correspondiente sobre las de la capa anterior, si esta última tiene varios canales,
 entonces el filtro es aplicado en todos ellos. Es decir, si por ejemplo la capa anterior
 tenía \(C\) canales y el filtro tiene tamaño \(l\), entonces al aplicar el filtro, ahora
-vamos a tener una matriz de pesos de tamaño \(l \times C\). Esto se puede ver en la
-Figura \ref{fig:conv-layer-multi-channel}.
+vamos a tener una cantidad de pesos \(l \times C\). Esto se puede ver en la Figura
+\ref{fig:conv-layer-multi-channel}.
 
 \begin{figure}
     \centering
@@ -163,18 +168,20 @@ Figura \ref{fig:conv-layer-multi-channel}.
 Además de la cantidad de filtros en una capa, y su tamaño \(l\), existen otros
 hiperparámetros de las capas convolucionales: \vspace{-0.25cm}
 \begin{itemize}[noitemsep]
-    \item El paso (\textit{stride}), que representa la distancia entre dos campos receptivos
+    \item El \textbf{paso} (\textit{stride}), que representa la distancia entre dos campos receptivos
     consecutivos. Un stride igual a 1 quiere decir que el filtro se aplica en cada
     posición de la entrda.
-    \item El relleno (\textit{padding}), que controla cuántos valores ``fantasma'' se agregan
-    artificialmente a los extremos de la entrada de forma tal que el tamaño de la salida
-    de la convolución no sea tanto menor al de la entrada. En la práctica, se usa el 0
-    para este relleno (\textit{zero-padding}).
-    \item La dilatación (\textit{dilation}), que determina cuántos 0s se intercalan
-    en los pesos del filtro. Con este parámetro, se puede convertir un filtro de \(l=5\)
-    a uno ``dilatado'' de tamaño 3 fijando el segundo y cuarto elementos en 0. Esto
-    permite seguir ``integrando'' la información de una región de la entrada de tamaño
-    5 pero requiriendo solamente 3 pesos para hacerlo \cite{prince2024understanding}.
+    \item El \textbf{relleno} (\textit{padding}), que controla cuántos valores
+    ``fantasma'' se agregan artificialmente a los extremos de la entrada de forma tal que
+    el tamaño de la salida de la convolución no sea tanto menor al de la entrada. En la
+    práctica, se usa el 0 para este relleno (\textit{zero-padding}). Con esto, se
+    puede computar el valor de \(z_1\) que presentamos como ejemplo anteriormente.
+    \item La \textbf{dilatación} (\textit{dilation}), que determina cuántos 0s se
+    intercalan en los pesos del filtro. Con este parámetro, se puede convertir un filtro
+    de \(l=5\) a uno ``dilatado'' de tamaño 3 fijando el segundo y cuarto elementos en 0.
+    Esto permite seguir ``integrando'' la información de una región de la entrada de
+    tamaño 5 pero requiriendo solamente 3 pesos para hacerlo
+    \cite{prince2024understanding}.
 \end{itemize}
 
 Otros de los componentes particulares de las RNCs son las capas de \textit{pooling}, cuyo
@@ -189,9 +196,29 @@ ante desplazamientos de la imagen \cite{hands-on-ML-sklearn-tf}.
 Una capa convolucional típica de una RNC se compone de tres etapas: en primer lugar, se
 producen las convoluciones, que se encargan de producir activaciones lineales; luego, cada
 una de estas activaciones pasa por una función de activación no lineal; y finalmente se
-aplica pooling para reducir (aún más) el tamaño de la salida \cite{deep-learning}.
+aplica pooling para reducir (aún más) el tamaño de la salida \cite{deep-learning}. Y así,
+una Red Neuronal Convolucional profunda se compone de varias de estas capas.
 
-De esta froma, una red neuronal convolucional profunda se compone de varias de estas
-capas.
+\bigskip
+Ahora bien, en este trabajo nosotros utilizaremos este tipo de redes para resolver la
+tarea de \textbf{clasificación de series de tiempo}, esto es: dada una serie de tiempo
+como entrada de la red, que esta sea capaz de predecir a qué categoría corresponde. Para
+ello, lo que se suele hacer en estas redes es agregar, luego de la última capa
+convolucional, una capa de \textbf{aplanado} (\textit{flatten}), la cual no posee pesos
+aprendibles y simplemente convierte el tensor resultante de la capa anterior en uno
+unidimensional. Por ejemplo, si esta consiste de \(k\) feature maps de longitud \(n\) cada
+uno, entonces la capa de flatten dará como resultado un vector unidimensional de tamaño
+\(kn\).
+
+El paso anterior es necesario ya que las capas siguientes que se agregan para hacer la
+clasificación son totalmente conectadas que, como vimos anteriormente, aceptan únicamente
+entradas unidimensionales. Entonces, lo que ocurre es que el vector de tamaño \(kn\) es
+procesado por las diferentes capas densas hasta llegar a la de salida.
+
+En problemas de clasificación con más de dos categorías, esta última capa suele tener
+tantas neuronas como clases haya. En cambio, para tareas de clasificación binaria, como en
+nuestro caso, se utiliza habitualmente una única neurona con una función de activación
+sigmoide, cuya salida representa la probabilidad de que la secuencia de entrada pertenezca
+a la clase positiva (aquella asociada con la etiqueta 1).
 
 \end{document}
