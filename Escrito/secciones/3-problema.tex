@@ -14,7 +14,7 @@ cuenta las diferencias preexistentes entre tratados y no tratados, que pueden ha
 afectado tanto a la decisión de participar en el programa como a los resultados
 potenciales posteriores.
 
-En evaluaciones sobre programas con asignación aleatoria, este grupo se obtiene
+En evaluaciones sobre programas con asignación aleatoria, el grupo de control se obtiene
 directamente tomando todos los individuos que no fueron tratados y el problema de
 autoselección se soluciona naturalmente. Sin embargo, en las evaluaciones
 cuasi-experimentales, hechas sobre tratamientos en donde la asignación al tratamiento no
@@ -22,59 +22,85 @@ fue aleatoria y se desconocen los motivos que han llevado a los individuos a ins
 recibir el tratamiento, construir un grupo de control adecuado constituye un gran desafío.
 Este es uno de los focos centrales de este trabajo.
 
-Una técnica estadística muy potente para abordar este problema es el PSM. Esta técnica
+Una técnica estadística muy potente para abordar este problema es el PSM, discutida
+anteriormente y que es la que tomamos como referencia en el presente trabajo. Este método
 empareja individuos tratados con no tratados basándose en su probabilidad estimada de
 participación, calculada a partir de un conjunto de variables que se consideran
 influyentes en el programa bajo cuestión.
 
-Estas variables pueden representar tanto características observadas en un instante
-determinado como también compartamientos a lo largo del tiempo. Por ejemplo, si
-consideramos un tratamiento a empresas, se puede tomar como variable el número de
-empleados solamente en el mes anterior al inicio del programa, o se podría tomar esta
-cantidad observada durante diez meses previos al comienzo. De esta forma, es posible
-incluir series de tiempo en el cálculo del puntaje de propensión, tomando como variables
-varios períodos de la misma característica. Esto permite capturar no solo un estado
-puntual de las unidades sino también como ha sido su evolución, lo cual puede contribuir
-a un mejor emparejamiento y a una estimación más precisa. En este trabajo, nos enfocamos
-particularmente en esta última elección de variables.
+Estas variables son seleccionadas por los evaluadores y pueden representar tanto
+características observadas en un instante determinado como también compartamientos a lo
+largo del tiempo. Por ejemplo, si consideramos un tratamiento a empresas, se puede tomar
+como variable el número de empleados y los ingresos mensuales de solamente el mes anterior
+al inicio del programa, o se podría tomar esta cantidad observada durante diez meses
+previos al comienzo. De esta forma, es posible incluir series de tiempo en el cálculo del
+puntaje de propensión, tomando como variables varios períodos de la misma característica.
+Esto permite capturar no solo un estado puntual de las unidades sino también como ha sido
+su evolución, lo cual puede contribuir a un mejor emparejamiento y consecuentemente, a una
+estimación más precisa del efecto del tratamiento.
 
 Otra cuestión a tener en cuenta a la hora de identificar los individuos de control es la
 forma de implementación del programa con respecto al tiempo. Hay unos en los que el
 ingreso al tratamiento por parte de los individuos se realiza en un único instante de
 tiempo, pero en otros la entrada al programa ocurre de manera secuencial. En este último
 caso, se habla de \textbf{cohorte} para referirse al conjunto de individuos que ingresaron
-al programa en el mismo momento. Nosotros consideraremos programas con este tipo
-de entradas.
+al programa en el mismo momento.
 
-% De hecho, cuando el ingreso
-% al tratamiento por parte de los individuos se realiza en un único instante de tiempo, el
-% grupo de control obtenido mediante su uso conforma el mejor estimador del contrafactual.
-% No obstante, cuando la entrada al programa ocurre de manera secuencial, los modelos
-% logísticos no son capaces de gestionar esa probabilidad variable en el tiempo.
+Habiendo presentado estas cuestiones, nuestro trabajo se enfoca en programas con entrada
+secuencial y en los que supondremos que los individuos tratados resultaron ser tratados (o
+decidieron inscribirse al programa) por la dinámica temporal observada en una
+característica en los períodos anteriores al inicio del programa. Bajo estas
+circunstancias, el PSM presenta ciertas limitaciones:
+\begin{itemize}
+    \item Por un lado, cuando existen múltiples cohortes, la forma en la que se aplica la
+    técnica es por cohorte. Es decir, lo que se hace es estimar la probabilidad por camada
+    de ingreso al programa, y se buscan controles separadamente para cada una de estas
+    camadas. Dicho de otra manera, se realizan tantos emparejamientos como cohortes haya.
+    \item Por otro lado, cuando las variables tenidas en cuenta en realidad representan
+    una misma característica pero en distintos períodos de tiempo, la regresión logística,
+    que es la forma en la que se calcula el puntaje de propensión, no es capaz de capturar
+    esta relación temporal entre ellas, sino que las ve como si fueran independientes.
+\end{itemize}
 
-% Objetivos
+Con estos problemas en mente, en esta tesina presentamos una alternativa para la selección
+de grupos de control bajo las hipótesis mencionadas previamente. Esta se basa en la
+utilización de diferentes tipos de redes neuronales, concretamente: redes totalmente
+conectadas, redes convolucionales y redes LSTM. Como explicamos en el capítulo anterior,
+las dos últimas incorporan naturalmente la relación temporal de los datos, permitiendo
+capturar patrones a lo largo del tiempo. En nuestro escenario, en donde suponemos que la
+dinámica previa a la intervención es un factor clave para entender la participación
+en el programa, estas características de estas redes resultan especialmente útiles.
 
+Para evaluar la estrategia presentada, desarrollamos diferentes conjuntos de datos
+sintéticos, ya que en los casos reales algunos comportamientos no pueden verificarse
+directamente. Aquí, algunos de los parámetros a variar son la cantidad de períodos
+observados, la cantidad de períodos de dependencia temporal, y la dinámica temporal
+observada. Teniendo esto en cuenta, los objetivos de nuestro trabajo se pueden
+resumir en los siguientes puntos:
+\begin{itemize}
+    \item Evaluar la capacidad de las redes neuronales de reconocer individuos de control
+    ante diferentes dinámicas temporales de la variable observada.
+    \item Superar las limitaciones observadas del PSM.
+    \item Obtener resultados que permitan comparar el desempeño de las redes con
+    el del PSM en diferentes escenarios.
+\end{itemize}
 
-% Hipótesis
+Nuestras hipótesis son las siguientes:
+\begin{itemize}
+    \item Cuando no hay una dependencia temporal fuerte, es decir no hay un comportamiento
+    determinado en la evolución de la variable observada, el PSM y las redes tienen
+    aproximadamente  el mismo desempeño.
+    \item Por el contario, cuando existe una alta dependencia temporal, o sea cuando en
+    los datos forzamos un determinado comportamiento temporal, las redes funcionan mejor
+    que el PSM.
+    \item Las redes convolucionales y las LSTM funcionan mejor que las densas.
+    \item Ante menor cantidad de períodos de observación, las redes cometen cada
+    vez más errores.
+\end{itemize}
 
-\begin{comment}
- Sin embargo, cuando la entrada al programa ocurre de
-manera secuencial, los modelos logísticos no son capaces de gestionar esa probabilidad
-variable en el tiempo. Lo que se hace entonces es estimar la probabilidad por camada de
-ingreso al programa, es decir se agrupan individuos que hayan ingresado al tratamiento en
-temporalidades similares, y se buscan controles separadamente para cada una de estas
-camadas.
-
-En este trabajo, exploramos una alternativa distinta para este último caso. Proponemos la
-utilización de redes neuronales, específicamente del tipo LSTM \textbf{y
-convolucionales????}, capaces de incorporar la dimensión temporal de los datos, para la
-detección automática de grupos de control, en el caso particular en que el programa en
-cuestión se implementa \textbf{secuencialmente} y existe una \textbf{alta dependencia
-temporal} entre una variable observada de los individuos y el momento de ingreso al
-tratamiento. El principal objetivo es evaluar el potencial y la efectividad de estas redes
-para capturar dependencias dinámicas y características temporales inherentes a los datos
-observados, para de esta forma mejorar el proceso de inferencia causal en la evaluación de
-impacto.
-\end{comment}
+A continuación, presentamos el marco sobre el cual llevamos a cabo los experimentos,
+detallando el alcance de nuestro trabajo, la forma en que construimos las diferentes
+simulaciones, las arquitecturas de redes, las métricas para evaluar los modelos,
+y las herramientas que nos ayudaron en todo este proceso.
 
 \end{document}
