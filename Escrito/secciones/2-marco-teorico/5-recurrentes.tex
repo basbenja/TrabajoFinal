@@ -2,33 +2,59 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-Las Redes Neuronales Recurrentes (RNR) son una familia de redes neuronales pensadas
-específicamente para trabajar con \textbf{datos secuenciales} en donde el orden importa.
-Es por esto que han sido y continúan siendo muy útiles en tareas como análisis de series
-temporales y procesamiento de lenguaje natural.
+Las Redes Neuronales Recurrentes (RNRs) son una familia de redes neuronales pensadas
+específicamente para trabajar con \textbf{datos secuenciales} en donde el orden y la
+dinámica importan. Es por esto que han sido y continúan siendo muy útiles en tareas como
+análisis de series temporales y procesamiento de lenguaje natural. Se emplean por ejemplo
+para predecir cuáles van a ser los próximos valores en una serie de tiempo (tarea
+comúnmente conocida como \textit{forecasting}), cuáles van a ser las palabras que
+continúan una oración, y también para clasificar series de tiempo, que es para lo que las
+usaremos nosotros.
 
-A diferencia de las redes feedforward como las que venimos presentando hasta el momento,
-en donde la información fluye solamente en una dirección, pasando de las neuronas de una
-capa a las de la capa siguiente, lo que caracteriza a las RNR es la presencia de cíclos en
-su grafo. Estos cíclos hacen que las neuronas de la red puedan tomar como entradas
-sus propias salidas de pasos anteriores, permitiéndole a la red de esta forma tener
-un \textbf{estado interno} o \textbf{memoria}: entradas recibidas en pasos más empranos
-afectan la respuesta de la red ante la entrada actual \cite{ai-a-modern-approach}.
+Una características de las redes feedforward que presentamos hasta el momento es que no
+tienen memoria. Si quisieramos procesar una secuencia temporal de datos con estas redes,
+lo que deberíamos hacer es ``mostrársela'' entera como entrada, perdiendo de esta forma la
+dependencia temporal que existe entre las distintas features, que en realidad son los
+pasos de tiempo de una misma secuencia.
 
-Para comprender un poco más este comportamiento, tomemos la más simple de las RNR,
+Las RNRs proponen una forma alternativa de trabajar con datos de este tipo. Procesan las
+secuencias iterando sobre los distintos pasos de tiempo manteniendo un \textbf{estado
+interno} o \textbf{memoria} que contiene información relacionada con lo que ha visto hasta
+el momento\footnotemark. A esto lo logra mediante la introducción de cíclos en su grafo,
+que permiten que las neuronas de la red puedan tomar como entradas sus propias salidas de
+pasos anteriores. Todo esto provoca que entradas recibidas en pasos más tempranos afectan
+la respuesta de la red ante la entrada actual. \cite{ai-a-modern-approach}
+\footnotetext{Cabe aclarar que este estado interno se reinicia entre el procesamiento de
+diferentes secuencias.}.
+
+Para comprender un poco más este comportamiento, tomemos la más simple de las RNRs,
 compuesta por una única neurona (oculta) que recibe la entrada correspondiente al tiempo
 \(t\), produce una salida y se la envía a sí misma \cite{hands-on-ML-sklearn-tf}, como se
-puede ver a la izquierda del Diagrama \ref{fig:simple-rnn}. Así, en cada paso \(t\), la
-\textit{neurona ``recurrente''} recibe no solo la entrada \(x_t\) sino también su propia
-salida computada en el paso anterior, \(y_{t-1}\). Esto se hace aún más evidente cuando
-``desenrollamos'' la red a lo largo del tiempo, cuya representación se encuentra a la
-derecha de la Figura \ref{fig:simple-rnn} y se asemeja a la de una feedforward.
+puede ver a la izquierda de la Figura \ref{fig:simple-rnn}. Así, en cada paso \(t\), la
+\textit{neurona ``recurrente''} \(f\) recibe no solo la entrada \(x_t\) sino también su
+propia salida computada en el paso anterior, \(f_{t-1}\). Esto se hace aún más evidente
+cuando ``desenrollamos'' la red a lo largo del tiempo, cuya representación se encuentra a
+la derecha de la Figura \ref{fig:simple-rnn} y se asemeja a la de una feedforward.
 
-\begin{figure}[h]
+% Ponerlo acá?
+Otro detalle a tener en cuenta en estas redes es que, como se puede ver en la Figura
+\ref{fig:simple-rnn}, en cada paso de tiempo de una misma secuencia, la red genera una
+salida. Es decir, si tenemos una secuencia de largo \(\tau\) y nuestra red produce en cada
+paso de tiempo una salida de tamaño \(o\), entonces al terminar de procesar una secuencia
+entera, tendremos una salida ``total'' de tamaño \(\tau \times o\). Sin embargo,
+la salida en cada paso de tiempo contiene información de los pasos de tiempo previos,
+por lo que en general se suele utilizar la salida producida en el último paso, ya
+que contiene información sobre toda la secuencia.
+
+% Dónde agregarlo?
+% Y además, permite procesar secuencias de longitud variable; a diferencia de las
+% feedforward cuyo tamaño de entrada es fijo.
+
+\begin{figure}[ht]
     \centering
     \begin{tikzpicture}[
         item/.style={circle,draw,thick,align=center},
-        itemc/.style={item,on chain,join}
+        itemc/.style={node hidden,on chain,join}
     ]
     % Unenrolled RNN (on the right)
         \begin{scope}[
@@ -51,10 +77,10 @@ derecha de la Figura \ref{fig:simple-rnn} y se asemeja a la de una feedforward.
 
         \foreach \X in {0,1,2,t}{
             \draw[very thick,-latex] (f\X.north) -- ++ (0, 3.5em)
-                node[above,item,fill=gray!10] (y\X) {\(y_\X\)}
+                node[node out,above,item] (y\X) {\(y_\X\)}
                 node[pos=0.4,fill=white] {\footnotesize\shortstack{\(w_{0_f, y}\)\\\(w_{f, y}\)}};
             \draw[very thick,latex-] (f\X.south) -- ++ (0, -3.5em)
-                node[below,item,fill=gray!10] (x\X) {\(x_\X\)}
+                node[node in,below,item] (x\X) {\(x_\X\)}
                 node[pos=0.6,fill=white] {\footnotesize\shortstack{\(w_{0_x, f}\)\\\(w_{x, f}\)}};
         }
         \path (x2) -- (xt) node[midway,scale=2,font=\bfseries] {\dots};
@@ -63,24 +89,24 @@ derecha de la Figura \ref{fig:simple-rnn} y se asemeja a la de una feedforward.
         \node[left=1em of chain,scale=2] (eq) {\(=\)};
 
         % Folded RNN (on the left)
-        \node[left=2em of eq,item] (f) {\(f\)};
+        \node[node hidden,left=2em of eq] (f) {\(f\)};
         \path (f) edge[
             out=135, in=225, looseness=5, ->, very thick
         ] node[pos=0.5,fill=white] {\scriptsize \(w_{f,f}\)} (f);
         \draw[very thick,-latex]
             (f.north) -- ++ (0, 3.5em)
-            node[above,item,fill=gray!10] {\(y_t\)}
+            node[node out,above,item] {\(y_t\)}
             node[pos=0.4,fill=white] {\footnotesize\shortstack{\(w_{0_f,y}\)\\\(w_{f, y}\)}};
         \draw[very thick,latex-]
             (f.south) -- ++ (0, -3.5em)
-            node[below,item,fill=gray!10] {\(x_t\)}
+            node[node in,below,item] {\(x_t\)}
             node[pos=0.6,fill=white] {\footnotesize\shortstack{\(w_{0_x,f}\)\\\(w_{x, f}\)}};
     \end{tikzpicture}
     \caption{A la izquierda, se ve la más simple de las Redes Neuronales Recurrentes, con
     solamente la capa de entrada, una capa oculta formada por una neurona con su
     respectiva conexión recurrente, y la capa de salida. A la derecha, se ve la misma red
     pero ``desenrollada'' a lo largo del tiempo. Asumiremos por simplicidad que tanto la
-    entrada como la salida en cada momento \(t\) son simplemente números real, es decir
+    entrada como la salida en cada momento \(t\) son simplemente números reales, es decir
     \(x_t, y_t \in \mathbb{R} \ \forall t\). Denotamos con \(w_{x,f}\) al peso que va
     desde la entrada a la neurona oculta, con \(w_{0_x,f}\) al asociado a la neurona dummy
     con valor fijo en 1 que está en la entrada, con \(w_{f,y}\) al que va desde la neurona
@@ -92,27 +118,27 @@ derecha de la Figura \ref{fig:simple-rnn} y se asemeja a la de una feedforward.
 
 Cada neurona realiza lo mismo que en una red feeforward, en el sentido que computan una
 suma pesada de sus entradas y aplican una función de activación sobre esta. Sin embargo, a
-partir de la Figura \ref{fig:simple-rnn}, podemos notar dos particularidades con respecto
-a las redes recurrentes: \vspace{-0.25cm}
-\begin{itemize}[itemsep=0.1cm]
+partir de la Figura \ref{fig:simple-rnn}, podemos notar algunas particularidades con
+respecto a las redes recurrentes:
+\begin{itemize}
     \item Por un lado, cada neurona tiene un peso extra además del que se aplica sobre la
-    entrada \(x_t\), el cual está denotado en la Figura con \(w_{x,f}\). Este peso extra
-    corresponde al que se aplica sobre la salida de la neurona en el paso anterior
-    \(f_{t-1}\), denotado con \(w_{f,f}\).
+    entrada \(x_t\) (denotado en la Figura \ref{fig:simple-rnn} con \(w_{x,f}\)) y del
+    bias. Este peso extra corresponde al que se aplica sobre la salida de la neurona en el
+    paso anterior \(f_{t-1}\), denotado con \(w_{f,f}\).
     \item Por otro lado, la red utiliza los mismos pesos \(w_{x,f}\), \(w_{f,f}\) y
-    \(w_{f,y}\) en \textit{todos} los pasos de tiempo.
+    \(w_{f,y}\), y biases \(w_{0_x,f}\) y \(w_{0_f, y}\) en \textit{todos} los pasos de
+    tiempo.
 \end{itemize}
 
 Con esto en cuenta, vamos a tener que el cómputo llevado a cabo por la red
 en cada paso de tiempo \(t\) está dado por:
-\begin{align*}
-    f_t &=\ a_f \left( w_{x,f} x_t  + w_{f,f} f_{t-1} + w_{0,f} \right) \\
-    y_t &=\ a_y \left( w_{f,y} f_t + w_{0,y} \right) \\
-\end{align*}
-donde \(a_f\) denota la función de activación seleccionada para la capa oculta y \(a_y\)
-la de la capa de salida. Algo que vale la pena aclarar es que para el primer paso
-de tiempo, lo que sería la salida del paso anterior se establace manualmente, como
-por ejemplo con el valor 0.
+\begin{align}
+    f_t &=\ a_f \left( w_{x,f} x_t  + w_{f,f} f_{t-1} + w_{0_x,f} \right) \label{eq:ft} \\
+    y_t &=\ a_y \left( w_{f,y} f_t + w_{0_f, y} \right) \label{eq:yt}
+\end{align}
+donde \(a_f\) denota la función de activación de la capa oculta y \(a_y\) la de la capa de
+salida. Algo que vale la pena aclarar es que para el primer paso de tiempo \(x_0\), lo que
+sería la salida del paso anterior se establace manualmente, por lo general con el valor 0.
 
 Nos concentremos en la salida de la neurona recurrente en el tiempo \(t\), es decir
 en \(f_t\), dejando la salida de la red \(y_t\) de lado. A partir de las Ecuaciones
@@ -126,7 +152,7 @@ tanto la entrada en el tiempo actual \(x_t\) y de su salida en el paso anterior
     \item y así sucesivamente
 \end{itemize}
 Este comportamiento hace que \(f_{t'}\) sea una función de todas las entradas vistas desde
-\(t=0\), constituyendo de esta forma una especie \textit{memoria}, que se suele llamar
+\(t=0\), constituyendo de esta forma una especie de \textit{memoria}, que se suele llamar
 \textbf{estado oculto} de la neurona. En este caso, como la red solamente tiene una capa
 oculta con una neurona recurrente, el estado oculto de la neurona coincide con el estado
 oculto de la red.
@@ -143,13 +169,13 @@ cada una con su propio ciclo, como se puede ver en la Figura \ref{fig:simple-rnn
     \def\n{5}    % number of recurrent neurons
     \def\xsep{3} % horizontal separation in em
 
-    \node[item, fill=gray!10] (x) at ({(\n-1)*\xsep/2}, -3.5) {\(x_t\)};
-    \node[item, fill=gray!10] (y) at ({(\n-1)*\xsep/2}, 3.5) {\(y_t\)};
+    \node[node in] (x) at ({(\n-1)*\xsep/2}, -3.5) {\(x_t\)};
+    \node[node out] (y) at ({(\n-1)*\xsep/2}, 3.5) {\(y_t\)};
 
     % Loop through to create f_i nodes
     \foreach \i in {1,...,\n} {
         \pgfmathsetmacro{\x}{(\i-1)*\xsep}
-        \node[item] (f\i) at (\x, 0) {\(f_{\i}\)};
+        \node[node hidden] (f\i) at (\x, 0) {\(f_{\i}\)};
 
         % Arrow up to y_t
         \draw[very thick,-latex]
@@ -157,7 +183,7 @@ cada una con su propio ciclo, como se puede ver en la Figura \ref{fig:simple-rnn
             node[pos=0.4,fill=white] {\footnotesize{\(w_{f_\i, y}\)}};
 
         % Self-loop
-        \path (f\i) edge[out=135, in=225, looseness=5, ->, very thick]
+        \path (f\i) edge[out=135, in=225, looseness=6, ->, very thick]
             node[pos=0.5,fill=white] {\scriptsize \(w_{f_\i,f_\i}\)} (f\i);
         % Arrow down from x_t
         \draw[very thick,latex-]
@@ -165,9 +191,12 @@ cada una con su propio ciclo, como se puede ver en la Figura \ref{fig:simple-rnn
             node[pos=0.4,fill=white] {\footnotesize{\(w_{x, f_\i}\)}};
     }
     \end{tikzpicture}
-    \caption{Red Neuronal Recurrente con una capa oculta de 5 neuronas recurrentes,
-    cada una con su ciclo. Similarmente al Diagrama anterior, denotamos con ...
-    \textbf{TODO}}
+    \caption{Red Neuronal Recurrente con una capa oculta de 5 neuronas recurrentes, cada
+    una con su ciclo. Similarmente al Diagrama anterior, denotamos con \(w_{x,f_i}\) al
+    peso que va desde la capa de entrada a la neurona oculta \(f_i\), con \(w_{f_i, f_i}\)
+    al peso de cada neurona oculta a sí misma, y con \(w_{f_i, y}\) al que va desde la
+    neurona oculta \(f_i\) a la capa de salida (\(i=1,2,3,4,5\)). En este caso, omitimos
+    los biases.}
     \label{fig:simple-rnn-2}
 \end{figure}
 
@@ -180,40 +209,156 @@ de la red en el tiempo \(t\) y con \(f_{i_t}\) al estado oculto de la neurona oc
 \end{equation*}
 
 Y también podemos volver a utilizar la notación matricial para describir el comportamiento
-de la red:
+de la red de manera general:
 \begin{align*}
-    f_t &=\ \bm{a}_t \left( \mathbf{W}_x x^T + \mathbf{W}_f f_{t-1}^T \right) \\
+    f_t &=\ \bm{a}_f \left( \mathbf{W}_x x^T + \mathbf{W}_f f_{t-1}^T \right) \\
     y_t &=\ \bm{a}_y \left( \mathbf{W}_y f_t \right)
 \end{align*}
-donde:
+donde, siendo \(k\) el número de neuronas en la capa oculta y \(n\) el tamaño de cada
+paso de tiempo de la secuencia:
 \begin{itemize}[itemsep=0.05cm]
-    \item \(\bm{a}_t\) es la función de activación de la capa oculta, aplicada elemento a
-    elemento, es decir \(\bm{a}_t(x_0, x_1, ..., x_n) = (a_t(x_0), a_t(x_1), ...,
-    a_t(x_n))\).
+    \item \(\bm{a}_f\) es la función de activación de la capa oculta, aplicada elemento a
+    elemento, es decir \(\bm{a}_f(z_0, z_1, ..., z_m) = (a_f(z_0), a_f(z_1), ...,
+    a_f(z_m))\).
     \item \(\mathbf{W}_x\) es la matriz de tamaño \(k \times (n+1)\) de pesos que salen
-    desde la capa de entrada hasta la capa oculta, incluyendo el bias, donde \(k\) es el
-    número de neuronas en la capa oculta y \(n\) el tamaño de la entrada.
-    \item \(x^T\) es el vector transpuesto de la entrada, junto con el 1 del bias.
-    En este caso, estamos asumiendo \(x \in \mathbb{R}\).
+    desde la capa de entrada hasta la capa oculta, incluyendo el bias.
+    \item \(x^T\) es el vector transpuesto de la entrada, junto con el 1 del bias,
+    es decir \(x^T\) es de tamaño \((n+1) \times 1\).
     \item \(\mathbf{W}_f\) es la matriz diagonal de tamaño \(k \times k\) de pesos
     recurrentes. En cada elemento de la diagonal \(i\) se encuentra el peso que va desde
     la neurona \(i\) a sí misma, es decir \(w_{f_i, f_i}\).
-    \item \(f_{t-1}^T\) es el estado oculto de la red en el paso de tiempo anterior.
+    \item \(f_{t-1}^T\) es el vector transpuesto del estado oculto de la red en el paso de
+    tiempo anterior, es decir es de tamaño \(k \times 1\).
     \item \(\bm{a}_y\) es la función de activación de la capa de salida, aplicada elemento a
     elemento, al igual que \(\bm{a}_t\).
     \item \(\mathbf{W}_y\) es la matriz de tamaño \(o \times (k+1)\) de pesos que van
     desde la capa oculta hasta la capa de salida, incluyendo el bias, donde \(o\) es el
-    tamaño de la salida. En nuestra red, tomamos \(o=1\).
+    tamaño de la salida.
 \end{itemize}
 
 Al igual que antes, se pueden agregar más capas de neuronas recurrentes a la red,
-permitiendo de esta manera que cada capa tenga su propio estado oculto. En este caso,
-lo que va a ocurrir es que el estado oculto producido por las neuronas de una capa
+permitiendo de esta manera que cada capa tenga su propio estado oculto. En este caso, lo
+que va a ocurrir es que el estado oculto producido por las neuronas de una capa va a ser
+la entrada de las neuronas de la siguiente capa, estando las capas totalmente conectadas
+entre sí.
 
+Para entrenar este tipo de redes, el truco está en ``desenrollarlas'' como vimos
+anteriormente y luego utilizar el algoritmo de backpropagation presentado en la sección de
+Redes Nueronales. Esta estrategia es conocida como \textbf{\textit{backpropagation through
+time}}.
+
+Ahora bien, estas redes sufren de un problema conocido como \textbf{el problema del
+gradiente desvaneciente}, lo que las hace incapaces de capturar dependencias de largo
+plazo al procesar secuencias de muchos pasos de tiempo. A continuación, detallamos
+este problema.
+
+% Problema del vanishing gradient
+\subsubsection{El problema del gradiente desvaneciente}
+En general, y no solo en estas redes, el problema del gradiente desvaneciente ocurre
+cuando, al calcular el gradiente de la función de pérdida con respecto a un parámetro
+determinado, este resulta ser muy pequeño. Como consecuencia, la actualización de dicho
+parámetro durante el proceso de entrenamiento es insignificante, lo que puede provocar que
+la red aprenda muy lentamente o incluso que deje de entrenarse por completo.
+
+Veámosolo con un ejemplo particular basándonos en las Ecuaciones \ref{eq:ft} y \ref{eq:yt},
+y suponiendo que la función de pérdida es el error cuadrático medio:
 
 
 \subsection{Long Short-Term Memory}
+Las redes conocidas como Long Short-Term Memory (LSTM) son un tipo particular de RNRs que
+fueron introducidas en el año 1997 en \cite{lstm-paper-1997} para solucionar el problema
+del gradiente desvaneciente que tenían las RNRs estándar, lo que las hace capaces de
+aprender dependencias de largo plazo. Han demostrado funcionar de manera efectiva en una
+gran variedad de problemas, y los mayores avances obtenidos con redes recurrentes se han
+logrado utilizando esta arquitectura \cite{colahs-blog-lstm-2015}.
 
-\subsection{Gated Recurrent Unit}
+Como hemos visto hasta el momento, todas las redes recurrentes tienen una estructura de
+cadena de ``módulos'' o ``bloques'' \cite{colahs-blog-lstm-2015} - las neuronas
+recurrentes -, es decir, unidades que se repiten a lo largo de la secuencia temporal. En
+una RNR estándar, este módulo es simplemente una aplicación de una función de activación,
+particularmente la tangente hiperbólica, sobre una suma pesada de sus entradas. En las
+LSTM, estas neuronas se complejizan para para incorporar mecanismos que permiten mantener
+una memoria a largo plazo en la red. Las llamaremos ``celdas'' o neuronas LSTM.
+
+El principal componente que introducen las LSTM para poder retener información por largos
+períodos de tiempo es el \textbf{estado de celda}, que denotaremos con la letra \(C\). La
+particularidad de este estado es que a medida que ``fluye'' por la red, se mantiene
+prácticamente intacto, salvo por algunas interacciones lineales
+\cite{colahs-blog-lstm-2015}, pero no es afectado por ningún peso o bias, lo que permite
+justamente solucionar el problema del gradiente desvaneciente.
+
+Así, vamos a tener dos estados que interactúan entre sí para realizar predicciones:
+\begin{itemize}
+    \item Por un lado, el \textbf{estado de celda}, que representa la \textbf{memoria a largo
+    plazo} de la red, y no es afectado por ningún peso o bias.
+    \item Por otro lado, el \textbf{estado oculto} (del que venimos hablando), que
+    representa la \textbf{memoria a corto plazo} de lado, y sí es calculado por medio
+    de sumas pesadas en donde hay pesos y biases.
+\end{itemize}
+
+Ahora bien, con este nuevo elemento, la idea es que la red aprenda qué almacenar en este
+estado de celda, qué descartar y qué leer de él \cite{hands-on-ML-sklearn-tf}, y a esto lo
+hace a través de otros nuevos elementos llamados \textbf{compuertas}. En particular,
+se introducen tres tipos de compuertas:
+\begin{itemize}
+    \item \textbf{Compuerta de olvido \(\bm{f}\)} (del inglés \textit{forget}): determina
+    si cada elemento del estado de celda es recordado (copiado al paso siguiente) u
+    olvidado, fijándolo en 0.
+    \item \textbf{Compuerta de entrada \(\bm{i}\)} (del inglés \textit{input}): determina
+    si cada elemento del estado de celda es actualizado agregando nueva información del
+    vector de entrada en el paso de tiempo actual.
+    \item \textbf{Compuerta de salida \(\bm{o}\)} (del inglés \textit{output}):
+\end{itemize}
+
+De esta forma, las compuertas son una manera de opcionalmente dejar pasar información
+\cite{colahs-blog-lstm-2015}. Los valores de estas están siempre en el rango \([0,1]\) y
+se obtienen como la salida de una función sigmoide aplicada sobre la entrada actual y el
+estado oculto anterior \cite{ai-a-modern-approach}. El valor entre 0 y 1 representa
+la proporción de información que se deja pasar a través de la compuerta correspondiente
+
+A continuación, detallamos las operaciones producidas por una celda LSTM en un paso de
+tiempo. Utilizaremos la siguiente notación:
+\begin{itemize}
+    \item \(\bm{x}_t\) para el vector de entrada del tiempo \(t\).
+    \item \(\bm{h}_t\) para el estado oculto en el tiempo \(t\).
+    \item \(C_t\) para el estado de celda en el tiempo \(t\).
+    \item \(\tilde{C}_t\) para el ``potencial'' estado de celda en el tiempo \(t\).
+    \item \(f_t\), \(i_t\), \(o_t\) para las salidas de las compuertas de olvido,
+    entrada y salida en el tiempo \(t\) respectivamente.
+    \item \(\bm{W}\) para denotar la matriz de pesos que se aplica sobre la entrada.
+    \item \(\bm{W}\) para denotar la matriz de pesos que se aplica sobre el
+    estado oculto.
+\end{itemize}
+
+La celda toma tres entradas: el estado de celda del paso anterior \(C_{t-1}\),
+el estado oculto del paso anterior \(h_{t-1}\), y el vector de entrada del paso actual
+\(\bm{x}_t\).
+
+La primera compuerta que actúa es la de olvido, para determinar que información ya
+presente en el estado de celda se ``sigue recordando''. Esta decisión se toma aplicando
+una función sigmoide aplicada sobre el estado oculto anterior, \(h_{t-1}\) y la entrada
+actual \(x_t\), produciendo un número entre 0 y 1 para cada valor presente en \(C_{t-1}\):
+\[
+    f_t = \sigma \left( \bm{W}_f x_t + \bm{W}_h h_{t-1}  \right)
+\]
+
+Este resultado empieza a modificar el estado de celda que teníamos hasta el momento:
+\[
+    C_t = C_{t-1} f_t
+\]
+
+El próximo paso es decidir qué nueva información ingresa a \(C_t\). Este esta compuesto
+por dos partes:
+\begin{itemize}
+    \item Por un lado, se calcula una ``potencial memoria a largo plazo'' \(\tilde{C}_t\).
+    Esto se hace combinando el estado oculto del paso anterior \(h_{t-1}\) y la entrada
+    actual \(x_t\) (con pesos distintos a los del paso anterior) y aplicando una tangente
+    hiperbólica sobre esta combinación:
+    \[
+    \tilde{C}_t = tanh \left( \bm{W}_i\right)
+    \]
+    \item Por el otro, a través de la compuerta de entrada, se calcula qué porcentaje de
+    la potencial memoria a largo plazo ingresa al estado de celda.
+\end{itemize}
 
 \end{document}
