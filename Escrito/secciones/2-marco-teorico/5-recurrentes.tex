@@ -3,7 +3,7 @@
 
 \begin{document}
 Las Redes Neuronales Recurrentes (RNRs) son una familia de redes neuronales pensadas
-específicamente para trabajar con \textbf{datos secuenciales} en donde el orden y la
+específicamente para trabajar con \textbf{datos secuenciales}, en donde el orden y la
 dinámica importan. Es por esto que han sido y continúan siendo muy útiles en tareas como
 análisis de series temporales y procesamiento de lenguaje natural. Se emplean por ejemplo
 para predecir cuáles van a ser los próximos valores en una serie de tiempo (tarea
@@ -13,28 +13,29 @@ usaremos nosotros.
 
 Una características de las redes feedforward que presentamos hasta el momento es que no
 tienen memoria. Si quisieramos procesar una secuencia temporal de datos con estas redes,
-lo que deberíamos hacer es ``mostrársela'' entera como entrada, perdiendo de esta forma la
-dependencia temporal que existe entre las distintas features, que en realidad son los
-pasos de tiempo de una misma secuencia.
+lo que deberíamos hacer es ``mostrársela'' entera como entrada, perdiendo la dependencia
+temporal que existe entre las distintas features, que en realidad son los pasos de tiempo
+de una misma secuencia.
 
 Las RNRs proponen una forma alternativa de trabajar con datos de este tipo. Procesan las
 secuencias iterando sobre los distintos pasos de tiempo manteniendo un \textbf{estado
 interno} o \textbf{memoria} que contiene información relacionada con lo que ha visto hasta
-el momento\footnotemark. A esto lo logra mediante la introducción de cíclos en su grafo,
-que permiten que las neuronas de la red puedan tomar como entradas sus propias salidas de
-pasos anteriores. Todo esto provoca que entradas recibidas en pasos más tempranos afectan
-la respuesta de la red ante la entrada actual. \cite{ai-a-modern-approach}
-\footnotetext{Cabe aclarar que este estado interno se reinicia entre el procesamiento de
-diferentes secuencias.}.
+el momento\footnotemark. A esto lo logran introduciendo cíclos en su grafo, que permiten
+que las neuronas de la red puedan tomar como entradas sus propias salidas de pasos
+anteriores. Esto provoca que entradas recibidas en pasos más tempranos afecten la
+respuesta de la red ante la entrada actual \cite{ai-a-modern-approach} \footnotetext{Cabe
+aclarar que este estado interno se reinicia entre el procesamiento de diferentes
+secuencias.}.
 
 Para comprender un poco más este comportamiento, tomemos la más simple de las RNRs,
 compuesta por una única neurona (oculta) que recibe la entrada correspondiente al tiempo
-\(t\), produce una salida y se la envía a sí misma \cite{hands-on-ML-sklearn-tf}, como se
-puede ver a la izquierda de la Figura \ref{fig:simple-rnn}. Así, en cada paso \(t\), la
-\textit{neurona ``recurrente''} \(f\) recibe no solo la entrada \(x_t\) sino también su
-propia salida computada en el paso anterior, \(f_{t-1}\). Esto se hace aún más evidente
-cuando ``desenrollamos'' la red a lo largo del tiempo, cuya representación se encuentra a
-la derecha de la Figura \ref{fig:simple-rnn} y se asemeja a la de una feedforward.
+\(t\), produce una salida y se la envía tanto a la capa de salida como a sí misma
+\cite{hands-on-ML-sklearn-tf}, como se puede ver a la izquierda de la Figura
+\ref{fig:simple-rnn}. Así, en cada paso \(t\), la \textit{neurona ``recurrente''} \(f\)
+recibe no solo la entrada \(x_t\) sino también su propia salida computada en el paso
+anterior, \(f_{t-1}\). Esto se hace aún más evidente cuando ``desenrollamos'' la red a lo
+largo del tiempo, cuya representación se encuentra a la derecha de la Figura
+\ref{fig:simple-rnn} y se asemeja a la de una feedforward.
 
 % Ponerlo acá?
 Otro detalle a tener en cuenta en estas redes es que, como se puede ver en la Figura
@@ -122,9 +123,9 @@ partir de la Figura \ref{fig:simple-rnn}, podemos notar algunas particularidades
 respecto a las redes recurrentes:
 \begin{itemize}
     \item Por un lado, cada neurona tiene un peso extra además del que se aplica sobre la
-    entrada \(x_t\) (denotado en la Figura \ref{fig:simple-rnn} con \(w_{x,f}\)) y del
-    bias. Este peso extra corresponde al que se aplica sobre la salida de la neurona en el
-    paso anterior \(f_{t-1}\), denotado con \(w_{f,f}\).
+    entrada \(x_t\) (\(w_{x,f}\)) y el bias correspondiente (\(w_{0_x,f}\)). Este peso
+    extra corresponde al que se aplica sobre la salida de la neurona en el paso anterior
+    \(f_{t-1}\), denotado con \(w_{f,f}\).
     \item Por otro lado, la red utiliza los mismos pesos \(w_{x,f}\), \(w_{f,f}\) y
     \(w_{f,y}\), y biases \(w_{0_x,f}\) y \(w_{0_f, y}\) en \textit{todos} los pasos de
     tiempo.
@@ -244,30 +245,23 @@ entre sí.
 
 Para entrenar este tipo de redes, el truco está en ``desenrollarlas'' como vimos
 anteriormente y luego utilizar el algoritmo de backpropagation presentado en la sección de
-Redes Nueronales. Esta estrategia es conocida como \textbf{\textit{backpropagation through
+Redes Neuronales. Esta estrategia es conocida como \textbf{\textit{backpropagation through
 time}}.
 
-Ahora bien, estas redes sufren de un problema conocido como \textbf{el problema del
-gradiente desvaneciente}, lo que las hace incapaces de capturar dependencias de largo
-plazo al procesar secuencias de muchos pasos de tiempo. A continuación, detallamos
-este problema.
+Ahora bien, estas redes así como las presentamos sufren de un problema conocido como
+\textbf{el problema del gradiente desvaneciente}, que las hace incapaces de capturar
+dependencias de largo plazo al procesar secuencias de muchos pasos de tiempo.
 
-% Problema del vanishing gradient
-\subsubsection{El problema del gradiente desvaneciente}
 En general, y no solo en estas redes, el problema del gradiente desvaneciente ocurre
 cuando, al calcular el gradiente de la función de pérdida con respecto a un parámetro
 determinado, este resulta ser muy pequeño. Como consecuencia, la actualización de dicho
 parámetro durante el proceso de entrenamiento es insignificante, lo que puede provocar que
 la red aprenda muy lentamente o incluso que deje de entrenarse por completo.
 
-Veámosolo con un ejemplo particular basándonos en las Ecuaciones \ref{eq:ft} y \ref{eq:yt},
-y suponiendo que la función de pérdida es el error cuadrático medio:
-
-
 \subsection{Long Short-Term Memory}
 Las redes conocidas como \textit{Long Short-Term Memory} (LSTM) son un tipo particular de
 RNRs que fueron introducidas en el año 1997 \cite{lstm-paper-1997} para solucionar el
-problema del gradiente desvaneciente que tenían las RNRs estándar, lo que las hace capaces
+problema del gradiente desvaneciente que tenían las RNRs estándar, haciéndolas capaces
 de aprender dependencias de largo plazo. Han demostrado funcionar de manera efectiva en
 una gran variedad de problemas, y los mayores avances obtenidos con redes recurrentes se
 han logrado utilizando esta arquitectura \cite{colahs-blog-lstm-2015}.
@@ -278,8 +272,59 @@ recurrentes -, es decir, unidades que se repiten a lo largo de la secuencia temp
 una RNR estándar, este módulo es simplemente una aplicación de una función de activación,
 particularmente la tangente hiperbólica, sobre una suma pesada de sus entradas. En las
 LSTM, estas neuronas se complejizan para incorporar mecanismos que permiten mantener
-una memoria a largo plazo en la red. Las llamaremos ``celdas'' o neuronas LSTM, y se
-puede ver el diagrama de una en la Figura \ref{fig:lstm-cell}.
+una memoria a largo plazo en la red. Las llamaremos ``celdas'' o neuronas LSTM.
+
+El principal componente que introducen las LSTM para poder retener información por largos
+períodos de tiempo es el \textbf{estado de celda}. La particularidad de este estado es que
+a medida que ``fluye'' por la red, se mantiene prácticamente intacto, salvo por algunas
+interacciones lineales \cite{colahs-blog-lstm-2015}, pero no es afectado por ningún peso o
+bias, lo que permite justamente solucionar el desvanecimiento del gradiente.
+
+Así, vamos a tener dos estados que interactúan entre sí para realizar predicciones:
+\begin{itemize}
+    \item Por un lado, el \textbf{estado de celda}, que representa la \textbf{memoria a largo
+    plazo} de la red, y no es afectado por ningún peso o bias.
+    \item Por otro lado, el \textbf{estado oculto} (del que hablamos previamente), que
+    representa la \textbf{memoria a corto plazo} de la red, y sí es calculado por medio
+    de sumas pesadas.
+\end{itemize}
+
+Ahora bien, con esto, la idea es que la red aprenda qué almacenar en el estado de celda,
+qué descartar y qué leer de él \cite{hands-on-ML-sklearn-tf}, y a esto lo hace a través de
+otros nuevos elementos llamados \textbf{compuertas}. En particular, se introducen tres
+tipos de compuertas en la celda LSTM:
+\begin{itemize}
+    \item \textbf{La compuerta de olvido \(\bm{f}\)} (del inglés \textit{forget}):
+    determina si cada elemento del estado de celda es recordado, copiándolo al paso
+    siguiente, u olvidado, fijándolo en 0.
+    \item \textbf{La compuerta de entrada \(\bm{i}\)} (del inglés \textit{input}):
+    determina cuál va a ser la información que se va a utilizar para actualizar
+    el estado de celda a partir de la entrada actual y del estado oculto actual.
+    \item \textbf{La compuerta de salida \(\bm{o}\)} (del inglés \textit{output})
+    determina qué partes de la memoria de largo plazo son transferidas a la memoria
+    de corto plazo, el estado oculto.
+\end{itemize}
+
+De esta forma, las compuertas son una manera de regular el paso de información
+\cite{colahs-blog-lstm-2015}. La salida de cada compuerta es un vector de valores todos en
+el rango \([0,1]\). Estos se obtienen como la salida de una pequeña red neuronal
+totalmente conectada en la que las entradas son los datos del paso de tiempo actual y el
+estado oculto anterior, y cuya capa de salida aplica una función de activación sigmoide.
+
+A continuación, detallamos las operaciones producidas por una celda LSTM en un paso de
+tiempo. Utilizaremos la siguiente notación para un tiempo \(t\):
+\begin{itemize}[itemsep=0.1cm]
+    \item \(x_t\) para el vector de entrada.
+    \item \(h_t\) para el estado oculto.
+    \item \(C_t\) para el estado de celda.
+    \item \(\tilde{C}_t\) para el ``potencial'' estado de celda (veremos a continuación
+    qué significa esto).
+    \item \(f_t\), \(i_t\), \(o_t\) para las salidas de las compuertas de olvido,
+    entrada y salida respectivamente.
+\end{itemize}
+Cabe aclarar que \(h_t\), \(C_t\), \(\tilde{C}_t\), \(f_t\), \(i_t\) y \(o_t\) son todos
+vectores de la misma dimensión. Con estos elementos, podemos dar un diagrama de una celda
+LSTM, que se encuentra en la Figura \ref{fig:lstm-cell}.
 
 \begin{figure}
     % Fuente: https://tex.stackexchange.com/a/432344
@@ -323,9 +368,6 @@ puede ver el diagrama de una en la Figura \ref{fig:lstm-cell}.
             inner sep=1pt,
             fill=myyellow
         },
-        mylabel/.style={ % something new that I have learned
-            font=\scriptsize\sffamily
-        },
         ArrowC1/.style={ % Arrows with rounded corners
             rounded corners=.25cm,
             thick,
@@ -340,16 +382,16 @@ puede ver el diagrama de una en la Figura \ref{fig:lstm-cell}.
         \node [cell, minimum height=4cm, minimum width=6cm] at (0,0) {} ;
 
         % Draw inputs named ibox#
-        \node [gt] (ibox1) at (-2,-1) {\(\sigma\)};
+        \node [gt] (ibox1) at (-2,0) {\(\sigma\)};
         \node [gt] (ibox2) at (-1.5, -1) {\(\sigma\)};
         \node [gt, minimum width=1cm] (ibox3) at (-0.5, -1) {tanh};
         \node [gt] (ibox4) at (0.5, -1) {\(\sigma\)};
 
         % Draw operators   named mux# , add# and func#
-        \node [operator] (mux1) at (-2,1.5) {\(\times\)};
+        \node [operator] (mux1) at (-2,1.5) {\(\odot\)};
         \node [operator] (add1) at (-0.5,1.5) {+};
-        \node [operator] (mux2) at (-0.5,0) {\(\times\)};
-        \node [operator] (mux3) at (1.5,0) {\(\times\)};
+        \node [operator] (mux2) at (-0.5,0) {\(\odot\)};
+        \node [operator] (mux3) at (1.5,0) {\(\odot\)};
         \node [function] (func1) at (1.5,0.75) {tanh};
 
         % Draw External inputs? named as basis c,h,x
@@ -377,7 +419,7 @@ puede ver el diagrama de una en la Figura \ref{fig:lstm-cell}.
         % Internal
         \draw [->, ArrowC2] (ibox1) -- (mux1) node[midway, left] {\scriptsize{\(f_t\)}};
         \draw [->, ArrowC2] (ibox2) |- (mux2) node[midway] {\scriptsize{\(i_t\)}};
-        \draw [->, ArrowC2] (ibox3) -- (mux2) node[midway, right] {\scriptsize{\(\hat{C}_t\)}};
+        \draw [->, ArrowC2] (ibox3) -- (mux2) node[midway, right] {\scriptsize{\(\tilde{C}_t\)}};
         \draw [->, ArrowC2] (ibox4) |- (mux3) node[midway] {\scriptsize{\(o_t\)}};
         \draw [->, ArrowC2] (mux2) -- (add1);
         \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
@@ -389,95 +431,88 @@ puede ver el diagrama de una en la Figura \ref{fig:lstm-cell}.
         \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
         \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
     \end{tikzpicture}
-    \caption{Diagrama de una celda LSTM.}
+    \caption{Diagrama de una celda LSTM. \(\sigma\) representa la función sigmoide, tanh
+    la tangente hiperbólica, el signo ``+'' una suma, y el signo \(\odot\) el producto de
+    Hadamard, también conocido como ``multiplicación elemento a elemento''.}
     \label{fig:lstm-cell}
 \end{figure}
 
-El principal componente que introducen las LSTM para poder retener información por largos
-períodos de tiempo es el \textbf{estado de celda}, que denotaremos con la letra \(C\). La
-particularidad de este estado es que a medida que ``fluye'' por la red, se mantiene
-prácticamente intacto, salvo por algunas interacciones lineales
-\cite{colahs-blog-lstm-2015}, pero no es afectado por ningún peso o bias, lo que permite
-justamente solucionar el desvanecimiento del gradiente.
-
-Así, vamos a tener dos estados que interactúan entre sí para realizar predicciones:
-\begin{itemize}
-    \item Por un lado, el \textbf{estado de celda}, que representa la \textbf{memoria a largo
-    plazo} de la red, y no es afectado por ningún peso o bias.
-    \item Por otro lado, el \textbf{estado oculto} (del que hablamos previamente), que
-    representa la \textbf{memoria a corto plazo} de la red, y sí es calculado por medio
-    de sumas pesadas.
-\end{itemize}
-
-Ahora bien, con este nueva memoria, la idea es que la red aprenda qué almacenar en este
-estado de celda, qué descartar y qué leer de él \cite{hands-on-ML-sklearn-tf}, y a esto lo
-hace a través de otros nuevos elementos llamados \textbf{compuertas}. En particular,
-se introducen tres tipos de compuertas en la celda LSTM:
-\begin{itemize}
-    \item \textbf{La compuerta de olvido \(\bm{f}\)} (del inglés \textit{forget}):
-    determina si cada elemento del estado de celda es recordado, copiándolo al paso
-    siguiente, u olvidado, fijándolo en 0.
-    \item \textbf{La compuerta de entrada \(\bm{i}\)} (del inglés \textit{input}):
-    determina cuál va a ser la información que se va a utilizar para actualizar
-    el estado de celda a partir de la entrada actual y del estado oculto actual.
-    \item \textbf{La compuerta de salida \(\bm{o}\)} (del inglés \textit{output})
-    determina qué partes de la memoria de largo plazo son transferidas a la memoria
-    de corto plazo, el estado oculto.
-\end{itemize}
-
-De esta forma, las compuertas son una manera de opcionalmente dejar pasar información
-\cite{colahs-blog-lstm-2015}. Los valores de estas están siempre en el rango \([0,1]\) y
-se obtienen como la salida de una función sigmoide aplicada sobre la entrada actual y el
-estado oculto anterior \cite{ai-a-modern-approach}. El valor entre 0 y 1 representa
-la proporción de información que se deja pasar a través de la compuerta correspondiente
-
-A continuación, detallamos las operaciones producidas por una celda LSTM en un paso de
-tiempo. Utilizaremos la siguiente notación para un tiempo \(t\):
-\begin{itemize}
-    \item \(x_t\) para el vector de entrada.
-    \item \(h_t\) para el estado oculto.
-    \item \(C_t\) para el estado de celda.
-    \item \(\tilde{C}_t\) para el ``potencial'' estado de celda (veremos a continuación
-    qué signfica esto).
-    \item \(f_t\), \(i_t\), \(o_t\) para las salidas de las compuertas de olvido,
-    entrada y salida respectivamente.
-\end{itemize}
-
 Y ahora, como se puede deducir a partir de la Figura \ref{fig:lstm-cell}, vamos a tener
-varios pesos involucrados:
+diversas matrices de pesos involucradas, que todas se aprenden durante el entrenamiento.
+Dejando de lado sus dimensiones, y asumiendo que todas incluyen el bias, las denotaremos
+de la siguiente forma:
 \begin{itemize}
-    \item 
+    \item \(\bm{W}_{x,f}\) y \(\bm{W}_{h,f}\) para los pesos de la compuerta de olvido.
+    \item \(\bm{W}_{x,i}\) y \(\bm{W}_{h,i}\) para los pesos de la compuerta de entrada.
+    \item \(\bm{W}_{x,o}\) y \(\bm{W}_{h,o}\) para los pesos de la compuerta de salida.
+    \item \(\bm{W}_{x, \tilde{C}}\) y \(\bm{W}_{h, \tilde{C}}\) para los pesos de la potencial
+    memoria a largo plazo.
 \end{itemize}
+En cada una, los subíndices indican de dónde hacia dónde van los pesos. Por ejemplo,
+\(\bm{W}_{x,f}\) es la matriz de pesos que va desde la entrada \(x_t\) hacia la compuerta
+de olvido \(f_t\), y \(\bm{W}_{h,f}\) es la matriz de pesos que va desde el estado oculto
+\(h_{t-1}\) hacia la compuerta de olvido \(f_t\). Con esto, veamos exactamente qué
+hace una neurona LSTM.
 
-La celda toma tres entradas: el estado de celda del paso anterior \(C_{t-1}\),
-el estado oculto del paso anterior \(h_{t-1}\), y el vector de entrada del paso actual
-\(x_t\).
+Para empezar, la celda toma tres entradas: el estado de celda del paso anterior
+\(C_{t-1}\), el estado oculto del paso anterior \(h_{t-1}\), y el vector de entrada del
+paso actual \(x_t\). En cada paso, las tres compuertas actúan ``internamente'' para
+producir dos salidas: el nuevo estado de celda \(C_t\) y el nuevo estado oculto \(h_t\).
 
 La primera compuerta que actúa es la de olvido, para determinar que información ya
 presente en el estado de celda se ``sigue recordando''. Esta decisión se toma aplicando
-una función sigmoide aplicada sobre el estado oculto anterior, \(h_{t-1}\) y la entrada
-actual \(x_t\), produciendo un número entre 0 y 1 para cada valor presente en \(C_{t-1}\):
+una función sigmoide sobre el estado oculto anterior \(h_{t-1}\), y la entrada actual
+\(x_t\), produciendo un número entre 0 y 1 para cada valor presente en \(C_{t-1}\):
 \[
-    f_t = \sigma \left( \bm{W}_f x_t + \bm{W}_h h_{t-1}  \right)
+    f_t = \sigma \left( \bm{W}_{x,f} x_t + \bm{W}_{x,h} h_{t-1}  \right)
 \]
 
-Este resultado empieza a modificar el estado de celda que teníamos hasta el momento:
-\[
-    C_t = C_{t-1} f_t
-\]
-
-El próximo paso es decidir qué nueva información ingresa a \(C_t\). Este esta compuesto
-por dos partes:
+El próximo paso es decidir qué nueva información ingresa a \(C_t\) utilizando la compuerta
+de entrada. Esta etapa se puede ver como compuesta por dos partes:
 \begin{itemize}
-    \item Por un lado, se calcula una ``potencial memoria a largo plazo'' \(\tilde{C}_t\).
+    \item Por un lado, se calcula una potencial memoria a largo plazo \(\tilde{C}_t\).
     Esto se hace combinando el estado oculto del paso anterior \(h_{t-1}\) y la entrada
-    actual \(x_t\) (con pesos distintos a los del paso anterior) y aplicando una tangente
-    hiperbólica sobre esta combinación:
+    actual \(x_t\) y aplicando una tangente hiperbólica:
     \[
-    \tilde{C}_t = tanh \left( \bm{W}_i\right)
+        \tilde{C}_t = \text{tanh} \left( \bm{W}_{x, \tilde{C}} x_t + \bm{W}_{h, \tilde{C}} h_{t-1}  \right)
     \]
-    \item Por el otro, a través de la compuerta de entrada, se calcula qué porcentaje de
-    la potencial memoria a largo plazo ingresa al estado de celda.
+    \item Por otro lado, a través de la compuerta de entrada, se calcula cuáles
+    van a ser los valores de la memoria a largo plazo que se van a actualizar.
+    \[
+        i_t = \sigma \left( \bm{W}_{x, i} x_t + \bm{W}_{h, i} h_{t-1}  \right)
+    \]
 \end{itemize}
+
+Con estas tres cantidades, es momento de efectivamente actualizar el estado de celda:
+\begin{enumerate}
+    \item En primer lugar, se multiplica elemento a elemento \(C_{t-1}\) por \(f_t\). Esto
+    provoca que un valor cercano a 0 en \(f_t\) haga que el valor correspondiene en
+    \(C_{t-1}\) se ``olvide'', y que un valor cercano a 1 haga que se siga recordando.
+    \item Y luego, se le suma la nueva información, dada por la multiplicación
+    elemento a elemento entre \(\tilde{C}_t\) e \(i_t\), que intuitivamente representa qué
+    valores se van a actualizar y en qué medida.
+\end{enumerate}
+De esta forma, la nueva memoria a largo plazo está dada por:
+\[
+    C_t = C_{t-1} \odot f_t + \tilde{C}_t \odot i_t
+\]
+
+Por último, es necesario determinar cuál va a ser el nuevo estado interno de la celda.
+Este se construye como una versión ``filtrada'' del nuevo estado de celda, haciendo
+uso del valor de la compuerta de salida:
+\[
+    o_t = \sigma \left( \bm{W}_{x,o} x_t + \bm{W}_{h,o} h_{t-1} \right)
+\]
+que, combinado con una aplicación de tanh sobre el nuevo estado de celda para situar a
+todos los valores en el rango \([-1,1]\), da la nueva memoria a corto plazo:
+\[
+    h_t = o_t \odot \text{tanh}(C_t)
+\]
+
+\bigskip
+Una aclaración es que cuando estas redes se utilizan para llevar a cabo clasificación
+de secuencias, lo que se hace es tomar el estado \textbf{oculto} del último paso y,
+similarmente a lo que se hace en las redes convolucionales, se agregan una o más capas
+totalmente conectadas que procesen este vector para hacer la clasificación final.
 
 \end{document}
