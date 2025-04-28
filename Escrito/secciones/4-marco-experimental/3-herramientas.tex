@@ -2,14 +2,33 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-
 A continuación, nombramos las herramientas que nos ayudaron a llevar a cabo los
 experimentos, desde la generación de datos sintéticos hasta el diseño, entrenamiento y
-evaluación de los modelos, junto con la búsqueda de hiperparámetros óptimos.
+evaluación de los modelos, junto con la búsqueda de hiperparámetros óptimos. En la
+sección de bilbiografía, se incluye el enlace a su documentación.
 
 \subsection{Hardware}
-% nabu (Centro de Cómputo de Alto Desempeño)
-% Mencionar las características (buscar en la página o preguntarle a Nico)
+Para el entrenamiento de los modelos y la búsqueda de hiperparámetros, utilizamos recursos
+computacionales de UNC Supercómputo (CCAD) de la Universidad Nacional de Córdoba
+(https://supercomputo.unc.edu.ar), que forman parte del Sistema Nacional de Computación de
+Alto Desempeño (SNCAD) de la República Argentina. En particular, hicimos uso de la
+Computadora Nabucodonosor, destinada especialmente a potenciar el uso del ML. Cuenta con 2
+procesadores Xeon E5-2680v2 de 10 núcleos cada uno, 64 GiB de RAM, y 3 GPU NVIDIA GTX
+1080Ti.
+
+\subsection{Jupyter}
+Jupyter es una plataforma que ofrece un entorno de desarrollo interactivo a través de
+documentos llamados ``\textit{notebooks}'', organizados en unidades denominadas ``celdas''.
+La potencia de estas notebooks radica en que pueden contener celdas de código, texto en
+lenguaje natural escrito en Markdown, imágenes, y diversas otras representaciones, como
+tablas y diagramas. Estos documentos proporcionan una forma rápida y práctica de
+prototipar y explicar código, explorar y visualizar datos, y realizar chequeos intermedios
+observando la salida de cada celda, lo cual contribuye a prevenir errores. Jupyter soporta
+diferentes lenguajes de programación y permite la utilización de entornos virtuales.
+
+En este proyecto, implementamos un \textit{pipeline} mediante notebooks de Jupyter que
+abarca desde la carga, visualización y transformación de los datos, hasta la selección,
+entrenamiento y evaluación de los modelos.
 
 \subsection{Python}
 Python es un lenguaje de programación interpretado, orientado a objetos y con tipado
@@ -17,40 +36,68 @@ dinámico. Es multipropósito, por lo que se puede usar para una diversiad de ta
 de sus aspectos más relevantes son su sintaxis simple e intuitiva con énfasis en la
 legibilidad, el alto grado de abstracción que provee, la gran cantidad de librerías que
 existen, y el extenso soporte de la comunidad. Además, es gratis, de código abierto y
-multiplataforma, es decir puede ejecutarse en diferentes sistemas operativos.
+multiplataforma, por lo que puede ejecutarse en diferentes sistemas operativos.
 
-Durante los últimos años, ha sido el lenguaje por defecto en las áreas de Ciencia
+Durante los últimos años, ha sido el lenguaje más utilizado en las áreas de Ciencia
 de Datos y Aprendizaje Automático, principalmente por el desarrollo de librerías
-como pandas, numpy, PyTorch, TensorFlow, y Scikit-learn, entre muchas otras.
+como pandas, numpy, PyTorch, TensorFlow, y Scikit-learn, que facilitan el manejo
+de grandes volúmenes de datos y la utilización de algoritmos de ML.
+
+En nuestro caso, utilizamos Python para todo la implementación de experimentos.
 
 \subsection{Pandas}
 Pandas es una librería de Python que provee estructuras de datos rápidas, flexibles y
 expresivas que permiten trabajar de manera fácil e intuitiva con datos tabulares. Las dos
-principales estructuras de datos de Python son las \texttt{Series} (unidimensionales) y
-los \texttt{DataFrames} (bidimensionales).
+principales estructuras de datos de pandas son las \texttt{Series} (unidimensionales) y
+los \texttt{DataFrames} (bidimensionales). En cada una, se pueden utilizar diferentes
+tipos de datos, como enteros, decimales, palabras, fechas, entre otros. Algunas de sus
+capacidades destacadas incluyen la lectura y escritura de datos en diferentes formatos
+(CSV, Microsoft Excel, Stata, etcétera), el manejo de datos faltantes, y la simple y
+eficiente transofrmación de datos.
+
+Utilizamos \texttt{DataFrames} para almacenar los datos sintéticos en archivos
+y para los conjuntos de entrenamiento y test.
+
+\subsection{NumPy}
+NumPy es una librería de Python que permite el cómputo numérico. Ofrece arreglos
+N-dimensionales, funciones matemáticas variadas, generadores de números aleatorios,
+rutinas de álgebra lineal, y más. El núcleo de NumPy es código C optimizado, por
+lo que combina la flexiblidad de Python con la rapidez propia del código compilado.
+Estas características hacen que sea la base de muchas otras librerías utilizadas
+en ámbitos muy diversos.
+
+Empleamos numpy principalmente para crear las series de tiempo de los diferentes
+individuos en matrices, que luego pasamos a \texttt{DataFrames}.
 
 \subsection{PyTorch}
-% Diseñar modelos y entrenarlos.
-% Principal estrucutra de datos: tensores.
-% Permite hacer uso de la GPU!
-PyTorch es una librería de Python 
+PyTorch es una librería de Python que facilita la utilización de redes neuronales, tanto
+en su diseño como en su entrenamiento. Provee cómputo acelerado mediante el uso de placas
+gráficas (\textit{Graphic Processing Unit}, GPU), e implementa internamente las
+optimizaciones numéricas necesarias para entrenar un modelo, siendo la más importante el
+la del algoritmo de backpropagation. La mayoría de PyTorch está escrito en C++ y CUDA.
 
-
-
-\subsection{Numpy}
-
-\subsection{Jupyter}
-% Para llevar a cabo el desarrollo
-% Entorno interactivo que se puede correr en el editor de código Visual Studio Code
-% Permite: celdas de código Python, celdas Markdown, ir viendo el progreso, hacer chequeos
-% manuales intermedios
+Aquí, utilizamos PyTorch justamente para diseñar las diferentes arquitecturas de redes
+neuronales, que se implementan como clases en Python, y para llevar a cabo el ciclo de
+entrenamiento de los distintos modelos.
 
 \subsection{Optuna}
-% Optimización de hiperparámetros
-% Paralelización!
+Optuna es una librería de Python que permite realizar la optimización automática de
+hiperparámetros de una manera eficiente. Resulta intuitiva de utilizar y su incorporación
+en un pipeline es bastante directa. Un aspecto muy útil es que incluye un
+\textit{dashboard} interactivo que posibilita la visualización en tiempo real de los
+valores de hiperparámetros evaluados en los diferentes ensayos, como así también de
+gráficos que reflejan la relación entre estso valores y el resultado obtenido con ellos
+(medido a través de una métrica específica, determinada por el usuario). Otra
+característica relevante es que Optuna permite la paralelización de las evaluaciones, lo
+que contribuye a acelerar el proceso de optimización.
 
 \subsection{MLflow}
-% Registro de experimentos: hiperparámetros, modelo utilizado, datasets, resultados
-% (matriz de confusión, classification report)
+MLflow es una librería de Python que permite llevar un registro fino de las diferentes
+etapas y los diferentes experimentos llevados a cabo en un proyecto de ML. Provee
+una interfaz con la cual se pueden crear diferentes proyectos, y dentro de cada uno
+diferentes experimentos. En cada uno de ellos, permite cargar los parámetros y valores
+que el usuario crea adecuados (como pueden ser los hiperparámetros empleados para
+entrenar el modelo), los datasets utilizados, y diferentes archivos que pueden incluir
+gráficos, métricas, y hasta incluso los pesos del modelo entrenado.
 
 \end{document}
