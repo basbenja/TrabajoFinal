@@ -1,28 +1,34 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../../main.tex]{subfiles}
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
+% Trabajamos bajo el supuesto que el comportamiento dinámico de la variable modelada para
+% cada unidad es el que determina si esta ingresa al tratamiento o no.
 
-A continuación, detallamos la metodología utilizada para llevar a cabo las simulaciones y
-medir el desempeño de las redes, y explicamos cómo este problema se termina enmarcando
-dentro de una clasificación de series de tiempo.
-
-% LA SIGUIENTE PARTE LA SAQUE DEL PAPER QUE ME MANDO DAVID
-% REVISAR SI CORRESPONDE QUE VAYA ACA O EN OTRO LADO
 El primer paso para poder llevar a cabo los experimentos es contar con datos. Nuestro
-entorno - \textit{framework} - de simulación está diseñado para generar \textbf{datos
-sintéticos} que imiten escenarios reales en donde la asignación al tratamiento es no
-aleatoria, escalonada y potencialmente dependiente de resultados pasados.
+entorno de simulación está diseñado para generar \textbf{datos sintéticos} que imiten
+escenarios reales en donde la asignación al tratamiento es no aleatoria, secuencial y
+potencialmente dependiente de resultados pasados.
 
 El proceso de generación de datos involucra la creación de una serie de tiempo univariada
-para cada individuo, que incorpora efectos fijos, componentes autoregresivos e impactos
-del tratamiento. Trabajamos bajo el supuesto que el comportamiento dinámico de la variable
-modelada para cada unidad es el que determina si esta ingresa al tratamiento o no, y es la
-misma sobre la que se espera que el tratamiento tenga un efecto.
+para cada individuo, que incorpora efectos fijos y componentes autoregresivos. Distinguimos
+entre tres tipos de individuos:
+\begin{itemize}[itemsep=0.1cm]
+    \item \textbf{Individuos tratados}: son aquellos que han recibido el tratamiento en
+    algún período. Es importante notar que en una situación real, son datos con los que
+    contamos.
+    \item \textbf{Individuos de control}: son aquellos que en los datos sintéticos, sabemos
+    que forman parte del grupo de control. Es importante notar que en un escenario real,
+    no sabemos quiénes son estos individuos sino que son los que tratamos de identificar.
+    \item \textbf{Individuos ``NiNi''}: son aquellas unidades que no han sido tratadas y
+    que en los datos sintéticos, sabemos que no forman parte del grupo de control.
+\end{itemize}
+
+Al tratarse de Aprendizaje Supervisado, también incluimos la etiqueta que le corresponde a
+cada individuo: 1 para tratados y controles, y 0 para los NiNi.
 
 Los parámetros para la generación de los datos son los siguientes:
-\begin{itemize}
-    \setlength{\itemsep}{0pt}
+\begin{itemize}[itemsep=0.1cm]
     \item \texttt{n\_sample}: cantidad de individuos en la simulación.
     \item \texttt{treated\_pct}: porcentaje de individuos tratados.
     \item \texttt{control\_pct}: porcentaje de individuos de control.
@@ -36,22 +42,12 @@ Los parámetros para la generación de los datos son los siguientes:
     participación en el tratamiento.
 \end{itemize}
 
+Concretamente, la fórmula con la que se generaron los valores de las series de tiempo
+fue la siguiente: \textbf{TODO}
+
 El resultado de la simulación es un conjunto de datos de panel compuesto por series de
 tiempo univariadas de longitud \texttt{T} para los distintos tipos de individuos:
-\begin{itemize}
-    \setlength{\itemsep}{0pt}
-    \setlength{\parsep}{0pt}
-    \item \textbf{Individuos de tipo 1}: son aquellos que han recibido el tratamiento en
-    algún período. Notar que en una situación real, son datos con los que contamos. Los
-    llamaremos también ``tratados''.
-    \item \textbf{Individuos de tipo 2}: son aquellos que en los datos sintéticos, sabemos
-    que forman parte del grupo de control. Es importante notar que en un escenario real,
-    no sabemos quiénes son estos individuos sino que son los que tratamos de identificar.
-    Nos referiremos a ellos también como ``controles''.
-    \item \textbf{Individuos de tipo 3}: son aquellas unidades que no han sido tratadas y
-    que en los datos sintéticos, sabemos que no forman parte del grupo de control. A estos
-    también los mencionaremos como ``NiNi'' (ni tratado ni control). 
-\end{itemize}
+
 
 En el dataset, cada individuo tiene un identificador y su tipo; y aquellos de tipo 1 y 2
 tienen como feature extra el período (desde \texttt{first\_tr\_period} hasta
@@ -67,6 +63,7 @@ También resulta muy importante tener en cuenta que en los datos generados sint�
 sabemos quiénes son los controles, pero en la realidad esto es justamente lo que queremos
 identificar.
 
+\subsection{Conjuntos de Entrenamiento y de Test}
 Ahora bien, para entrenar y evaluar a nuestros modelos, tomamos en cuenta lo que ocurriría
 en un escenario real, en el que sabríamos solamente quiénes son los tratados y quiénes los
 no tratados. Por lo tanto, construimos el conjunto de entrenamiento con la totalidad de
@@ -75,15 +72,5 @@ conjunto de test colocamos a todos los de tipo 2, queriendo predecir en ellos un
 resto de tipo 3, queriendo predecir en ellos un 0.
 
 Más aún, como queremos identificar a los grupos de control de cada cohorte,
-
-
-
-\begin{comment}
-Dicho esto, la metodología empleada para evaluar el desempeño de las redes neuronales a la
-hora de identificar los individuos de control consistió en construir el conjunto de
-entrenamiento con la totalidad de individuos tratados y algunos de tipo 3 (notar que en un
-escenario real, podemos identificar a todos estos individuos), y utilizamos todos los
-controles y el resto de tipo 3 como conjunto de testeo.
-\end{comment}
 
 \end{document}

@@ -1,0 +1,32 @@
+\documentclass[../../main.tex]{subfiles}
+% \graphicspath{{\subfix{../images/}}}
+
+\begin{document}
+A continuación, describimos las diferentes arquitecturas de redes neuronales que
+utilizamos durante los experimentos y los valores particulares que fueron incluidos en la
+búsqueda de hiperparámetros. Un detalle que vale la pena aclarar es que el tamaño de la
+salida es 1 ya que 
+
+\subsection{Arquitectura 1: Red Totalmente Conectada}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline\hline
+        \textbf{Capa} & \textbf{Entrada} & \textbf{Salida} \\ \hline\hline
+        Entrada  & \(n\)   & \(n_1\) \\ \hline
+        Oculta 1 & \(n_1\) & \(n_2\) \\ \hline
+        Oculta 2 & \(n_2\) & 1   \\ \hline
+        Salida   & 1       & 1   \\ \hline
+        \hline
+    \end{tabular}
+    \caption{Arquitectura de Autoencoder 1: 2 capas convolucionales en el encoder, ambas con kernels de $3\times3$. Se pasa de tener la imagen de entrada a 8 feature maps de $13\times13$, a 16 de $5\times5$.}
+    \label{tab:dense}
+\end{table}
+
+\subsection{Arquitectura 2: Red LSTM}
+
+\subsection{Arquitectura 3: Red Convolucional}
+
+\subsection{Arquitectura 4: Red Convolucional + LSTM}
+
+\end{document}
