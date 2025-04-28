@@ -406,55 +406,52 @@ modelo tendrá una buena capacidad de generalización. Es decir, habiendo llegad
 conjunto de test.
 
 \bigskip
-Algo que no hemos discutido hasta el momento es la correspondencia del espacio de
-funciones con el conjunto de datos con el que estamos tratando.
-
 Como venimos enfatizando, el principal desafío del ML es hacer que un modelo tenga una
 buena capacidad de generalización, es decir que actúe de manera correcta ante entradas aún
 no vistas. Por un lado, esto depende de qué tan representativo es el conjunto de
-entrenamiento. Per por otro, también depende de la elección de un espacio de
+entrenamiento. Pero por otro, también depende de la elección de un espacio de
 funciones adecuado, cuyos modelos sean lo suficientemente \textit{expresivos} como para
-capturar la distribución de los datos. Nos centraremos en este último aspecto.
+capturar la distribución de los datos.
 
-A grandes rasgos, los factores que determinan qué tan bien un algoritmo de ML
-se va a desempeñar son sus capacidades para \cite{deep-learning}:
-\begin{itemize}[itemsep=0.1cm]
-    \item Reducir el error en el conjunto de entrenamiento.
-    \item Reducir la brecha entre el error en el conjunto de entrenamiento y en el de
-    test.
-\end{itemize}
+Sin embargo, más allá de la expresividad que otorgue el espacio de funciones y de la
+representatividad del conjunto de entrenamiento, existe otra variable presente, que es la
+dimensionalidad de los datos. La capacidad de generalizar se vuelve aún más complicada
+cuando los datos son de altas dimensiones, es decir cada entrada contiene muchas
+características.
 
-Estos dos factores están relacionados con dos conceptos fundamentales en el ML: el
-\textbf{subajuste} (\textit{underfitting}) y el \textbf{sobreajuste}
-(\textit{overfitting}).
+En este contexto, aparecen los modelos conocidos como \textbf{Redes Neuronales}, que no
+solo permiten describir conjuntos de funciones complejas, expresivas, y no lineales sin la
+necesidad de tener un conocimiento profundo sobre la estructura subyacente de los datos,
+sino que también son capaces de trabajar con espacios de alta dimensión. En la sección
+siguiente, explicaremos el funcionamiento de estos modelos.
 
-El underfitting ocurre cuando el modelo no es lo suficientemente ``potente'' como para
-lograr tener un error bajo en el conjunto de entrenamiento. Generalmente, esto sucede
-porque las funciones del espacio elegido son demasiado simples como para lograr aprender
-correctamente la estructura subyacente del problema. Un ejemplo podría ser elegir un modelo
-lineal cuando los datos en realidad tienen una relación cuadrática.
+% A grandes rasgos, los factores que determinan qué tan bien un algoritmo de ML
+% se va a desempeñar son sus capacidades para \cite{deep-learning}:
+% \begin{itemize}[itemsep=0.1cm]
+%     \item Reducir el error en el conjunto de entrenamiento.
+%     \item Reducir la brecha entre el error en el conjunto de entrenamiento y en el de
+%     test.
+% \end{itemize}
 
-Por otro lado, si seleccionamos un espacio de funciones altamente flexibles como pueden
-ser polinomios de grado alto, puede ocurrir que el modelo aprenda tan bien los datos de
-entrenamiento que termine describiendo peculiaridades atípicas de ellos que posteriormente
-llevan a predicciones inusuales sobre nuevos datos \cite{prince2024understanding}. Es
-decir, en estos casos la brecha entre el error en el conjunto de entrenamiento y el de
-test sea probablemente grande. Esta situación es lo que se llama sobreajuste.
+% Estos dos factores están relacionados con dos conceptos fundamentales en el ML: el
+% \textbf{subajuste} (\textit{underfitting}) y el \textbf{sobreajuste}
+% (\textit{overfitting}).
 
-Si bien existen otros modelos que permiten identificar relaciones no lineales y no
-polinómicas, varios de ellos requieren tener un buen conocimiento sobre la estructura de
-los datos, y muchas veces su desempeño está condicionado a ciertas transformaciones sobre
-los mismos, proceso que se conoce por su nombre en inglés \textit{feature engineering}.
+% El underfitting ocurre cuando el modelo no es lo suficientemente ``potente'' como para
+% lograr tener un error bajo en el conjunto de entrenamiento. Generalmente, esto sucede
+% porque las funciones del espacio elegido son demasiado simples como para lograr aprender
+% correctamente la estructura subyacente del problema. Un ejemplo podría ser elegir un modelo
+% lineal cuando los datos en realidad tienen una relación cuadrática.
 
-Más allá de la expresividad que otorgue el espacio de funciones y de la representatividad
-del conjunto de entrenamiento, existe otra variable presente, que es la dimensionalidad
-de los datos. La capacidad de generalizar se vuelve aún más complicada cuando los datos
-son de altas dimensiones, es decir cada entrada contiene muchas características.
+% Por otro lado, si seleccionamos un espacio de funciones altamente flexibles como pueden
+% ser polinomios de grado alto, puede ocurrir que el modelo aprenda tan bien los datos de
+% entrenamiento que termine describiendo peculiaridades atípicas de ellos que posteriormente
+% llevan a predicciones inusuales sobre nuevos datos \cite{prince2024understanding}. Es
+% decir, en estos casos la brecha entre el error en el conjunto de entrenamiento y el de
+% test sea probablemente grande. Esta situación es lo que se llama sobreajuste.
 
-En este contexto, aparecen los modelos conocidos como \textbf{Redes Neuronales}, que
-no solo permiten describir conjuntos de funciones complejas, expresivas, y no lineales
-sin la necesidad de tener un conocimiento profundo sobre los datos, sino que también son
-capaces de trabajar con espacios de alta dimensión. En la sección siguiente, explicaremos
-el funcionamiento de estos modelos.
-
+% Si bien existen otros modelos que permiten identificar relaciones no lineales y no
+% polinómicas, varios de ellos requieren tener un buen conocimiento sobre la estructura de
+% los datos, y muchas veces su desempeño está condicionado a ciertas transformaciones sobre
+% los mismos, proceso que se conoce por su nombre en inglés \textit{feature engineering}.
 \end{document}
