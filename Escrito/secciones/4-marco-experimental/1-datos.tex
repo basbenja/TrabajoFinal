@@ -1,31 +1,89 @@
 \documentclass[../../main.tex]{subfiles}
 % \graphicspath{{\subfix{../images/}}}
 
+% Simulation involves multiple parameters set to create various scenarios. These parameters
+% include the number of simulations (N\_simulations), the total sample size (Total\_Sample),
+% the proportion of treated individuals (PorTreated), and the proportion of control
+% individuals (PorControl). Additional parameters, such as autoregressive persistence
+% associated with the outcome variables, are specified for the treated (phiT), controls
+% (PhiC), and neither treated nor control (Nini) groups (phiNini) to model temporal
+% dependencies in the data.
+
+% A crucial aspect of our simulation is the modeling of the treatment effect, where we
+% simulate a nominal impact of the treatment on the outcome variable based on a proportion
+% (ImpactProportional) and with a variabilitiy in the impact on each individual that depend
+% on a standard deviation (STDImpact). Furthermore, we introduce scenarios with both linear
+% and nonlinear (nonlinear) dependencies in treatment assignment, reflecting the complex
+% dynamics often observed in observational studies.
+
+% To examine the network's ability to handle heterogeneous treatment effects, we simulated
+% variability in impact by cohort (staggered enters). This heterogeneity allows us to test
+% the robustness of the LSTM network in identifying appropriate controls in different
+% subpopulations with different treatment effects.
+
+% The data generation process involves the creation of time series for each individual,
+% incorporating fixed effects, autoregressive components, and treatment impacts as
+% appropriate. This process is designed to closely replicate the generation of observational
+% data in studies with nonrandomized treatment assignments.
+
+
 \begin{document}
-% Trabajamos bajo el supuesto que el comportamiento dinámico de la variable modelada para
-% cada unidad es el que determina si esta ingresa al tratamiento o no.
+Nuestro entorno de simulación está diseñado para generar \textbf{datos sintéticos} que
+imiten escenarios reales en donde la asignación de individuos al tratamiento es:
+\begin{itemize}[itemsep=0.05cm]
+    \item No aleatoria.
+    \item Secuencial (hay cohortes).
+    \item Potencialmente dependendiente de resultados pasados.
+\end{itemize}
 
-El primer paso para poder llevar a cabo los experimentos es contar con datos. Nuestro
-entorno de simulación está diseñado para generar \textbf{datos sintéticos} que imiten
-escenarios reales en donde la asignación al tratamiento es no aleatoria, secuencial y
-potencialmente dependiente de resultados pasados.
-
-El proceso de generación de datos involucra la creación de una serie de tiempo univariada
-para cada individuo, que incorpora efectos fijos y componentes autoregresivos. Distinguimos
-entre tres tipos de individuos:
+Concretamente, el proceso de generación de datos involucra la creación de una serie de
+tiempo univariada para cada individuo o unidad, que incorpora efectos fijos y componentes
+autoregresivos. Distinguimos entre tres tipos de individuos:
 \begin{itemize}[itemsep=0.1cm]
     \item \textbf{Individuos tratados}: son aquellos que han recibido el tratamiento en
-    algún período. Es importante notar que en una situación real, son datos con los que
-    contamos.
-    \item \textbf{Individuos de control}: son aquellos que en los datos sintéticos, sabemos
-    que forman parte del grupo de control. Es importante notar que en un escenario real,
-    no sabemos quiénes son estos individuos sino que son los que tratamos de identificar.
+    algún período, es decir que forman parte de alguna de las cohortes.
+    \item \textbf{Individuos de control}: son aquellos que en los datos sintéticos,
+    sabemos que forman parte del grupo de control.
     \item \textbf{Individuos ``NiNi''}: son aquellas unidades que no han sido tratadas y
     que en los datos sintéticos, sabemos que no forman parte del grupo de control.
 \end{itemize}
 
-Al tratarse de Aprendizaje Supervisado, también incluimos la etiqueta que le corresponde a
-cada individuo: 1 para tratados y controles, y 0 para los NiNi.
+Para los tratados y los controles, agregamos una feature extra (además de la serie de
+tiempo) que es el inicio de programa. Además, al tratarse de Aprendizaje Supervisado,
+también incluimos la etiqueta que le corresponde a cada individuo: 1 para tratados y
+controles, y 0 para los NiNi.
+
+Con estas categorías en mente, es muy importante destacar una diferencia fundamental
+respecto a lo que ocurre en situaciones reales. En un entorno real, a la hora de llevar a
+cabo la evaluación de impacto, solo se puede identificar quiénes han sido tratados y
+quiénes no. Dentro del conjunto de no tratados, puede haber tanto individuos de control
+potenciales como individuos NiNi, pero no se cuenta con información para distinguirlos
+directamente.
+
+La idea detrás de esta construcción artificial es que tanto tratados como controles
+posean una determinada dinámica en su comportamiento temporal, mientras que los NiNis
+no. Nuevamente, cabe aclarar que estas son hipótesis que en la vida real pueden resultar
+difíciles de verificar, por lo que queremos ver si modelándolas de cierta forma, los
+modelos son capaces de capturarlas.
+
+Generamos diferentes escenarios, caracterizados principalemente por dos aspectos:
+\begin{enumerate}[itemsep=0.01cm, label=\textbf{\arabic*.}]
+    \item La longitud de las series de tiempo generadas. Esto representa la cantidad
+    de períodos observados para cada individuo previos al inicio del tratamiento.
+    \item La dinámica temporal específica observada en las series de tiempo.
+\end{enumerate}
+Y para cada escenario, generamos 100 simulaciones para poder garantizar que los resultados
+obtenidos sean estadísticamente significativos.
+
+A continuación, detallamos algunas configuraciones fijas a lo largo de todos los
+escenarios y simulaciones:
+\begin{itemize}[noitemsep]
+    \item Cantidad total de individuos: 10000.
+    \item Cantidad de cohortes: 3.
+    \item Cantidad de individuos tratados: 1000, divididos en las 3 cohortes.
+    \item Cantidad de individuos de control: 1000.
+    \item Cantidad de individuos NiNi: 8000.
+\end{itemize}
 
 Los parámetros para la generación de los datos son los siguientes:
 \begin{itemize}[itemsep=0.1cm]
