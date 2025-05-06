@@ -8,7 +8,7 @@ from optuna.visualization import plot_pareto_front
 from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import DataLoader, Subset
 from utils.train_predict import train_step, validate_step
-from utils.metrics import check_metrics, get_features_mean
+from utils.metrics import check_metrics
 
 
 def objective_cv(
@@ -81,6 +81,11 @@ def get_all_studies(storage):
 def delete_studies(studies_names, storage):
     for name in studies_names:
         optuna.delete_study(name, storage)
+
+
+def get_study_by_id(study_id, storage):
+    study = optuna.load_study(study_name=study_id, storage=storage)
+    return study
 
 
 def get_best_trials_info(study, metrics):
