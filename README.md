@@ -39,6 +39,21 @@ hay que definir los métodos `__init__` y `forward`.
 2. Definir en la clase `DataPreprocessor` el preprocesamiento necesario de los
 datos para convertirlos a un formato compatbile con la arquitectura.
 
+## Para usar `pystata`
+`pystata` es un paquete que ya se instala junto con stata. Si stata se encuentra en
+`/usr/local/stata17`, el paquete `pystata` está en `/usr/local/stata17/utilities/pystata`.
+
+Leer las diferentes opciones para incluirlo en el entorno Python utilizado en
+[pystata17 Installation](https://www.stata.com/python/pystata17/install.html).
+
+Según la documentación de pystata, la forma más directa de interactuar con Stata en
+una notebook de Jupyter, es usando las magics:
+  - [The stata magic](https://www.stata.com/python/pystata19/notebook/Magic%20Commands1.html#):
+    esta es la magic que justamente sirve para correr comandos Stata.
+  - [The pystata magic](https://www.stata.com/python/pystata19/notebook/Magic%20Commands3.html):
+    esta magic solamente sirve para configurar comportamientos/ajustes en la interacción
+    entre Python y Stata.
+
 # TODO
 * Arquitectura y preprocesamiento en la misma clase?
 * Agregar SMOTE a la clase `DataPreprocessor`?

@@ -18,7 +18,10 @@ EXPERIMENT_TAGS = {
 }
 
 # Simulated databases related
-DATA_DIR = "/users/bbas/TrabajoFinal/data/Benja"
+DATA_DIR = "/home/basbenja/Facultad/TrabajoFinal/data"
+
+# Stata related
+STATA_PATH = "/usr/local/stata17"
 
 # Model training related
 N_EPOCHS = 100
