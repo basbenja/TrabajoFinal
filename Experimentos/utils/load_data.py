@@ -17,7 +17,7 @@ def transform(id, data, start, required_periods):
         for i in range(required_periods):
             row[f"y(t-{required_periods-i})"] = relevant_data['y'].values[i]
     else:
-        raise ValueError(f"Individual {data['id'].iloc[0]} does not have enough periods.")
+        raise ValueError(f"Individual {id} does not have enough periods.")
     return row
 
 

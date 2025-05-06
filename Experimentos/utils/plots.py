@@ -38,15 +38,15 @@ def plot_time_series(df, n, label):
     return fig, ax
 
 
-def confusion_matrix_plot(y_true, y_pred, normalize):
+def confusion_matrix_plot(y_true, y_pred):
     fig, ax = plt.subplots()
-    
+
     cm = confusion_matrix(y_true, y_pred)
     disp = ConfusionMatrixDisplay(
         confusion_matrix=cm, display_labels=["NiNi", "Control"]
     )
     disp.plot(ax=ax, cmap='viridis')
-    
+
     ax.set_title(
         "Matriz de confusión",
         fontsize=14, fontweight='bold', pad=20
@@ -59,7 +59,7 @@ def confusion_matrix_plot(y_true, y_pred, normalize):
 
 def roc_curve_plot(y, y_pred):
     fig, ax = plt.subplots(figsize=(8, 5))
-    
+
     fpr, tpr, thresholds = roc_curve(y, y_pred)
     roc_auc = roc_auc_score(y, y_pred)
 
