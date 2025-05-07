@@ -35,6 +35,7 @@ class DataPreprocessor:
         return df_scaled
 
     def _scale_data(self, train_df, test_df):
+        # FIXME
         train_df_scaled = self._scale_temp_feats(train_df)
         test_df_scaled  = self._scale_temp_feats(test_df)
         
@@ -57,8 +58,10 @@ class DataPreprocessor:
             )
         elif 'dense' in model_arch:
             train_set, test_set = self._prepare_dense(X_train_df, X_test_df)
-        elif any(keyword in model_arch for keyword in ['lstm_v2', 'fcn']):
-            train_set, test_set = self._prepare_lstm_v2_fcn(X_train_df, X_test_df)
+        elif 'lstm_v2' in model_arch:
+            train_set, test_set = self._prepare_lstm_v2(X_train_df, X_test_df)
+        elif 'conv' in model_arch:
+            train_set, test_set = self._prepare_conv(X_train_df, X_test_df)
         return train_set, test_set
 
     def _prepare_lstm_v1(self, X_train_df, X_test_df, temp_feats, stat_feat):
@@ -75,9 +78,30 @@ class DataPreprocessor:
         test_set  = TensorDataset(X_test_tensor , self.y_test_tensor)
         return train_set, test_set
 
-    def _prepare_lstm_v2_fcn(self, X_train_df, X_test_df):
+    def _prepare_lstm_v2(self, X_train_df, X_test_df):
         X_train_temp_tensor = get_lstm_input(X_train_df, self.temp_feats)
         X_test_temp_tensor  = get_lstm_input(X_test_df , self.temp_feats)
+        X_train_static_tensor = torch.tensor(
+            X_train_df[self.static_feats].values, dtype=torch.float32
+        ).view(-1, 1)
+        X_test_static_tensor  = torch.tensor(
+            X_test_df[self.static_feats].values , dtype=torch.float32
+        ).view(-1, 1)
+        train_set = TemporalStaticDataset(
+            X_train_temp_tensor, X_train_static_tensor, self.y_train_tensor
+        )
+        test_set = TemporalStaticDataset(
+            X_test_temp_tensor, X_test_static_tensor, self.y_test_tensor
+        )
+        return train_set, test_set
+
+    def _prepare_conv(self, X_train_df, X_test_df):
+        X_train_temp_tensor = torch.tensor(
+            X_train_df[self.temp_feats].values, dtype=torch.float32
+        ).unsqueeze(1)
+        X_test_temp_tensor  = torch.tensor(
+            X_test_df[self.temp_feats].values , dtype=torch.float32
+        ).unsqueeze(1)
         X_train_static_tensor = torch.tensor(
             X_train_df[self.static_feats].values, dtype=torch.float32
         ).view(-1, 1)

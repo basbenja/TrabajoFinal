@@ -1,13 +1,13 @@
 from models.dense import DenseClassifier
 from models.lstm_v1 import LSTMClassifier_v1
 from models.lstm_v2 import LSTMClassifier_v2
-from models.fcn import FCN_FC
+from models.conv import Conv_FC
 from models.gru import GRUCLassifier
 
 def instantiate_model(model_arch, input_size, hyperparams):
-    dropout = hyperparams['dropout']
     match model_arch.lower():
         case 'dense':
+            dropout = hyperparams['dropout']
             num_layers = hyperparams['num_layers']
             hidden_sizes = [hyperparams[f"n_units_l{i}"] for i in range(num_layers)]
             model = DenseClassifier(
@@ -16,6 +16,7 @@ def instantiate_model(model_arch, input_size, hyperparams):
                 dropout=dropout,
             )
         case 'lstm_v1':
+            dropout = hyperparams['dropout']
             num_layers = hyperparams['num_layers']
             hidden_size = hyperparams['hidden_size']
             model = LSTMClassifier_v1(
@@ -25,6 +26,7 @@ def instantiate_model(model_arch, input_size, hyperparams):
                 dropout=dropout
             )
         case 'lstm_v2':
+            dropout = hyperparams['dropout']
             num_layers = hyperparams['num_layers']
             hidden_size = hyperparams['hidden_size']
             model = LSTMClassifier_v2(
@@ -35,6 +37,7 @@ def instantiate_model(model_arch, input_size, hyperparams):
                 dropout=dropout
             )
         case 'gru':
+            dropout = hyperparams['dropout']
             num_layers = hyperparams['num_layers']
             hidden_size = hyperparams['hidden_size']
             model = GRUCLassifier(
@@ -43,8 +46,8 @@ def instantiate_model(model_arch, input_size, hyperparams):
                 num_layers=num_layers,
                 dropout=dropout
             )
-        case 'fcn':
-            model = FCN_FC(
+        case 'conv':
+            model = Conv_FC(
                 n_static_feats=1
             )
     return model

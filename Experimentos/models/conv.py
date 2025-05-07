@@ -4,10 +4,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# FCN: Fully Convolutional Network
-class FCNBlock(nn.Module):
+# Conv: Convolutional
+class ConvBlock(nn.Module):
     def __init__(self):
-        super(FCNBlock, self).__init__()
+        super(ConvBlock, self).__init__()
         # in_channels: number of input features per time step
         self.conv1 = nn.Conv1d(in_channels=1, out_channels=128, kernel_size=2, padding=1)
         self.bn1 = nn.BatchNorm1d(128)
@@ -29,21 +29,21 @@ class FCNBlock(nn.Module):
         return x
 
 
-class FCN_FC(nn.Module):
+class Conv_FC(nn.Module):
     def __init__(self, n_static_feats=1):
-        super(FCN_FC, self).__init__()
-        self.fcn = FCNBlock()
+        super(Conv_FC, self).__init__()
+        self.conv = ConvBlock()
         # out_features=1 when using BCEWithLogitsLoss
         # out_features=2 when using CrossEntropyLoss
         self.fc = nn.Linear(in_features=128+n_static_feats, out_features=1)
 
     def forward(self, x_temp, x_static):
-        x = self.fcn(x_temp)
+        x = self.conv(x_temp)
         x = torch.cat((x, x_static), dim=1)
         x = self.fc(x)
         return x
 
 
-def define_fcn_model(trial):
+def define_conv_model(trial, n_static_feats):
     ###### TO DO #######
-    return FCN_FC(n_static_feats=1)
+    return Conv_FC(n_static_feats)
