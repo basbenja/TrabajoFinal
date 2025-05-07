@@ -33,7 +33,6 @@ def plot_time_series(df, n, label):
     ax.axvline(x=0, color='r', linestyle='--', label="Inicio de tratamiento")
     ax.legend()
     ax.grid(True)
-    ax.yaxis.set_major_locator(MultipleLocator(0.5))
 
     return fig, ax
 
