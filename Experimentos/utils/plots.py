@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 plt.style.use('default')
 
-from matplotlib.ticker import MultipleLocator
 from sklearn.metrics import (
     ConfusionMatrixDisplay, confusion_matrix, roc_curve, roc_auc_score
 )
