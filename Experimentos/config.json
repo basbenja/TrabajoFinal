@@ -1,10 +1,15 @@
 {
-    "group": "1",
-    "simulation": "1",
-    "required_periods": 49,
-    "model_arch": "lstm_v1",
-    "metrics": ["f1_score"],
-    "directions": ["maximize"],
+    "group": 1,
+    "simulation": 1,
+    "required_periods": 45,
+    "model_arch": "dense",
+    "metrics": [
+        "f_beta_score"
+    ],
+    "directions": [
+        "maximize"
+    ],
     "beta": 0.5,
-    "log_to_mlflow": "False"
+    "log_to_mlflow": "False",
+    "scale_data": "False"
 }
