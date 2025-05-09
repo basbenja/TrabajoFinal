@@ -1,6 +1,7 @@
 from models.dense import DenseClassifier
 from models.lstm_v1 import LSTMClassifier_v1
 from models.lstm_v2 import LSTMClassifier_v2
+from models.lstm_conv import LSTMConvClassifier
 from models.conv import Conv_FC
 from models.gru import GRUCLassifier
 
@@ -49,5 +50,13 @@ def instantiate_model(model_arch, input_size, hyperparams):
         case 'conv':
             model = Conv_FC(
                 n_static_feats=1
+            )
+        case 'lstm_conv':
+            model = LSTMConvClassifier(
+                lstm_input_size=input_size,
+                lstm_hidden_size=hyperparams['hidden_size'],
+                lstm_num_layers=hyperparams['num_layers'],
+                n_static_feats=1,
+                dropout=hyperparams['dropout']
             )
     return model

@@ -60,7 +60,7 @@ class DataPreprocessor:
             train_set, test_set = self._prepare_dense(X_train_df, X_test_df)
         elif 'lstm_v2' in model_arch:
             train_set, test_set = self._prepare_lstm_v2(X_train_df, X_test_df)
-        elif 'conv' in model_arch:
+        elif 'conv' in model_arch or 'lstm_conv' in model_arch:
             train_set, test_set = self._prepare_conv(X_train_df, X_test_df)
         return train_set, test_set
 

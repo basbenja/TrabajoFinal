@@ -24,8 +24,9 @@ class LSTMBlock(nn.Module):
         )
 
     def forward(self, x):
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        batch_size = x.size(0)
+        h0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(x.device)
+        c0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(x.device)
         _, (hidden_state, _) = self.lstm(x, (h0, c0))
         lstm_out = hidden_state[-1]
         return lstm_out
