@@ -1,66 +1,34 @@
 import torch
 import torch.nn as nn
 
-from constants import *
+from constants import N_LAYERS
 
-class LSTMBlock(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, dropout):
-        super(LSTMBlock, self).__init__()
-        self.hidden_size = hidden_size
-        self.num_layers = num_layers
-        
-        self.lstm = nn.LSTM(
-            input_size=input_size,
-            hidden_size=hidden_size,
-            num_layers=num_layers,
-            batch_first=True,
-            dropout=dropout if num_layers > 1 else 0,
-        )
-
-    def forward(self, x):
-        """
-        x should be of shape (batch_size, seq_length, input_size), where input_size
-        is the amount of features in each time step.
-
-        The outputs of the LSTM layer are:
-          - out: tensor of shape (batch_size, seq_length, hidden_size) containing
-            the output features (h_t) from the last layer of the LSTM, for each t.
-          - h_n: tensor of shape (num_layers, batch_size, hidden_size) containing
-            the hidden state for each element in the sequence.
-          - c_n: tensor of shape (num_layers, batch_size, hidden_size) containing
-            the final cell state for each element in the sequence.
-        """
-        # Set initial hidden and cell states
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        _, (hidden_state, _) = self.lstm(x, (h0, c0))
-        lstm_out = hidden_state[-1] # Use the last hidden_state
-        return lstm_out
-
+from models.blocks.lstm_block import LSTMBlock
+from models.blocks.fc_block import FCBlock
 
 class LSTMClassifier_v2(nn.Module):
     def __init__(
         self, lstm_input_size, lstm_hidden_size, lstm_num_layers, n_static_feats, dropout
     ):
         super(LSTMClassifier_v2, self).__init__()
+
         self.lstm = LSTMBlock(
             input_size=lstm_input_size,
             hidden_size=lstm_hidden_size,
             num_layers=lstm_num_layers,
             dropout=dropout
         )
-        self.fc = nn.Sequential(
-            nn.Linear(lstm_hidden_size+n_static_feats, 128),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(128, 1)
+        self.fc = FCBlock(
+            input_size=lstm_hidden_size+n_static_feats,
+            hidden_sizes=[128],
+            dropout=dropout
         )
 
     def forward(self, x_temp, x_static):
         lstm_out = self.lstm(x_temp)
-        x = torch.cat((lstm_out, x_static), dim=1)
-        x = self.fc(x)
-        return x
+        combined = torch.cat((lstm_out, x_static), dim=1)
+        logits = self.fc(combined)
+        return logits
 
 
 def define_lstm_v2_model(trial, input_size):

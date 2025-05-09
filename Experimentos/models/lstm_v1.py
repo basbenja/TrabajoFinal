@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 
 from constants import N_LAYERS
+from models.blocks.lstm_block import LSTMBlock
+from models.blocks.fc_block import FCBlock
 
 class LSTMClassifier_v1(nn.Module):
     def __init__(self, input_size, num_layers, hidden_size, dropout):
@@ -14,47 +16,23 @@ class LSTMClassifier_v1(nn.Module):
         dropout: dropout rate
         """
         super().__init__()
-        self.hidden_size = hidden_size
-        self.num_layers = num_layers
 
-        # LSTM Layer
-        self.lstm = nn.LSTM(
+        self.lstm = LSTMBlock(
             input_size=input_size,
             hidden_size=hidden_size,
             num_layers=num_layers,
-            batch_first=True,
-            dropout=dropout if num_layers > 1 else 0,
+            dropout=dropout
+        )
+        self.fc = FCBlock(
+            input_size=hidden_size,
+            hidden_sizes=[128],
+            dropout=dropout
         )
 
-        # Fully connected layer to classify the output
-        self.fc = nn.Linear(hidden_size, out_features=1)
-
     def forward(self, x):
-        """
-        x should be of shape (batch_size, seq_length, input_size), where input_size
-        is the amount of features in each time step.
-
-        The outputs of the LSTM layer are:
-          - out: tensor of shape (batch_size, seq_length, hidden_size) containing
-            the output features (h_t) from the last layer of the LSTM, for each t.
-          - h_n: tensor of shape (num_layers, batch_size, hidden_size) containing
-            the hidden state for each element in the sequence.
-          - c_n: tensor of shape (num_layers, batch_size, hidden_size) containing
-            the final cell state for each element in the sequence.
-
-        The fully connected layer is applied to the last hidden state of the sequence.
-        """
-
-        # Set initial hidden and cell states
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        out, _ = self.lstm(x, (h0, c0))     # out: (batch_size, seq_length, hidden_size)
-
-        # out, _ = self.lstm(x)     # out: (batch_size, seq_length, hidden_size)
-
-        # Use the last hidden state of the sequence for classification
-        out = self.fc(out[:, -1, :])        # out: (batch_size, output_size)
-        return out
+        lstm_out = self.lstm(x)
+        logits = self.fc(lstm_out)
+        return logits
 
 
 def define_lstm_v1_model(trial, input_size):
