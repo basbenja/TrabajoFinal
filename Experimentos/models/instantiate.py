@@ -4,6 +4,7 @@ from models.lstm_v2 import LSTMClassifier_v2
 from models.lstm_conv import LSTMConvClassifier
 from models.conv import Conv_FC
 from models.gru import GRUCLassifier
+from models.bilstm import BiLSTMClassifier
 
 def instantiate_model(model_arch, input_size, hyperparams):
     match model_arch.lower():
@@ -59,4 +60,13 @@ def instantiate_model(model_arch, input_size, hyperparams):
                 n_static_feats=1,
                 dropout=hyperparams['dropout']
             )
+        case 'bilstm':
+            model = BiLSTMClassifier(
+                lstm_input_size=input_size,
+                lstm_hidden_size=hyperparams['hidden_size'],
+                lstm_num_layers=hyperparams['num_layers'],
+                n_static_feats=1,
+                dropout=hyperparams['dropout']
+            )
+
     return model

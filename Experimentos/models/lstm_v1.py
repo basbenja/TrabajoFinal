@@ -7,14 +7,6 @@ from models.blocks.fc_block import FCBlock
 
 class LSTMClassifier_v1(nn.Module):
     def __init__(self, input_size, num_layers, hidden_size, dropout):
-        """
-        input_size: amount of features of each time series
-        num_layers: amount of LSTM layers
-        hidden_size: amount of neurons per layer
-        output_size: amount of classes to classify (2 if we are use CrossEntropyLoss, 
-        1 if we use BCEWithLogitsLoss)
-        dropout: dropout rate
-        """
         super().__init__()
 
         self.lstm = LSTMBlock(
