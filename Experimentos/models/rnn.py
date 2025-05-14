@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
+
 class RNNCLassifier(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, dropout):
         super().__init__()
@@ -28,8 +30,7 @@ class RNNCLassifier(nn.Module):
 
 
 def define_model(trial, input_size):
-    hidden_size = trial.suggest_int("hidden_size", 16, 128)
-    num_layers = trial.suggest_int("num_layers", 1, 3)
-    dropout = trial.suggest_float("dropout", 0.1, 0.5)
-    return RNNCLassifier(input_size, hidden_size, num_layers, dropout)
+    hidden_size = trial.suggest_categorical("hidden_size", HIDDEN_SIZES)
+    dropout = trial.suggest_categorical("dropout", DROPOUTS)
+    return RNNCLassifier(input_size, hidden_size, N_LAYERS, dropout)
 

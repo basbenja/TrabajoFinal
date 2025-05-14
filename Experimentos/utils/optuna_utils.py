@@ -3,7 +3,7 @@ import pandas as pd
 import torch
 import numpy as np
 
-from constants import N_EPOCHS, OPTIMIZER
+from constants import N_EPOCHS, OPTIMIZER, BATCH_SIZES, LEARNING_RATES
 from optuna.visualization import plot_pareto_front
 from sklearn.model_selection import StratifiedKFold
 from torch.utils.data import DataLoader, Subset
@@ -18,8 +18,8 @@ def objective_cv(
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = define_model(trial, input_size).to(device)
 
-    lr = trial.suggest_categorical("lr", [1e-4, 1e-3, 1e-2])
-    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128])
+    lr = trial.suggest_categorical("lr", LEARNING_RATES)
+    batch_size = trial.suggest_categorical("batch_size", BATCH_SIZES)
     optimizer = getattr(torch.optim, OPTIMIZER)(model.parameters(), lr=lr)
 
     # Cross-validation

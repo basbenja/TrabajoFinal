@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from constants import N_LAYERS
+from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
 
 class GRUCLassifier(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, dropout):
@@ -34,6 +34,6 @@ class GRUCLassifier(nn.Module):
 
 
 def define_gru_model(trial, input_size):
-    hidden_size = trial.suggest_categorical("hidden_size", [16, 32, 64, 128])
-    dropout = trial.suggest_categorical("dropout", [0.3, 0.5, 0.7, 0.8])
+    hidden_size = trial.suggest_categorical("hidden_size", HIDDEN_SIZES)
+    dropout = trial.suggest_categorical("dropout", DROPOUTS)
     return GRUCLassifier(input_size, hidden_size, N_LAYERS, dropout)

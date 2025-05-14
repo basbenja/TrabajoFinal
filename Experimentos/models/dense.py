@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from constants import N_LAYERS
+from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
 
 from models.blocks.fc_block import FCBlock
 
@@ -20,7 +20,7 @@ class DenseClassifier(nn.Module):
 
 def define_dense_model(trial, input_size):
     hidden_sizes = [
-        trial.suggest_categorical(f"n_units_l{i}", [16, 32, 64, 128]) for i in range(N_LAYERS)
+        trial.suggest_categorical(f"n_units_l{i}", HIDDEN_SIZES) for i in range(N_LAYERS)
     ]
-    dropout = trial.suggest_categorical("dropout", [0.1, 0.3, 0.5, 0.7])
+    dropout = trial.suggest_categorical("dropout", DROPOUTS)
     return DenseClassifier(input_size, hidden_sizes, dropout)

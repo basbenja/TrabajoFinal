@@ -18,7 +18,7 @@ EXPERIMENT_TAGS = {
 }
 
 # Simulated databases related
-DATA_DIR = "/home/basbenja/Facultad/TrabajoFinal/data"
+DATA_DIR = "/users/bbas/TrabajoFinal/data/Benja"
 
 # Stata related
 STATA_PATH = "/usr/local/stata17"
@@ -27,7 +27,11 @@ STATA_PATH = "/usr/local/stata17"
 N_EPOCHS = 100
 N_LAYERS = 2
 OPTIMIZER = "Adam"
+DROPOUTS = [0.3, 0.5, 0.7]
+HIDDEN_SIZES = [32, 64, 128]
+BATCH_SIZES = [32, 64, 128]
+LEARNING_RATES = [1e-4, 1e-3, 1e-2]
 
 # Hyperparameter Optimization Parallelization
 N_PROCESSES = 8
-TRIALS_PER_PROCESS = 3
+TRIALS_PER_PROCESS = 2
