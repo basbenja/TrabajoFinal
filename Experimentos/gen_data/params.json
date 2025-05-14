@@ -1,11 +1,11 @@
 {
-    "n_simulations": 1,
+    "n_simulations": 100,
     "n_total": 10000,
     "n_treated": 1000,
     "n_control": 1000,
-    "T": 50,
-    "first_tr_period": 46,
+    "T": 30,
+    "first_tr_period": 16,
     "n_cohorts": 3,
-    "n_per_dep": 20,
-    "increase_pct": 0.1
+    "n_per_dep": 8,
+    "ups_max_count": 2
 }
