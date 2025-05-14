@@ -1,15 +1,14 @@
 {
-    "group": 1,
-    "simulation": 1,
-    "required_periods": 45,
+    "group": 2,
+    "simulation": 5,
     "model_arch": "dense",
     "metrics": [
-        "f_beta_score"
+        "f1_score"
     ],
     "directions": [
         "maximize"
     ],
     "beta": 0.5,
-    "log_to_mlflow": "False",
+    "log_to_mlflow": "True",
     "scale_data": "False"
 }
