@@ -6,7 +6,7 @@ HOST = "0.0.0.0"
 PORT = 8080
 TRACKING_SERVER_URI = f"http://{HOST}:{PORT}"
 
-EXPERIMENT_NAME = "TrabajoFinal"
+EXPERIMENT_PREFIX = "TF"
 EXPERIMENT_DESCRIPTION = (
     "Final Project of Computer Science MS at FAMAF-UNC: Control Group Identification "
     "with Neural Networks"
