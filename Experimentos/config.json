@@ -1,7 +1,7 @@
 {
-    "group": 2,
-    "simulation": 5,
-    "model_arch": "dense",
+    "group": 1,
+    "simulation": 86,
+    "model_arch": "lstm_v2",
     "metrics": [
         "f1_score"
     ],
@@ -10,5 +10,6 @@
     ],
     "beta": 0.5,
     "log_to_mlflow": "True",
-    "scale_data": "False"
+    "scale_data": "False",
+    "comparison": "ML"
 }
