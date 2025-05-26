@@ -5,13 +5,12 @@
 La definición más general acerca de la Inteligencia Artificial (IA) establece que es el
 área de las Ciencias de la Computación que se enfoca tanto en entender como en crear
 sistemas que simulen comportamientos \textit{inteligentes}. Si bien existen distintas
-perspectivas sobre qué significa que una computadora actúe de manera inteligente, la que
-más ha prevalecido a lo largo de los años es aquella que refiere con la capacidad de
-computar cómo actuar de la mejor manera posible en una determinada situación
-\cite{ai-a-modern-approach}.
+perspectivas sobre qué significa que una computadora actúe de manera inteligente, una que
+la resume adecuadamente es aquella que la relaciona la capacidad de computar cómo actuar
+de la mejor manera posible en una determinada situación \cite{ai-a-modern-approach}.
 
 En sus comienzos, los métodos desarrollados en el área de la IA estaban principalmente
-\textbf{basados en conocimiento}, es decir reglas matemáticas formales que permitían a las
+\textbf{basados en conocimiento}, es decir en reglas matemáticas formales que permitían a las
 computadoras llevar a cabo inferencias lógicas y de esta forma resolver problemas que eran
 intelectualmente difíciles para los humanos \cite{deep-learning}.
 
@@ -42,7 +41,7 @@ los datos -, sin la necesidad de ser explícitamente programadas para hacerlo.
 
 Un ejemplo de estos algoritmos puede ser un clasificador de correo spam, que aprende a
 distinguir correos spam de regulares viendo ejemplos de cada tipo de correo. Otro ejemplo
-puede ser un sistema que aprenda a predecir la edad de una persona a partir de una imagen
+puede ser un sistema que aprenda a predecir la edad de una persona a partir de una imagen,
 habiendo experimentado previamente algunos ejemplos de imagen-edad.
 
 En 1997, Tom Mitchell definió en su libro Machine Learning \cite{ml-tom-mitchell} el
@@ -62,24 +61,24 @@ resueltas por un sistema de ML se encuentran la clasificación, la regresión, l
 traducción, la detección de objetos en imágenes, la generación de nuevos datos, la
 detección de valores atípicos, entre muchas otras. Siguiendo con el ejemplo, podríamos
 querer que, en base a las features de las casa, el sistema nos provea un estimado
-de su valor.
+de su valor (regresión) o nos diga si corresponde a una vivienda adecuada para una
+familia o no (clasificación).
 
 La experiencia hace referencia al tipo de información que el algoritmo ``puede ver''
 durante su proceso de aprendizaje o \textit{entrenamiento} \cite{hands-on-ML-sklearn-tf}.
 A esta información se la conoce como ``conjunto (de datos) de entrenamiento'', y es un
-subconjunto del \textit{dataset}, que es simplemente el conjunto de todos los ejemplos o
-datos con los que se cuenta. En base a la experiencia, los algoritmos de ML se clasifican
-en dos grandes categorías:
+subconjunto del \textit{dataset}, que es el conjunto de todos los ejemplos o datos con los
+que se cuenta. En base a la experiencia, los algoritmos de ML se clasifican en dos grandes
+categorías:
 \begin{itemize}
     \item \textbf{Algoritmos de Aprendizaje Supervisado}: experimentan un dataset que
-    contiene pares de entrada-salida, esto es cada ejemplo contiene sus características pero
+    contiene pares de entrada-salida. Cada ejemplo contiene sus características pero
     también su ``etiqueta'', que vendría a ser la ``respuesta correcta'' para dicha
-    entrada, y la que se espera que el sistema aprenda. De esta forma, el algoritmo
-    aprende una función que asigna (\textit{mapea}) entradas a salidas. Las tareas más
-    comunes llevadas a cabo con este tipo de aprendizaje son las de regresión, en donde la
-    etiqueta corresponde a un valor continuo; y clasificación, en donde la solución viene
-    dada por la categoría (dentro de un conjunto predefinido de categorías) a la que
-    pertenece un ejemplo.
+    entrada. De esta forma, el algoritmo aprende una función que asigna (\textit{mapea})
+    entradas a salidas. Las tareas más comunes llevadas a cabo con este tipo de
+    aprendizaje son las de regresión, en donde la etiqueta corresponde a un valor
+    continuo; y clasificación, en donde la solución viene dada por la categoría (dentro de
+    un conjunto predefinido de categorías) a la que pertenece un ejemplo.
     \item \textbf{Algoritmos de Aprendizaje No Supervisado}: ven un dataset que cuenta
     solamente con features de cada entrada pero sin etiquetas, e intentan aprender
     automáticamente patrones y propiedades útiles de la estructura de los datos. Algunas
@@ -161,7 +160,7 @@ funciones lineales, de polinomios de grado 2, de polinomios de grado 3, etcéter
 tanto, el espacio determina la forma o ``\textbf{arquitectura}'' que va a tener la función
 \(h\), y consecuentemente cuáles son sus parámetros, cuyo vector denotaremos con la letra
 \(\bm{\bm{w}}\), y a los que también se suele llamar ``\textbf{pesos}''. De esta forma,
-este espacio determina la familia de posibles relaciones entre entradas y salidas, y los
+este espacio fija la familia de posibles relaciones entre entradas y salidas, y los
 parámetros especifican la relación particular (el modelo).
 
 Por ejemplo, si suponemos que cada entrada \(\bm{x} \in \mathbb{R}\), y establecemos
@@ -205,7 +204,7 @@ Entonces, cuando un modelo se entrena o aprende, lo que realmente hace es intent
 encontrar los valores de los parámetros que describan la verdadera relación entre entradas
 y salidas \cite{prince2024understanding}. Un algoritmo de aprendizaje toma el conjunto de
 entrenamiento y manipula los parámetros de forma iterativa hasta que las predicciones
-dadas por él sean lo más cercanas posible a las etiquetas verdaderas.
+dadas por el modelo resultante sean lo más cercanas posible a las etiquetas verdaderas.
 
 Para que el algoritmo sepa cómo modificar estos parámetros para mejorar sus predicciones,
 necesita una forma de conocer cómo está siendo su desempeño. Para esto, se define lo que se
@@ -216,19 +215,19 @@ lejos están sus predicciones de las respuestas reales del conjunto de entrenami
 
 Como venimos enfatizando, lo que caracteriza al modelo en cada iteración es el valor de
 sus parámetros. Por lo tanto, tiene sentido tratar a la función de pérdida como una que
-depende de estos, es decir \(L(\bm{w})\)\footnotemark. \footnotetext{En realidad la
+depende de estos, es decir\footnotemark\ \(L(\bm{w})\). \footnotetext{En realidad la
 función de pérdida también depende de los datos de entrenamiento, por lo que si somos
-estrictos deberíamos escribir \(L(\left\{\bm{X}, \bm{Y}\right\}, \bm{w}\)). Sin
+estrictos, deberíamos escribir \(L(\left\{\bm{X}, \bm{Y}\right\}, \bm{w}\)). Sin
 embargo, como estos datos están fijos durante todo el proceso de aprendizaje, podemos
-omitirlos.} A continuación, se mencionan dos ejemplos de funciones de error:
+omitirlos.}A continuación, se mencionan dos ejemplos de funciones de error:
 \begin{itemize}
-    \item Una función de pérdida que se es común usar en problemas de regresión es la de
+    \item Una función de pérdida que es común usar en problemas de regresión es la de
     Error Cuadrático Medio (ECM), dada por:
     \[
     ECM(\bm{w}) = \frac{1}{N} \sum_{i=1}^{N} \left(h(\bm{x}_i, \bm{w}) - \bm{y}_i\right)^2
     \]
     \item Para problemas de clasificación binaria como el que tratamos en este trabajo, vamos a tener
-    \(\bm{y}_i \in \mathbb{R}\), y se suele emplear la Entropía Cruzada Binaria (ECB), dada por:
+    (generalmente) \(\bm{y}_i \in \{0,1\}\), y se suele emplear la Entropía Cruzada Binaria (ECB), dada por:
     \[
     ECB(\bm{w}) = -\frac{1}{N} \sum_{i=1}^{N}
         \left[
@@ -275,8 +274,8 @@ La pregunta que surge entonces es cómo hacer para lograr esta minimización. De
 del espacio de funciones y de la función de costo seleccionada, puede que exista una
 fórmula cerrada para \(\bm{w}^*\), que se calcule analíticamente.
 
-Sin embargo, si la función de costo tiene muchas variables (parámetros) o los modelos son
-complejos, resulta más útil recurrir a métodos numéricos para aproximar este mínimo.
+Sin embargo, si la función de costo tiene muchas variables o los modelos son complejos,
+resulta más útil recurrir a métodos numéricos para aproximar este mínimo.
 
 El algoritmo por defecto que se utiliza para resolver este problema de optimización es el
 llamado \textbf{Descenso por el Gradiente} (DG), y es muy potente ya que se puede aplicar a
@@ -297,24 +296,25 @@ v_M)\), el \textbf{gradiente} de \(g\) es el vector formado por las derivadas pa
 \]
 donde la notación \(\frac{\partial g}{\partial v_i}\) representa la \textbf{derivada
 parcial} de \(g\) con respecto a \(v_i\), que mide cómo cambia \(g\) cuando se varía
-\(v_i\) mientras se mantienen constantes las demás variables. Algo a notar es que
-el vector resultante es un vector de funciones, y cuando se lo evalúa en un punto,
-da la dirección de mayor crecimiento de \(g\) desde ese punto.}
+\(v_i\) mientras se mantienen constantes las demás variables. De aquí la razón por la cual
+es necesario que la función de pérdida sea derivable. Algo a notar es que el vector
+resultante es un vector de funciones, y cuando se lo evalúa en un punto, da la dirección
+de mayor crecimiento de \(g\) desde ese punto.}
 
 Concretamente, se empieza con un vector de parámetros \(\bm{w}_0\) con valores arbitrarios
-que va mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente,
+que van mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente,
 con el objetivo de reducir el valor de la función de pérdida, hasta que el algoritmo
 \textit{converja} a un mínimo (local o global) de la función de pérdida.
 
 Un hiperparámetro\footnotemark{} determinante en el algoritmo del DG es el tamaño de los
 pasos, llamado \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\eta\) y
-supondremos por el momento que se mantiene constante en todo el proceso. Si el valor
-\(\eta\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas
-iteraciones para converger \cite{hands-on-ML-sklearn-tf}. Si en cambio el valor es muy
-alto, entonces puede ser que vayamos ``saltando'' de un lado a otro de un valle de la
-función, haciendo que el algoritmo diverja \cite{hands-on-ML-sklearn-tf}.
-\footnotetext{Hablaremos más adelante sobre qué es un hiperparámetro, pero lo importante
-es que no es un parámetro que se aprende, como lo son los contenidos en el vector \(\bm{w}\).}
+supondremos por el momento que se mantiene constante en todo el proceso. Si el valor de
+\(\eta\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas iteraciones
+para converger \cite{hands-on-ML-sklearn-tf}. Si en cambio el valor es muy alto, entonces
+puede ser que vayamos ``saltando'' de un lado a otro de un valle de la función, haciendo
+que el algoritmo diverja \cite{hands-on-ML-sklearn-tf}. \footnotetext{Hablaremos más
+adelante sobre qué es un hiperparámetro, pero lo importante es que no es un parámetro que
+se aprende, como lo son los contenidos en el vector \(\bm{w}\).}
 
 De esta forma, la regla del DG está dada por:
 \[
@@ -350,7 +350,7 @@ esto es un proceso llamado \textbf{búsqueda u optimización de hiperparámetros
 Esta búsqueda se hace de forma empírica: se entrenan distintos modelos con diferentes
 hiperparámetros sobre el mismo conjunto de entrenamiento, se mide el desempeño de cada
 uno de ellos, y se elige el mejor. Ahora bien, el desempeño no se mide sobre el
-conjunto de test, ya que esto admitiría la posibilidad que los hiperparámetros elegidos
+conjunto de test, ya que esto podría provocar que los hiperparámetros elegidos
 funcionen bien para ese conjunto, pero no permitan al modelo generalizar a nuevos
 datos \cite{prince2024understanding}.
 
@@ -393,6 +393,7 @@ Aprendizaje Supervisado. Los distintos elementos presentes son:
     y ayuda a guiar el entrenamiento.
     \item Un \textbf{algoritmo de optimización}, que busca minimizar la función de pérdida,
     siendo el más común el Descenso por el Gradiente.
+    \item \textbf{Hiperparámetros}, que permiten controlar el proceso de entrenamiento.
 \end{itemize}
 
 Con esto, el objetivo es encontrar los parámetros \(\bm{w}^*\) que minimicen la función de
