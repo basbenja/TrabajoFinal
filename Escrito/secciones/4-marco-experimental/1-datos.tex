@@ -1,57 +1,41 @@
 \documentclass[../../main.tex]{subfiles}
-% \graphicspath{{\subfix{../images/}}}
-
-% Simulation involves multiple parameters set to create various scenarios. These parameters
-% include the number of simulations (N\_simulations), the total sample size (Total\_Sample),
-% the proportion of treated individuals (PorTreated), and the proportion of control
-% individuals (PorControl). Additional parameters, such as autoregressive persistence
-% associated with the outcome variables, are specified for the treated (phiT), controls
-% (PhiC), and neither treated nor control (Nini) groups (phiNini) to model temporal
-% dependencies in the data.
-
-% A crucial aspect of our simulation is the modeling of the treatment effect, where we
-% simulate a nominal impact of the treatment on the outcome variable based on a proportion
-% (ImpactProportional) and with a variabilitiy in the impact on each individual that depend
-% on a standard deviation (STDImpact). Furthermore, we introduce scenarios with both linear
-% and nonlinear (nonlinear) dependencies in treatment assignment, reflecting the complex
-% dynamics often observed in observational studies.
-
-% To examine the network's ability to handle heterogeneous treatment effects, we simulated
-% variability in impact by cohort (staggered enters). This heterogeneity allows us to test
-% the robustness of the LSTM network in identifying appropriate controls in different
-% subpopulations with different treatment effects.
-
-% The data generation process involves the creation of time series for each individual,
-% incorporating fixed effects, autoregressive components, and treatment impacts as
-% appropriate. This process is designed to closely replicate the generation of observational
-% data in studies with nonrandomized treatment assignments.
-
 
 \begin{document}
-Nuestro entorno de simulación está diseñado para generar \textbf{datos sintéticos} que
-imiten escenarios reales en donde la asignación de individuos al tratamiento es:
+Nuestro entorno de simulación está diseñado para generar datos sintéticos que imiten
+escenarios reales en donde la asignación de individuos al tratamiento es:
 \begin{itemize}[itemsep=0.05cm]
     \item No aleatoria.
-    \item Secuencial (hay cohortes).
+    \item Secuencial, es decir que hay cohortes.
     \item Potencialmente dependendiente de resultados pasados.
 \end{itemize}
 
 Concretamente, el proceso de generación de datos involucra la creación de una serie de
 tiempo univariada para cada individuo o unidad, que incorpora efectos fijos y componentes
-autoregresivos. Distinguimos entre tres tipos de individuos:
+autoregresivos, resultando así en un conjunto de datos de panel. Distinguimos entre tres
+tipos de individuos:
 \begin{itemize}[itemsep=0.1cm]
     \item \textbf{Individuos tratados}: son aquellos que han recibido el tratamiento en
     algún período, es decir que forman parte de alguna de las cohortes.
     \item \textbf{Individuos de control}: son aquellos que en los datos sintéticos,
-    sabemos que forman parte del grupo de control.
-    \item \textbf{Individuos ``NiNi''}: son aquellas unidades que no han sido tratadas y
-    que en los datos sintéticos, sabemos que no forman parte del grupo de control.
+    sabemos que forman parte del grupo de control para una determinada cohorte de
+    tratados.
+    \item \textbf{Individuos ``NiNi''} (``Ni tratados Ni controles''): son aquellas
+    unidades que no han sido tratadas y que en los datos sintéticos, sabemos que no forman
+    parte del grupo de control para ninguna de las cohortes.
 \end{itemize}
 
-Para los tratados y los controles, agregamos una feature extra (además de la serie de
-tiempo) que es el inicio de programa. Además, al tratarse de Aprendizaje Supervisado,
-también incluimos la etiqueta que le corresponde a cada individuo: 1 para tratados y
-controles, y 0 para los NiNi.
+Para los tratados y los controles, agregamos una característica extra además de la serie
+de tiempo, a la que llamamos ``\textit{inicio de programa}''. Para los tratados, este
+representa el momento en que un individuo recibió el tratamiento; y para cada unidad de
+control, representa el momento en que se aplicó el programa a los individuos tratados para
+los cuales efectivamente sirve como control.
+
+Además, al tratarse de Aprendizaje Supervisado, también incluimos la etiqueta que le
+corresponde a cada individuo: 1 para tratados y controles, y 0 para los NiNi. La razón por
+la cual tratados y controles comparten la misma etiqueta es que el modelo aprenda durante
+su entrenamiento los patrones que tienen los tratados para luego poder clasificar como
+``1'' a aquellos que se asemejen a los tratados, que serán justamente los que identifique
+como posibles controles.
 
 Con estas categorías en mente, es muy importante destacar una diferencia fundamental
 respecto a lo que ocurre en situaciones reales. En un entorno real, a la hora de llevar a
@@ -60,75 +44,64 @@ quiénes no. Dentro del conjunto de no tratados, puede haber tanto individuos de
 potenciales como individuos NiNi, pero no se cuenta con información para distinguirlos
 directamente.
 
-La idea detrás de esta construcción artificial es que tanto tratados como controles
-posean una determinada dinámica en su comportamiento temporal, mientras que los NiNis
-no. Nuevamente, cabe aclarar que estas son hipótesis que en la vida real pueden resultar
-difíciles de verificar, por lo que queremos ver si modelándolas de cierta forma, los
-modelos son capaces de capturarlas.
+La motivación detrás de esta construcción artificial es que tanto tratados como controles
+compartan una determinada dinámica en su comportamiento temporal, mientras que los NiNis
+no. Nuevamente, cabe aclarar que estas son hipótesis que en la práctica pueden resultar
+difíciles de verificar. Sin embargo, nuestro interés radica en evaluar si, al modelar
+estos supuestos, los algoritmos son capaces de capturar tales patrones.
 
-Generamos diferentes escenarios, caracterizados principalemente por dos aspectos:
+Como mencionamos anteriormente, para cada individuo \(i\) generamos una serie de tiempo
+univariada \(y_i\) de una longitud \(L\) que incorpora efectos fijos y componentes
+autoregresivos. La fórmula que utilizamos para simular cada valor \(y_{i,t}\) de las
+series, con \(t = 0, 1, ..., L\) indicando el período generado, fue la siguiente:
+\begin{align}
+    \mu &= \mu_{EF} + EF_i + \mu_{ET} \\
+    y_{i,0} &= \mu + u_0  \ \sigma \\
+    y_{i,t} &= \phi \ y_{i,t-1} + (1 - \phi) \ \mu +  u_t \ \sigma
+\end{align}
+donde:
+\begin{itemize}[itemsep=0.1cm]
+    \item \(\mu_{EF}\) representa la media del efecto fijo para todos los individuos
+    de un mismo grupo.
+    \item \(\mu_{ET}\) representa la media del efecto temporal en todos los pasos
+    de la serie y es la misma para todos los grupos.
+    \item \(EF_i\) representa el efecto fijo del individuo \(i\), constante en todos
+    los pasos de tiempo.
+    \item \(\phi\) es la persistencia auto-regresiva asociada a la variable para
+    todos los individuos de un mismo grupo.
+    \item \(u_t\) es un valor aleatorio proveniente de una distribución normal estándar
+    (se genera uno en cada paso de tiempo).
+    \item \(\sigma\) es la desviación estándar del término de ruido de las series,
+    y es la misma para todos los grupos.
+\end{itemize}
+
+Generamos diferentes escenarios, que se diferencian entre sí por determinados aspectos:
 \begin{enumerate}[itemsep=0.01cm, label=\textbf{\arabic*.}]
-    \item La longitud de las series de tiempo generadas. Esto representa la cantidad
-    de períodos observados para cada individuo previos al inicio del tratamiento.
-    \item La dinámica temporal específica observada en las series de tiempo.
+    \item La longitud de las series de tiempo generadas, que denotamos con \(L\). Esta
+    representa la cantidad de períodos observados para cada individuo \textbf{previos al inicio
+    del tratamiento}.
+    \item La cantidad de períodos previos al inicio del tratamiento en los que se observa
+    un comportamiento específico en tratados y controles. A estos períodos los llamamos
+    ``períodos de dependencia'' y a la cantidad la denotamos con \texttt{n\_per\_dep}.
+    Se va a cumplir siempre que \(0 \le \texttt{n\_per\_dep} \le L\).
+    \item Parámetros específicos relacionados a la generación de las series de tiempo
+    para los individuos de cada grupo.
 \end{enumerate}
 Y para cada escenario, generamos 100 simulaciones para poder garantizar que los resultados
 obtenidos sean estadísticamente significativos.
 
-A continuación, detallamos algunas configuraciones fijas a lo largo de todos los
-escenarios y simulaciones:
+Las configuraciones fijas a lo largo de todos los escenarios y simulaciones a la hora de
+generar los datos fueron las siguientes:
 \begin{itemize}[noitemsep]
     \item Cantidad total de individuos: 10000.
     \item Cantidad de cohortes: 3.
     \item Cantidad de individuos tratados: 1000, divididos en las 3 cohortes.
-    \item Cantidad de individuos de control: 1000.
+    \item Cantidad de individuos de control: 1000, divididos en las 3 cohortes.
     \item Cantidad de individuos NiNi: 8000.
 \end{itemize}
 
-Los parámetros para la generación de los datos son los siguientes:
-\begin{itemize}[itemsep=0.1cm]
-    \item \texttt{n\_sample}: cantidad de individuos en la simulación.
-    \item \texttt{treated\_pct}: porcentaje de individuos tratados.
-    \item \texttt{control\_pct}: porcentaje de individuos de control.
-    \item \texttt{T}: cantidad de períodos observados de cada individuo.
-    \item \texttt{first\_tr\_period}: primer período de tratamiento (o único, dependiendo
-    de la cantidad de cohortes).
-    \item \texttt{n\_cohorts}: cantidad de cohortes.
-    \item \texttt{phiT}: persistencia auto-regresiva para los tratados.
-    \item \texttt{phiC}: persistencia auto-regresiva para los controles.
-    \item \texttt{n\_dep\_periods}: cantidad de períodos de dependencia para la
-    participación en el tratamiento.
-\end{itemize}
-
-Concretamente, la fórmula con la que se generaron los valores de las series de tiempo
-fue la siguiente: \textbf{TODO}
-
-El resultado de la simulación es un conjunto de datos de panel compuesto por series de
-tiempo univariadas de longitud \texttt{T} para los distintos tipos de individuos:
-
-
-En el dataset, cada individuo tiene un identificador y su tipo; y aquellos de tipo 1 y 2
-tienen como feature extra el período (desde \texttt{first\_tr\_period} hasta
-\texttt{first\_tr\_period + n\_cohorts}) en el que ingresaron al programa. A continuación,
-se muestran algunos ejemplos, tomando \texttt{T = 6}, \texttt{first\_tr\_period = 3} y
-\texttt{n\_cohorts = 2}:
-
-En este punto cabe recordar cuál es nuestra meta: a partir de información sobre los
-individuos que fueron tratados, queremos identificar de entre los no tratados, quiénes son
-los que podrían formar parte del grupo de control.
-
-También resulta muy importante tener en cuenta que en los datos generados sintéticamente,
-sabemos quiénes son los controles, pero en la realidad esto es justamente lo que queremos
-identificar.
-
-\subsection{Conjuntos de Entrenamiento y de Test}
-Ahora bien, para entrenar y evaluar a nuestros modelos, tomamos en cuenta lo que ocurriría
-en un escenario real, en el que sabríamos solamente quiénes son los tratados y quiénes los
-no tratados. Por lo tanto, construimos el conjunto de entrenamiento con la totalidad de
-los individuos de tipo 1 con etiqueta 1 y algunos de tipo 3 con etiqueta 0, y en el
-conjunto de test colocamos a todos los de tipo 2, queriendo predecir en ellos un 1, y al
-resto de tipo 3, queriendo predecir en ellos un 0.
-
-Más aún, como queremos identificar a los grupos de control de cada cohorte,
+Más adelante, veremos cómo construimos los conjuntos de entrenamiento y de test con estos
+datos; y en la sección de Resultados, detallaremos los parámetros específicos de cada
+escenario.
 
 \end{document}
