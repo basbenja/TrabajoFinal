@@ -25,10 +25,14 @@ biológica, que solamente tenía una o más entradas binarias y una salida binar
 
 Posteriormente, en 1958, Frank Rosenblatt presentó una de las formas o
 \textit{arquitecturas} más simples de RNAs: el ``Perceptrón''
-\cite{rosenblatt1958perceptron}. Este servía principalmente para resolver problemas de
-clasificación en donde los datos son linealmente separables. Sin emabrgo, su aporte más
-notorio fue que definió un algoritmo para el entrenamiento del Perceptrón que le permitía
-mejorar automáticamente sus parámetros internos para poder llegar a la solución óptima.
+\cite{rosenblatt1958perceptron}. Este consistía de solamente una neurona artificial que
+recibía entradas, las combinaba en una suma pesada y si el resultado era mayor a un
+determinado umbral, daba como salida un valor de 1, y en caso contrario de (-1). La gran
+limitación del Perceptrón fue que servía solamente para resolver problemas de
+clasificación en donde los datos son linealmente separables. Sin emabrgo, el aporte más
+notorio de Rosenblatt fue la definición de un algoritmo para el entrenamiento del
+Perceptrón que le permitía mejorar automáticamente sus parámetros internos (los ``pesos''
+de la suma pesada) para poder llegar a la solución óptima.
 
 Más tarde, se descubrió que los problemas que no podían ser resueltos por el Perceptrón,
 sí podían ser resueltos ``apilando'' múltiples perceptrones, lo cual llevó a la invención
@@ -36,7 +40,7 @@ del ``Perceptrón Multicapa'' (PMC), también conocido actualmente como ``Red Ne
 Propagación Directa''\footnotemark (del inglés \textit{Feedforward Neural Networks}, FFNN)
 \cite{deep-learning}, las cuales conforman el punto de partida de las redes neuronales
 actuales. \footnotetext{Si bien estos términos se suelen usar indistintamente, la realidad
-es que las redes neuronales feedforward tienen algunas diferencias con  respecto al
+es que las redes neuronales feedforward presentan algunas diferencias con respecto al
 Perceptrón Multicapa.}
 
 Para explicar la idea y los elementos presentes detrás de estos algoritmos, tomaremos como
@@ -62,7 +66,8 @@ funciones que proveen está formado en realidad por la composición de varias fu
     \label{eq:fun-composition}
 \end{equation}
 donde \(\bm{x}\) es un vector de dimensión \(n\) de números reales: \(\bm{x}=(x_1,
-x_2, ..., x_n)\), es decir \(\bm{x} \in \mathbb{R}^n\).
+x_2, ..., x_n)\), es decir \(\bm{x} \in \mathbb{R}^n\) y asumiremos que los espacios
+de dominio y llegada de las diferentes funciones son ``compatibles''.
 
 Usualmente, se dice que las redes están organizadas en \textbf{capas}. De esta forma, en
 la ecuación anterior, a \(\bm{x}\) se la conoce como \textbf{capa de entrada}, a las
@@ -111,12 +116,14 @@ siguiente manera:
 \end{center}
 
 En este caso, la entrada \(\bm{x}\) va a la función \(f^{(1)}\), la salida de
-\(f^{(1)}(\bm{x})\) va a \(f^{(2)}\), y la salida de \(f^{(2)}(f^{(1)}(\bm{x}))\)
-va directamente a \(f^{(3)}\) para de esa forma producir el resultado final \(\bm{\hat{y}} =
-f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))\).
+\(f^{(1)}(\bm{x})\) va a \(f^{(2)}\), y la salida de \(f^{(2)}(f^{(1)}(\bm{x}))\) va
+directamente a \(f^{(3)}\) para de esa forma producir el resultado final\footnotemark\
+\(\bm{\hat{y}} = f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))\). \footnotetext{Usamos
+\(\bm{\hat{y}}\) para referirnos a la aproximación de \(\bm{y}\), la
+etiqueta real para una entrada \(\bm{x}\), dada por el modelo.}
 
 Es justamente el comportamiento anterior el que caracteriza a las redes neuronales de tipo
-\textbf{\textit{Feedforward}}: los datos y resultados fluyen en una sola dirección; cada
+\textbf{Feedforward}: los datos y resultados fluyen en una sola dirección; cada
 nodo computa su resultado y se lo pasa a su sucesor (o sucesores, como veremos más
 adelante). En el grafo, esta situación se refleja en el hecho que no hay ciclos, por lo
 que las redes de este tipo se representan por medio de grafos dirigidos y acíclicos.
@@ -125,8 +132,8 @@ Ahora bien, ¿qué es exactamente una capa? En la terminología de redes neurona
 es un conjunto de \textbf{unidades} o, tomando en cuenta su inspiración biológica,
 \textbf{neuronas}, que actúan en paralelo. Cada unidad representa una función que toma un
 vector y retorna un escalar, y se asemejan a las neuronas biológicas en el sentido que
-reciben entradas (o estímulos) de otras unidades y computan su propio valor de activación
-\cite{deep-learning}.
+reciben entradas (o estímulos) de otras unidades y en base a estas, computan su propio
+valor de activación \cite{deep-learning}.
 
 De esta forma, la capa de entrada va a tener tantas neuronas como la dimensión de los
 datos de entrada (\(\bm{x}\)). Es decir, si \(\bm{x}\) es de dimensión \(n\), entonces la
@@ -211,43 +218,40 @@ Más precisamente, una función de activación es una función no lineal que tom
 valor real como entrada y produce como resultado un número en un determinado rango.
 Algunas funciones de activación comunes son las siguientes:
 \begin{itemize}[itemsep=0.1cm]
-    \item \textbf{Sigmoide}: produce un valor entre 0 y 1. Es por ello que se suele usar
+    \item \textbf{Sigmoide}: produce un valor entre 0 y 1. Es por esto que se suele usar
     en problemas de clasificación binaria para que una única neurona en la capa de salida
-    represente la probabilidad de que la entrada pertenezca a la clase ``positiva''
-    (la que corresponde a la etiqueta 1).
+    represente la probabilidad de que la entrada pertenezca a la clase ``positiva''.
     \[\sigma(x)=\frac{1}{1+e^{-x}}\]
-    \item \textbf{ReLU} (abreviatura de \textit{Rectified Linear Unit}): produce un
-    valor entre 0 e \(\infty\). Se utiliza mayormente en las neuronas de capas ocultas.
+    \item \textbf{ReLU} (abreviatura de \textit{Rectified Linear Unit}): produce un valor
+    entre 0 e \(\infty\). Esta y sus variantes son las más utilizadas actualmente en las
+    neuronas de capas ocultas, siendo una de las razones la simplicidad de su cálculo.
     \[\text{ReLU}(x) = \text{max}(0, x)\]
     \item \textbf{Tangente hiperbólica}: produce un valor entre -1 y 1. Lo particular de
     esta es que mantiene el signo de la entrada.
     \[\text{tanh}(x)=\frac{e^x - e^{-x}}{e^x + e^{-x}}\]
 \end{itemize}
-Actualmente, la más utilizada es la ReLU y variantes de ella.
+
+Un aspecto a notar en este punto es que en las redes neuronales aparecen nuevos
+hiperparámetros, que ya no tienen tanto que ver con el proceso de entrenamiento en sí,
+sino más bien con el diseño y la capacidad de la red, como son la cantidad de capas
+ocultas, la cantidad de neuronas en cada capa oculta, e incluso la función de activación
+de cada capa. Para todos estos, se puede encontrar el valor óptimo utilizando las técnicas
+mencionadas en la sección anterior.
 
 Para formalizar el cómputo de una neurona, es necesario introducir cierta notación.
 Denotaremos con:
 \begin{itemize}[itemsep=0.1cm]
+    \item \(n^{(k)}\) la cantidad de neuronas de la capa \(k\).
     \item \(s^{(k)}_j\) a la salida de la unidad \(j\) de la capa \(k\)
     \item \(a^{(k)}_j\) a la función no lineal de la unidad \(j\) de la capa \(k\)
     \item \(w^{(k)}_{i,j}\) la intensidad o \textbf{peso} de la conexión entre la
     neurona \(i\) de la capa \(k\) y la \(j\) de la capa \((k+1)\),
 \end{itemize}
-tenemos que:
+Con esto, tenemos que la salida de una neurona está dada por:
 \begin{equation}
-    s^{(k)}_j = a^{(k)}_j \left( \sum_i w^{(k-1)}_{i,j} s^{(k-1)}_i \right)
+    s^{(k)}_j = a^{(k)}_j \left( \sum_{i=1}^{n^{(k-1)}} w^{(k-1)}_{i,j} s^{(k-1)}_i \right)
     \label{eq:neuron}
 \end{equation}
-donde el ínidice \(i\) de la sumatoria va a recorrer todas las neuronas de la capa
-anterior.
-
-%Gráficamente:
-% Poner gráfico basado en la figura figs/neurona_orig.png
-
-
-
-% Hablar en este punto que la función de activación se aplica en problemas de clasificación
-% es la sigmoide en la capa de salida?
 
 Volviendo a la Fórmula \ref{eq:neuron}, si en nuestro ejemplo tomamos la neurona
 \(f^{(2)}_1\), tenemos que su salida estará dada por:
@@ -270,12 +274,12 @@ forma vectorizada:
 donde: \vspace{-0.25cm}
 \begin{itemize}
     \item \(\bm{w}^{(k-1)}_j\) es el vector de todos los pesos que salen de las neuronas de la
-    capa \((k-1\)) y se dirigen a la unidad \(j\) de la capa \(k\) (incluyendo \(w_{0,j}\))
+    capa \((k-1\)) y se dirigen a la unidad \(j\) de la capa \(k\) (incluyendo \(w^{(k-1)}_{0,j}\))
     \item \(\bm{s}^{(k-1)}_j\) es el vector de todas las salidas de la capa anterior que se
 dirigen a la unidad \(j\) de la capa \(k\) (incluyendo el 1 fijo de la neurona dummy).
 \end{itemize}
 \footnotetext{En la bibliografía sobre redes neuronales, también se suele presentar a este
-peso como un elemento ``aparte'' de la neurona, no como un peso extra, y se lo denota como
+peso como un elemento ``aparte'' de la neurona, no como un peso extra, y se lo denota con
 \(b^{(k)}_j\).}
 
 \vspace{-0.2cm}
@@ -341,12 +345,11 @@ la Figura \ref{fig:neuron-weights}.
         };
     \end{tikzpicture}
     \caption{Entradas a la neurona \(f^{(2)}_1\), junto con sus pesos asociados. Se
-    incluyen tanto la neurona dummy de la capa anterior como su bias. En este caso, se
+    incluyen tanto la neurona dummy de la capa anterior como su bias. Cabe aclarar que se
     usan indistintamente las letras \(s\) y \(f\) para denotar a las neuronas. Adaptado de
     \cite{tikz-neural-networks}.}
     \label{fig:neuron-weights}
 \end{figure}
-
 
 Así como utilizamos vectores para describir el cómputo de una neurona, podemos emplear
 matrices para describir el comportamiento de toda una capa. Para ello, tomemos la siguiente
@@ -361,7 +364,7 @@ neuronas:
     a^{(k)}(x_2), ..., a^{(k)}(x_m))\), donde \(a^{(k)}\) es la función de activación
     de todas las neuronas de la capa \(k\) con aplicación a un número.
     \item \(\bm{W}^{(k)}\) es la matriz de pesos que salen de la capa \(k\). Cada fila
-    \(j\) de esta matriz corresponde a los pesos que sale de todas las neuronas de la capa
+    \(j\) de esta matriz corresponde a los pesos que salen de todas las neuronas de la capa
     \(k\) (incluyendo el bias) y se dirigen a la neurona \(j\) de la capa \((k+1)\). Es
     decir cada fila es \(\bm{w}^{(k)}_j\) con \(j = 1,...,n\), y \(n\) la cantidad de
     neuronas de la capa \((k+1)\) (sin contar la dummy, que ``aparece después''). Así,
@@ -451,13 +454,6 @@ Y si queremos profundizar aún más esta ecuación para ver dónde aparece cada 
 Las librerías que implementan estos modelos utilizan esta notación matricial ya que
 suelen estar optimizadas para cálculos con matrices.
 
-Algo a notar es que en las redes neuronales, aparecen nuevos hiperparámetros, que ya no
-tienen tanto que ver con el proceso de entrenamiento en sí, sino más bien con el diseño y
-la capacidad de la red, como son la cantidad de capas ocultas, la cantidad de neuronas en
-cada capa oculta, e incluso la función de activación de cada capa. Para todos estos,
-se puede encontrar el valor óptimo utilizando las técnicas mencionadas en la sección
-anterior.
-
 \subsubsection{Entrenamiento}
 En el caso de las redes neuronales, los parámetros a optimizar van a ser las intensidades
 de las conexiones entre las neuronas, que también venimos llamando pesos. Los
@@ -469,13 +465,12 @@ hasta el momento es que requiere calcular el gradiente de la función de pérdid
 considerando \textit{todas} las muestras del conjunto de entrenamiento. Para reducir esta
 carga, en la práctica se recurre a una aproximación: en lugar de usar todas las muestras,
 se selecciona aleatoriamente un subconjunto de ellas, llamado \textbf{lote}
-(\textit{batch}), y se calcula el gradiente usando únicamente ese lote. Luego, los pesos
-se actualizan con base en esta estimación parcial. Luego, se actualizan los pesos en base
-a este estimación. Cabe aclarar que el tamaño de lote, es decir la cantidad de ejemplos
-que se eligen cada vez, se mantiene fijo en todo el entrenamiento y constituye un
-hiperparámetro. Esta técnica suele llamarse optimización por \textbf{mini-lotes} o
-\textbf{estocástica}, ya que introduce cierto grado de aletoriedad en el cálculo
-del gradiente.
+(\textit{batch}), y se calcula el gradiente usando únicamente ese lote. Luego, se
+actualizan los pesos en base a este estimación. Cabe aclarar que el tamaño de lote, es
+decir la cantidad de ejemplos que se eligen cada vez, se mantiene fijo en todo el
+entrenamiento y constituye un hiperparámetro. Esta técnica suele llamarse optimización por
+\textbf{mini-lotes} o \textbf{estocástica}, ya que introduce cierto grado de aletoriedad
+en el cálculo del gradiente.
 
 Otra mejora aplicada sobre el método del DG estándar, diseñada para acelerar el
 aprendizaje, es la técnica conocida como \textbf{momentum}. A grandes rasgos, consiste en
@@ -486,10 +481,10 @@ apuntan en la misma dirección \cite{deep-learning}. Un optimizador ampliamente 
 actualmente, y que es el que empleamos en este trabajo, es \textbf{Adam} \cite{adampaper}.
 Este combina momentum con una tasa de aprendizaje adaptativa para cada parámetro.
 
-Para entender cómo progresa el entrenamiento, es útil definir el concepto de definir el
-concepto de \textbf{época}. Una época se refiere al proceso completo en el cual el modelo
-se entrena utilizando \textbf{todos} los datos disponibles en el conjunto de entrenamiento
-una vez. A grandes rasgos, los pasos involucrados en una época son los siguientes:
+Para entender cómo progresa el entrenamiento, es útil definir el concepto el concepto de
+\textbf{época}. Una época se refiere al proceso completo en el cual el modelo se entrena
+utilizando \textbf{todos} los datos disponibles en el conjunto de entrenamiento una vez. A
+grandes rasgos, los pasos involucrados en una época son los siguientes:
 \begin{enumerate}[itemsep=0.05cm,label=\textbf{\arabic*.}]
     \item Mezclar el conjunto de entrenamiento. Este paso en realidad es opcional
     pero evita que el modelo aprenda patrones no deseados debido al orden de los datos.
@@ -531,24 +526,22 @@ fuertemente en la idea que un pequeño cambio en uno de los pesos causa un efect
 sobre el cómputo restante de la red \cite{prince2024understanding}. Para verlo, supongamos
 que tenemos una red neuronal con tres capas ocultas, que denotaremos con \(\bm{h}^{(1)}\),
 \(\bm{h}^{(2)}\) y \(\bm{h}^{(3)}\) (la cantidad de neuronas en cada capa es irrelevante),
-y veamos cómo computaríamos el efecto de un cambio en un peso
+y veamos cómo computaríamos el efecto de un cambio en un peso de manera intuitiva
 \cite{prince2024understanding}:
 \begin{itemize}
     \item Para calcular cómo un cambio en un peso que se dirige a \(\bm{h}^{(3)}\)
-    modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en \(\bm{h}^{(3)}\)
-    modifica la salida \(\bm{f}\) del modelo y (ii) cómo un cambio en la salida
+    modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en
+    \(\bm{h}^{(3)}\) modifica la salida del modelo y (ii) cómo un cambio en la salida
     modifica la pérdida.
     \item Para calcular cómo un cambio en un peso que se dirige a \(\bm{h}^{(2)}\)
     modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en
     \(\bm{h}^{(2)}\) afecta a \(\bm{h}^{(3)}\), (ii) cómo un cambio en \(\bm{h}^{(3)}\)
-    modifica la salida \(\bm{f}\) del modelo y (iii) cómo un cambio en la salida
-    modifica la pérdida.
+    modifica la salida del modelo y (iii) cómo un cambio en la salida modifica la pérdida.
     \item Para calcular cómo un cambio en un peso que se dirige a \(\bm{h}^{(1)}\)
     modifica el valor de la pérdida, necesitamos saber (i) cómo un cambio en
-    \(\bm{h}^{(1)}\) afecta a \(\bm{h}^{(2)}\), (ii) cómo un cambio en
-    \(\bm{h}^{(2)}\) afecta a \(\bm{h}^{(3)}\), (iii) cómo un cambio en \(\bm{h}^{(3)}\)
-    modifica la salida \(\bm{f}\) del modelo y (iv) cómo un cambio en la salida
-    modifica la pérdida.
+    \(\bm{h}^{(1)}\) afecta a \(\bm{h}^{(2)}\), (ii) cómo un cambio en \(\bm{h}^{(2)}\)
+    afecta a \(\bm{h}^{(3)}\), (iii) cómo un cambio en \(\bm{h}^{(3)}\) modifica la salida
+    del modelo y (iv) cómo un cambio en la salida modifica la pérdida.
 \end{itemize}
 Mientras nos movemos hacia las primeras capas de la red, vemos que la mayoría de los
 términos que se necesitan ya han sido calculados en pasos anteriores, por lo que no es
@@ -556,7 +549,8 @@ necesario recomputarlos. Justamente calcular los efectos de los cambios - que so
 básicamente las derivadas parciales - de esta manera es conocido como el backward pass.
 
 El paso final del backpropagation es actualizar los pesos con los gradientes calculados
-en el backward pass y utilizando la regla del DG.
+en el backward pass utilizando la regla del DG (con las optimizaciones que se hayan
+incluido).
 
 \bigskip
 En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
@@ -564,7 +558,7 @@ de las que hacemos uso en este trabajo: las Redes Neuronales Convolucionales y l
 Neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
 específico de datos. Las convolucionales son ideales para procesar datos estructurados en
 forma de grilla, mientras que las recurrentes son adecuadas para secuencias temporales.
-Presentaremos la intuición sobre detrás de ellas y nos concentraremos en su aplicación
-sobre series de tiempo, relevante para nuestro trabajo.
+Presentaremos la intuición detrás de ellas y nos concentraremos en su aplicación sobre
+series de tiempo, relevante para nuestro trabajo.
 
 \end{document}
