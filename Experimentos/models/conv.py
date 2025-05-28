@@ -1,20 +1,20 @@
-# Arquitectura basada en "LSTM Fully Convolutional Networks for Time Series
-# Classification" (https://arxiv.org/abs/1709.05206)
 import torch
 import torch.nn as nn
+
+from constants import DROPOUTS
 
 from models.blocks.conv_block import ConvBlock
 from models.blocks.fc_block import FCBlock
 
 class Conv_FC(nn.Module):
-    def __init__(self, n_static_feats=1):
+    def __init__(self, dropout, n_static_feats, conv_out_dim):
         super(Conv_FC, self).__init__()
 
-        self.conv = ConvBlock()
+        self.conv = ConvBlock(dropout=dropout)
         self.fc = FCBlock(
-            input_size=128+n_static_feats,
+            input_size=conv_out_dim+n_static_feats,
             hidden_sizes=[128],
-            dropout=0
+            dropout=dropout
         )
 
 
@@ -25,6 +25,6 @@ class Conv_FC(nn.Module):
         return logits
 
 
-def define_conv_model(trial, n_static_feats):
-    ###### TO DO #######
-    return Conv_FC(n_static_feats)
+def define_conv_model(trial, n_static_feats, conv_out_dim):
+    dropout = trial.suggest_categorical("dropout", DROPOUTS)
+    return Conv_FC(dropout, n_static_feats, conv_out_dim)
