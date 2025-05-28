@@ -19,7 +19,7 @@ class LSTMConvClassifier(nn.Module):
             num_layers=lstm_num_layers,
             dropout=dropout
         )
-        self.conv = ConvBlock()
+        self.conv = ConvBlock(dropout=dropout)
         self.fc = FCBlock(
             input_size=128+lstm_hidden_size+n_static_feats,
             hidden_sizes=[128],

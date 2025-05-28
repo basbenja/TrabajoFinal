@@ -6,7 +6,7 @@ from models.conv import Conv_FC
 from models.gru import GRUCLassifier
 from models.bilstm import BiLSTMClassifier
 
-def instantiate_model(model_arch, input_size, hyperparams):
+def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
     match model_arch.lower():
         case 'dense':
             dropout = hyperparams['dropout']
@@ -49,8 +49,9 @@ def instantiate_model(model_arch, input_size, hyperparams):
                 dropout=dropout
             )
         case 'conv':
+            dropout = hyperparams['dropout']
             model = Conv_FC(
-                n_static_feats=1
+                dropout=dropout, n_static_feats=1, conv_out_dim=kwargs['conv_out_dim']
             )
         case 'lstm_conv':
             model = LSTMConvClassifier(
