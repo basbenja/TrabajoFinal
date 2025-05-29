@@ -199,16 +199,49 @@ una de estas activaciones pasa por una función de activación no lineal; y fina
 aplica pooling para reducir el tamaño de la salida \cite{deep-learning}. Y así, una RNC
 profunda se compone de varias de estas capas.
 
+Según \cite{deep-learning}, \cite{hands-on-ML-sklearn-tf} e incluso el artículo
+\cite{batch-norm} en donde fue presentada, una técnica particular que ha demostrado tener
+un efecto positivo al entrenar redes convolucionales es una conocida como
+\textbf{normalización de lote} (\textit{batch normalization}) \cite{batch-norm},
+introducida en 2015. Esta consiste en reescalar los valores generados en las capas
+intermedias de la red a partir de los ejemplos en el mini-batch
+\cite{ai-a-modern-approach}. Este reescalado suele agregarse antes de la aplicación de la
+función de activación y es importante notar que se hace a lo largo de las muestras del
+lote, y no a lo largo de las salidas de la capa sobre la que se aplica.
+
+Para ver concretamente cuáles son las operaciones llevadas a cabo durante el entrenamiento
+en cada capa de batch normalization, supongamos que tenemos un lote \(B\) de tamaño
+\(m_B\) y que \(x_i\) representa la salida de una neurona de la capa previa para una
+entrada \(i\) del lote:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item Se calcula la media empírica, a lo largo del lote:
+    \[ \mu_B = \frac{1}{m_B} \sum_{i=1}^{m_B} x_i \]
+    \item Se calcula la varianza empírica, a lo largo del lote:
+    \[ \sigma_B^2 = \frac{1}{m_B} \sum_{i=1}^{m_B} \left( x_i - \mu_B \right)^2 \]
+    \item Se estandariza cada una de las salidas, centrándolas en 0 con una desviación
+    estándar de \(\sigma_B\):
+    \[ \hat{x}_i = \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} \]
+    donde \(\epsilon\) es un número constante que se añade para evitar la división por 0.
+    \item Se aplica el escalado y el desplazamiento para finalmente obtener lo que es la
+    entrada a la función de activación:
+    \[ z_i = \gamma \hat{x}_i + \beta \] donde \(\gamma\) y \(\beta\) son nuevos
+    parámetros específicos a cada neurona que el modelo aprende durante su entrenamiento,
+    es decir también se aplica backpropagation sobre estos.
+\end{enumerate}
+
+Luego del entrenamiento, no hay un lote sobre el cual calcular la media y la varianza.
+Lo que se hace es utilizar las de todo el conjunto de entrenamiento, que se van
+calculando durante el aprendizaje \cite{hands-on-ML-sklearn-tf}.
+
 \bigskip
-Ahora bien, en este trabajo nosotros utilizaremos este tipo de redes para resolver la
-tarea de \textbf{clasificación de series de tiempo}. Esto es: dada una serie de tiempo
-como entrada de la red, que esta sea capaz de predecir a qué categoría corresponde. Para
-ello, lo que se suele hacer en estas redes es agregar, luego de la última capa
-convolucional, una capa de \textbf{aplanado} (\textit{flatten}), la cual no posee pesos
-aprendibles y simplemente convierte el tensor resultante de la capa anterior en uno
-unidimensional. Por ejemplo, si esta consiste de \(k\) feature maps de longitud \(n\) cada
-uno, entonces la capa de flatten dará como resultado un vector unidimensional de tamaño
-\(kn\).
+En este trabajo nosotros utilizaremos este tipo de redes para resolver la tarea de
+\textbf{clasificación de series de tiempo}. Esto es: dada una serie de tiempo como entrada
+de la red, que esta sea capaz de predecir a qué categoría corresponde. Para ello, lo que
+se suele hacer en estas redes es agregar, luego de la última capa convolucional, una capa
+de \textbf{aplanado} (\textit{flatten}), la cual no posee pesos aprendibles y simplemente
+convierte el tensor resultante de la capa anterior en uno unidimensional. Por ejemplo, si
+esta consiste de \(k\) feature maps de longitud \(n\) cada uno, entonces la capa de
+flatten dará como resultado un vector unidimensional de tamaño \(kn\).
 
 El paso anterior es necesario ya que las capas siguientes que se agregan para hacer la
 clasificación son totalmente conectadas que, como vimos anteriormente, aceptan únicamente
