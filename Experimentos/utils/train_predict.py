@@ -42,7 +42,7 @@ def validate_step(model, dataloader, loss_fn, metrics, **metrics_kwargs):
     """
     model.eval()
     model_device = next(model.parameters()).device
-    
+
     total_loss = 0
     total_samples = 0
 
@@ -61,7 +61,7 @@ def validate_step(model, dataloader, loss_fn, metrics, **metrics_kwargs):
             else:
                 loss = loss_fn(logits, y)
             total_loss += loss.item() * curr_batch_size
-            
+
             all_labels.extend(y.cpu().numpy())
             all_preds.extend(predict(logits, loss_fn).cpu().numpy())
 
@@ -75,11 +75,11 @@ def validate_step(model, dataloader, loss_fn, metrics, **metrics_kwargs):
     return avg_loss, metrics_values
 
 
-def predict(model_output, loss_fn):
+def predict(model_output, loss_fn, thresh=0.5):
     # The prediction depends on how was the model trained
     if isinstance(loss_fn, nn.CrossEntropyLoss):
         y_pred = torch.argmax(model_output, dim=1)
     elif isinstance(loss_fn, nn.BCEWithLogitsLoss):
         y_pred_probs = torch.sigmoid(model_output)
-        y_pred = (y_pred_probs >= 0.5).float()
+        y_pred = (y_pred_probs >= thresh).float()
     return y_pred
