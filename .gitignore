@@ -6,3 +6,4 @@ playground.ipynb
 *.gz
 *.bbl
 Escrito/secciones/**/*.pdf
+Experimentos/output_simulations/

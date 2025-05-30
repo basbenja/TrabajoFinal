@@ -58,11 +58,11 @@ def confusion_matrix_plot(y_true, y_pred):
     return fig, ax
 
 
-def roc_curve_plot(y, y_pred):
+def roc_curve_plot(y, y_pred_probs):
     fig, ax = plt.subplots(figsize=(8, 5))
 
-    fpr, tpr, thresholds = roc_curve(y, y_pred)
-    area = roc_auc_score(y, y_pred)
+    fpr, tpr, thresholds = roc_curve(y, y_pred_probs)
+    area = roc_auc_score(y, y_pred_probs)
 
     ax.plot(
         fpr, tpr, color='blue', label=f"Área bajo la curva = {area:.2f}"
@@ -79,7 +79,7 @@ def roc_curve_plot(y, y_pred):
     ax.grid()
     ax.legend(loc='lower right')
 
-    return area, fig, ax
+    return fpr, tpr, thresholds, area, fig, ax
 
 
 def epoch_vs_loss_plot(epoch_losses_train, epoch_losses_test):
