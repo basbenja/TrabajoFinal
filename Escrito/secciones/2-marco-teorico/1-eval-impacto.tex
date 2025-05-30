@@ -2,11 +2,6 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-\subsection{¿Qué es una Evaluación de Impacto?}
-\begin{comment}
-El uso de métodos cuantitativos para medir el impacto de programas sociales ha cobrado un gran interés en los últimos años \cite{bernal}. Las evaluaciones de impacto han comenzado a desempeñar un papel preponderante en el diseño de políticas públicas \cite{bernal}.
-\end{comment}
-
 Los programas y las políticas públicas de desarrollo suelen estar diseñados para cambiar
 resultados, como aumentar los ingresos, mejorar el aprendizaje o reducir las enfermedades
 \cite{gertler-2016}. Saber si estos cambios se logran o no es una pregunta crucial para
@@ -541,9 +536,10 @@ De esta forma, se asume que al condicionar los resultados potenciales de tratado
 tratados en determinadas características observables (pertinentes en el programa bajo
 estudio), el sesgo de autoselección es igual a cero. Formalmente, si denotamos con \(X\) a
 los rasgos observables que se están teniendo en cuenta, este supuesto se escribe de la
-siguiente forma:
+siguiente forma\footnotemark :
+\footnotetext{Nuevamente, omitimos el subíndice \(i\) por comodidad.}
 \begin{equation}
-    \mathbb{E}\left[Y_i(0)|D_i=1, X_i\right] = \mathbb{E}\left[Y_i(0)|D_i=0, X_i\right],
+    \mathbb{E}\left[Y(0)|D=1, X\right] = \mathbb{E}\left[Y(0)|D=0, X\right],
 \end{equation}
 y se lo conoce como \textbf{supuesto de Independencia Condicional} (IC).
 
@@ -564,8 +560,7 @@ Para solucionarlo, se utiliza un método denominado \textbf{Pareamiento por Punt
 Propensión} (\textit{Propensity Score Matching}, PSM), presentado por primera vez en 1983
 en \cite{psm1983}. Consiste en emparejar individuos pero no con base en \(X\), sino en su
 probabilidad estimada de participación en el programa, dadas sus características
-observables, es decir en\footnotemark :
-\footnotetext{Nuevamente, omitiremos el subíndice \(i\).}
+observables, es decir en:
 \[P(X) = P(D = 1|X)\] donde \(P\) denota el operador de probabilidad de un evento . Este
 valor es conocido como \textbf{probabilidad de participación} o \textbf{puntaje de
 propensión}.
@@ -589,16 +584,40 @@ La condición de soporte común (SC) establece que individuos con el mismo vecto
 variables \(X\) tienen probabilidad positiva de ser tanto participantes como no
 participantes del programa \cite{bernal}. Esto es, fijado un vector de variables
 \(\hat{X}\):
-\[0 < P(D=1|\hat{X}) < 1\]
-Si esta condición no se cumple, sería posible encontrar una combinación particular de
-características que predice perfectamente la participación en el programa, y por tanto,
-no existiría un individuo que fuera un buen control (o viceversa) \cite{bernal}.
+\[0 < P(D=1|\hat{X}) < 1\] Si esta condición no se cumple, sería posible encontrar una
+combinación particular de características que predice perfectamente la participación en el
+programa, y por tanto, no existiría un individuo que fuera un buen control (o viceversa)
+\cite{bernal}. Es decir, si por ejemplo para un vector de variables \(\hat{X}\), tenemos
+que \(P(D=1|\hat{X})=1\), (o \(\simeq 1\)), entonces no podremos encontrar ningún no
+tratado con esas características, y consecuentemente ningún control.
 
 El SC implica que solo se utilizarán en la estimación aquellos individuos tratados para
 los cuales se pueda encontrar uno no tratado con un puntaje de propensión similar. Por
 ejemplo, si existen individuos del grupo de tratamiento con una probabilidad de
 participación muy alta, pero ningún individuo no participante exhibe un puntaje tan alto,
 entonces estos individuos tratados se descartarán a la hora de hacer el emparejamiento.
+
+La Figura \ref{fig:common-support} muestra un gráfico de densidad de los puntajes de
+propensión del grupo de tratados y del grupo de no tratados (suponiendo que ya se han
+calculado en base a un determinado conjunto de características), en donde se puede ver que
+hay falta de rango común. Lo que se hace en estos casos es simplemente restringir el
+análisis a los individuos que se encuentran en el área de soporte común aunque esto, como
+mencionaremos más adelante, puede traer problemas.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.65\textwidth]{figs/soporte-comun.png}
+    \caption{Fuente: \cite{gertler-2016}. Gráfico de densidad de los puntajes de
+    propensión de los tratados y los no tratados. El área entre las líneas punteadas es la
+    región de soporte común, en donde se encuentran tanto inscritos como no inscritos con
+    puntajes de propensión similares. En el área a la izquierda de dicha región solamente
+    hay no inscritos con bajos puntajes de propensión. Es decir, lo que ocurre aquí es que
+    \(P(D=1|\hat{X}) \simeq 0\). Similarmente, en el área a la derecha de la región de
+    soporte común, solamente hay inscritos con altas probabilidades de participar. Es
+    decir, lo que ocurre aquí es que \(P(D=1|\hat{X}) \simeq 1\), y para estos no será
+    posible encontrar ningún individuo de control.}
+    \label{fig:common-support}
+\end{figure}
 
 Asumiendo que se cumplen las condiciones de IC y SC, el estimador del \(ATT\) por PSM
 estaría dado por:
@@ -634,8 +653,8 @@ siguientes puntos:
 \end{enumerate}
 A continuación, se explican brevemente algunos de estos pasos.
 
-En cuanto a la elección de variables (paso \textbf{2}) que se incluirán para calcular el puntaje de
-propensión, si bien es importante poder parear utilizando un gran número de
+En cuanto a la elección de variables (paso \textbf{2}) que se incluirán para calcular el
+puntaje de propensión, si bien es importante poder parear utilizando un gran número de
 características, lo es más aún hacerlo sobre la base de aquellas que \textbf{determinan la
 inscripción} \cite{gertler-2016}.  En términos estadísticos, estas características reciben
 el nombre de \textbf{covariables}, \textbf{variables independientes} o \textbf{variables
@@ -645,10 +664,10 @@ estudio.
 Cuanto más se comprenda acerca de los criterios utilizados para la selección de los
 participantes, en mejores condiciones se estará de construir un buen grupo de covariables
 \cite{gertler-2016}. Para tener una mejor comprensión, los investigadores se pueden guiar
-por los modelos económicos que describen el fenómeno bajo estudio, investigaciones
-previas y conocimiento del diseño institucional \cite{bernal}. Además, como dijimos
-anteriormente, estas características deben ser medidas en la línea de base, y no una vez
-aplicado el programa, ya que se pueden haber visto afectadas por el mismo.
+por los modelos económicos que describen el fenómeno bajo estudio, investigaciones previas
+y conocimiento del diseño institucional \cite{bernal}. Además, como dijimos anteriormente,
+estas características deben ser medidas en la línea de base, y no una vez aplicado el
+programa, ya que se pueden haber visto afectadas por el mismo.
 
 Con respecto al cálculo del puntaje de propensión (paso \textbf{3}), la idea es
 especificar un modelo \(P(D=1|X) = f(X)\), es decir, la probabiliad de participación como
@@ -657,6 +676,35 @@ individuos, \(X\) \cite{bernal}. Con frecuencia se prefieren los modelos de regr
 logística (\textit{logit}) o de probabilidad (\textit{probit}) \cite{bernal}. En este
 trabajo, utilizaremos la regresión logística, por lo que resulta conveniente saber de qué
 se trata.
+
+Una regresión es un método en el cual se propone una relación funcional entre una variable
+dependiente y una o varias variables independientes, y luego se estiman los coeficientes o
+parámetros correspondientes a dicha relación funcional \cite{giuliodori-2022}. En el caso
+del PSM, la variable dependiente es la probabilidad de participación y las independientes,
+aquellas que el investigador haya seleccionado en el paso \textbf{2}. Cuando lo que se
+intenta estimar es justamente una probabilidad, una opción es emplear el modelo de
+regresión logística, que establece como relación funcional la llamada función logística o
+sigmoide:
+\[
+    f(z) = \frac{e^z}{1 + e^z}
+\]
+El gráfico de esta función se puede ver en la Figura \ref{fig:logit}, donde se observa que
+siempre da como resultado un valor real en el rango [0,1].
+
+En la regresión logística, se toma \(z = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots +
+\beta_k x_k\), siendo \(x_j\) las variables independientes y \(\beta_j\) los coeficientes
+a estimar, correspondientes a la ponderación que tiene cada una de las variables. De esta
+forma, suponiendo que se tienen dos clases o categorías ``0'' o ``1'', que en el PSM
+serían respectivamente ``no participa'' y ``participa'', el valor dado por la función se
+interpreta como la probabilidad que los valores de las variables independientes se
+correspondan con la categoría 1, es decir: \(P(y=1|x_1, x_2, ..., x_k)\).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.65\textwidth]{figs/logit.png}
+    \caption{Gráfico de la función logística para valores de \(z\) en el rango [-5,5].}
+    \label{fig:logit}
+\end{figure}
 
 En lo que refiere al algoritmo de emparejamiento, estos suelen establecer tanto la manera
 en que se encuentra el individuo (o grupo de individuos) ``parecido'' para cada tratado
@@ -670,7 +718,8 @@ matching, una opción es emparejar cada individuo de tratamiento con aquel del g
 tratados que tenga la probabilidad de participación más cercana. Es decir, la unidad no
 tratada tal que la distancia entre su puntaje y el del individuo tratado sea mínima. En
 este caso, una vez que se haya emparejado a cada individuo tratado, el \(ATT\) se calcula
-como el promedio simple de las diferencias entre las variables de resultado en cada pareja.
+como el promedio simple de las diferencias entre las variables de resultado en cada
+pareja.
 
 Otra opción es dado un individuo tratado, tomar los \(k\) vecinos más cercanos del grupo
 de no tratados con respecto al puntaje de propensión estimado, y estos formarán el grupo

@@ -553,6 +553,52 @@ en el backward pass utilizando la regla del DG (con las optimizaciones que se ha
 incluido).
 
 \bigskip
+Para finalizar, hablaremos de un problema bastante conocido al entrenar redes neuronales,
+conocido como \textbf{sobreajuste} (en inglés \textit{overfitting}).
+
+A grandes rasgos, los factores que determinan qué tan bueno es un modelo son sus capacidades
+para \cite{deep-learning}:
+\begin{itemize}[itemsep=0.1cm]
+    \item Reducir el error en el conjunto de entrenamiento.
+    \item Reducir la brecha entre el error en el conjunto de entrenamiento y en el de
+    test.
+\end{itemize}
+
+Las redes neuronales son bastante capaces de lograr lo primero, principalmente gracias a
+su habilidad de modelar una gran variedad de funciones, pero muchas veces puede ocurrir
+que no logren alcanzar lo segundo, y esto es lo que se conoce como sobreajuste. Es decir,
+el overfitting ocurre cuando la brecha entre el error en el conjunto de entrenamiento y en
+el de test es significativa. Esto signficia que el modelo ha aprendido los patrones vistos
+durante su entrenamiento ``de memoria'' y no está siendo capaz de generalizar correctamente.
+
+Por suerte, para solucionar este problema, existen técnicas llamadas \textbf{de
+regularización}. Una regularización es cualquier modificación hecha sobre un algoritmo de
+aprendizaje que tiene como objetivo reducir el error de generalización (i.e. en el
+conjunto de test) pero no el de entrenamiento \cite{deep-learning}.
+
+Existen varias estrategia de regularización, pero una puntual que utilizaremos en este
+trabajo y que ha probado ser efectiva es llamada \textbf{\textit{dropout}}. El dropout se
+puede aplicar sobre la capa de entrada o las capas ocultas, pero no sobre la de salida.
+Una ventaja es que su implementación es relativamente sencilla: en cada paso de
+entrenamiento\footnotemark, cada neurona de la capa sobre la que se esté aplicando el
+dropout tiene una probabilidad \(p\) de ser temporalmente descartada, lo cual significa
+que su salida va a ser ignorada en este paso \cite{hands-on-ML-sklearn-tf}, normalmente
+multiplicándola por 0. Aquí se introduce un nuevo hiperparámetro, \(p\), llamado ``tasa de
+dropout''.
+\footnotetext{Cuando se utiliza DG Estocástico, un paso de entrenamiento equivale a procesar un lote.}
+
+Este método fuerza a las neuronas a aprender no solo a ser útiles por sí solas,
+pero sino también a ser compatibles con muchos conjuntos posibles de neuronas que pueden
+estar o no incluidas en la red \cite{ai-a-modern-approach}. En resumen, contribuye
+a que la red no dependa de unidades específicas y lo fuerza a aprender diversas
+explicaciones para cada entrada \cite{ai-a-modern-approach}.
+
+Luego del entrenamiento, no se aplica más el dropout y todas las neuronas de la red
+contribuyen a la inferencia. Sin embargo, como en este momento la red tiene más neuronas
+ocultas que cuando fue entrenada, lo que se hace para compensar este hecho es multiplicar
+cada peso por (\(1-p\)) \cite{prince2024understanding}.
+
+\bigskip
 En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
 de las que hacemos uso en este trabajo: las Redes Neuronales Convolucionales y las Redes
 Neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
