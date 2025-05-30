@@ -9,7 +9,7 @@ from models.blocks.fc_block import FCBlock
 
 class LSTMConvClassifier(nn.Module):
     def __init__(
-        self, lstm_input_size, lstm_hidden_size, lstm_num_layers, n_static_feats, dropout
+        self, lstm_input_size, lstm_hidden_size, lstm_num_layers, n_static_feats, dropout, conv_out_dim
     ):
         super(LSTMConvClassifier, self).__init__()
 
@@ -21,7 +21,7 @@ class LSTMConvClassifier(nn.Module):
         )
         self.conv = ConvBlock(dropout=dropout)
         self.fc = FCBlock(
-            input_size=128+lstm_hidden_size+n_static_feats,
+            input_size=conv_out_dim+lstm_hidden_size+n_static_feats,
             hidden_sizes=[128],
             dropout=dropout
         )
@@ -35,7 +35,7 @@ class LSTMConvClassifier(nn.Module):
         return logits
 
 
-def define_lstm_conv_model(trial, input_size):
+def define_lstm_conv_model(trial, input_size, conv_out_dim):
     hidden_size = trial.suggest_categorical("hidden_size", HIDDEN_SIZES)
     dropout = trial.suggest_categorical("dropout", DROPOUTS)
     return LSTMConvClassifier(
@@ -43,5 +43,6 @@ def define_lstm_conv_model(trial, input_size):
         lstm_hidden_size=hidden_size,
         lstm_num_layers=N_LAYERS,
         n_static_feats=1,
-        dropout=dropout
+        dropout=dropout,
+        conv_out_dim=conv_out_dim
     )

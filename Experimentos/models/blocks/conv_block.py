@@ -8,12 +8,12 @@ class ConvBlock(nn.Module):
         self.backbone = nn.Sequential(
             nn.Conv1d(in_channels=1, out_channels=128, kernel_size=3, padding=1),
             nn.BatchNorm1d(128),
-            nn.LeakyReLU(),
+            nn.ReLU(),
             nn.Dropout(p=dropout),
 
             nn.Conv1d(in_channels=128, out_channels=256, kernel_size=2, padding=0),
             nn.BatchNorm1d(256),
-            nn.LeakyReLU(),
+            nn.ReLU(),
             nn.Dropout(p=dropout),
             nn.AvgPool1d(kernel_size=2),
 

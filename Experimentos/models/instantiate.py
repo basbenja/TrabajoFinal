@@ -59,7 +59,8 @@ def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
                 lstm_hidden_size=hyperparams['hidden_size'],
                 lstm_num_layers=hyperparams['num_layers'],
                 n_static_feats=1,
-                dropout=hyperparams['dropout']
+                dropout=hyperparams['dropout'],
+                conv_out_dim=kwargs['conv_out_dim']
             )
         case 'bilstm':
             model = BiLSTMClassifier(
