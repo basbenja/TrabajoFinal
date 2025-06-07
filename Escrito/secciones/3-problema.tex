@@ -20,13 +20,12 @@ autoselección se soluciona naturalmente. Sin embargo, en las evaluaciones
 cuasi-experimentales, hechas sobre tratamientos en donde la asignación al tratamiento no
 fue aleatoria y se desconocen los motivos que han llevado a los individuos a inscribirse o
 recibir el tratamiento, construir un grupo de control adecuado constituye un gran desafío.
-Este es uno de los focos centrales de este trabajo.
+Este es uno de los temas centrales de este trabajo.
 
 Una técnica estadística para abordar este problema es el PSM, discutida anteriormente y
-que es la que tomamos como punto de partida en el presente trabajo. Este método empareja
-individuos tratados con no tratados basándose en su probabilidad estimada de
-participación, calculada a partir de un conjunto de variables que se consideran
-influyentes en el programa bajo cuestión.
+que es la que tomamos como punto de partida aquí. Este método empareja individuos tratados
+con no tratados basándose en su probabilidad estimada de participación, calculada a partir
+de un conjunto de variables que se consideran influyentes en el programa bajo cuestión.
 
 Estas variables son seleccionadas por los evaluadores y pueden representar tanto
 características observadas en un instante determinado como también compartamientos a lo
@@ -64,21 +63,24 @@ circunstancias, el PSM presenta ciertas limitaciones:
     esta relación temporal entre ellas, sino que las ve como si fueran independientes.
 \end{itemize}
 
-Con estos problemas en mente, en este trabajo exploramos una alternativa para la
-construcción de grupos de control bajo las hipótesis mencionadas previamente. Esta se basa
-en la utilización de diferentes tipos de redes neuronales, concretamente: redes
-convolucionales, redes LSTM, y la combinación de ellas. Como explicamos en el capítulo
-anterior, estas incorporan naturalmente la relación temporal de los datos, permitiendo
-capturar patrones a lo largo del tiempo. En nuestro escenario, en donde suponemos que la
-dinámica previa a la intervención es un factor clave para entender la participación en el
-programa, consideramos que estas redes pueden resultar especialmente útiles.
+Con estos problemas en mente, el foco de nuestro trabajo está en explorar una alternativa
+para la identificación de grupos de control bajo las hipótesis mencionadas previamente.
+Esta se basa en la utilización de diferentes tipos de redes neuronales, concretamente:
+redes convolucionales, redes LSTM, y la combinación de ellas. Como explicamos en el
+capítulo anterior, estas incorporan naturalmente la relación temporal de los datos,
+permitiendo capturar patrones a lo largo del tiempo. En nuestro escenario, en donde
+suponemos que la dinámica previa a la intervención es un factor clave para entender la
+participación en el programa, consideramos que estas redes pueden resultar especialmente
+útiles.
 
 Para evaluar la estrategia presentada, desarrollamos diferentes conjuntos de datos
-sintéticos de tipo panel, ya que en los casos reales algunos comportamientos no pueden
-verificarse directamente. Aquí, algunos de los parámetros a variar son la cantidad de
-períodos observados (previos al inicio del programa), la cantidad de períodos de
-dependencia temporal, y la dinámica temporal observada. Teniendo esto en cuenta, los
-objetivos de nuestro trabajo se pueden resumir en los siguientes puntos:
+sintéticos de tipo panel\footnotemark, ya que en los casos reales algunos comportamientos
+no pueden verificarse directamente. Aquí, algunos de los parámetros a variar son la
+cantidad de períodos observados (previos al inicio del programa), la cantidad de períodos
+de dependencia temporal, y la dinámica temporal observada. Teniendo esto en cuenta, los
+objetivos de nuestro trabajo se pueden resumir en los siguientes puntos: \footnotetext{Los
+datos de tipo panel son aquellos en los que a cada unidad considerada le corresponde una
+serie de tiempo.}
 \begin{itemize}
     \item Evaluar la capacidad de las redes neuronales de reconocer individuos de control
     ante diferentes dinámicas temporales de la variable observada.
