@@ -38,11 +38,11 @@ sobre la entrada, y en cada momento calcular el producto escalar. Para verlo má
 claramente en el caso unidimensional, tomemos un ejemplo.
 
 Dado como entrada a la convolución un vector \(\bm{x}\), si tomamos un filtro de
-tamaño 3, dado por \(\bm{w}=(w_1, w_2, w_3)^T\), entonces el resultado de la convolución
+tamaño 3, dado por\footnotemark\ \(\bm{w}=(w_1, w_2, w_3)^T\), entonces el resultado de la convolución
 es un vector \(\bm{z}\) en donde cada componente \(z_i\) es una suma pesada de las
 entradas ``cercanas'':
 \[z_i = w_1 x_{i-1} + w_2 x_{i} + w_3 x_{i+1}\]
-\footnotetext[3]{Por conveniencia, el primer elemento de los vectores será indexado en 1,
+\footnotetext{Por conveniencia, el primer elemento de los vectores será indexado en 1,
 y no en 0.}
 
 En la Figura \ref{fig:conv1d-example}, se puede ver cómo se computan \(z_2\) y \(z_3\). Un
@@ -79,11 +79,11 @@ Supongamos que tenemos el filtro \(\bm{w} = (1, 0, -1)\) (de tamaño \(l=3\)). E
 usando la Ecuación \ref{eq:convolution}, veamos qué calcula este filtro en cada
 posición \(i\) de la salida:
 \begin{align*}
-    z_i =& \sum_{j=1}^3 w_j x_{j+i-(3+1)/2} \\
-        =& \sum_{j=1}^3 w_j x_{j+i-2} \\
-        =& w_1 x_{1+i-2} + w_2 x_{2+i-2} + w_3 x_{3+i-2} \\
-        =& 1 \times x_{i-1} + 0 \times x_i + (-1) \times x_{i+1} \\
-        =& x_{i-1} - x_{i+1}
+    z_i &=\ \sum_{j=1}^3 w_j x_{j+i-(3+1)/2} \\
+        &=\ \sum_{j=1}^3 w_j x_{j+i-2} \\
+        &=\ w_1 x_{1+i-2} + w_2 x_{2+i-2} + w_3 x_{3+i-2} \\
+        &=\ 1 * x_{i-1} + 0 * x_i + (-1) * x_{i+1} \\
+        &=\ x_{i-1} - x_{i+1}
 \end{align*}
 O sea, lo que hace es dada una posición \(i\) en la entrada, calcular la diferencia entre
 el ``vecino'' izquierdo de \(i\) y el derecho. De esta forma, si para un \(i\) el valor
@@ -199,39 +199,15 @@ una de estas activaciones pasa por una función de activación no lineal; y fina
 aplica pooling para reducir el tamaño de la salida \cite{deep-learning}. Y así, una RNC
 profunda se compone de varias de estas capas.
 
-Según \cite{deep-learning}, \cite{hands-on-ML-sklearn-tf} e incluso el artículo
-\cite{batch-norm} en donde fue presentada, una técnica particular que ha demostrado tener
-un efecto positivo al entrenar redes convolucionales es una conocida como
-\textbf{normalización de lote} (\textit{batch normalization}) \cite{batch-norm},
-introducida en 2015. Esta consiste en reescalar los valores generados en las capas
-intermedias de la red a partir de los ejemplos en el mini-batch
-\cite{ai-a-modern-approach}. Este reescalado suele agregarse antes de la aplicación de la
-función de activación y es importante notar que se hace a lo largo de las muestras del
-lote, y no a lo largo de las salidas de la capa sobre la que se aplica.
-
-Para ver concretamente cuáles son las operaciones llevadas a cabo durante el entrenamiento
-en cada capa de batch normalization, supongamos que tenemos un lote \(B\) de tamaño
-\(m_B\) y que \(x_i\) representa la salida de una neurona de la capa previa para una
-entrada \(i\) del lote:
-\begin{enumerate}[label=\textbf{\arabic*.}]
-    \item Se calcula la media empírica, a lo largo del lote:
-    \[ \mu_B = \frac{1}{m_B} \sum_{i=1}^{m_B} x_i \]
-    \item Se calcula la varianza empírica, a lo largo del lote:
-    \[ \sigma_B^2 = \frac{1}{m_B} \sum_{i=1}^{m_B} \left( x_i - \mu_B \right)^2 \]
-    \item Se estandariza cada una de las salidas, centrándolas en 0 con una desviación
-    estándar de \(\sigma_B\):
-    \[ \hat{x}_i = \frac{x_i - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} \]
-    donde \(\epsilon\) es un número constante que se añade para evitar la división por 0.
-    \item Se aplica el escalado y el desplazamiento para finalmente obtener lo que es la
-    entrada a la función de activación:
-    \[ z_i = \gamma \hat{x}_i + \beta \] donde \(\gamma\) y \(\beta\) son nuevos
-    parámetros específicos a cada neurona que el modelo aprende durante su entrenamiento,
-    es decir también se aplica backpropagation sobre estos.
-\end{enumerate}
-
-Luego del entrenamiento, no hay un lote sobre el cual calcular la media y la varianza.
-Lo que se hace es utilizar las de todo el conjunto de entrenamiento, que se van
-calculando durante el aprendizaje \cite{hands-on-ML-sklearn-tf}.
+Según \cite{deep-learning}, \cite{hands-on-ML-sklearn-tf} y \cite{batch-norm}, una técnica
+particular que ha demostrado tener un efecto positivo al entrenar redes convolucionales es
+una conocida como \textbf{normalización de lote} (\textit{batch normalization})
+\cite{batch-norm}, introducida en 2015. Esta consiste en reescalar los valores generados
+en las capas intermedias de la red a partir de los ejemplos en el lote actual
+\cite{ai-a-modern-approach}. Esta operación suele agregarse antes de la aplicación de la
+función de activación y es importante notar que agrega nuevos parámetros a optimizar
+durante el entrenamiento de la red. Para ver los detalles concretos de esta técnica, se
+puede consultar el Capítulo ... de \cite{hands-on-ML-sklearn-tf}.
 
 \bigskip
 En este trabajo nosotros utilizaremos este tipo de redes para resolver la tarea de

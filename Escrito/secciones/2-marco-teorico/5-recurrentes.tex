@@ -116,7 +116,7 @@ que contiene información sobre toda la secuencia.
     \label{fig:simple-rnn}
 \end{figure}
 
-Cada neurona realiza lo mismo que en una red feeforward, en el sentido que computan una
+Cada neurona realiza lo mismo que en una red feedforward, en el sentido que computan una
 suma pesada de sus entradas y aplican una función de activación sobre esta. Sin embargo, a
 partir de la Figura \ref{fig:simple-rnn}, podemos notar algunas particularidades con
 respecto a las redes recurrentes:
@@ -150,7 +150,7 @@ tanto la entrada en el tiempo actual \(x_t\) y de su salida en el paso anterior
     \item \(f_{t'}\) es una función de \(x_{t'}\) y de \(f_{t'-1}\), pero
     \item \(f_{t'-1}\) es a su vez una función de \(x_{t'-1}\) y de \(f_{t'-2}\), pero
     \item \(f_{t'-2}\) es a su vez una función de \(x_{t'-2}\) y de \(f_{t'-3}\),
-    \item y así sucesivamente
+    \item y así sucesivamente.
 \end{itemize}
 Este comportamiento hace que \(f_{t'}\) sea una función de todas las entradas vistas desde
 \(t=0\), constituyendo de esta forma una especie de \textit{memoria}, que se suele llamar
@@ -499,7 +499,7 @@ De esta forma, la nueva memoria a largo plazo está dada por:
     C_t = C_{t-1} \odot f_t + \tilde{C}_t \odot i_t
 \]
 
-Por último, es necesario determinar cuál va a ser el nuevo estado interno de la celda.
+Por último, es necesario determinar cuál va a ser el nuevo estado oculto de la celda.
 Este se construye como una versión ``filtrada'' del nuevo estado de celda, haciendo
 uso del valor de la compuerta de salida:
 \[

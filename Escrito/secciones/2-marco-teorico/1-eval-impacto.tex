@@ -123,7 +123,7 @@ expresar como:
     \label{eq:observed-result}
 \end{equation}
 
-Si nos concentramos en las unidades efectivamente resultaron tratadas, en la Ecuación
+Si nos concentramos en las unidades que efectivamente resultaron tratadas, en la Ecuación
 \ref{eq:ite}, el término \(Y_i(0) = (Y_i|D_i=0)\) es la situación contrafactual ya que
 representa \textit{cuál habría sido el resultado si la unidad no hubiera participado en el
 programa}. Al ser imposible observar directamente el contrafactual, es necesario
@@ -168,7 +168,7 @@ tratados:
 Es decir, el \(ATT\) es la diferencia entre la media de la variable de resultado en el
 grupo de los participantes y la media que hubieran obtenido los participantes si el
 programa no hubiera existido \cite{bernal}. Ahora bien, ¿cómo podemos intentar estimar
-esta última situación?
+esta última situación? A continuación, presentamos una estrategia utilizada para esto.
 
 \subsection{El Grupo de Control como Estimador del Contrafactual}
 En la ecuación \ref{eq:ATT}, el término \(\mathbb{E} \left[Y_i(1)|D_i=1\right]\) es un
@@ -206,8 +206,9 @@ Para que un grupo de comparación sea válido, debe satisfacer lo siguiente \cit
     \item El grupo de comparación debería reaccionar de la misma manera que el grupo de
     tratamiento si fuera objeto del programa.
 \end{itemize}
-En general, no resulta sencillo verificar estos puntos, por lo que las técnicas de
-evaluación que veremos a continuación suelen establecer algunos supuestos.
+Sin embargo, cabe aclarar que en general, no resulta sencillo verificar estos puntos, por
+lo que las técnicas de evaluación que veremos a continuación suelen establecer algunos
+supuestos sobre ellos.
 
 Cuando el grupo de comparación no produce una estimación precisa del contrafactual, no se
 puede establecer el verdadero impacto del programa. A continuación, se presentan dos
@@ -235,7 +236,7 @@ Por lo tanto, podríamos tomar a todo el conjunto de los no participantes como g
 control y solucionar el problema del contrafactual utilizando \(\mathbb{E}
 \left[Y_i(0)|D_i=0\right]\) como estimador, es decir podríamos asumir lo siguiente:
 \begin{equation}
-    \mathbb{E} \left[Y_i(0)|D_i=1\right]\ = \mathbb{E} \left[Y_i(0)|D_i=0\right]\
+    \mathbb{E} \left[Y_i(0)|D_i=1\right] = \mathbb{E} \left[Y_i(0)|D_i=0\right]\
     \label{eq:supuesto-1}  % IC: Independencia Condicional
 \end{equation}
 Esto quiere decir que el valor esperado de la variable de resultado en ausencia del
@@ -301,7 +302,7 @@ aún en ausencia del tratamiento (esto es \(\mathbb{E} \left[Y_i(0)|D_i=1\right]
 (el lado derecho de la igualdad) será igual al \(ATT\) más la diferencia preexistente
 entre los grupos (el lado izquierdo de la igualdad) \cite{bernal}. Es decir, esta
 comparación de medias será una combinación del efecto directo del tratamiento, capturado
-en el \(ATT\), y las diferencias preexistentes y, sin información adicional, no es posible
+en el \(ATT\), y las diferencias preexistentes. Y, sin información adicional, no es posible
 distinguir qué parte se debe a qué \cite{bernal}.
 
 Dicho esto, el gran desafío de la evaluación de impacto es determinar las condiciones o
@@ -314,7 +315,7 @@ dificultades \cite{gertler-2016}.
 
 \bigskip
 Es importante en este punto identificar claramente las comparaciones que hemos
-mencionado hasta el momento, los cuales se encuentran en la Tabla \ref{tab:distinciones}.
+mencionado hasta el momento, las cuales se encuentran en la Tabla \ref{tab:distinciones}.
 \begin{table}[h!]
     \centering
     \begin{tabular}{p{7cm}m{7cm}}  % Set fixed column widths
@@ -476,18 +477,26 @@ técnica de DD estudia las \textit{tendencias} entre los grupos de tratamiento y
 Como explicamos con anterioridad, el principal problema de las comparaciones antes-después
 en el grupo de tratamiento es que se asume que lo único que hizo cambiar la variable de
 resultado fue el programa, cuando en realidad puede haber sido por factores externos. El
-DD busca solucionar este problema basándose en la idea que la diferencia en los resultados
-antes-después para el grupo de tratamiento controla por factores que son constantes a lo
-largo del tiempo en ese grupo, y la manera de capturar los factores variables en el tiempo
-es medir el cambio antes-después en los resultados de un grupo que no se inscribió en el
-programa pero que estuvo expuesto al mismo conjunto de condiciones ambientales. De esta
-forma, si se ``limpia'' la primera diferencia de otros factores variables en el tiempo que
-influyen en el resultado de interés sustrayendo la segunda diferencia, se habrá eliminado
-una fuente de sesgo \cite{gertler-2016}.
+DD busca solucionar este problema partiendo de la idea que la diferencia en los resultados
+antes-después para el grupo de tratamiento captura factores que son constantes a lo largo
+del tiempo en ese grupo. Para ``limpiar'' este cambio de otros factores que sí varían en
+el tiempo, se lo compara con el cambio antes-después observado en un grupo que no
+participó del programa pero que estuvo expuesto al mismo conjunto de condiciones
+ambientales.
+
+Ahora bien, el supuesto que permite utilizar la diferencia en el grupo de no inscritos
+para controlar los factores externos que afectan a los inscritos es que, en ausencia del
+programa, dichos factores habrían impactado a los tratados de la misma manera que a los no
+tratados. En otras palabras, se asume que, sin la intervención, los resultados en el grupo
+tratado habrían evolucionado en paralelo con los del grupo de control, aumentando o
+disminuyendo en la misma proporción. Esto se conoce como \textbf{supuesto de tendencias
+paralelas}, y es sobre el que hay que basarse al trabajar con este método ya que
+claramente no es posible observar qué habría ocurrido con el grupo tratado en ausencia del
+programa.
 
 Por otro lado, en las comparaciones de inscritos y no inscritos, el gran inconveniente era
 el sesgo de autoselección. Para entender mejor la solución que el DD propone a esto,
-resulta conveniente reescribir el estimador como:
+resulta conveniente reescribir el estimador de la Ecuación \ref{eq:dif-en-dif-1} como:
 \begin{equation}
     ATT_{DD} =
         \left(
@@ -506,16 +515,6 @@ visto en la variable entre tratados y no tratados luego de la implementación de
 \(\mathbb{E}\left[Y^{(1)}|D=1\right] - \mathbb{E}\left[Y^{(1)}|D=0\right]\) como un
 estimador de las diferencias preexistentes entre el grupo de tratamiento y el grupo de
 control.
-
-Ahora bien, volviendo a la Ecuación \ref{eq:dif-en-dif-1}, el supuesto que permite
-utilizar la diferencia en el grupo de no inscritos para controlar los factores externos
-que afectan a los inscritos es que, en ausencia del programa, dichos factores habrían
-impactado a los tratados de la misma manera que a los no tratados. En otras palabras, se
-asume que, sin la intervención, los resultados en el grupo tratado habrían evolucionado en
-paralelo con los del grupo de control, aumentando o disminuyendo en la misma proporción.
-Esto se conoce como \textbf{supuesto de tendencias paralelas}, y es sobre el que hay que
-basarse al trabajar con este método ya que claramente no es posible observar qué habría
-ocurrido con el grupo tratado en ausencia del programa.
 
 \subsubsection{Propensity Score Matching}
 Otro enfoque para lograr una buena aproximación del contrafactual consiste en construir un
@@ -647,9 +646,9 @@ siguientes puntos:
     \item Seleccionar un algoritmo de emparejamiento para emparejar a cada individuo
     tratado con un individuo o grupo de individuos no tratados que tenga una probabilidad
     de participación similar.
-    \item Se calcula el impacto del programa como el promedio apropiadamente
-    ponderado de la diferencia entre la variable de resultado de los tratados y
-    sus parejas no tratadas (Ecuación \ref{ATT-PSM}).
+    \item Calcular el impacto del programa como el promedio apropiadamente ponderado de la
+    diferencia entre la variable de resultado de los tratados y sus parejas no tratadas
+    (Ecuación \ref{ATT-PSM}).
 \end{enumerate}
 A continuación, se explican brevemente algunos de estos pasos.
 
@@ -709,7 +708,7 @@ correspondan con la categoría 1, es decir: \(P(y=1|x_1, x_2, ..., x_k)\).
 En lo que refiere al algoritmo de emparejamiento, estos suelen establecer tanto la manera
 en que se encuentra el individuo (o grupo de individuos) ``parecido'' para cada tratado
 como así también la manera en que se pondera la diferencia a la hora de hacer la
-comparación. También se los llama estimadores ya que en fin, determinar una forma de
+comparación. También se los llama estimadores ya que en fin, determinan una forma de
 estimar el \(ATT\).
 
 Uno de los más usados y más simples de entender es el de vecino más cercano (o \textit{NN
@@ -719,32 +718,37 @@ tratados que tenga la probabilidad de participación más cercana. Es decir, la 
 tratada tal que la distancia entre su puntaje y el del individuo tratado sea mínima. En
 este caso, una vez que se haya emparejado a cada individuo tratado, el \(ATT\) se calcula
 como el promedio simple de las diferencias entre las variables de resultado en cada
-pareja.
+pareja. Esta es la técnica que utilizamos en este trabajo \footnotemark.
+\footnotetext{Una cuestión a tener en cuenta al utilizar este algoritmo es que la
+diferencia de puntajes entre un tratado y su vecino más cercano no sea lo suficientemente
+pequeña como para asegurar que ambos son muy parecidos, y aún así la diferencia entre sus
+variables de resultado contribuirá al cálculo del \(ATT\).}
 
-Otra opción es dado un individuo tratado, tomar los \(k\) vecinos más cercanos del grupo
-de no tratados con respecto al puntaje de propensión estimado, y estos formarán el grupo
-de comparación para el tratado. Aquí, para calcular el impacto del programa, se puede dar
-igual peso a cada uno de los \(k\) vecinos, en cuyo caso el impacto para una unidad
-tratada estará dada por la diferencia entre la variable observada de ella y el promedio
-simple de las variables de resultado de los vecinos cercanos \cite{bernal}. Otra
-alternativa es hacer un promedio ponderado de las observaciones de los vecinos, según qué
-tan comparable es cada vecino: así, el valor de la variable de resultado de un vecino más
-cercano tiene más peso que el de uno no tan cercano.
+Existen otras opciones como tomar los \(k\) vecinos más cercanos (con \(k > 1\)), el
+emparejamiento por \textit{kernel}, y por regresión lineal local. La principal diferencia
+con el del párrafo anterior es que cada tratado ya no tiene solamente un individuo de
+comparación, sino un grupo de individuos. Para más detalles sobre cada uno de estos, se
+puede consultar el Capítulo 6 de \cite{bernal}.
 
-Existen algunas cuestiones a tener en cuenta al utilizar este algoritmo, como puede ser
-el hecho que la diferencia de puntajes entre un tratado y su vecino más cercano no
-sea lo suficientemente pequeña como para asegurar que ambos son muy parecidos, y aún
-así la diferencia entre sus variables de resultado contribuirá al cálculo del \(ATT\).
+% Otra opción es dado un individuo tratado, tomar los \(k\) vecinos más cercanos del grupo
+% de no tratados con respecto al puntaje de propensión estimado, y estos formarán el grupo
+% de comparación para el tratado. Aquí, para calcular el impacto del programa, se puede dar
+% igual peso a cada uno de los \(k\) vecinos, en cuyo caso el impacto para una unidad
+% tratada estará dada por la diferencia entre la variable observada de ella y el promedio
+% simple de las variables de resultado de los vecinos cercanos \cite{bernal}. Otra
+% alternativa es hacer un promedio ponderado de las observaciones de los vecinos, según qué
+% tan comparable es cada vecino: así, el valor de la variable de resultado de un vecino más
+% cercano tiene más peso que el de uno no tan cercano.
 
-Otros algoritmos utilizados para el emparejamiento son los de \textit{kernel} y regresión
-lineal local. Estos son estimadores no paramétricos que emparejan a cada individuo del
-grupo de tratamiento con un promedio ponderado de (potencialmente) todos los individuos
-del grupo de control \cite{bernal}. En principio, con estos, se puede comparar a cada
-individuo de tratamiento con todos los no tratados, y darles menos peso en la comparación
-a aquellos con probabilidades de participación más lejanas \cite{bernal}. Una ventaja de
-ellos es que tienen menor varianza a la hora de calcular las diferencias individuales (que
-vecino más cercano por ejemplo) porque usan más información \cite{bernal}. Para
-más detalles sobre cada uno de estos, se puede consultar el Capítulo 6 de \cite{bernal}.
+% Otros algoritmos utilizados para el emparejamiento son los de \textit{kernel} y regresión
+% lineal local. Estos son estimadores no paramétricos que emparejan a cada individuo del
+% grupo de tratamiento con un promedio ponderado de (potencialmente) todos los individuos
+% del grupo de control \cite{bernal}. En principio, con estos, se puede comparar a cada
+% individuo de tratamiento con todos los no tratados, y darles menos peso en la comparación
+% a aquellos con probabilidades de participación más lejanas \cite{bernal}. Una ventaja de
+% ellos es que tienen menor varianza a la hora de calcular las diferencias individuales (que
+% vecino más cercano por ejemplo) porque usan más información \cite{bernal}. Para
+% más detalles sobre cada uno de estos, se puede consultar el Capítulo 6 de \cite{bernal}.
 
 Una evaluación en la que se utilizó la técnica de PSM, particularmente con el algoritmo
 del vecino más cercano, fue la llevada a cabo a partir del año 2021 por la Unidad de
@@ -776,7 +780,7 @@ podría ser evidencia de que es probable que también existan diferencias entre 
 grupos en características no observadas \cite{bernal}.
 
 Por otro lado, si bien el cálculo del \(ATT\) se puede restringir a aquellos individuos
-que se encuentra en la región de soporte común entre tratados y no tratados, esta
+que se encuentran en la región de soporte común entre tratados y no tratados, esta
 restricción puede volverse preocupante cuando hay una fracción importante de individuos
 tratados que quedan sin emparejar. Esto implica que existirá un conjunto de individuos
 para el cual no se puede decir nada acerca del efecto del programa \cite{bernal}.
@@ -784,7 +788,7 @@ para el cual no se puede decir nada acerca del efecto del programa \cite{bernal}
 \bigskip
 En este trabajo, utilizaremos el PSM con el algoritmo de 1 vecino más cercano como
 referencia para compararlo con nuestro enfoque, lo cual se explicará con más detalle en la
-sección \ref{sec:problema}.
+Sección \ref{sec:problema}.
 
 A continuación, introducimos el área de Inteligencia Artificial, dentro de la cual se
 enmarcan los algoritmos propuestos en este trabajo.

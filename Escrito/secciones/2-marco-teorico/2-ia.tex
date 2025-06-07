@@ -60,7 +60,7 @@ patio o no, el tamaño de la cocina, etcétera. Dentro de las tareas que pueden 
 resueltas por un sistema de ML se encuentran la clasificación, la regresión, la
 traducción, la detección de objetos en imágenes, la generación de nuevos datos, la
 detección de valores atípicos, entre muchas otras. Siguiendo con el ejemplo, podríamos
-querer que, en base a las features de las casa, el sistema nos provea un estimado
+querer que, en base a las features de las casas, el sistema nos provea un estimado
 de su valor (regresión) o nos diga si corresponde a una vivienda adecuada para una
 familia o no (clasificación).
 
@@ -96,10 +96,9 @@ que dependen de la tarea que se esté realizando y del objetivo que se intente l
 ejemplo, en clasificación, una de las más comunes es la de exactitud (\textit{accuracy}),
 que es la proporción de ejemplos para los cuales se predijo la salida correcta (dada por
 el dataset); aunque también existen otras como la precisión, sensibilidad, especificidad,
-y el puntaje F1, que pueden resultar más adecuadas según el dominio del
-problema\footnotetext{Hablaremos de estas más adelante, dando sus fórmulas y lo que
-representan.}. Por otro lado, en tareas de regresión, algunas métricas que se suelen
-utilizar son el Error Cuadrático Medio y el Error Absoluto Medio.
+y el puntaje F1, que pueden resultar más adecuadas según el dominio del problema. Por otro
+lado, en tareas de regresión, algunas métricas que se suelen utilizar son el Error
+Cuadrático Medio y el Error Absoluto Medio.
 
 El objetivo fundamental del ML es que un algoritmo actúe correctamente ante nuevas
 entradas desconocidas, es decir que \textbf{generalice} más allá de los ejemplos del
@@ -148,11 +147,12 @@ Formalmente, una tarea de Aprendizaje Supervisado es la siguiente:
         \(\bm{Y}=(\bm{y}_1, \bm{y}_2, ..., \bm{y}_N)\)
     \end{quote}
 \end{quote}
-De esta forma, el modelo es la función \(h\), que toma un vector de entrada \(\bm{x}\)
-y devuelve una salida \(\bm{y}\), y se presenta como una \textbf{hipótesis} de \(f\).
-La suposición sobre la que se trabaja es que si el modelo funciona bien para los pares de
-entrenamiento, entonces se espera que va a realizar buenas predicciones para nuevas
-entradas cuya etiqueta se desconoce.
+De esta forma, el modelo es la función \(h\), que toma un vector de entrada \(\bm{x}\) y
+devuelve una salida \(\bm{y}\), y se presenta como una \textbf{hipótesis} de \(f\). La
+suposición sobre la que se trabaja es que si el modelo funciona bien para los pares de
+entrenamiento (es decir \(h(\bm{x}_i) \simeq \bm{y}_i\) para \(i=1,...N\)), entonces se
+espera que va a realizar buenas predicciones para nuevas entradas cuya etiqueta se
+desconoce.
 
 Ahora bien, esta función \(h\) se obtiene a partir de un \textbf{espacio de funciones},
 que es elegido por quien diseña el modelo. Este espacio podría ser el conjunto de
@@ -231,10 +231,10 @@ omitirlos.}A continuación, se mencionan dos ejemplos de funciones de error:
     \[
     ECB(\bm{w}) = -\frac{1}{N} \sum_{i=1}^{N}
         \left[
-            \bm{y}_i\ ln(h(\bm{x}_i, \bm{w})) + (1 - \bm{y}_i)\ ln(1 - h(\bm{x}_i, \bm{w}))
+            \bm{y}_i\ \ln(h(\bm{x}_i, \bm{w})) + (1 - \bm{y}_i)\ \ln(1 - h(\bm{x}_i, \bm{w}))
         \right]
     \]
-    donde \(ln\) es la función de logaritmo natural. A grandes rasgos, lo que mide esta
+    donde \(\ln\) es la función de logaritmo natural. A grandes rasgos, lo que mide esta
     función es la diferencia entre dos distribuciones de probabilidad, que en este caso
     son la distribución real de los datos dada por el conjunto de entrenamiento y la
     distribución predicha por el modelo en su estado actual.
@@ -244,11 +244,11 @@ omitirlos.}A continuación, se mencionan dos ejemplos de funciones de error:
     y que la salida del modelo es \(h(\bm{x}', \bm{w}') = 0{.}95\). En primera instancia,
     vamos a tener que el lado derecho del término de la sumatoria directamente se anula
     (ya que \(1-\bm{y}' = 1-1 = 0\)). Y, para ver qué pasa con el lado izquierdo, notemos
-    que \(ln(h(\bm{x}', \bm{w}')) = ln(0{.}95) \approx -0{.}05\), por lo que multiplicando
+    que \(\ln(h(\bm{x}', \bm{w}')) = \ln(0{.}95) \approx -0{.}05\), por lo que multiplicando
     por el (\(-1\)) del comienzo de la fórmula, vamos a tener como resultado \(0{.}05\),
     lo cual es bajo e indica una buena predicción del modelo. Si en cambio la predicción
-    hubiera sido \(h(\bm{x}', \bm{w}') = 0{.}25\), tendríamos \(ln(h(\bm{x}', \bm{w}')) =
-    ln(0{.}25) \approx -1{.}39\), dando una pérdida de \(1{.}39\).
+    hubiera sido \(h(\bm{x}', \bm{w}') = 0{.}25\), tendríamos \(\ln(h(\bm{x}', \bm{w}')) =
+    \ln(0{.}25) \approx -1{.}39\), dando una pérdida de \(1{.}39\).
 
     Lo que se puede ver es que el lado izquierdo influye cuando la salida esperada para la
     entrada actual es 1, y el lado derecho lo hará cuando la salida esperada es 0.
