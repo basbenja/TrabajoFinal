@@ -1,107 +1,176 @@
 \documentclass[../../main.tex]{subfiles}
 
 \begin{document}
-Nuestro entorno de simulación está diseñado para generar datos sintéticos que imiten
-escenarios reales en donde la asignación de individuos al tratamiento es:
+Como mencionamos en la Sección \ref{sec:problema}, los experimentos fueron realizados con
+datos generados sintéticamente, diseñados para imitar situaciones reales. Para comprender
+cómo se construyeron estos datos, recordemos que nuestro objetivo es identificar
+unidades pertenecientes al grupo de control en escenarios donde la asignación de
+individuos al tratamiento tiene las siguientes características:
 \begin{itemize}[itemsep=0.05cm]
-    \item No aleatoria.
-    \item Secuencial, es decir que hay cohortes.
-    \item Potencialmente dependendiente de resultados pasados.
+    \item Es no aleatoria.
+    \item Es secuencial, es decir que hay cohortes.
+    \item Es potencialmente dependendiente de resultados pasados.
 \end{itemize}
 
-Concretamente, el proceso de generación de datos involucra la creación de una serie de
-tiempo univariada para cada individuo o unidad, que incorpora efectos fijos y componentes
-autoregresivos, resultando así en un conjunto de datos de panel. Distinguimos entre tres
-tipos de individuos:
+Dicho esto, la síntesis de los datos involucra la creación de una serie de tiempo
+univariada para cada individuo o unidad, que incorpora efectos fijos\footnotemark, efectos
+temporales\footnotemark\ y componentes autorregresivos\footnotemark, resultando así en un
+conjunto de datos de panel. Distinguimos entre tres tipos de individuos:
+\footnotetext{Un \textbf{proceso autorregresivo de orden uno}, abreviado como
+\textbf{AR(1)} es un modelo de series de tiempo en donde el valor actual de la serie
+depende linealmente de su valor más reciente más una perturbación impredecible
+\cite{intro-econometria-wooldridge}. La fórmula de un AR(1) es la siguiente:
+\[
+    y_t = \rho * y_{t-1} + e_t
+\]
+donde a \(\rho\) se lo denomina coeficiente autorregresivo y \(e_t\) para \(t=0,1,...,T\)
+es una secuencia de valores independiente e idénticamente distribuidos con media cero y
+varianza \(\sigma_e^2\). Para más información, se puede consultar el Capítulo 11.1 de
+\cite{intro-econometria-wooldridge}.}
+\footnotetext{FALTA EFECTOS TEMPORALES}
+\footnotetext{En el modelado de series de tiempo, una forma de capturar los efectos no
+observables que influyen en la variable dependiente y son constantes en el tiempo consiste
+en incorporar un factor denominado \textbf{efecto fijo}, el cual permanece invariante a lo
+largo de toda la serie de tiempo. Parauna explicación más detallada, se puede consultar el
+Capítulo 13.3 de \cite{intro-econometria-wooldridge}.}
 \begin{itemize}[itemsep=0.1cm]
     \item \textbf{Individuos tratados}: son aquellos que han recibido el tratamiento en
     algún período, es decir que forman parte de alguna de las cohortes.
     \item \textbf{Individuos de control}: son aquellos que en los datos sintéticos,
     sabemos que forman parte del grupo de control para una determinada cohorte de
-    tratados.
+    tratados. Los llamaremos ``controles''.
     \item \textbf{Individuos ``NiNi''} (``Ni tratados Ni controles''): son aquellas
     unidades que no han sido tratadas y que en los datos sintéticos, sabemos que no forman
     parte del grupo de control para ninguna de las cohortes.
 \end{itemize}
 
 Para los tratados y los controles, agregamos una característica extra además de la serie
-de tiempo, a la que llamamos ``\textit{inicio de programa}''. Para los tratados, este
+de tiempo, a la que llamamos ``\textit{inicio de programa}''. Para los primeros, este
 representa el momento en que un individuo recibió el tratamiento; y para cada unidad de
 control, representa el momento en que se aplicó el programa a los individuos tratados para
 los cuales efectivamente sirve como control.
 
-Además, al tratarse de Aprendizaje Supervisado, también incluimos la etiqueta que le
-corresponde a cada individuo: 1 para tratados y controles, y 0 para los NiNi. La razón por
-la cual tratados y controles comparten la misma etiqueta es que el modelo aprenda durante
-su entrenamiento los patrones que tienen los tratados para luego poder clasificar como
-``1'' a aquellos que se asemejen a los tratados, que serán justamente los que identifique
-como posibles controles.
+Además, al estar en el marco del Aprendizaje Supervisado, también incluimos la etiqueta
+que le corresponde a cada individuo: 1 para tratados y controles, y 0 para los NiNi. La
+razón por la cual tratados y controles comparten la misma etiqueta es que buscamos que el
+modelo aprenda durante su entrenamiento los patrones que tienen los tratados para luego
+poder clasificar como ``1'' a aquellos que se les asemejen. Estos serán justamente los que
+identifique como potenciales individuos de control.
 
-Con estas categorías en mente, es muy importante destacar una diferencia fundamental
-respecto a lo que ocurre en situaciones reales. En un entorno real, a la hora de llevar a
-cabo la evaluación de impacto, solo se puede identificar quiénes han sido tratados y
-quiénes no. Dentro del conjunto de no tratados, puede haber tanto individuos de control
-potenciales como individuos NiNi, pero no se cuenta con información para distinguirlos
-directamente.
-
-La motivación detrás de esta construcción artificial es que tanto tratados como controles
-compartan una determinada dinámica en su comportamiento temporal, mientras que los NiNis
-no. Nuevamente, cabe aclarar que estas son hipótesis que en la práctica pueden resultar
-difíciles de verificar. Sin embargo, nuestro interés radica en evaluar si, al modelar
-estos supuestos, los algoritmos son capaces de capturar tales patrones.
+La motivación detrás de esta construcción artificial es forzar que tanto tratados como
+controles compartan una determinada dinámica en su comportamiento temporal, mientras que
+los NiNis no. Nuevamente, cabe aclarar que estas son hipótesis que en la práctica pueden
+resultar difíciles de verificar. Sin embargo, nuestro interés radica en evaluar si, al
+modelar estos supuestos, los algoritmos son capaces de capturar tales patrones.
 
 Como mencionamos anteriormente, para cada individuo \(i\) generamos una serie de tiempo
-univariada \(y_i\) de una longitud \(L\) que incorpora efectos fijos y componentes
-autoregresivos. La fórmula que utilizamos para simular cada valor \(y_{i,t}\) de las
-series, con \(t = 0, 1, ..., L\) indicando el período generado, fue la siguiente:
+univariada \(y_i\) de una longitud \(L\). La fórmula que utilizamos para simular cada
+valor \(y_{i,t}\) de las series, con \(t = 0, 1, ..., L\) indicando el período generado,
+fue la siguiente:
 \begin{align}
-    \mu &= \mu_{EF} + EF_i + \mu_{ET} \\
     y_{i,0} &= \mu + u_0  \ \sigma \\
-    y_{i,t} &= \phi \ y_{i,t-1} + (1 - \phi) \ \mu +  u_t \ \sigma
+    y_{i,t} &= \phi \ y_{i,t-1} + (1 - \phi) \ \mu +  u_t \ \sigma \qquad (t \ge 1)
 \end{align}
 donde:
+\[
+    \mu = \mu_{EF} + EF_i + \mu_{ET}
+\]
+es una constante que depende del individuo \(i\) y:
 \begin{itemize}[itemsep=0.1cm]
-    \item \(\mu_{EF}\) representa la media del efecto fijo para todos los individuos
-    de un mismo grupo.
-    \item \(\mu_{ET}\) representa la media del efecto temporal en todos los pasos
+    \item \(\mu_{EF}\) representa la media de los efectos fijos para todos los individuos
+    de un mismo grupo. En nuestros experimentos, utilizamos \(\mu_{EF} = 10\) para todos
+    los grupos.
+    \item \(\mu_{ET}\) representa la media de los efectos temporales en todos los pasos
     de la serie y es la misma para todos los grupos.
     \item \(EF_i\) representa el efecto fijo del individuo \(i\), constante en todos
     los pasos de tiempo.
-    \item \(\phi\) es la persistencia auto-regresiva asociada a la variable para
-    todos los individuos de un mismo grupo.
+    \item \(\phi\) es el componente autorregresivo asociado a la variable generada para
+    todos los individuos de un mismo grupo. Denotaremos con \(\phi_T\), \(\phi_C\) y
+    \(\phi_{NiNi}\) al componente autorregresivo de los tratados, controles y NiNi
+    respectivamente.
     \item \(u_t\) es un valor aleatorio proveniente de una distribución normal estándar
     (se genera uno en cada paso de tiempo).
     \item \(\sigma\) es la desviación estándar del término de ruido de las series,
-    y es la misma para todos los grupos.
+    y es la misma para todos los grupos. En este trabajo, tomamos \(\sigma=5\).
 \end{itemize}
 
-Generamos diferentes escenarios, que se diferencian entre sí por determinados aspectos:
-\begin{enumerate}[itemsep=0.01cm, label=\textbf{\arabic*.}]
+Generamos cinco escenarios, que se diferencian entre sí por determinados aspectos:
+\begin{enumerate}[itemsep=0.05cm, label=\textbf{\arabic*.}]
     \item La longitud de las series de tiempo generadas, que denotamos con \(L\). Esta
     representa la cantidad de períodos observados para cada individuo \textbf{previos al inicio
     del tratamiento}.
     \item La cantidad de períodos previos al inicio del tratamiento en los que se observa
     un comportamiento específico en tratados y controles. A estos períodos los llamamos
-    ``períodos de dependencia'' y a la cantidad la denotamos con \texttt{n\_per\_dep}.
-    Se va a cumplir siempre que \(0 \le \texttt{n\_per\_dep} \le L\).
-    \item Parámetros específicos relacionados a la generación de las series de tiempo
-    para los individuos de cada grupo.
+    ``períodos de dependencia'' y a la cantidad la denotamos con \(n_{pd}\). Se
+    va a cumplir siempre que \(0 \le n_{pd} < L\). En particular, en los
+    escenarios con períodos de dependencia, al comportamiento que modelamos lo llamamos
+    ``decreciente con ruido'': en dichos períodos, forzamos a que cada nuevo valor
+    generado sea estrictamente menor al anterior, salvo en una cantidad \(m\) de ocasiones
+    en donde le permitimos que sea mayor. Este \(m\) también varía entre escenarios.
+    \item La cantidad de cohortes, que denotamos con \(c\).
+    \item El valor de los componentes autorregresivos de cada grupo.
 \end{enumerate}
-Y para cada escenario, generamos 100 simulaciones para poder garantizar que los resultados
+Para cada escenario, generamos 100 simulaciones para poder garantizar que los resultados
 obtenidos sean estadísticamente significativos.
 
-Las configuraciones fijas a lo largo de todos los escenarios y simulaciones a la hora de
-generar los datos fueron las siguientes:
+A modo de ejemplo, la Figura \ref{fig:treated_series_example} muestra el gráfico de 15 series de tiempo
+generadas para individuos tratados con \(L=45\), \(n_{pd}=20\), \(m=6\), \(c=3\) y
+\(\phi_T = \phi_C = \phi_{NiNi} = 10\). En este caso, los inicios de programa son
+46, 47 y 48 (uno para cada cohorte).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figs/series_tratados_exp1.png}
+    \caption{Gráfico de 15 series de tiempo generadas para individuos tratados con
+    \(L=45\), \(n_{pd}=20\), \(m=6\), \(c=3\) y \(\phi_T = \phi_C = \phi_{NiNi} = 10\). En
+    el eje \(x\) se encuentra el período, relativo al inicio de programa de cada
+    individuo, y en el eje \(y\) el valor de la variable en cada período. La línea
+    vertical punteada de color rojo indica el inicio de programa de cada individuo, y los
+    períodos con fondo rojo son los períodos de dependencia.}
+    \label{fig:treated_series_example}
+\end{figure}
+
+En todos los escenarios y simulaciones, la distribución de individuos fue la siguiente:
 \begin{itemize}[noitemsep]
-    \item Cantidad total de individuos: 10000.
-    \item Cantidad de cohortes: 3.
-    \item Cantidad de individuos tratados: 1000, divididos en las 3 cohortes.
-    \item Cantidad de individuos de control: 1000, divididos en las 3 cohortes.
-    \item Cantidad de individuos NiNi: 8000.
+    \item Cantidad de individuos tratados: 1000, divididos en la cantidad de cohortes
+    correspondiente.
+    \item Cantidad de individuos de control: 1000, divididos en la cantidad de cohortes
+    correspondiente.
+    \item Cantidad de individuos NiNi: 2500.
 \end{itemize}
 
-Más adelante, veremos cómo construimos los conjuntos de entrenamiento y de test con estos
-datos; y en la sección de Resultados, detallaremos los parámetros específicos de cada
-escenario.
+A continuación, describimos cómo a partir de los datos generados, construimos los conjuntos
+de entrenamiento y test.
+
+\subsection{Conjuntos de entrenamiento y de test}
+Con la idea que el modelo aprenda los patrones vistos en los tratados para luego poder
+identificar los controles, construimos los conjuntos de entrenamiento y de test de la
+siguiente manera:
+\begin{itemize}
+    \item \textbf{Conjunto de entrenamiento}: individuos tratados de todas las cohortes
+    (1000 en total) y una muestra aleatoria de 1000 NiNis.
+    \item \textbf{Conjunto de test}: individuos de control de todas las cohortes (1000 en
+    total) y una muestra aleatoria de 1500 NiNis, distinta a la utilizada en el conjunto
+    de entrenamiento.
+\end{itemize}
+
+Ahora bien, recordemos que tanto tratados como controles tienen una característica extra:
+el inicio de programa. Sin embargo, esta no está presente en los NiNis, justamente porque
+no fueron tratados y porque no forman parte del grupo de comparación en ninguna de las
+cohortes. Para reflejar esto e intentar ``transmitírselo'' al modelo, lo que hicimos fue,
+por cada NiNi incluido, repetirlo tantas veces como inicios de programa (o cohortes) haya,
+utilizando en cada repetición los períodos previos al respectivo inicio. En todas las
+repeticiones, la etiqueta asignada es 0.
+
+Para los controles, incluidos en el conjunto de test, hicimos exactamente lo mismo pero
+asignando en todas las repeticiones la etiqueta 1. Al hacer esto, estamos relajando uno de
+nuestros objetivos, haciendo que un individuo de control lo pueda ser para cualquier
+cohorte.
+
+De esta forma, el balanceo de clases en cada conjunto es la siguiente:
+\begin{itemize}[itemsep=0.1cm]
+    \item \textbf{Conjunto de entrenamiento: } 75\% etiqueta 0; 25\% etiqueta 1.
+    \item \textbf{Conjunto de test: } 71.43\% etiqueta 0; 28.57\% etiqueta 1.
+\end{itemize}
 
 \end{document}
