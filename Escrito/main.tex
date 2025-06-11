@@ -34,21 +34,21 @@
 En este capítulo, presentamos los conceptos teóricos necesarios para entender el contexto
 del problema y cuál es la solución que planteamos.
 
-Primeramente, explicamos la Evaluación de Impacto, que es el campo de aplicación sobre el
+Primeramente, explicamos la evaluación de impacto, que es el campo de aplicación sobre el
 que vamos a trabajar. Describimos qué es una Evaluación de Impacto, en qué consiste,
 cuáles son los problemas involucrados, y las distintas técnicas que se utilizan para
 llevarla a cabo. Al final de esta sección, presentamos el método de \textit{Propensity
 Score Matching}, que es el que tomaremos como parámetro para evaluar nuestra solución
 propuesta.
 
-Luego, nos abordamos al campo de la Inteligencia Artificial, enfocándonos particularmente
+Luego, abordamos el área de la Inteligencia Artificial, enfocándonos particularmente
 en el campo de los algoritmos de Aprendizaje Automático. Explicamos cómo funcionan estos y
 cuáles son los elementos presentes en ellos haciendo especial enfásis en los algoritmos de
 Aprendizaje Supervisado, dentro de los cuales se enmarca nuestra propuesta.
 
 A continuación, hablamos sobre un \textit{modelo} particular dentro del Aprendizaje
 Automático que ha cobrado particular importancia en los últimos años: las Redes Neuronales
-Artificiales. Partimos explicando las de tipo \textit{Feedforward} para Luego introducir
+Artificiales. Partimos explicando las de tipo \textit{Feedforward} para luego introducir
 otras más específicas como son las Convolucionales y las Recurrentes, de las cuales
 haremos uso en nuestros experimentos.
 
@@ -58,7 +58,7 @@ parámetros involucrados en ellas, y repasamos los últimos trabajos llevados a 
 utilizan Inteligencia Artificial para resolver el problema de clasificación de series de
 tiempo.
 
-\section{Evaluación de Impacto}
+\section{Evaluación de impacto}
 \subfile{secciones/2-marco-teorico/1-eval-impacto}
 
 \section{Inteligencia Artificial}
@@ -66,7 +66,6 @@ tiempo.
 
 \section{Redes Neuronales Artificiales}
 \subfile{secciones/2-marco-teorico/3-rna}
-
 
 \section{Redes Neuronales Convolucionales}
 \subfile{secciones/2-marco-teorico/4-convolucionales}
@@ -77,17 +76,14 @@ tiempo.
 % \section{Clasificación de Series de Tiempo}
 % \subfile{secciones/2-marco-teorico/6-series-de-tiempo}
 
-
 \chapter{Presentación del problema} \label{sec:problema}
 \subfile{secciones/3-problema}
-
 
 \chapter{Marco Experimental}
 El alcance del trabajo desarrollado está dado por las siguientes etapas, de las
 cuales hablaremos en este capítulo:
-\begin{enumerate}[noitemsep, label=\textbf{\arabic*.}]
+\begin{enumerate}[itemsep=0.1cm, label=\textbf{\arabic*.}]
     \item Generación de datos sintéticos.
-    \item Transformación de datos.
     \item Diseño de modelos.
     \item Búsqueda de hiperparámetros.
     \item Entrenamiento del modelo.
@@ -107,13 +103,17 @@ cada uno de estos pasos.
 \section{Herramientas}
 \subfile{secciones/4-marco-experimental/3-herramientas}
 
-\section{Métricas}
+\section{Métricas} \label{sec:metricas}
 \subfile{secciones/4-marco-experimental/4-metricas}
 
-\chapter{Resultados}
+\section{Comparación de técnicas}
+\subfile{secciones/4-marco-experimental/5-comparacion.tex}
 
+\chapter{Resultados} \label{sec:resultados}
+\subfile{secciones/5-resultados}
 
 \chapter{Conclusiones y Trabajos Futuros}
+\subfile{secciones/6-conclusiones-trabajos-futuros.tex}
 
 \newpage
 \footnotesize
