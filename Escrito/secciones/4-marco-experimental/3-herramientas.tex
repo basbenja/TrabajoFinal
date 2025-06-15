@@ -2,7 +2,7 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-A continuación, nombramos las herramientas que nos ayudaron a llevar a cabo los
+A continuación, nombramos las herramientas que más nos ayudaron a llevar a cabo los
 experimentos, desde la generación de datos sintéticos hasta el diseño, entrenamiento y
 evaluación de los modelos, junto con la búsqueda de hiperparámetros óptimos. En la
 sección de bibliografía, se incluye el enlace a su documentación.
@@ -81,6 +81,17 @@ Aquí, utilizamos PyTorch justamente para diseñar las diferentes arquitecturas 
 neuronales, que se implementan como clases en Python, y para llevar a cabo el ciclo de
 entrenamiento de los distintos modelos.
 
+\subsection{Scikit-learn}
+Scikit-learn \cite{scikitlearn-docs} es una biblioteca de Python de código abierto para
+aprendizaje automático. Provee varias herramientas útiles que facilitan tareas como el
+preprocesamiento de datos, el entrenamiento y la evaluación de modelos, el cálculo de
+métricas, la búsqueda de hiperparámetros, entre otros.
+
+En nuestro caso, usamos Scikit-learn para automatizar el proceso de validación cruzada
+durante la búsqueda de hiperparámetros, y para la evaluación final de los modelos mediante
+
+el cálculo automático de diversas métricas, incluyendo la matriz de confusión.
+
 \subsection{Optuna}
 Optuna \cite{optuna-docs} es una librería de Python que permite realizar la optimización
 automática de hiperparámetros de una manera eficiente. Resulta intuitiva de utilizar y su
@@ -100,5 +111,16 @@ diferentes experimentos. En cada uno de ellos, permite cargar los parámetros y 
 el usuario crea adecuados (como pueden ser los hiperparámetros empleados para entrenar el
 modelo), los datasets utilizados, y diferentes archivos que pueden incluir gráficos,
 métricas, y hasta incluso los pesos del modelo entrenado.
+
+\subsection{Stata}
+Stata \cite{stata-docs} es un paquete de software estadístico que ofrece una gran variedad
+de herramientas para el análisis exhaustivo de datos, incluyendo tareas de manipulación,
+exploración, visualización e inferencia estadística. Es utilizado en disciplinas como
+economía, políticas públicas, educación y salud pública, entre otras. Además, ofrece
+compatibilidad con Python mediante la biblioteca pystata, la cual permite integrar de
+forma eficiente los objetos DataFrame de pandas con las funcionalidades de Stata.
+
+En este trabajo, utilizamos Stata para la implementación del PSM, específicamente a través
+de las funciones \texttt{logit} y \texttt{psmatch2}.
 
 \end{document}
