@@ -78,16 +78,16 @@ donde:
 es una constante que depende del individuo \(i\) y:
 \begin{itemize}[itemsep=0.1cm]
     \item \(\mu_{EF}\) representa la media de los efectos fijos para todos los individuos
-    de un mismo grupo. En nuestros experimentos, utilizamos \(\mu_{EF} = 10\) para todos
-    los grupos.
+    de un mismo grupo. Denotaremos con \(\mu_{EF_T}\), \(\mu_{EF_C}\) y
+    \(\mu_{EF_{NiNi}}\) a la media de los efectos fijos de los tratados, controles y NiNi
+    respectivamente.
     \item \(\mu_{ET}\) representa la media de los efectos temporales en todos los pasos
     de la serie y es la misma para todos los grupos.
     \item \(EF_i\) representa el efecto fijo del individuo \(i\), constante en todos
     los pasos de tiempo.
     \item \(\phi\) es el componente autorregresivo asociado a la variable generada para
-    todos los individuos de un mismo grupo. Denotaremos con \(\phi_T\), \(\phi_C\) y
-    \(\phi_{NiNi}\) al componente autorregresivo de los tratados, controles y NiNi
-    respectivamente.
+    todos los individuos de un mismo grupo. En nuestros experimentos, usamos \(\phi = 0.9\)
+    para todos los grupos.
     \item \(u_t\) es un valor aleatorio proveniente de una distribución normal estándar
     (se genera uno en cada paso de tiempo).
     \item \(\sigma\) es la desviación estándar del término de ruido de las series,
@@ -108,25 +108,28 @@ Generamos cinco escenarios, que se diferencian entre sí por determinados aspect
     generado sea estrictamente menor al anterior, salvo en una cantidad \(m\) de ocasiones
     en donde le permitimos que sea mayor. Este \(m\) también varía entre escenarios.
     \item La cantidad de cohortes, que denotamos con \(c\).
-    \item El valor de los componentes autorregresivos de cada grupo.
+    \item El valor de la media de los efectos fijos de cada grupo (\(\mu_{EF_T}\),
+    \(\mu_{EF_C}\) y \(\mu_{EF_{NiNi}}\)). Modificar este provoca que el promedio de los
+    valores generados en cada paso de tiempo para un grupo esté por encima o por debajo de
+    otro.
 \end{enumerate}
 Para cada escenario, generamos 100 simulaciones para poder garantizar que los resultados
 obtenidos sean estadísticamente significativos.
 
-A modo de ejemplo, la Figura \ref{fig:treated_series_example} muestra el gráfico de 15 series de tiempo
-generadas para individuos tratados con \(L=45\), \(n_{pd}=20\), \(m=6\), \(c=3\) y
-\(\phi_T = \phi_C = \phi_{NiNi} = 10\). En este caso, los inicios de programa son
-46, 47 y 48 (uno para cada cohorte).
+A modo de ejemplo, la Figura \ref{fig:treated_series_example} muestra el gráfico de 15
+series de tiempo generadas para individuos tratados con \(L=45\), \(n_{pd}=20\), \(m=6\),
+\(c=3\) y \(\mu_{EF_T} = 10\). En este caso, los inicios de programa son 46, 47 y 48 (uno
+para cada cohorte).
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/series_tratados_exp1.png}
     \caption{Gráfico de 15 series de tiempo generadas para individuos tratados con
-    \(L=45\), \(n_{pd}=20\), \(m=6\), \(c=3\) y \(\phi_T = \phi_C = \phi_{NiNi} = 10\). En
-    el eje \(x\) se encuentra el período, relativo al inicio de programa de cada
-    individuo, y en el eje \(y\) el valor de la variable en cada período. La línea
-    vertical punteada de color rojo indica el inicio de programa de cada individuo, y los
-    períodos con fondo rojo son los períodos de dependencia.}
+    \(L=45\), \(n_{pd}=20\), \(m=6\), \(c=3\) y \(\mu_{EF_T} = 10\). En el eje \(x\) se
+    encuentra el período, relativo al inicio de programa de cada individuo, y en el eje
+    \(y\) el valor de la variable en cada período. La línea vertical punteada de color
+    rojo indica el inicio de programa de cada individuo, y los períodos con fondo rojo son
+    los períodos de dependencia.}
     \label{fig:treated_series_example}
 \end{figure}
 
