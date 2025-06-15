@@ -1,5 +1,4 @@
 \documentclass[../../main.tex]{subfiles}
-% \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
 En problemas de clasificación binaria, existen diferentes métricas para evaluar el
@@ -26,9 +25,10 @@ problema. Para describirlas, utilizaremos la siguiente notación, asumiendo que 
 \end{itemize}
 
 Todas estas cantidades se suelen presentar de forma conjunta en lo que se denomina
-\textbf{matriz de confusión}:
+\textbf{matriz de confusión}, cuya representación se encuentra en la Figura
+\ref{fig:confusion-matrix}.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{figs/matriz-confusion.png}
     \caption{Matriz de confusión.}
@@ -63,15 +63,15 @@ era un 1. Su fórmula está dada por:
 \]
 
 Nuevamente, utilizar solamente la precisión es engañoso. Una forma de tener una precisión
-perfecta es crear un clasificador que siempre prediga un valor de 0, excepto en única
-instancia de la que esté más seguro de predecir 1 \cite{hands-on-ML-sklearn-tf}. Si esta
-predicción es correcta, entonces tendríamos \(VP=1\), \(FP=0\), dando de esta forma una
-precisión de 1.
+perfecta es crear un clasificador que siempre prediga un valor de 0, excepto en una única
+instancia de la que esté más seguro de predecir 1. Si esta predicción es correcta,
+entonces tendríamos \(VP=1\), \(FP=0\), dando de esta forma una precisión de 1.
 
-\subsection{Sensibilidad o Ratio de Verdaderos Positivos}
-Es la proporción de instancias positivas verdaderas predichas correctamente por el modelo.
-Una sensibilidad de 1 indica que cada observación que era un 1 fue predicha como 1 por el
-modelo. Su fórmula está dada por:
+\subsection{Sensibilidad}
+Es la proporción de instancias positivas verdaderas predichas correctamente por el modelo,
+por lo que también se la suele llamar Ratio de Verdaderos Positivos. Una sensibilidad de 1
+indica que cada observación que era un 1 fue predicha como 1 por el modelo. Su fórmula
+está dada por:
 \[
     Sensibilidad = \frac{VP}{VP + FN}
 \]
@@ -98,5 +98,15 @@ valores de \(S\) y \(P\) son altos y que, si al menos uno de los dos es bajo, en
 \(F_1\) ``tenderá'' hacia ese valor. Si por ejemplo \(P=1\) pero \(S=0.5\), entonces
 tendríamos \(F_1 = 0.67\). En cambio, si \(P=1\) pero \(S=0.8\), tendríamos \(F_1 =
 0.89\).
+
+\bigskip
+Como mencionamos anteriormente, la métrica que tomamos como referencia en este trabajo
+para evaluar el desempeño de los modelos es el puntaje \(F_1\). Consideramos que
+maximizarla resulta  adecuada en nuestro contexto ya que nos permite encontrar un
+equilibrio entre dos objetivos: por un lado, identificar la mayor cantidad posible de
+individuos de control (es decir, lograr una alta sensibilidad) y a la vez, minimizar la
+cantidad de falsos positivos (es decir, maximizar la precisión). De esta forma, la
+maximización del puntaje \(F_1\) guiará la búsqueda de hiperparámetros y la comparación de
+los diferentes modelos.
 
 \end{document}
