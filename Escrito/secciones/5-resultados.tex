@@ -1,23 +1,107 @@
 \documentclass[../main.tex]{subfiles}
 
 \begin{document}
-Llevamos a cabo cuatro experimentos, diferenciados entre sí por la cantidad de períodos
-observados de los diferentes individuos y el tipo de tendencia observada en estos,
-ambos parámetros establecidos a la hora de generar los datos.
+En lo que sigue, detallamos las diferentes características presentes en cada uno de
+los escenarios junto con los resultados obtenidos con las diferentes arquitecturas
+de redes neuronales como con el método de PSM.
 
-Para cada experimento, corrimos 100 simulaciones con las diferentes arquitecturas,
-llevando a cabo una búsqueda de hiperparámetros para cada una.
+Recordemos que para cada experimento realizamos 100 simulaciones por modelo, tanto para
+las diferentes arquitecturas de redes como para el PSM. En el caso de las redes neuronales,
+cada simulación incluyó una búsqueda de hiperparámetros sobre 16 combinaciones distintas,
+realizada automáticamente por Optuna. El resultado reportado en cada simulación corresponde
+a la red entrenada con la mejor combinación de hiperparámetros.
 
-Tomamos como métrica objetivo ... Para obtener el resultado final de un determinado
-modelo, tomamos el promedio de ... a lo largo de las diferentes simulaciones. Y para
-compararlo con los resultados obtenidos con el PSM por cohortes ...
+En los resultados, mostramos el puntaje \(F_1\) promedio obtenido en las 100 simulaciones
+para cada arquitectura y el PSM. Además, de cada hiperparámetro, mostramos el valor
+que resultó seleccionado con mayor frecuencia en las simulaciones.
 
-\subsection{Experimento 1}
+Como mencionamos previamente, denotamos con:
+\begin{itemize}
+    \item \(L\) a la cantidad de períodos observados antes del inicio del programa.
+    \item \(n_{pd}\) a la cantidad de períodos de dependencia, con \(0 \le n_{pd} < L\).
+    \item \(m\) a la cantidad de veces, dentro de los períodos de dependencia, en los que
+    permitimos que el valor de la variable sea mayor al inmediato anterior.
+    \item \(c\) a la cantidad de cohortes.
+    \item \(\mu_{EF_T}\), \(\mu_{EF_C}\) y \(\mu_{EF_{NiNi}}\) a la media de los efectos
+    fijos de los grupos de tratados, controles y NiNis respectivamente.
+\end{itemize}
 
-\subsection{Experimento 2}
+\section{Experimento 1}
+En este primer escenario, tomamos 45 períodos observados previos al inicio del programa
+para cada individuo con 20 períodos de dependencia, en donde permitimos un máximo de 6
+``subidas''. Es importante notar la proporción períodos de dependencia sobre períodos
+observados, que en este caso es de 0.44 aproximadamente. Todos los parámetros utilizados
+se encuentran en la Tabla \ref{tab:params_exp1}. Al tener 45 períodos observados y 3
+cohortes, los inicios de programa son 46, 47 y 48.
 
-\subsection{Experimento 3}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+        \(L\) & \(n_{pd}\) & \(m\) & \(c\) & \(\mu_{EF_T}\) & \(\mu_{EF_C}\) & \(\mu_{EF_{NiNi}}\) \\ \hline\hline
+        45 & 20 & 6 & 3 & 10 & 10 & 10 \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros para la generación de datos utilizados en el Experimento 1.}
+    \label{tab:params_exp1}
+\end{table}
 
-\subsection{Experimento 4}
+La Tabla \ref{tab:results_exp1} muestra los resultados obtenidos en las métricas \(F_1\),
+precisión y sensibilidad por las diferentes redes y el PSM. Cada valor representa el
+promedio de esa métrica en las 100 simulaciones en el conjunto de test.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+         & Puntaje \(F_1\) & Precisión & Sensibilidad \\ \hline\hline
+        \textbf{LSTM} & & & \\ \hline
+        \textbf{Convolucional} & & & \\ \hline
+        \textbf{LSTM + Convolucional} & & & \\ \hline
+        \textbf{PSM} & & & \\
+        \hline
+    \end{tabular}
+    \caption{H}
+    \label{tab:results_exp1}
+\end{table}
+
+La Tabla \ref{tab:hyperparams_exp1} muestra, para cada arquitectura, el valor de cada
+hiperparámetro que fue seleccionado con mayor frecuencia como el óptimo duarante la
+búsqueda en las 100 simulaciones. Cada celda contiene dicho valor y entre paréntesis el
+porcentaje de simulaciones en el que dicho valor resultó ser el mejor, de acuerdo a la
+optimización realizada por Optuna mediante validación cruzada.
+
+Por último, se muestran las matrices de confusión promedio obtenidas en las 100 simulaciones
+para cada arquitectura.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+         & \makecell{Tamaño\\de lote}
+           & \makecell{Neuronas en\\capas ocultas}
+           & \makecell{Tasa de\\aprendizaje}
+           & Dropout \\ \hline\hline
+        \textbf{LSTM}                 & 128 (44\%) & 128 (69\%) & 0.001 (98\%) & 0.3 (54\%) \\ \hline
+        \textbf{Convolucional}        & 32 (46\%)  &  -         & 0.001 (90\%) & 0.3 (66\%) \\ \hline
+        \textbf{LSTM + Convolucional} & 32 (37\%)  & 64 (37\%)  & 0.001 (86\%) & 0.3 (72\%) \\
+        \hline
+    \end{tabular}
+    \caption{H}
+    \label{tab:hyperparams_exp1}
+\end{table}
+
+
+\section{Experimento 2}
+
+\section{Experimento 3}
+
+\section{Experimento 4}
+
+\section{Experimento 5}
+
+\section{Experimento 6}
 
 \end{document}

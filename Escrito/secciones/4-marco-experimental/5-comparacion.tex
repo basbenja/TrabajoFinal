@@ -1,0 +1,139 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+Como mencionamos en el capítulo anterior, uno de nuestros objetivos es obtener resultados
+que permitan comparar el desempeño de las redes neuronales con el del PSM en los
+distintos escenarios. Las diferencias metodológicas inherentes a ambas técnicas hacen que
+esto sea un desafío. En esta sección, describimos la estrategia propuesta en este trabajo
+para abordarlo.
+
+Para empezar, a partir de los datos generados, construimos los conjuntos de entrenamiento
+y test de la siguiente manera, con la idea que los modelos aprendan los patrones vistos en
+los tratados para luego poder identificar los controles:
+\begin{itemize}
+    \item \textbf{Conjunto de entrenamiento}: individuos tratados de todas las cohortes
+    (1000 en total) y una muestra aleatoria de 1000 NiNis.
+    \item \textbf{Conjunto de test}: individuos de control de todas las cohortes (1000 en
+    total) y una muestra aleatoria de 1500 NiNis, distinta a la utilizada en el conjunto
+    de entrenamiento.
+\end{itemize}
+
+Un detalle a tener en cuenta es que tanto tratados como controles tienen una
+característica extra: el inicio de programa. Sin embargo, esta no está presente en los
+NiNis, justamente porque no fueron tratados y porque no forman parte del grupo de
+comparación en ninguna de las cohortes. Para reflejar esto e intentar ``transmitírselo''
+al modelo, por cada NiNi incluido, generamos versiones múltiples de cada uno, simulando
+cómo se verían si pertenecieran a distintas cohortes. Puntualmente, a cada uno lo
+repetimos tantas veces como inicios de programa (o cohortes) haya, utilizando en cada
+repetición los períodos previos al respectivo inicio. En todas las repeticiones, la
+etiqueta asignada es 0. Por lo tanto, los conjuntos de entrenamiento y test finales fueron
+los siguientes:
+\begin{itemize}
+    \item \textbf{Conjunto de entrenamiento}:
+        \begin{itemize}
+            \item Individuos tratados de todas las cohortes (1000).
+            \item 1000 individuos NiNi, cada uno repetido tantas veces como cohortes haya,
+            con los períodos previos al inicio de programa de cada cohorte.
+        \end{itemize}
+    \item \textbf{Conjunto de test}:
+        \begin{itemize}
+            \item Individuos de control de todas las cohortes (1000).
+            \item 2500 individuos NiNi, cada uno repetido tantas veces como cohortes haya,
+            con los períodos previos al inicio de programa de cada cohorte.
+        \end{itemize}
+\end{itemize}
+
+Ahora bien, para evaluar las redes, se toman los resultados obtenidos en el conjunto de
+test, el cual permanece ``oculto'' durante el proceso de entrenamiento. Sin embargo, en el
+PSM no existe esta noción: todos los individuos disponibles son utilizados para estimar
+los coeficientes de la regresión logística, calcular las probabilidades y hacer el
+emparejamiento.
+
+Además, otra distinción fundamental es que las redes, incluyendo la feature de inicio de
+programa, posibilitan la utilización de un solo modelo para evaluarlo sobre las distintas
+cohortes, mientras que el PSM requiere realizar una estimación por cohorte.
+
+Debido a estas diferencias identificadas, para poder hacer una comparación razonable,
+adaptamos los dos métodos, las redes y el PSM. Para el PSM, lo que hicimos fue modificarlo
+de tal forma que permita incorporar la noción de ``entrenamiento'' y ``test''; y para las
+redes, cambiamos la forma de evaluarlas para poder hacerlo por cohorte. Los detalles del
+procedimiento propuesto se encuentran en la Tabla \ref{tab:comparacion}.
+
+\begin{table}[ht]
+    \centering
+    \renewcommand{\arraystretch}{1.3} % opcional: más espacio vertical entre filas
+    \begin{tabularx}{\textwidth}{|c|X|X|}
+        \hline
+         & \multicolumn{1}{c|}{\textbf{Redes neuronales}} & \multicolumn{1}{c|}{\textbf{PSM}} \\ \hline
+        \textbf{Entrenamiento}
+            & Se utiliza el conjunto de entrenamiento en su totalidad para construir
+            un único modelo capaz de incorporar diferentes cohortes.
+
+            & Para cada cohorte, se estima una regresión logística utilizando los tratados
+            de la cohorte y los NiNi del conjunto de entrenamiento correspondientes al
+            inicio de programa de la cohorte. % Al realizar estas estimaciones para
+            % todas las cohortes, se terminan utilizando todos los tratados y NiNi disponibles
+            % en el conjunto de entrenamiento.
+        \\ \hline
+        \textbf{Evaluación}
+            & Se divide al conjunto de test en tantos subconjuntos como cohortes haya.
+            Cada uno de ellos está formado por los controles de cada cohorte y los NiNi
+            del conjunto de test correspondientes a cada cohorte.
+
+            Con el modelo entrenado, se evalúa en cada uno de estos subconjuntos, y el
+            resultado final es el promedio de los obtenidos en cada partición.
+
+            & Se divide al conjunto de test en tantos subconjuntos como cohortes haya.
+            Cada uno de ellos está formado por los controles de cada cohorte y los NiNi
+            del conjunto de test correspondientes a cada cohorte.
+
+            Con la regresión estimada en cada cohorte, se hace la inferencia de la
+            probabilidad de participación sobre los tratados y la partición de test
+            correspondientes a la cohorte; y con ello se lleva a cabo el emparejamiento.
+            Se evalúa el emparejamiento en cada cohorte, y el resultado final es el
+            promedio de los obtenidos en cada cohorte.
+        \\ \hline
+    \end{tabularx}
+    \caption{Comparación entre el procedimiento de evaluación de redes neuronales y PSM.}
+    \label{tab:comparacion}
+\end{table}
+
+% Con estos conjuntos en mente, propusimos el siguiente procedimiento para poder
+% evaluar el PSM, aplicado por cohorte:
+% \begin{enumerate}[label=\textbf{\arabic*.}]
+%     \item Se toman los tratados \textbf{de la cohorte} y los NiNi del conjunto de entrenamiento
+%     con la repetición correspondiente al inicio de programa de la cohorte.
+%     \item Con tratados, controles y NiNi (\textbf{todos}), se estiman los coeficientes de
+%     la regresión logística.
+%     \item Una vez ajustada la logit, se realiza inferencia sobre los tratados, controles y
+%     NiNi \textbf{del conjunto de test}, obteniendo la probabilidad de participación
+%     para cada uno.
+%     \item Se lleva a cabo el emparejamiento entre tratados y no tratados.
+%     \item Finalmente, se consideran como controles predichos por el PSM aquellos
+%     individuos que hayan sido emparejados con algún tratado. El resto de los individuos no
+%     tratados (excluyendo los tratados) se consideran como clasificados en la clase 0 por
+%     el PSM.
+% \end{enumerate}
+% Así, el resultado final del PSM para una simulación con más de una cohorte es el puntaje
+% \(F_1\) promedio entre las cohortes.
+
+% \bigskip
+% Resulta pertinente hacer algunas observaciones sobre la forma de comparación propuesta:
+% \begin{itemize}
+%     \item En primer lugar, si bien en las redes la evaluación se hace sobre un solo
+%     conjunto y en el PSM, se van haciendo evaluaciones ``parciales'', es importante notar
+%     que al final, el conjunto de test está formado por los mismos individuos en ambas
+%     técnicas. Mientras que el de las redes considera a todas las cohortes al mismo tiempo,
+%     en el PSM los individuos son ``incluidos'' de a cohortes.
+%     \item En segundo lugar, como en el PSM la estimación se lleva a cabo por cohorte, no
+%     es necesario incluir la variable correspondiente al inicio del programa, añadida en
+%     las redes para poder trabajar con todas las cohortes de una sola vez.
+%     \item Por último, cabe destacar que si bien en el conjunto de test de las redes se
+%     repite cada individuo de control con una etiqueta positiva (1) - lo cual implica una
+%     relajación del objetivo de identificación de controles por cohorte -, en el PSM no se
+%     realiza esta repetición, ya que el propio enfoque - al trabajar por cohorte -
+%     restringe naturalmente los candidatos a cada caso, otorgándole así al modelo una
+%     especie de ``ventaja'' o ``pista'' adicional.
+% \end{itemize}
+
+\end{document}
