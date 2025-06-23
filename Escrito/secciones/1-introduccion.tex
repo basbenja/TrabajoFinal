@@ -1,0 +1,113 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+Cuando se invierten recursos en un proyecto, suele haber un propósito claro por detrás y,
+con el paso del tiempo, surge la necesidad de cuestionarse si lo invertido tuvo algún
+efecto real sobre el objetivo que se estaba tratando de lograr. Por ejemplo, si uno decide
+dedicarle más horas fuera de clase al estudio de una materia, es normal que nos surja la
+pregunta de si realmente esas horas sirvieron. En el caso de una empresa, siempre se
+espera que contratando más empleados, se aumenten la productividad y las ganancias. Las
+políticas públicas tampoco son una excepción: tomemos el caso de un programa de subsidios
+para la compra de alimentos en un determinado sector de la población; aquí resulta aún más
+importante analizar si, luego de un tiempo, esto ayudó a mejorar los niveles de salud de
+dicho sector.
+
+En este contexto, y particularmente en las políticas públicas o de desarrollo, aparece la
+metodología conocida como \textbf{evaluación de impacto}. La evaluación de impacto es una
+técnica que permite estimar cuantitativamente los efectos - positivos o negativos - que ha
+tenido la implementación de un programa, proyecto o tratamiento sobre determinadas
+variables de interés de la población ``receptora'' del mismo, la población objetivo. La
+forma en la que esto se logra es a través de un \textbf{análisis contrafactual}: ¿qué
+hubiera pasado con la población objetivo - los ``tratados'' - si el programa no hubiera
+existido?
+
+La situación anterior, que recibe comúnmente el nombre de ``el contrafactual'', es sin
+dudas un escenario hipotético, no observable en la realidad; y es por esto que es
+necesario aproximarlo de alguna forma. Para ello, se construye un \textbf{grupo de
+control} o \textbf{comparación}. Este debería estar formado por unidades que no han sido
+beneficiarias del programa pero que, idealmente, antes del inicio del mismo, eran muy
+similares a quienes sí lo fueron. Con el grupo de control identificado, se puede estimar
+el \textbf{efecto promedio del programa en los tratados} (ATT) comparando los resultados
+de ambos grupos.
+
+Dicho esto, el principal desafío en una evaluación de impacto es construir un grupo de
+control \textit{válido}, que permita asegurar que la diferencia observada en los
+resultados se debe pura y exclusivamente al tratamiento en cuestión, y no a otros
+factores. Si la asignación al programa es aleatoria, este grupo es todo el conjunto de los
+no tratados. Sin embargo, en políticas donde la asignación no tiene reglas claras, y se
+desconocen cuáles son las verdaderas razones que han llevado a las unidades a participar o
+no del programa, tomar a los no tratados como grupo de comparación puede producir
+estimaciones sesgadas, resultantes de no haber considerado las diferencias preexistentes
+entre ambos grupos. Este problema es conocido como \textbf{sesgo de autoselección}.
+
+Existen diferentes técnicas que buscan mitigar este sesgo, siendo una bastante utilizada
+el \textbf{pareamiento por puntaje de propensión} (PSM).
+%\cite{poner el paper donde se introduce el PSM, y algunos en donde se usa}
+El PSM consiste en estimar el puntaje de propensión - también conocido como probabilidad de
+participación - tanto para tratados y no tratados, y construir un grupo de control
+emparejando a cada tratado con uno o varios individuos no tratados que tengan puntajes
+similares. Para el cálculo de esta probabilidad, los evaluadores deben seleccionar ciertas
+variables que consideren determinantes en la decisión de participar.
+
+Ahora bien, cuando se cree que esta decisión puede estar influida por comportamientos
+observados a lo largo del tiempo en períodos previos a la implementación del programa, los
+métodos estadísticos utilizados para calcular el puntaje de propensión no son los más
+efectivos para capturar posibles patrones y dinámicas, y hacer un emparejamiento adecuado.
+
+Es en estos escenarios donde consideramos que los modelos de \textbf{aprendizaje
+automático} pueden contribuir a una mejor selección de unidades pertenecientes al grupo de
+control. El aprendizaje automático es un campo de la inteligencia artificial cuyo enfoque
+está en desarrollar técnicas que permitan a las computadoras aprender automáticamente a
+partir de los datos, sin la necesidad de tener que proveerlas de reglas. Esta estrategia
+facilita la identificación de patrones, incluso cuando pueden parecer muy difíciles de
+identificar a simple vista.
+
+Un modelo particular que ha tenido un gran desarrollo en los últimos años es el conocido
+como \textbf{redes neuronales artificiales}, cuya inspiración estuvo en el intento de
+modelar el aprendizaje en el cerebro humano. Dentro de estas, existen algunos tipos
+específicos adecuados para el procesamiento de datos temporales, como las \textbf{redes
+neuronales recurrentes} y las \textbf{redes neuronales convolucionales}.
+
+En este trabajo, proponemos la utilización de estos dos tipos de redes neuronales para la
+identificación de grupos de control válidos en contextos donde la asignación al programa
+es no aleatoria, potencialmente dependiente de resultados pasados, y cuya implementación
+se desarrolla en múltiples períodos de tiempo. Para la evaluación de nuestro enfoque,
+generamos datos sintéticos diseñados para imitar situaciones reales, y comparamos los
+diferentes resultados con los obtenidos con el PSM. De esta manera, buscamos aportar una
+herramienta alternativa para mejorar la calidad de las evaluaciones de impacto en este
+tipo de programas.
+
+
+% Poner esto despues de la primera oracion del abstract?
+% Su aplicación es particularmente importante en el marco de políticas públicas ya que
+% permite aumentar la efectividad de las mismas, invertir mejor los recursos y rendir
+% cuentas a la ciudadanía.
+
+
+\subsection{Estructura del trabajo}
+En el Capítulo 2 se presentan los conceptos fundamentales necesarios para comprender el
+desarrollo de este trabajo. En particular, explicamos en profundidad la metodología de la
+evaluación de impacto, los problemas que aparecen y algunas de las técnicas utilizadas;
+luego, nos enfocamos en el Aprendizaje Automático, centrándonos en las redes neuronales, y
+más particularmente en las de tipo LSTM y convoluciones.
+
+Posteriormente, en el Capítulo 3, se describen algunas de las limitaciones que presenta el
+PSM en los escenarios considerados en este trabajo y argumentamos por qué consideramos que
+el enfoque propuesto debería de superarlas.
+
+En el Capítulo 4, se detalla el marco experimental utilizado. Se mencionan todas las
+decisiones tomadas en las diferentes etapas, desde la generación de datos sintéticos, la
+búsqueda de hiperparámetros, la métrica de importancia y la forma de comparar el desempeño de las
+redes neuronales con el del PSM.
+
+En el Capítulo 5 se muestran los resultados obtenidos en los diferentes experimentos
+llevados a cabo, haciendo especial énfasis en el puntaje \(F_1\), la precisión y la
+sensibilidad y en los valores de los mejores hiperparámetros hallados en las diferentes
+simulaciones.
+
+Finalmente, en el Capítulo 6, se presentan las conclusiones derivadas a partir de los
+resultados y se introducen algunos aspectos de nuestro desarrollo que podrían mejorarse en
+trabajos futuros.
+
+\end{document}
