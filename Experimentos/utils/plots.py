@@ -5,7 +5,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay, confusion_matrix, roc_curve, roc_auc_score
 )
 
-def plot_time_series(df, n, label, n_per_dep):
+def plot_time_series(df, n, label, n_per_dep, color=None, ax=None):
     """
     Draws time series plots for a random subset of rows in the DataFrame.
 
@@ -19,19 +19,24 @@ def plot_time_series(df, n, label, n_per_dep):
     n_time_steps = len(df.columns)
     time_steps = list(range(-n_time_steps, 0))  # Time steps leading up to t
 
-    fig, ax = plt.subplots(figsize=(11, 5))
+    if not ax:
+        fig, ax = plt.subplots(figsize=(11, 6))
+    else:
+        fig = ax.figure
 
     for _, row in random_rows.iterrows():
-        ax.plot(time_steps, row.values)
+        ax.plot(time_steps, row.values, color=color if color else None)
 
     ax.set_xlabel("$t$ (relativo al inicio del tratamiento)", fontsize=12)
     ax.set_ylabel("$y(t)$", fontsize=12)
-    ax.set_title(
-        f"Individuos {label}",
-        fontsize=14, fontweight='bold', pad=20
-    )
-    ax.axvspan(-n_per_dep, -1, color="red", alpha=0.2)
-    ax.axvline(x=0, color='r', linestyle='--', label="Inicio de tratamiento")
+    ax.set_title(f"Individuos {label}", fontsize=14, fontweight='bold', pad=20)
+    
+    if n_per_dep > 0:
+        ax.axvspan(-n_per_dep, -1, color="red", alpha=0.2)
+    
+    existing_vlines = [l.get_label() for l in ax.get_lines()]
+    if "Inicio de tratamiento" not in existing_vlines:
+        ax.axvline(x=0, color='r', linestyle='--', label="Inicio de tratamiento")
     ax.legend()
     ax.grid(True)
     ax.set_xticks(range(-n_time_steps, 1, 5))
@@ -39,10 +44,12 @@ def plot_time_series(df, n, label, n_per_dep):
     return fig, ax
 
 
-def confusion_matrix_plot(y_true, y_pred):
+def confusion_matrix_plot(y_true, y_pred, normalize=None):
     fig, ax = plt.subplots()
 
-    cm = confusion_matrix(y_true, y_pred)
+    cm = confusion_matrix(y_true, y_pred, normalize=normalize)
+    tn, fp, fn, tp = cm.ravel().tolist()
+    confusion_dict = {"tn": tn, "fp": fp, "fn": fn, "tp": tp}
     disp = ConfusionMatrixDisplay(
         confusion_matrix=cm, display_labels=["NiNi", "Control"]
     )
@@ -55,7 +62,7 @@ def confusion_matrix_plot(y_true, y_pred):
     ax.set_xlabel("Predicción")
     ax.set_ylabel("Verdadero")
     ax.set_yticklabels(ax.get_yticklabels(), rotation=90, va="center")
-    return fig, ax
+    return fig, ax, confusion_dict
 
 
 def roc_curve_plot(y, y_pred_probs):

@@ -1,3 +1,4 @@
+import gc
 import optuna
 import pandas as pd
 import torch
@@ -51,6 +52,11 @@ def objective_cv(
     aggregated_scores = {
         metric: round(np.mean(values), 6) for metric, values in scores.items()
     }
+
+    # Clean up GPU memory
+    del model
+    gc.collect()
+    torch.cuda.empty_cache()
 
     # if len(metrics) == 1:
     #     trial.report(metrics_values[metrics[0]], epoch)

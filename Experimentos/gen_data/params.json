@@ -1,11 +1,21 @@
 {
     "n_simulations": 100,
+    
     "n_total": 10000,
     "n_treated": 1000,
     "n_control": 1000,
-    "T": 30,
-    "first_tr_period": 16,
+    
+    "T": 50,
+    "first_tr_period": 46,
     "n_cohorts": 3,
-    "n_per_dep": 8,
-    "ups_max_count": 2
+    "n_per_dep": 5,
+    "ups_max_count": 0,
+
+    "phiT": 0.90,
+    "phiC": 0.90,
+    "phiNiNi": 0.90,
+
+    "MeanFET": 10.0,
+    "MeanFEC": 10.0,
+    "MeanFEN": 10.0
 }
