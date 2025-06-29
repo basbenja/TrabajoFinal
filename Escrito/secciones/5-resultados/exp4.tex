@@ -1,0 +1,62 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Experimento 4: 35 períodos observados, 15 de dependencia}
+En este Experimento, tomamos 35 períodos observados, de los cuales 15 son de dependencia
+con un máximo de 4 subidas. Así, el ratio de períodos de dependencia sobre observados es
+de 0.43, y el de subidas sobre períodos de dependencia de 0.27, ambos muy parecidos a los
+del Experimento 1. La idea de este escenario y los siguientes es evaluar el desempeño de
+los distintos modelos en casos en donde la información disponible es sobre una cantidad
+más limitada de períodos pre-tratamiento.
+
+Los resultados obtenidos, resumidos en la Tabla \ref{tab:results_exp4}, muestran solamente
+un muy leve deterioro de todos los modelos en comparación los del Experimento 1, lo cual
+es bastante alentador.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Sensibilidad} \\ \hline\hline
+        \textbf{LSTM}
+            & 0.788148 & 0.69409 & 0.914435 \\ \hline
+        \textbf{Convolucional}
+            & \textbf{0.819889} & 0.733707 & \textbf{0.9311} \\ \hline
+        \textbf{LSTM + Convolucional}
+            & 0.819418 & \textbf{0.737445} & 0.92359 \\ \hline
+        \textbf{PSM}
+            & 0.610622 & 0.611555 & 0.609697 \\
+        \hline
+    \end{tabular}
+    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
+    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
+    Experimento 4.}
+    \label{tab:results_exp4}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+            & \makecell{\textbf{Tamaño}\\\textbf{de lote}}
+            & \makecell{\textbf{Neuronas en}\\\textbf{capas ocultas}}
+            & \makecell{\textbf{Tasa de}\\\textbf{aprendizaje}}
+            & \textbf{Dropout} \\ \hline\hline
+        \textbf{LSTM}
+            & 64 (39\%) & 128 (62\%) & 0.001 (99\%) & 0.3 (51\%) \\ \hline
+        \textbf{Convolucional}
+            & 64 (36\%) & -          & 0.001 (98\%) & 0.3 (77\%) \\ \hline
+        \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
+            & 32 (41\%) & 32 (41\%)  & 0.001 (95\%) & 0.3 (78\%) \\
+        \hline
+    \end{tabular}
+    \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
+    simulaciones en cada arquitectura. El porcentaje entre paréntesis indica el porcentaje
+    de veces que fue elegido ese valor en las 100 simulaciones.}
+    \label{tab:hyperparams_exp4}
+\end{table}
+
+\end{document}

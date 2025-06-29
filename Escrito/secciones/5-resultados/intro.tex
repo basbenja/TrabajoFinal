@@ -1,0 +1,30 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+En lo que sigue, detallamos las diferentes características presentes en cada uno de
+los escenarios junto con los resultados obtenidos con las diferentes arquitecturas
+de redes neuronales como con el método de PSM.
+
+Recordemos que para cada experimento realizamos 100 simulaciones por modelo, tanto para
+las diferentes arquitecturas de redes como para el PSM. En el caso de las redes
+neuronales, cada simulación incluyó una búsqueda de hiperparámetros sobre 16 combinaciones
+distintas, realizada automáticamente por Optuna. El resultado en cada simulación
+corresponde a la red entrenada con la mejor combinación de hiperparámetros hallada para
+esa simulación.
+
+Mostramos los promedios del puntaje \(F_1\), la precisión y la sensibilidad en el conjunto
+de test a lo largo de las 100 simulaciones. Cabe aclarar que, siguiendo lo explicado en la
+Sección \ref{sec:comparacion}, dada una métrica determinada, el resultado obtenido en una
+simulación es el promedio obtenido en las cohortes. Además, en las redes neuronales, de
+cada hiperparámetro, mostramos el valor que fue seleccionado como el óptimo con mayor
+frecuencia en las simulaciones.
+
+Como mencionamos previamente, denotamos con:
+\begin{itemize}
+    \item \(L\) a la cantidad de períodos observados antes del inicio del programa.
+    \item \(n_{pd}\) a la cantidad de períodos de dependencia, con \(0 \le n_{pd} < L\).
+    \item \(m\) a la cantidad de veces, dentro de los períodos de dependencia, en los que
+    permitimos que el valor de la variable sea mayor al inmediato anterior.
+\end{itemize}
+Y recordemos que en cada escenario simulamos la existencia de 3 cohortes.
+\end{document}

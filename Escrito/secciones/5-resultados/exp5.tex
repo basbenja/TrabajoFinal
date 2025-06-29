@@ -1,0 +1,53 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Experimento 5: 25 períodos observados, 10 de dependencia}
+Proporción entre períodos de dependencia y observados: 0.4.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Sensibilidad} \\ \hline\hline
+        \textbf{LSTM}
+            & 0.571055 & 0.446358 & 0.796076 \\ \hline
+        \textbf{Convolucional}
+            & \textbf{0.626289} & \textbf{0.507315} & \textbf{0.821558} \\ \hline
+        \textbf{LSTM + Convolucional}
+            & 0.618374 & 0.503425 & 0.806757 \\ \hline
+        \textbf{PSM}
+            & 0.364804 & 0.365307 & 0.364306 \\
+        \hline
+    \end{tabular}
+    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
+    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
+    Experimento 5.}
+    \label{tab:results_exp5}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+            & \makecell{\textbf{Tamaño}\\\textbf{de lote}}
+            & \makecell{\textbf{Neuronas en}\\\textbf{capas ocultas}}
+            & \makecell{\textbf{Tasa de}\\\textbf{aprendizaje}}
+            & \textbf{Dropout} \\ \hline\hline
+        \textbf{LSTM}
+            & 128 (38\%) & 128 (77\%) & 0.001 (98\%) & 0.5 (43\%) \\ \hline
+        \textbf{Convolucional}
+            & 64 (35\%) & -           & 0.001 (93\%) & 0.3 (78\%) \\ \hline
+        \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
+            & 64 (39\%) & 128 (38\%)  & 0.001 (95\%) & 0.3 (86\%) \\
+        \hline
+    \end{tabular}
+    \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
+    simulaciones en cada arquitectura. El porcentaje entre paréntesis indica el porcentaje
+    de veces que fue elegido ese valor en las 100 simulaciones.}
+    \label{tab:hyperparams_exp5}
+\end{table}
+
+\end{document}

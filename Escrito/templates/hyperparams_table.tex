@@ -1,0 +1,23 @@
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+            & \makecell{\textbf{Tamaño}\\\textbf{de lote}}
+            & \makecell{\textbf{Neuronas en}\\\textbf{capas ocultas}}
+            & \makecell{\textbf{Tasa de}\\\textbf{aprendizaje}}
+            & \textbf{Dropout} \\ \hline\hline
+        \textbf{LSTM}
+            &  &  &  &  \\ \hline
+        \textbf{Convolucional}
+            &   & -          &  &  \\ \hline
+        \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
+            &   &  &  &  \\
+        \hline
+    \end{tabular}
+    \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
+    simulaciones en cada arquitectura. Cada celda contiene dicho valor y entre paréntesis
+    el porcentaje de simulaciones en el resultó ser el mejor, de acuerdo a la optimización
+    realizada por Optuna mediante validación cruzada.}
+    \label{tab:hyperparams_exp1}
+\end{table}

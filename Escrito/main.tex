@@ -4,7 +4,6 @@
 \begin{document}
 
 \input{caratula.tex}
-
 \cleardoublepage
 
 % Resumen - Palabras clave - Abstract - Keywords
@@ -14,15 +13,43 @@
 % Agradecimientos
 \thispagestyle{empty}
 \chapter*{Agradecimientos}
-% David y Martín
-% Mi familia
-% Juli y Toni
-% Amigos
-% Compañeros de la facu
-% Profesores, ayudantes alumnos
-% Al CCAD
-% Universidad pública, gratuita y de calidad
+A David y Martín, por acompañarme a lo largo de este año, enseñándome, guiándome,
+y por su disposición a responder todas las dudas que fueran surgiendo.
+
+A mi familia, Andrés, María, Sofi y Feli, por su apoyo incondicional a lo largo de
+toda la carrera, festejando mis logros y siempre motivándome a seguir adelante y
+dar lo mejor de mí; por ayudarme cuando los tiempos no alcanzaban y por darme la
+posibilidad de estudiar sin otras preocupaciones.
+
+A Juli y Toni, mis compañeros desde el cursillo de ingreso hasta el último día de
+cursado. Hicieron que este recorrido sea mucho más lindo; gracias por cada trabajo,
+explicación, consejo, charla y momento compartido. Espero que dure para toda la vida.
+
+A mis amigos en general, por siempre darme un espacio en donde poder distraerme
+cuando aparecía el estrés, festejar mis logros, apoyarme y muchas veces hacerme ver
+las cosas de otra manera.
+
+A todos los profesores y ayudantes alumnos que me crucé en estos años. Admiro
+profundamente su vocación y su esfuerzo constante por formar grandes profesionales y
+científicos, ayudando a los alumnos en absolutamente todo. Ojalá siempre me toquen
+docentes como los de FAMAF.
+
+A cada persona que pasó por mi vida durante este tiempo, y que de forma directa
+o indirecta contribuyó a que hoy yo esté acá.
+
+Por último, agradecer a la universidad pública, gratuita y de calidad; que me dio
+la oportunidad de formarme con una educación de un altísimo nivel y que abre las
+puertas a todas las personas para que puedan alcanzar sus sueños.
 \clearpage
+
+\thispagestyle{empty}
+\chapter*{Reconocimientos}
+Este trabajo utilizó recursos computacionales de UNC Supercómputo (CCAD) de la Universidad
+Nacional de Córdoba
+(\href{https://supercomputo.unc.edu.ar}{\texttt{https://supercomputo.unc.edu.ar}}), que forman
+parte del Sistema Nacional de Computación de Alto Desempeño (SNCAD) de la República
+Argentina.
+
 
 \tableofcontents
 \clearpage
@@ -94,7 +121,7 @@ cuales hablaremos en este capítulo:
 También nombraremos las diferentes herramientas que nos ayudaron a llevar a cabo
 cada uno de estos pasos.
 
-\section{Conjuntos de Datos}
+\section{Conjuntos de Datos} \label{sec:datos}
 \subfile{secciones/4-marco-experimental/1-datos}
 
 \section{Arquitecturas de Redes Neuronales}
@@ -106,11 +133,18 @@ cada uno de estos pasos.
 \section{Métricas} \label{sec:metricas}
 \subfile{secciones/4-marco-experimental/4-metricas}
 
-\section{Comparación de técnicas}
+\section{Comparación de técnicas} \label{sec:comparacion}
 \subfile{secciones/4-marco-experimental/5-comparacion.tex}
 
 \chapter{Resultados} \label{sec:resultados}
-\subfile{secciones/5-resultados}
+\subfile{secciones/5-resultados/intro.tex}
+\subfile{secciones/5-resultados/exp1.tex}
+
+\subfile{secciones/5-resultados/exp2.tex}
+\subfile{secciones/5-resultados/exp3.tex}
+\subfile{secciones/5-resultados/exp4.tex}
+\subfile{secciones/5-resultados/exp5.tex}
+\subfile{secciones/5-resultados/exp6.tex}
 
 \chapter{Conclusiones y Trabajos Futuros}
 \subfile{secciones/6-conclusiones-trabajos-futuros.tex}
