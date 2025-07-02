@@ -2,9 +2,10 @@
 
 \begin{document}
 En problemas de clasificación binaria, existen diferentes métricas para evaluar el
-desempeño del modelo utilizado. Las que más relevancia tendrán depende del contexto del
-problema. Para describirlas, utilizaremos la siguiente notación, asumiendo que la etiqueta
-1 corresponde a la clase ``positiva'' y la 0 a la ``negativa'':
+desempeño del modelo utilizado, siempre sobre el conjunto de test. Las que más relevancia
+tendrán depende del contexto del problema. Para describirlas, utilizaremos la siguiente
+notación, asumiendo que la etiqueta 1 corresponde a la clase ``positiva'' y la 0 a la
+``negativa'':
 \begin{itemize}
     \item \(VP\): Verdaderos Positivos. Es la cantidad de predicciones correctas para la
     clase positiva. Es decir, son aquellas observaciones cuya etiqueta verdadera es 1 y
@@ -36,7 +37,10 @@ Todas estas cantidades se suelen presentar de forma conjunta en lo que se denomi
 \end{figure}
 
 Con estos conceptos en mente, algunas de las métricas que se suelen considerar son las
-siguientes, cuyo valor mínimo es 0 y el máximo es 1:
+siguientes, cuyo valor mínimo es 0 y el máximo es 1, y se pueden calcular tanto para la
+clase positiva como la negativa (en las explicaciones, asumimos que se calculan sobre la
+positiva):
+
 \subsection{Exactitud}
 Es la proporción de entradas para las cuales el modelo predijo la salida correcta.
 Su fórmula está dada por:
@@ -57,7 +61,8 @@ Por esto, suele ser necesario prestar atención a otros valores.
 \subsection{Precisión}
 Es la proporción de verdaderos positivos sobre todos los positivos detectados por el
 modelo. Una precisión de 1 indica que cada elemento predicho como 1 efectivamente
-era un 1. Su fórmula está dada por:
+era un 1, y por ejemplo una de 0.5 indica que de las entradas predichas como 1,
+solamente la mitad era realmente un 1. Su fórmula está dada por:
 \[
     Precisi\acute{o}n = \frac{VP}{VP + FP}
 \]
@@ -83,11 +88,11 @@ siempre prediga 1, ya que tendríamos \(VP=10\) y \(FN=0\). Sin embargo, tendrí
 una precisión de 0.1, ya que \(FP=90\).
 
 Dicho esto, existe una medida que combina a estas dos métricas, y que es justamente
-a la que le damos importancia en este trabajo.
+a la que le más importancia damos en este trabajo.
 
 \subsection{Puntaje F1}
-El puntaje F1 es la media armónica entre la precisión y la sensibilidad, lo que significa
-que da igual importancia a ambas. Si denotamos con \(P\) a la precisión y con \(S\) la
+El puntaje \(F_1\) es la media armónica entre la precisión y la sensibilidad, lo que significa
+que da igual importancia a ambas. Si denotamos con \(P\) a la precisión y con \(S\) a la
 sensibilidad, la fórmula del puntaje \(F_1\) está dada por:
 \[
     F_1 = \frac{2}{\frac{1}{P} + \frac{1}{S}} = 2 \times \frac{P \times S}{P + S}
@@ -100,13 +105,13 @@ tendríamos \(F_1 = 0.67\). En cambio, si \(P=1\) pero \(S=0.8\), tendríamos \(
 0.89\).
 
 \bigskip
-Como mencionamos anteriormente, la métrica que tomamos como referencia en este trabajo
-para evaluar el desempeño de los modelos es el puntaje \(F_1\). Consideramos que
+Como mencionamos anteriormente, la métrica a la que más le prestamos atención en este
+trabajo para evaluar el desempeño de los modelos es el puntaje \(F_1\). Consideramos que
 maximizarla resulta  adecuada en nuestro contexto ya que nos permite encontrar un
 equilibrio entre dos objetivos: por un lado, identificar la mayor cantidad posible de
 individuos de control (es decir, lograr una alta sensibilidad) y a la vez, minimizar la
-cantidad de falsos positivos (es decir, maximizar la precisión). De esta forma, la
-maximización del puntaje \(F_1\) guiará la búsqueda de hiperparámetros y la comparación de
-los diferentes modelos.
+cantidad de falsos positivos (es decir, maximizar la precisión). De esta forma, como
+explicamos antes, la maximización del puntaje \(F_1\) guía la búsqueda de hiperparámetros
+y también la comparación de los diferentes modelos.
 
 \end{document}

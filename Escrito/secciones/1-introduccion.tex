@@ -6,7 +6,7 @@ Cuando se invierten recursos en un proyecto, suele haber un propósito claro por
 con el paso del tiempo, surge la necesidad de cuestionarse si lo invertido tuvo algún
 efecto real sobre el objetivo que se estaba tratando de lograr. Por ejemplo, si uno decide
 dedicarle más horas fuera de clase al estudio de una materia, es normal que nos surja la
-pregunta de si realmente esas horas sirvieron. En el caso de una empresa, siempre se
+pregunta de si realmente esas horas sirvieron. En el caso de una empresa, quizás se
 espera que contratando más empleados, se aumenten la productividad y las ganancias. Las
 políticas públicas tampoco son una excepción: tomemos el caso de un programa de subsidios
 para la compra de alimentos en un determinado sector de la población; aquí resulta aún más
@@ -42,13 +42,12 @@ estimaciones sesgadas, resultantes de no haber considerado las diferencias preex
 entre ambos grupos. Este problema es conocido como \textbf{sesgo de autoselección}.
 
 Existen diferentes técnicas que buscan mitigar este sesgo, siendo una bastante utilizada
-el \textbf{pareamiento por puntaje de propensión} (PSM).
-%\cite{poner el paper donde se introduce el PSM, y algunos en donde se usa}
-El PSM consiste en estimar el puntaje de propensión - también conocido como probabilidad de
-participación - tanto para tratados y no tratados, y construir un grupo de control
-emparejando a cada tratado con uno o varios individuos no tratados que tengan puntajes
-similares. Para el cálculo de esta probabilidad, los evaluadores deben seleccionar ciertas
-variables que consideren determinantes en la decisión de participar.
+el \textbf{Pareamiento por Puntaje de Propensión} (PSM) \cite{psm1983}. El PSM consiste en
+estimar el puntaje de propensión - también llamado probabilidad de participación - tanto
+para tratados y no tratados, y construir un grupo de control emparejando a cada tratado
+con uno o varios individuos no tratados que tengan puntajes similares. Para el cálculo de
+esta probabilidad, los evaluadores deben seleccionar ciertas variables que consideren
+determinantes en la decisión de participar.
 
 Ahora bien, cuando se cree que esta decisión puede estar influida por comportamientos
 observados a lo largo del tiempo en períodos previos a la implementación del programa, los
@@ -57,7 +56,7 @@ efectivos para capturar posibles patrones y dinámicas, y hacer un emparejamient
 
 Es en estos escenarios donde consideramos que los modelos de \textbf{aprendizaje
 automático} pueden contribuir a una mejor selección de unidades pertenecientes al grupo de
-control. El aprendizaje automático es un campo de la inteligencia artificial cuyo enfoque
+control. El Aprendizaje Automático es un campo de la Inteligencia Artificial cuyo enfoque
 está en desarrollar técnicas que permitan a las computadoras aprender automáticamente a
 partir de los datos, sin la necesidad de tener que proveerlas de reglas. Esta estrategia
 facilita la identificación de patrones, incluso cuando pueden parecer muy difíciles de
@@ -85,25 +84,25 @@ tipo de programas.
 % cuentas a la ciudadanía.
 
 
-\subsection{Estructura del trabajo}
+\section{Estructura del trabajo}
 En el Capítulo 2 se presentan los conceptos fundamentales necesarios para comprender el
 desarrollo de este trabajo. En particular, explicamos en profundidad la metodología de la
-evaluación de impacto, los problemas que aparecen y algunas de las técnicas utilizadas;
-luego, nos enfocamos en el Aprendizaje Automático, centrándonos en las redes neuronales, y
+evaluación de impacto, los problemas que aparecen y algunas de las técnicas utilizadas.
+Luego, nos enfocamos en el Aprendizaje Automático, centrándonos en las redes neuronales, y
 más particularmente en las de tipo LSTM y convoluciones.
 
 Posteriormente, en el Capítulo 3, se describen algunas de las limitaciones que presenta el
-PSM en los escenarios considerados en este trabajo y argumentamos por qué consideramos que
+PSM en los escenarios estudiados en este trabajo y argumentamos por qué consideramos que
 el enfoque propuesto debería de superarlas.
 
 En el Capítulo 4, se detalla el marco experimental utilizado. Se mencionan todas las
 decisiones tomadas en las diferentes etapas, desde la generación de datos sintéticos, la
-búsqueda de hiperparámetros, la métrica de importancia y la forma de comparar el desempeño de las
-redes neuronales con el del PSM.
+búsqueda de hiperparámetros, las métricas de importancia y la forma de comparar el
+desempeño de las redes neuronales con el del PSM.
 
 En el Capítulo 5 se muestran los resultados obtenidos en los diferentes experimentos
 llevados a cabo, haciendo especial énfasis en el puntaje \(F_1\), la precisión y la
-sensibilidad y en los valores de los mejores hiperparámetros hallados en las diferentes
+sensibilidad y en los valores de los hiperparámetros hallados en las diferentes
 simulaciones.
 
 Finalmente, en el Capítulo 6, se presentan las conclusiones derivadas a partir de los

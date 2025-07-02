@@ -13,15 +13,15 @@
 % Agradecimientos
 \thispagestyle{empty}
 \chapter*{Agradecimientos}
-A David y Martín, por acompañarme a lo largo de este año, enseñándome, guiándome,
+A David y Martín, por acompañarme a lo largo de estos meses enseñándome y guiándome,
 y por su disposición a responder todas las dudas que fueran surgiendo.
 
-A mi familia, Andrés, María, Sofi y Feli, por su apoyo incondicional a lo largo de
-toda la carrera, festejando mis logros y siempre motivándome a seguir adelante y
+A mi familia, Andrés, María, Sofi y Feli, por su comprensión y apoyo incondicional a lo
+largo de toda la carrera, festejando mis logros y siempre motivándome a seguir adelante y
 dar lo mejor de mí; por ayudarme cuando los tiempos no alcanzaban y por darme la
 posibilidad de estudiar sin otras preocupaciones.
 
-A Juli y Toni, mis compañeros desde el cursillo de ingreso hasta el último día de
+A Juli y Toni, mis amigos y compañeros desde el cursillo de ingreso hasta el último día de
 cursado. Hicieron que este recorrido sea mucho más lindo; gracias por cada trabajo,
 explicación, consejo, charla y momento compartido. Espero que dure para toda la vida.
 
@@ -29,26 +29,24 @@ A mis amigos en general, por siempre darme un espacio en donde poder distraerme
 cuando aparecía el estrés, festejar mis logros, apoyarme y muchas veces hacerme ver
 las cosas de otra manera.
 
-A todos los profesores y ayudantes alumnos que me crucé en estos años. Admiro
-profundamente su vocación y su esfuerzo constante por formar grandes profesionales y
-científicos, ayudando a los alumnos en absolutamente todo. Ojalá siempre me toquen
-docentes como los de FAMAF.
+A todos los profesores y ayudantes que me crucé en estos años. Admiro profundamente su
+vocación y su esfuerzo constante por formar grandes profesionales y científicos, ayudando
+a los alumnos en absolutamente todo. Ojalá siempre me toquen docentes como los de FAMAF.
 
 A cada persona que pasó por mi vida durante este tiempo, y que de forma directa
 o indirecta contribuyó a que hoy yo esté acá.
 
-Por último, agradecer a la universidad pública, gratuita y de calidad; que me dio
-la oportunidad de formarme con una educación de un altísimo nivel y que abre las
-puertas a todas las personas para que puedan alcanzar sus sueños.
+Por último, a la universidad pública, gratuita y de calidad; que me dio la oportunidad de
+formarme con una educación de un altísimo nivel y que abre las puertas a todas las
+personas para que puedan alcanzar sus sueños. Es un recurso invaluable que nos ofrece
+nuestro país y que hay que defenderlo siempre.
 \clearpage
 
 \thispagestyle{empty}
 \chapter*{Reconocimientos}
 Este trabajo utilizó recursos computacionales de UNC Supercómputo (CCAD) de la Universidad
-Nacional de Córdoba
-(\href{https://supercomputo.unc.edu.ar}{\texttt{https://supercomputo.unc.edu.ar}}), que forman
-parte del Sistema Nacional de Computación de Alto Desempeño (SNCAD) de la República
-Argentina.
+Nacional de Córdoba \cite{ccad}, que forman parte del Sistema Nacional de Computación de
+Alto Desempeño (SNCAD) de la República Argentina.
 
 
 \tableofcontents
@@ -62,7 +60,7 @@ En este capítulo, presentamos los conceptos teóricos necesarios para entender 
 del problema y cuál es la solución que planteamos.
 
 Primeramente, explicamos la evaluación de impacto, que es el campo de aplicación sobre el
-que vamos a trabajar. Describimos qué es una Evaluación de Impacto, en qué consiste,
+que vamos a trabajar. Describimos qué es una evaluación de impacto, en qué consiste,
 cuáles son los problemas involucrados, y las distintas técnicas que se utilizan para
 llevarla a cabo. Al final de esta sección, presentamos el método de \textit{Propensity
 Score Matching}, que es el que tomaremos como parámetro para evaluar nuestra solución
@@ -73,17 +71,11 @@ en el campo de los algoritmos de Aprendizaje Automático. Explicamos cómo funci
 cuáles son los elementos presentes en ellos haciendo especial enfásis en los algoritmos de
 Aprendizaje Supervisado, dentro de los cuales se enmarca nuestra propuesta.
 
-A continuación, hablamos sobre un \textit{modelo} particular dentro del Aprendizaje
-Automático que ha cobrado particular importancia en los últimos años: las Redes Neuronales
-Artificiales. Partimos explicando las de tipo \textit{Feedforward} para luego introducir
-otras más específicas como son las Convolucionales y las Recurrentes, de las cuales
+A continuación, hablamos sobre un \textit{modelo} particular dentro del aprendizaje
+automático que ha cobrado particular importancia en los últimos años: las redes neuronales
+artificiales. Partimos explicando las de tipo \textit{feedforward} para luego introducir
+otras más específicas como son las convolucionales y las recurrentes, de las cuales
 haremos uso en nuestros experimentos.
-
-Por último, y para combinar el método de solución propuesto junto con el área de
-aplicación, hablamos sobre las series de tiempo. Mencionamos qué son y cuáles son los
-parámetros involucrados en ellas, y repasamos los últimos trabajos llevados a cabo que
-utilizan Inteligencia Artificial para resolver el problema de clasificación de series de
-tiempo.
 
 \section{Evaluación de impacto}
 \subfile{secciones/2-marco-teorico/1-eval-impacto}
@@ -91,7 +83,7 @@ tiempo.
 \section{Inteligencia Artificial}
 \subfile{secciones/2-marco-teorico/2-ia}
 
-\section{Redes Neuronales Artificiales}
+\section{Redes Neuronales Artificiales} \label{sec:rna}
 \subfile{secciones/2-marco-teorico/3-rna}
 
 \section{Redes Neuronales Convolucionales}
@@ -107,13 +99,12 @@ tiempo.
 \subfile{secciones/3-problema}
 
 \chapter{Marco Experimental}
-El alcance del trabajo desarrollado está dado por las siguientes etapas, de las
-cuales hablaremos en este capítulo:
+El alcance del trabajo desarrollado comprende las siguientes etapas, de las cuales
+hablaremos en este capítulo:
 \begin{enumerate}[itemsep=0.1cm, label=\textbf{\arabic*.}]
     \item Generación de datos sintéticos.
-    \item Diseño de modelos.
-    \item Búsqueda de hiperparámetros.
-    \item Entrenamiento del modelo.
+    \item Diseño de arquitecturas de redes neuronales.
+    \item Búsqueda de hiperparámetros y entrenamiento de las redes propuestas.
     \item Evaluación del modelo con diferentes métricas.
     \item Comparación con los resultados obtenidos con el PSM.
 \end{enumerate}

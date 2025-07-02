@@ -60,7 +60,7 @@ circunstancias, el PSM presenta ciertas limitaciones:
     \item Por otro lado, cuando las variables tenidas en cuenta en realidad representan
     una misma característica pero en distintos períodos de tiempo, la regresión logística,
     que es la forma en la que se calcula el puntaje de propensión, no es capaz de capturar
-    esta relación temporal entre ellas, sino que las ve como si fueran independientes.
+    esta relación temporal entre ellas, sino que las ``ve'' como si fueran independientes.
 \end{itemize}
 
 Con estos problemas en mente, el foco de nuestro trabajo está en explorar una alternativa
@@ -75,17 +75,18 @@ participación en el programa, consideramos que estas redes pueden resultar espe
 
 Para evaluar la estrategia presentada, desarrollamos diferentes conjuntos de datos
 sintéticos de tipo panel\footnotemark, ya que en los casos reales algunos comportamientos
-no pueden verificarse directamente. Aquí, algunos de los parámetros a variar son la
-cantidad de períodos observados (previos al inicio del programa), la cantidad de períodos
-de dependencia temporal, y la dinámica temporal observada. Teniendo esto en cuenta, los
-objetivos de nuestro trabajo se pueden resumir en los siguientes puntos: \footnotetext{Los
-datos de tipo panel son aquellos en los que a cada unidad considerada le corresponde una
-serie de tiempo.}
+no pueden verificarse directamente. En estos escenarios, variamos la cantidad de
+\textbf{períodos observados} (previos al inicio del programa), la cantidad de
+\textbf{períodos de dependencia temporal} - que son aquellos dentro de los períodos
+observados en los que modelamos una tendencia específica -, y la \textbf{dinámica
+temporal} (tendencia) observada. Teniendo esto en cuenta, los objetivos de nuestro trabajo
+se pueden resumir en los siguientes puntos: \footnotetext{Los datos de tipo panel son
+aquellos en los que a cada unidad considerada le corresponde una serie de tiempo.}
 \begin{itemize}
+    \item Obtener resultados que permitan comparar el desempeño de las redes con
+    el del PSM en los diferentes escenarios.
     \item Evaluar la capacidad de las redes neuronales de reconocer individuos de control
     ante diferentes dinámicas temporales de la variable observada.
-    \item Obtener resultados que permitan comparar el desempeño de las redes con
-    el del PSM en diferentes escenarios.
     \item Superar las limitaciones observadas del PSM utilizando las redes neuronales.
     Esto es: incorporar de manera más efectiva la dependencia temporal de las covariables
     y poder reconocer los controles por cohorte en un solo proceso, sin la necesidad de
@@ -94,16 +95,13 @@ serie de tiempo.}
 
 Nuestras hipótesis son las siguientes:
 \begin{itemize}
-    \item Cuando no hay una dependencia temporal marcada, es decir no hay un
-    comportamiento determinado en la evolución de la variable observada, el PSM y las
-    redes tienen aproximadamente el mismo desempeño.
-    \item Por el contario, cuando existe una alta dependencia temporal, o sea cuando en
-    los datos forzamos un determinado comportamiento temporal, las redes funcionan mejor
-    que el PSM.
+    \item Con una cantidad de períodos pre-tratamiento fija, a medida que reducimos
+    la cantidad de períodos de dependencia temporal, las redes van a tener cada
+    vez un peor desempeño y se va a asemejar al del PSM.
+    \item A medida que haya menos períodos pre-tratamiento, tanto las redes como el
+    PSM van a ir teniendo un peor rendimiento.
     \item Las redes LSTM tienen un mejor desmpeño que las convolucionales, y la combinación
     de las dos es mejor que ambas.
-    \item Ante menor cantidad de períodos de observación, las redes cometen cada
-    vez más errores.
 \end{itemize}
 
 A continuación, presentamos el marco sobre el cual llevamos a cabo los experimentos,

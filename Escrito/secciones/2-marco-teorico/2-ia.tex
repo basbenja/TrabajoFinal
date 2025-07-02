@@ -96,7 +96,7 @@ que dependen de la tarea que se esté realizando y del objetivo que se intente l
 ejemplo, en clasificación, una de las más comunes es la de exactitud (\textit{accuracy}),
 que es la proporción de ejemplos para los cuales se predijo la salida correcta (dada por
 el dataset); aunque también existen otras como la precisión, sensibilidad, especificidad,
-y el puntaje F1, que pueden resultar más adecuadas según el dominio del problema. Por otro
+y el puntaje \(F_1\), que pueden resultar más adecuadas según el dominio del problema. Por otro
 lado, en tareas de regresión, algunas métricas que se suelen utilizar son el Error
 Cuadrático Medio y el Error Absoluto Medio.
 
@@ -279,8 +279,7 @@ resulta más útil recurrir a métodos numéricos para aproximar este mínimo.
 
 El algoritmo por defecto que se utiliza para resolver este problema de optimización es el
 llamado \textbf{Descenso por el Gradiente} (DG), y es muy potente ya que se puede aplicar a
-una gran variedad de funciones de pérdida \cite{ai-a-modern-approach}, siempre que esta
-sea diferenciable (a continuación veremos por qué).
+una gran variedad de funciones de pérdida \cite{ai-a-modern-approach}.
 
 La idea del DG es ir modificando los parámetros iterativamente hasta eventualmente llegar
 a un ``valle'' de la función de pérdida. El algoritmo se basa en que la dirección dada por
@@ -301,7 +300,7 @@ es necesario que la función de pérdida sea derivable. Algo a notar es que el v
 resultante es un vector de funciones, y cuando se lo evalúa en un punto, da la dirección
 de mayor crecimiento de \(g\) desde ese punto.}
 
-Concretamente, se empieza con un vector de parámetros \(\bm{w}_0\) con valores arbitrarios
+Concretamente, se empieza con un vector de parámetros \(\bm{w}^{(0)}\) con valores arbitrarios
 que van mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente,
 con el objetivo de reducir el valor de la función de pérdida, hasta que el algoritmo
 \textit{converja} a un mínimo (local o global) de la función de pérdida.
@@ -324,14 +323,14 @@ donde \(p\) indica el número de iteración actual, y \(\nabla L(\bm{w}^{(p)})\)
 gradiente de la función de error con respecto a los pesos del modelo, evaluado en los
 valores de los pesos de la iteración actual.
 
-Algo importante a notar es que en la forma que lo presentamos hasta ahora, el cómputo del
-gradiente de la función de peso involucra recorrer todas las muestras del conjunto de
-entrenamiento, lo cual computacionalmente es ``pesado'' y puede demorar el tiempo de
-entrenamiento. Es decir, en cada iteración, el cálculo del gradiente requiere evaluar la
-contribución de cada una de las muestras, lo que puede ser caro cuando \(N\) es muy
-grande. Para mitigar este problema, existen variantes del DG que buscan aproximar
-el gradiente utilizando subconjuntos del conjunto de entrenamiento. Retomaremos este tema
-en la proxima sección de Redes Neuronales.
+% Algo importante a notar es que en la forma que lo presentamos hasta ahora, el cómputo del
+% gradiente de la función de peso involucra recorrer todas las muestras del conjunto de
+% entrenamiento, lo cual computacionalmente es ``pesado'' y puede demorar el tiempo de
+% entrenamiento. Es decir, en cada iteración, el cálculo del gradiente requiere evaluar la
+% contribución de cada una de las muestras, lo que puede ser caro cuando \(N\) es muy
+% grande. Para mitigar este problema, existen variantes del DG que buscan aproximar
+% el gradiente utilizando subconjuntos del conjunto de entrenamiento. Retomaremos este tema
+% en la proxima sección de Redes Neuronales.
 
 \subsubsection{Hiperparámetros}
 La mayoría de los algoritmos de ML tienen \textbf{hiperparámetros}, que son ajustes que
@@ -345,14 +344,17 @@ que existen varios más.
 
 Los hiperparámetros pueden contribuir a que el modelo mejore su desempeño, por lo que
 surge el problema de cómo hacer para encontrar el valor óptimo de cada uno. La respuesta a
-esto es un proceso llamado \textbf{búsqueda u optimización de hiperparámetros}.
+esto es un proceso llamado \textbf{búsqueda} u \textbf{optimización de hiperparámetros}.
 
 Esta búsqueda se hace de forma empírica: se entrenan distintos modelos con diferentes
-hiperparámetros sobre el mismo conjunto de entrenamiento, se mide el desempeño de cada
-uno de ellos, y se elige el mejor. Ahora bien, el desempeño no se mide sobre el
-conjunto de test, ya que esto podría provocar que los hiperparámetros elegidos
-funcionen bien para ese conjunto, pero no permitan al modelo generalizar a nuevos
-datos \cite{prince2024understanding}.
+hiperparámetros sobre el mismo conjunto de entrenamiento, se mide el desempeño de cada uno
+de ellos, y se elige el mejor. Ahora bien, el desempeño\footnotemark no se mide sobre el
+conjunto de test, ya que esto provocaría que la evaluación final sobre la capacidad de
+generalización del modelo esté sesgada; no sabríamos realmente cómo funciona ante entradas
+nunca vistas. \footnotetext{Cómo se mide exactamente el desempeño es una decisión de
+diseño. Generalmente interesa maximizar o minimizar una métrica puntual; y así lo que
+guiará la optimización de hiperparámetros serán los valores de esa métrica obtenidos por
+los distintos modelos.}
 
 Por lo tanto, una técnica para realizar correctamente esta búsqueda consiste en construir
 una tercera partición del conjunto de datos, además de la de entrenamiento y la de test,
@@ -389,15 +391,15 @@ Aprendizaje Supervisado. Los distintos elementos presentes son:
     y nos dará una noción de su capacidad de \textbf{generalización} una vez entrenado.
     \item Un \textbf{espacio de funciones}, que determina la forma de la función \(h\) y los
     parámetros \(\bm{w}\).
-    \item Una \textbf{función de pérdida} \(L(\bm{w})\), que mide el desempeño del modelo
-    y ayuda a guiar el entrenamiento.
+    \item Una \textbf{función de pérdida} \(L(\bm{w})\), que da una medida de qué tan bien
+    está funcionando el modelo y ayuda a guiar el entrenamiento.
     \item Un \textbf{algoritmo de optimización}, que busca minimizar la función de pérdida,
     siendo el más común el Descenso por el Gradiente.
     \item \textbf{Hiperparámetros}, que permiten controlar el proceso de entrenamiento.
 \end{itemize}
 
 Con esto, el objetivo es encontrar los parámetros \(\bm{w}^*\) que minimicen la función de
-pérdida en el conjunto de entrenamiento. Para esto, se comienza con pesos \(\bm{w}\)
+pérdida en el conjunto de entrenamiento. Para esto, se comienza con pesos \(\bm{w}^{(0)}\)
 arbitarios y, haciendo uso del algoritmo de optimización, se los va modificando iterativamente
 hasta llegar a un mínimo (local o global) de \(L(\bm{w})\).
 
@@ -423,7 +425,7 @@ características.
 En este contexto, aparecen los modelos conocidos como \textbf{Redes Neuronales}, que no
 solo permiten describir conjuntos de funciones complejas, expresivas, y no lineales sin la
 necesidad de tener un conocimiento profundo sobre la estructura subyacente de los datos,
-sino que también son capaces de trabajar con espacios de alta dimensión. En la sección
+sino que también son capaces de trabajar con espacios de alta dimensión. En la Sección
 siguiente, explicaremos el funcionamiento de estos modelos.
 
 \end{document}

@@ -7,10 +7,11 @@ estructura y funcionamiento estuvieron inspirados inicialmente por el intento de
 modelos computacionales del aprendizaje biológico, es decir modelos de cómo el aprendizaje
 podría ocurrir en el cerebro \cite{deep-learning}. Durante los últimos años, ha sido el
 área que más desarrollo e impacto ha tenido, principalmente gracias a su versatilidad,
-potencia y escalabilidad, cualidades que hacen que estos modelos sean capaces de
-enfrentar problemas grandes y complejos \cite{hands-on-ML-sklearn-tf}, y que sobre todo
-parecían extremadamente difíciles de resolver, como son el reconocimiento de voz y la
-detección de objetos.
+potencia y escalabilidad, cualidades que hacen que estos modelos sean capaces de enfrentar
+problemas grandes y complejos \cite{hands-on-ML-sklearn-tf}, y que sobre todo parecían
+extremadamente difíciles de resolver. Como mencionamos anteriormente, su avance se vio muy
+favorecido por principalemnte por la creciente disponibilidad de datos y el aumento en la
+capacidad computacional.
 
 A continuación, damos un breve contexto histórico y luego ahondamos en su funcionamiento.
 
@@ -40,7 +41,7 @@ del ``Perceptrón Multicapa'' (PMC), también conocido actualmente como ``Red Ne
 Propagación Directa''\footnotemark (del inglés \textit{Feedforward Neural Networks}, FFNN)
 \cite{deep-learning}, las cuales conforman el punto de partida de las redes neuronales
 actuales. \footnotetext{Si bien estos términos se suelen usar indistintamente, la realidad
-es que las redes neuronales feedforward presentan algunas diferencias con respecto al
+es que las redes neuronales Feedforward presentan algunas diferencias con respecto al
 Perceptrón Multicapa.}
 
 Para explicar la idea y los elementos presentes detrás de estos algoritmos, tomaremos como
@@ -62,17 +63,17 @@ funciones que proveen está formado en realidad por la composición de varias fu
 \cite{deep-learning}. Por ejemplo, podríamos tener la composición de tres funciones
 \(f^{(1)}\), \(f^{(2)}\) y \(f^{(3)}\) para formar la siguiente función:
 \begin{equation}
-    f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))
+    \hat{\bm{y}} = f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))
     \label{eq:fun-composition}
 \end{equation}
-donde \(\bm{x}\) es un vector de dimensión \(n\) de números reales: \(\bm{x}=(x_1,
-x_2, ..., x_n)\), es decir \(\bm{x} \in \mathbb{R}^n\) y asumiremos que los espacios
-de dominio y llegada de las diferentes funciones son ``compatibles''.
+donde \(\bm{x} \in \mathbb{R}^n\) para algún \(n \in \mathbb{N}\), \(\hat{\bm{y}} \in
+\mathbb{R}^m\) para algún \(m \in \mathbb{N}\), y asumiremos que los espacios de dominio y
+llegada de las diferentes funciones son ``compatibles''.
 
 Usualmente, se dice que las redes están organizadas en \textbf{capas}. De esta forma, en
 la ecuación anterior, a \(\bm{x}\) se la conoce como \textbf{capa de entrada}, a las
-funciones \(f^{(1)}\) y \(f^{(2)}\) como \textbf{capa ocultas o intermedias}, y a
-\(f^{(3)}\), que es la que produce el resultado final, como \textbf{capa de salida}. La
+funciones \(f^{(1)}\) y \(f^{(2)}\) como \textbf{capas ocultas} o \textbf{intermedias}, y
+a \(f^{(3)}\), que es la que produce el resultado final, como \textbf{capa de salida}. La
 longitud de esta cadena de funciones es la que va a dar la \textbf{profundidad} de la red.
 
 Las RNAs tienen una capa de entrada y una de salida, pero el número de capas ocultas
@@ -458,36 +459,36 @@ con matrices.
 En resumen, las redes neuronales constituyen una forma de modelar funciones altamente
 expresivas, capaces de capturar patrones complejos a través de la composición de capas de
 neuronas que actúan en cojunto. Estas neuronas están conectadas entre sí con distintas
-intensidades que, como veremos, son justamente los parámetros aprendibles de las redes. A
-continuación, describimos cómo se lleva a cabo su entrenamiento, siempre dentro del
-contexto del Aprendizaje Supervisado.
+intensidades que, como veremos, son justamente los parámetros aprendibles de las redes.
+Además, introducen nuevos hiperparámetros referentes a la arquitectura. A continuación,
+describimos cómo se lleva a cabo su entrenamiento, siempre dentro del contexto del
+Aprendizaje Supervisado.
 
 \subsubsection{Entrenamiento}
-Como dijimos, los parámetros a optimizar en las redes son las intensidades de las
-conexiones entre las neuronas, que también venimos llamando pesos. Los algoritmos de
-optimización que se emplean actualmente se basan en la regla del DG, aunque con algunas
-mejoras.
+Los parámetros a optimizar en las redes son las intensidades de las conexiones entre las
+neuronas, que también venimos llamando pesos. Los algoritmos de optimización que se
+emplean actualmente se basan en la regla del DG, aunque con algunas mejoras.
 
-Recapitulando lo mencionado en la Sección anterior, lo costoso de la regla clásica del DG
-presentada hasta el momento es que requiere calcular el gradiente de la función de pérdida
-considerando \textit{todas} las muestras del conjunto de entrenamiento. Para reducir esta
-carga, en la práctica se recurre a una aproximación: en lugar de usar todas las muestras,
-se selecciona aleatoriamente un subconjunto de ellas, llamado \textbf{lote}
-(\textit{batch}), y se calcula el gradiente usando únicamente ese lote. Luego, se
-actualizan los pesos en base a esta estimación. Cabe aclarar que el tamaño de lote, es
-decir la cantidad de ejemplos que se eligen cada vez, se mantiene fijo en todo el
-entrenamiento y constituye un hiperparámetro. Esta técnica suele llamarse optimización por
-\textbf{mini-lotes} o \textbf{estocástica}, ya que introduce cierto grado de aletoriedad
-en el cálculo del gradiente.
+Lo costoso de la regla clásica del DG presentada hasta el momento es que requiere calcular
+el gradiente de la función de pérdida considerando \textit{todas} las muestras del
+conjunto de entrenamiento. Para reducir esta carga, en la práctica se recurre a una
+aproximación: en lugar de usar todas las muestras, se selecciona aleatoriamente un
+subconjunto de ellas, llamado \textbf{lote} (\textit{batch}), y se calcula el gradiente
+usando únicamente ese lote. Luego, se actualizan los pesos en base a esta estimación. Cabe
+aclarar que el tamaño de lote, es decir la cantidad de ejemplos que se eligen cada vez, se
+mantiene fijo en todo el entrenamiento y constituye un hiperparámetro. Esta técnica suele
+llamarse optimización por \textbf{mini-lotes} o \textbf{estocástica}, ya que introduce
+cierto grado de aletoriedad en el cálculo del gradiente.
 
 Otra mejora aplicada sobre el método del DG estándar, diseñada para acelerar el
 aprendizaje, es la técnica conocida como \textbf{momentum}. A grandes rasgos, consiste en
 actualizar los pesos mirando no solo el gradiente de la iteración actual, sino también
-dándole un peso a la acumulación de gradientes de las iteraciones anteriores. Esto permite
-sobre todo acelerar las actualizaciones cuando se encuentran sucesivos gradientes que
-apuntan en la misma dirección \cite{deep-learning}. Un optimizador ampliamente utilizado
-actualmente, y que es el que empleamos en este trabajo, es \textbf{Adam} \cite{adampaper}.
-Este combina momentum con una tasa de aprendizaje adaptativa para cada parámetro.
+prestando atención a la acumulación de gradientes de las iteraciones anteriores. Esto
+permite sobre todo acelerar las actualizaciones cuando se encuentran sucesivos gradientes
+que apuntan en la misma dirección \cite{deep-learning}. Un optimizador ampliamente
+utilizado actualmente, y que es el que empleamos en este trabajo, es \textbf{Adam}
+\cite{adampaper}. Este combina momentum con una tasa de aprendizaje adaptativa para cada
+parámetro.
 
 Para entender cómo progresa el entrenamiento, es útil definir el concepto el concepto de
 \textbf{época}. Una época se refiere al proceso completo en el cual el modelo se entrena
@@ -525,7 +526,8 @@ funciones compuestas y se divide en dos etapas: primero, el paso hacia adelante
 entender estas etapas, supondremos que solamente una entrada es provista a la red.
 
 En el forward pass, la red simplemente lleva a cabo una predicción para la entrada,
-realizando todo el cómputo intermedio necesario para llegar a producir una salida.
+realizando todo el cómputo intermedio necesario para llegar a producir una salida, y
+guardando la salida de cada neurona.
 
 El backward pass comienza por calcular el error cometido por la red para la entrada dada,
 y consiste en propagar este error desde la capa de salida hasta la de entrada, midiendo la
@@ -553,8 +555,8 @@ y veamos cómo computaríamos el efecto de un cambio en un peso de manera intuit
 \end{itemize}
 Mientras nos movemos hacia las primeras capas de la red, vemos que la mayoría de los
 términos que se necesitan ya han sido calculados en pasos anteriores, por lo que no es
-necesario recomputarlos. Justamente calcular los efectos de los cambios - que son
-básicamente las derivadas parciales - de esta manera es conocido como el backward pass.
+necesario recomputarlos. Justamente calcular los efectos de los cambios - que son en otras
+palabras las derivadas parciales - de esta manera es conocido como el backward pass.
 
 El paso final del backpropagation es actualizar los pesos con los gradientes calculados
 en el backward pass utilizando la regla del DG (con las optimizaciones que se hayan
@@ -598,7 +600,7 @@ dropout''.
 Este método fuerza a las neuronas a aprender no solo a ser útiles por sí solas,
 pero sino también a ser compatibles con muchos conjuntos posibles de neuronas que pueden
 estar o no incluidas en la red \cite{ai-a-modern-approach}. En resumen, contribuye
-a que la red no dependa de unidades específicas y lo fuerza a aprender diversas
+a que la red no dependa de unidades específicas y la fuerza a aprender diversas
 explicaciones para cada entrada \cite{ai-a-modern-approach}.
 
 Luego del entrenamiento, no se aplica más el dropout y todas las neuronas de la red
@@ -608,8 +610,8 @@ cada peso por (\(1-p\)) \cite{prince2024understanding}.
 
 \bigskip
 En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
-de las que hacemos uso en este trabajo: las Redes Neuronales Convolucionales y las Redes
-Neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
+de las que hacemos uso en este trabajo: las redes neuronales Convolucionales y las redes
+neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
 específico de datos. Las convolucionales son ideales para procesar datos estructurados en
 forma de grilla, mientras que las recurrentes son adecuadas para secuencias temporales.
 Presentaremos la intuición detrás de ellas y nos concentraremos en su aplicación sobre

@@ -1,26 +1,25 @@
 \documentclass[../../main.tex]{subfiles}
 
 \begin{document}
-Como mencionamos en el capítulo anterior, uno de nuestros objetivos es obtener resultados
-que permitan comparar el desempeño de las redes neuronales con el del PSM en los
-distintos escenarios. Las diferencias metodológicas inherentes a ambas técnicas hacen que
-esto sea un desafío. En esta sección, describimos la estrategia propuesta en este trabajo
-para abordarlo.
+Como mencionamos en el \hyperref[sec:problema]{Capítulo anterior}, uno de nuestros objetivos es
+obtener resultados que permitan comparar el desempeño de las redes neuronales con el del
+PSM en los distintos escenarios. Las diferencias metodológicas inherentes a ambas técnicas
+hacen que esto sea un desafío. En esta sección, describimos la estrategia propuesta en
+este trabajo para abordarlo.
 
 Para empezar, a partir de los datos generados, construimos los conjuntos de entrenamiento
 y test de la siguiente manera, con la idea que los modelos aprendan los patrones vistos en
 los tratados para luego poder identificar los controles:
 \begin{itemize}
     \item \textbf{Conjunto de entrenamiento}: individuos tratados de todas las cohortes
-    (1000 en total) y una muestra aleatoria de 1000 NiNis.
+    (1000 en total) y una muestra aleatoria de 1000 NiNi.
     \item \textbf{Conjunto de test}: individuos de control de todas las cohortes (1000 en
-    total) y una muestra aleatoria de 1500 NiNis, distinta a la utilizada en el conjunto
-    de entrenamiento.
+    total) y los 1500 NiNi restantes (de los 2500 generados en cada escenario).
 \end{itemize}
 
 Un detalle a tener en cuenta es que tanto tratados como controles tienen una
 característica extra: el inicio de programa. Sin embargo, esta no está presente en los
-NiNis, justamente porque no fueron tratados y porque no forman parte del grupo de
+NiNi, justamente porque no fueron tratados y porque no forman parte del grupo de
 comparación en ninguna de las cohortes. Para reflejar esto e intentar ``transmitírselo''
 al modelo, por cada NiNi incluido, generamos versiones múltiples de cada uno, simulando
 cómo se verían si pertenecieran a distintas cohortes. Puntualmente, a cada uno lo
@@ -29,13 +28,13 @@ repetición los períodos previos al respectivo inicio. En todas las repeticione
 etiqueta asignada es 0. Por lo tanto, los conjuntos de entrenamiento y test finales fueron
 los siguientes:
 \begin{itemize}
-    \item \textbf{Conjunto de entrenamiento}:
+    \item \textbf{Conjunto de entrenamiento}:\vspace{-0.2cm}
         \begin{itemize}
             \item Individuos tratados de todas las cohortes (1000).
             \item 1000 individuos NiNi, cada uno repetido tantas veces como cohortes haya,
             con los períodos previos al inicio de programa de cada cohorte.
         \end{itemize}
-    \item \textbf{Conjunto de test}:
+    \item \textbf{Conjunto de test}:\vspace{-0.2cm}
         \begin{itemize}
             \item Individuos de control de todas las cohortes (1000).
             \item 2500 individuos NiNi, cada uno repetido tantas veces como cohortes haya,

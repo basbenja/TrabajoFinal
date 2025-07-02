@@ -1,5 +1,4 @@
 \documentclass[../../main.tex]{subfiles}
-% \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
 Los programas y las políticas públicas de desarrollo suelen estar diseñados para cambiar
@@ -10,9 +9,13 @@ conoce como \textbf{evaluación de impacto}.
 
 Una evaluación de impacto mide los cambios en el bienestar de los individuos que se pueden
 atribuir a un proyecto, un programa o una política específicos \cite{gertler-2016}. Su
-sello distintivo es que pueden proporcionar \textbf{evidencia} robusta y creíble
-sobre si un programa concreto ha alcanzado o está alcanzando sus objetivos
-\cite{gertler-2016}.
+sello distintivo es que pueden proporcionar \textbf{evidencia} robusta y creíble sobre si
+un programa concreto ha alcanzado o está alcanzando sus objetivos \cite{gertler-2016}.
+Algunas de las principales razones por las que se debería promover su uso como
+herramientas de gestión provienen del hecho que permiten mejorar la rendición de cuentas,
+la inversión de recursos públicos o la efectividad de una política, obtener
+financiamiento, como así también probar modalidades de programas alternativos o
+innovaciones de diseño \cite{gertler-2016}.
 
 Estas evaluaciones ponen un fuerte énfasis en los resultados y buscan responder una
 pregunta específica de causa y efecto: ¿cuál es el impacto (o efecto causal) de un
@@ -33,12 +36,6 @@ embargo, es evidente que la respuesta a qué habría pasado con los beneficiario
 hubieran recibido el tratamiento se refiere a una situación que no es observable. Este
 resultado hipotético se denomina \textbf{contrafactual} (o contrafáctico) y es lo que se
 debe estimar en cualquier evaluación de impacto.
-
-Algunas de las principales razones por las que se debería promover el uso de estas
-evaluaciones como herramientas de gestión provienen del hecho que permiten mejorar la
-rendición de cuentas, la inversión de recursos públicos o la efectividad de una política,
-obtener financiamiento, como así también probar modalidades de programas alternativos o
-innovaciones de diseño \cite{gertler-2016}.
 
 Un ejemplo claro de por qué son necesarias las evaluaciones de impacto es el que describe
 Howard White con respecto al Programa Integrado de Nutrición en Bangladesh (PINB)
@@ -69,13 +66,13 @@ comunidades tratadas, sino también que los niños beneficiarios dedicaban un pr
 trabajos en las granjas familiares y a asistir a encuentros comunitarios. Además, la
 participación en el programa preescolar mostró mejoras consistentes en habilidades motoras
 finas, cognitivas, y de resolución de problemas \cite{preschool-africa-2012}. Todos estos
-resultados contribuyeron a reforzar la idea de que los programas preescolares constituyen
+resultados contribuyeron a reforzar la idea que los programas preescolares constituyen
 una política prometedora para mejorar la preparación escolar de niños pobres y
 desfavorecidos en áreas rurales de África.
 
-Habiéndonos enfocado en el \textit{qué} es una evaluación de impacto, a continuación,
-presentamos \textit{cómo} se lleva a cabo una, detallando los elementos presentes y los
-problemas que pueden surgir al hacerlo.
+Habiéndonos enfocado en el \textit{qué} es una evaluación de impacto y su relevancia, a
+continuación, presentamos \textit{cómo} se lleva a cabo una, detallando los elementos
+presentes y los problemas que pueden surgir al hacerlo.
 
 \subsection{Estimación del Tratamiento}
 Como mencionamos anteriormente, el resultado deseado al llevar a cabo una evaluación de
@@ -108,8 +105,8 @@ programa (\(Y_i(1)\)) y la misma variable sin el programa (\(Y_i(0)\)).
 
 De nuevo, el problema fundamental de la evaluación de impacto es que se intenta medir una
 variable en un mismo momento del tiempo para la misma unidad de observación pero en dos
-realidades diferentes. Sin embargo, en la realidad, solo se observa uno de los dos resultados
-potenciales \(Y_i(1)\) o \(Y_i(0)\), pero no ambos. Es decir, en los datos queda solamente
+realidades diferentes. Sin embargo, solo se observa uno de los dos resultados potenciales
+\(Y_i(1)\) o \(Y_i(0)\), pero no ambos. Más precisamente, en los datos queda solamente
 registrado \(Y_i(1)\) si \(D_i=1\) e \(Y_i(0)\) si \(D_i=0\); no se dispone de \(Y_i(1)\)
 si el individuo no fue tratado (\(D_i=0\)), ni tampoco de \(Y_i(0)\) si el individuo fue
 tratado (\(D_i=1\)). De esta manera, el \textbf{resultado observado de \(Y_i\)} se puede
@@ -131,7 +128,7 @@ programa}. Al ser imposible observar directamente el contrafactual, es necesario
 
 La forma más directa de solucionar este problema sería hallando un ``clon perfecto'' para
 cada uno de los beneficiarios del programa en el grupo de individuos no tratados, lo cual
-resulta bastante complicado. Por lo tanto, el primer paso para lograr esta estimación
+puede resultar bastante complicado. Por lo tanto, el primer paso para lograr esta estimación
 consiste en \textbf{desplazarse desde el nivel individual al nivel del grupo}
 \cite{gertler-2016}, enfocando el análisis en el \textbf{impacto} o \textbf{efecto
 \textit{promedio}}.
@@ -142,6 +139,8 @@ En primera instancia, se puede estimar el \textbf{impacto promedio del programa
     ATE = \mathbb{E}\left[Y_i(1)-Y_i(0)\right]
 \end{equation}
 donde el operador \(\mathbb{E}\) representa la esperanza de una variable aleatoria.
+En este caso, la esperanza se toma sobre toda la población elegible para el tratamiento
+en cuestión.
 
 El \(ATE\) se interpreta como el cambio promedio en la variable de resultado cuando un
 individuo escogido al azar pasa aleatoriamente de ser participante a ser no participante
@@ -165,32 +164,32 @@ tratados:
     \mathbb{E} \left[Y_i(0)|D_i=1\right]
     \label{eq:ATT}
 \end{equation}
-Es decir, el \(ATT\) es la diferencia entre la media de la variable de resultado en el
-grupo de los participantes y la media que hubieran obtenido los participantes si el
-programa no hubiera existido \cite{bernal}. Ahora bien, ¿cómo podemos intentar estimar
-esta última situación? A continuación, presentamos una estrategia utilizada para esto.
+donde en este caso la esperanza se toma sobre los individuos tratados. Es decir, el
+\(ATT\) es la diferencia entre la media de la variable de resultado en el grupo de los
+participantes y la media que hubieran obtenido los participantes si el programa no hubiera
+existido \cite{bernal}. Ahora bien, ¿cómo podemos intentar estimar esta última situación?
+A continuación, presentamos una estrategia utilizada para esto.
 
 \subsection{El Grupo de Control como Estimador del Contrafactual}
 En la ecuación \ref{eq:ATT}, el término \(\mathbb{E} \left[Y_i(1)|D_i=1\right]\) es un
 resultado observable mientras que \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) es el promedio
 contrafactual que debemos aproximar. Para lograrlo, se construye lo que se conoce como
-\textbf{grupo de control} o \textbf{de comparación}, formado por individuos que no
-participan del programa pero que, idealmente, son estadísticamente similares
-\cite{gertler-2016} al \textbf{grupo de tratamiento}, compuesto por quienes sí recibieron
-el programa. La Figura \ref{fig:control-group} ilustra esta distinción. A partir de ahora,
-denotaremos con \(C_i\) a un individuo \(i\) que pertenezca al grupo de control.
+\textbf{grupo de control} o \textbf{de comparación}, formado por individuos que no han
+participado del programa pero que, idealmente, eran estadísticamente similares
+\cite{gertler-2016} al \textbf{grupo de tratamiento} en la línea de base, es decir en el
+momento previo al tratamiento. La Figura \ref{fig:control-group} ilustra esta distinción.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.65\textwidth]{figs/grupo-de-control.png}
     \caption{El grupo de control debería estar formado idealmente por individuos que no
-    recibieron el tratamiento pero que en promedio poseen características similares a
-    los tratados.}
+    recibieron el tratamiento pero que en promedio poseían características similares a
+    los tratados en la línea de base.}
     \label{fig:control-group}
 \end{figure}
 
 Por lo tanto, en la práctica, para obtener una buena estimación del \(ATT\), el reto está
-en definir un \textit{buen} grupo de control, es decir uno que sea estadísticamente
+en definir un grupo de control \textit{válido}, es decir uno que sea estadísticamente
 idéntico al de tratamiento, en promedio, en ausencia del programa \cite{gertler-2016}. Si
 se lograra que los dos grupos sean idénticos, con la única excepción que un grupo
 participa del programa y el otro no, entonces sería posible estar seguros que cualquier
@@ -206,9 +205,8 @@ Para que un grupo de comparación sea válido, debe satisfacer lo siguiente \cit
     \item El grupo de comparación debería reaccionar de la misma manera que el grupo de
     tratamiento si fuera objeto del programa.
 \end{itemize}
-Sin embargo, cabe aclarar que en general, no resulta sencillo verificar estos puntos, por
-lo que las técnicas de evaluación que veremos a continuación suelen establecer algunos
-supuestos sobre ellos.
+En general, no resulta sencillo verificar estos puntos, por lo que las técnicas de
+evaluación que veremos a continuación suelen establecer algunos supuestos sobre ellos.
 
 Cuando el grupo de comparación no produce una estimación precisa del contrafactual, no se
 puede establecer el verdadero impacto del programa. A continuación, se presentan dos
@@ -218,33 +216,32 @@ situaciones comúnes en las que esto ocurre.
 Este tipo de comparaciones intenta establecer el impacto de un programa a partir de un
 seguimiento de los cambios en los resultados en los participantes del programa a lo largo
 del tiempo. Estiman el contrafactual con el resultado promedio para el grupo de
-tratamiento antes que comience la intervención, momento también conocido como
-\textbf{línea de base}. Si bien una ventaja de este método es que no es necesario hallar
-un grupo de control, esta comparación supone que si el programa no hubiera existido,
-el resultado para los participantes del programa habría sido igual a su situación antes
-del mismo, lo cual en la mayoría de los tratamientos no puede sostenerse
-\cite{gertler-2016}.
+tratamiento antes que comience la intervención, es decir en la línea de base. Si bien una
+ventaja de este método es que no es necesario hallar un grupo de control, esta comparación
+supone que si el programa no hubiera existido, el resultado para los participantes del
+programa habría sido igual a su situación antes del mismo, lo cual en la mayoría de los
+tratamientos no puede sostenerse \cite{gertler-2016}.
 
-\subsubsection{Comparaciones de inscritos y no inscritos: Sesgo de autoselección}
+\subsubsection{Comparaciones de tratados y no tratados: Sesgo de autoselección}
 Como explicamos anteriormente, el término \(\mathbb{E} \left[Y_i(0)|D_i=1\right]\) de la
 Ecuación \ref{eq:ATT} representa el contrafactual, que no es observable. Sin embargo, lo
-que sí se puede medir es la variable de resultado entre los no inscritos, aquellos
+que sí se puede medir es la variable de resultado entre los no tratados, aquellos
 individuos que no participaron del programa, es decir \(\mathbb{E}
 \left[Y_i(0)|D_i=0\right]\).
 
 Por lo tanto, podríamos tomar a todo el conjunto de los no participantes como grupo de
 control y solucionar el problema del contrafactual utilizando \(\mathbb{E}
-\left[Y_i(0)|D_i=0\right]\) como estimador, es decir podríamos asumir lo siguiente:
+\left[Y_i(0)|D_i=0\right]\) como estimador. Es decir, podríamos asumir lo siguiente:
 \begin{equation}
     \mathbb{E} \left[Y_i(0)|D_i=1\right] = \mathbb{E} \left[Y_i(0)|D_i=0\right]\
     \label{eq:supuesto-1}  % IC: Independencia Condicional
 \end{equation}
 Esto quiere decir que el valor esperado de la variable de resultado en ausencia del
 programa (\(\mathbb{E}\left[Y_i(0)\right]\)) es idéntico para el grupo de tratados (\(D_i =
-1\)) y para el de no tratados (\(D_i = 0\)). Indica que los individuos que participan en el
-programa no son sistemáticamente distintos de los que no lo hacen \cite{bernal} o, en
-otras palabras, que la decisión de participar en el programa no está determinada por
-factores que también influyen en la variable de resultado.
+1\)) y para el de no tratados (\(D_i = 0\)). Indica que los individuos que participaron en el
+programa no son sistemáticamente distintos de los que no lo hicieron \cite{bernal} o, en
+otras palabras, que la decisión de participar en el programa no estuvo determinada por
+factores que también pueden haber influido en la variable de resultado.
 
 De esta forma, podríamos calcular el \(ATT\) como:
 \begin{equation}
@@ -314,30 +311,37 @@ principales objetivos de cualquier evaluación de impacto, y plantea importantes
 dificultades \cite{gertler-2016}.
 
 \bigskip
-Es importante en este punto identificar claramente las comparaciones que hemos
-mencionado hasta el momento, las cuales se encuentran en la Tabla \ref{tab:distinciones}.
+Es importante en este punto identificar claramente las comparaciones que hemos mencionado
+hasta el momento, las cuales se encuentran en la Tabla \ref{tab:distinciones}. Allí,
+usamos \(Y_{C_i}\) para denotar al valor de la variable \(Y\) en un individuo \(C_i\)
+perteneciente al grupo de control .
 \begin{table}[h!]
     \centering
     \begin{tabular}{p{7cm}m{7cm}}  % Set fixed column widths
         \hline
-        \textbf{Lo que se desea medir}: el \(ATT\). & \(\mathbb{E} \left[Y_i(1)-Y_i(0)|D_i=1\right]\) \\
+        \textbf{Lo que se desea medir}: el \(ATT\).
+            & \(\mathbb{E} \left[Y_i(1)-Y_i(0)|D_i=1\right]\)
+            \\
         \hline
         \textbf{Lo que se observa}: el promedio de la diferencia entre los resultados de
-        los tratados y el grupo de control. & \(\mathbb{E} \left[Y_i(1)|D_i=1\right]\) -
-        \(\mathbb{E} \left[C_i(0)|D_i=0\right]\) \\
+        los tratados y el grupo de control.
+            & \(\mathbb{E} \left[Y_i(1)|D_i=1\right]\) - \(\mathbb{E} \left[Y_{C_i}(0)|D_i=0\right]\)
+            \\
         \hline
-        \textbf{El sesgo de autoselección}: las diferencias preexistentes entre el grupo de
-        tratamiento y el de control. & \(\mathbb{E} \left[Y_i(0)-C_i(0)|D_i=0\right]\) \\
+        El promedio de la \textbf{diferencia} entre \textbf{lo que se observa} y
+        \textbf{lo que se desea medir}.
+            & \(\mathbb{E} \left[Y_{C_i}(0)|D_i=0\right] - \mathbb{E}\left[Y_i(0)|D_i=1\right]\)
+        \\
         \hline
     \end{tabular}
     \caption{Distinción entre las diferentes comparaciones presentes en una evaluación de impacto.}
     \label{tab:distinciones}
 \end{table}
 
-Teniendo en cuenta las fórmulas expuestas en la Tabla \ref{tab:distinciones}, podemos
-enunciar de otra forma lo que dijimos anteriormente: la calidad de una evaluación de
-impacto dependerá de los supuestos necesarios para asegurar que no hay sesgo de autoselección,
-es decir que \(\mathbb{E} \left[Y_i(0)-C_i(0)|D_i=0\right] = 0\).
+Teniendo en cuenta las fórmulas expuestas en la Tabla \ref{tab:distinciones}, la calidad
+de una evaluación de impacto dependerá de los supuestos necesarios para asegurar que el
+grupo de control es una buena aproximación del contrafactual, es decir que \(\mathbb{E}
+\left[Y_{C_i}(0)|D_i=0\right] - \mathbb{E}\left[Y_i(0)|D_i=1\right] = 0\).
 
 \bigskip
 Las reglas de un programa para seleccionar a los participantes beneficiarios, también
@@ -370,10 +374,10 @@ al grupo de tratamiento en todos los sentidos, excepto con respecto a su partici
 el programa que se evalúa. Ahora bien, el proceso de asignación aleatoria producirá dos
 grupos que tienen una alta probabilidad de ser estadísticamente idénticos en todas sus
 características (observables y no observables), siempre que el número de unidades sea
-suficientemente grande \cite{gertler-2016}. Esto es así ya que en general, si esto ocurre,
-este mecanismo asegura que cualquier rasgo de la población se transfiere a ambos grupos.
-Sin embargo, en la práctica, este supuesto debería comprobarse empíricamente con los datos
-de línea de base de ambos grupos.
+suficientemente grande \cite{gertler-2016}. En general, si esto ocurre, este mecanismo
+asegura que cualquier rasgo de la población se transfiere a ambos grupos. Sin embargo, en
+la práctica, este supuesto debería comprobarse empíricamente con los datos de línea de
+base de ambos grupos.
 
 Dicho esto, lo que sucede en estos casos es que todos aquellos individuos que no
 resultaron ser beneficiarios del programa conforman un grupo de control que resulta ser
@@ -401,13 +405,13 @@ de conglomerado (por ejemplo, comunidades) \cite{bernal}.
 
 Resulta claro que las evaluaciones experimentales tienen varias ventajas: por diseño, al
 quitarles la posibilidad de elección a los individuos sobre si participar o no en el
-programa, resuelven el problema del sesgo de selección, y además los resultados obtenidos
+programa, resuelven el problema del sesgo de autoselección, y además los resultados obtenidos
 son transparentes, intuitivos y no es necesario utilizar herramientas econométricas
 sofisticadas para alcanzarlos \cite{bernal}. Esto hace que contribuyan a la transparencia
 de las políticas públicas y a la rendición de cuentas \cite{bernal}.
 
-Sin embargo, este tipo de experimentos sufre varias limitaciones que hace que no sea tan
-común en la práctica. Por un lado, pueden ser costosos y de difícil implementación
+Sin embargo, este tipo de experimentos sufre varias limitaciones que hace que no sean tan
+comúnes en la práctica. Por un lado, pueden ser costosos y de difícil implementación
 \cite{bernal}. Esto se debe a que en general, el ensayo aleatorio se hace específicamente
 para evaluar una intervención, por lo que es necesario destinar recursos para la prueba
 piloto, la recolección de información, los seguimientos, y a veces incluso la
@@ -455,7 +459,7 @@ Si denotamos con \(Y^{(1)}\) al valor de la variable \(Y\) en la línea de base,
 antes de la implementación del programa, y con \(Y^{(2)}\) al valor de la misma variable en
 un período posterior a la implementación (también llamado período de seguimiento),
 entonces el impacto del programa por el método de DD está dado por\footnotemark
-\footnotetext{Omitimos el subíndice \(i\) por comodidad}:
+\footnotetext{Omitimos el subíndice \(i\) por comodidad.}:
 \begin{equation}
     ATT_{DD} =
         \left(
@@ -471,18 +475,20 @@ Es importante señalar que el contrafactual que se estima en este caso es el cam
 resultados del grupo de tratamiento, y su estimación se logra midiendo el cambio en los
 resultados del grupo de comparación \cite{gertler-2016}. En lugar de contrastar los
 resultados entre los grupos de tratamiento y comparación después de la intervención, la
-técnica de DD estudia las \textit{tendencias} entre los grupos de tratamiento y comparación
-\cite{gertler-2016}.
+técnica de DD estudia las \textit{tendencias} entre ambos grupos \cite{gertler-2016}.
 
 Como explicamos con anterioridad, el principal problema de las comparaciones antes-después
 en el grupo de tratamiento es que se asume que lo único que hizo cambiar la variable de
-resultado fue el programa, cuando en realidad puede haber sido por factores externos. El
-DD busca solucionar este problema partiendo de la idea que la diferencia en los resultados
-antes-después para el grupo de tratamiento captura factores que son constantes a lo largo
-del tiempo en ese grupo. Para ``limpiar'' este cambio de otros factores que sí varían en
-el tiempo, se lo compara con el cambio antes-después observado en un grupo que no
-participó del programa pero que estuvo expuesto al mismo conjunto de condiciones
-ambientales.
+resultado fue el programa. Sin embargo, el cambio observado puede haber sido por factores
+externos o incluso características propias de los individuos que se mantuvieron durante el
+programa y afectaron el resultado final.
+
+El DD busca solucionar este problema partiendo de la idea que la diferencia en los
+resultados antes-después para el grupo de tratamiento refleja tanto el efecto del
+tratamiento como el impacto de factores constantes a lo largo del tiempo en ese
+grupo. Para ``limpiar'' este cambio de otros factores que sí varían en el tiempo, se lo
+compara con el cambio antes-después observado en un grupo que no participó del programa
+pero que estuvo expuesto al mismo conjunto de condiciones ambientales.
 
 Ahora bien, el supuesto que permite utilizar la diferencia en el grupo de no inscritos
 para controlar los factores externos que afectan a los inscritos es que, en ausencia del
@@ -510,7 +516,7 @@ resulta conveniente reescribir el estimador de la Ecuación \ref{eq:dif-en-dif-1
 
 De la Ecuación \ref{eq:dif-en-dif-2} se puede ver que lo que plantea es restarle al cambio
 visto en la variable entre tratados y no tratados luego de la implementación del programa
-(\(Y^{(2)}\)), las diferencias que ya pueda haber habido entre ellos en la línea de base
+(\(Y^{(2)}\)), las diferencias que ya puedan haber existido entre ellos en la línea de base
 (\(Y^{(1)}\)). Es decir, desde este punto de vista, se utiliza a
 \(\mathbb{E}\left[Y^{(1)}|D=1\right] - \mathbb{E}\left[Y^{(1)}|D=0\right]\) como un
 estimador de las diferencias preexistentes entre el grupo de tratamiento y el grupo de
@@ -542,6 +548,12 @@ siguiente forma\footnotemark :
 \end{equation}
 y se lo conoce como \textbf{supuesto de Independencia Condicional} (IC).
 
+Por ejemplo, si se considera que las características en cuestión son el nivel
+socioeconómico (bajo, medio y alto) y la cantidad de hijos, entonces lo que supone este
+método es que individuos con el mismo nivel socioeconómico y la misma cantidad de hijos
+tendrían, en promedio, el mismo resultado si no hubieran recibido el tratamiento,
+independientemente de si efectivamente lo recibieron o no.
+
 Con esto en mente, la versión más directa de esta metodología consiste en encontrar un
 ``clon'' \textit{para cada individuo tratado} en el grupo de no tratados y contrastar las
 variables de resultado de ambos \cite{bernal}. Un clon en este caso quiere decir, una vez
@@ -557,15 +569,15 @@ para cada una de las unidades del grupo de tratamiento. Esta situación es conoc
 
 Para solucionarlo, se utiliza un método denominado \textbf{Pareamiento por Puntajes de
 Propensión} (\textit{Propensity Score Matching}, PSM), presentado por primera vez en 1983
-en \cite{psm1983}. Consiste en emparejar individuos pero no con base en \(X\), sino en su
+\cite{psm1983}. Consiste en emparejar individuos pero no con base en \(X\), sino en su
 probabilidad estimada de participación en el programa, dadas sus características
 observables, es decir en:
-\[P(X) = P(D = 1|X)\] donde \(P\) denota el operador de probabilidad de un evento . Este
+\[P(X) = P(D = 1|X)\] donde \(P\) denota el operador de probabilidad de un evento. Este
 valor es conocido como \textbf{probabilidad de participación} o \textbf{puntaje de
 propensión}.
 
-De esta forma, el clon adecuado para cada individuo del grupo de tratamiento
-será aquel del grupo de no tratados con una probabilidad de participación en el programa
+De esta forma, la pareja adecuada para cada individuo del grupo de tratamiento será aquel
+individuo del grupo de no tratados con una probabilidad de participación en el programa
 suficientemente cercana \cite{bernal}. La ventaja de emparejar a partir de \(P(X)\), a
 diferencia de \(X\), es que \(P(X)\) es un número, mientras que \(X\) puede tener una
 dimensión muy grande \cite{bernal}. Cabe aclarar que para calcular este puntaje, solo
@@ -635,8 +647,7 @@ son funciones de la probabilidad de participación en el programa \cite{bernal}.
 Los pasos a seguir a la hora de aplicar la técnica de PSM se pueden resumir en los
 siguientes puntos:
 \begin{enumerate}[label=\textbf{\arabic*.}]
-    \item Identificar las unidades que se inscribieron en el programa y las que no lo
-    hicieron.
+    \item Identificar las unidades que que fueron tratados y las que no.
     \item Definir el conjunto de variables observables \(X\) que se utilizarán para
     calcular el puntaje de propensión \(P(X)\).
     \item Calcular el puntaje de propensión \(P(X)\) para cada individuo, tratados
@@ -655,7 +666,7 @@ A continuación, se explican brevemente algunos de estos pasos.
 En cuanto a la elección de variables (paso \textbf{2}) que se incluirán para calcular el
 puntaje de propensión, si bien es importante poder parear utilizando un gran número de
 características, lo es más aún hacerlo sobre la base de aquellas que \textbf{determinan la
-inscripción} \cite{gertler-2016}.  En términos estadísticos, estas características reciben
+inscripción} \cite{gertler-2016}. En términos estadísticos, estas características reciben
 el nombre de \textbf{covariables}, \textbf{variables independientes} o \textbf{variables
 explicativas}, y son justamente aquellas que posiblemente predicen el resultado bajo
 estudio.
@@ -669,7 +680,7 @@ estas características deben ser medidas en la línea de base, y no una vez apli
 programa, ya que se pueden haber visto afectadas por el mismo.
 
 Con respecto al cálculo del puntaje de propensión (paso \textbf{3}), la idea es
-especificar un modelo \(P(D=1|X) = f(X)\), es decir, la probabiliad de participación como
+especificar un modelo \(P(D=1|X) = f(X)\), es decir la probabiliad de participación como
 una función que puede ser lineal o no lineal en las características observables de los
 individuos, \(X\) \cite{bernal}. Con frecuencia se prefieren los modelos de regresión
 logística (\textit{logit}) o de probabilidad (\textit{probit}) \cite{bernal}. En este
@@ -679,24 +690,28 @@ se trata.
 Una regresión es un método en el cual se propone una relación funcional entre una variable
 dependiente y una o varias variables independientes, y luego se estiman los coeficientes o
 parámetros correspondientes a dicha relación funcional \cite{giuliodori-2022}. En el caso
-del PSM, la variable dependiente es la probabilidad de participación y las independientes,
-aquellas que el investigador haya seleccionado en el paso \textbf{2}. Cuando lo que se
-intenta estimar es justamente una probabilidad, una opción es emplear el modelo de
-regresión logística, que establece como relación funcional la llamada función logística o
-sigmoide:
+del PSM, la variable dependiente es \(D\), que toma el valor 1 si un individuo fue
+tratado, y 0 en caso contrario. Y las independientes aquellas que el investigador haya
+seleccionado en el paso \textbf{2}, que denotamos con \(X\).
+
+Ahora bien, lo que en realidad modela la regresión logística es la probabilidad que los
+valores de las variables independientes se correspondan con la categoría 1, es decir:
+\(P(D=1|X=\bm{x})\), donde \(\bm{x}\) corresponde a valores específicos de las variables
+en \(X\).
+
+Para ello, la regresión logística propone como relación funcional la llamada función
+logística o sigmoide:
 \[
     f(z) = \frac{e^z}{1 + e^z}
 \]
 El gráfico de esta función se puede ver en la Figura \ref{fig:logit}, donde se observa que
 siempre da como resultado un valor real en el rango [0,1].
 
-En la regresión logística, se toma \(z = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots +
+Más precisamente, se toma \(z = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots +
 \beta_k x_k\), siendo \(x_j\) las variables independientes y \(\beta_j\) los coeficientes
-a estimar, correspondientes a la ponderación que tiene cada una de las variables. De esta
-forma, suponiendo que se tienen dos clases o categorías ``0'' o ``1'', que en el PSM
-serían respectivamente ``no participa'' y ``participa'', el valor dado por la función se
-interpreta como la probabilidad que los valores de las variables independientes se
-correspondan con la categoría 1, es decir: \(P(y=1|x_1, x_2, ..., x_k)\).
+a estimar, correspondientes a la ponderación que tiene cada una de las variables. Para
+una explicación más detallada de la regresión logística y de cómo se calculan los coeficientes,
+se puede consultar la Sección 17.1 de \cite{intro-econometria-wooldridge}.
 
 \begin{figure}[h!]
     \centering
@@ -712,7 +727,7 @@ comparación. También se los llama estimadores ya que en fin, determinan una fo
 estimar el \(ATT\).
 
 Uno de los más usados y más simples de entender es el de vecino más cercano (o \textit{NN
-matching}, por su sigla en inglés, \textit{nearest neighbor}) \cite{bernal}. En el NN
+matching}, por sus sigla en inglés, \textit{nearest neighbor}) \cite{bernal}. En el NN
 matching, una opción es emparejar cada individuo de tratamiento con aquel del grupo de no
 tratados que tenga la probabilidad de participación más cercana. Es decir, la unidad no
 tratada tal que la distancia entre su puntaje y el del individuo tratado sea mínima. En
@@ -726,9 +741,9 @@ variables de resultado contribuirá al cálculo del \(ATT\).}
 
 Existen otras opciones como tomar los \(k\) vecinos más cercanos (con \(k > 1\)), el
 emparejamiento por \textit{kernel}, y por regresión lineal local. La principal diferencia
-con el del párrafo anterior es que cada tratado ya no tiene solamente un individuo de
-comparación, sino un grupo de individuos. Para más detalles sobre cada uno de estos, se
-puede consultar el Capítulo 6 de \cite{bernal}.
+con el método descrito en el párrafo anterior es que cada tratado ya no tiene solamente un
+individuo de comparación, sino un grupo de individuos. Para más detalles sobre cada uno de
+estos, se puede consultar el Capítulo 6 de \cite{bernal}.
 
 % Otra opción es dado un individuo tratado, tomar los \(k\) vecinos más cercanos del grupo
 % de no tratados con respecto al puntaje de propensión estimado, y estos formarán el grupo
@@ -749,6 +764,7 @@ puede consultar el Capítulo 6 de \cite{bernal}.
 % ellos es que tienen menor varianza a la hora de calcular las diferencias individuales (que
 % vecino más cercano por ejemplo) porque usan más información \cite{bernal}. Para
 % más detalles sobre cada uno de estos, se puede consultar el Capítulo 6 de \cite{bernal}.
+\medskip
 
 Una evaluación en la que se utilizó la técnica de PSM, particularmente con el algoritmo
 del vecino más cercano, fue la llevada a cabo a partir del año 2021 por la Unidad de
@@ -757,7 +773,8 @@ Aires (CABA) sobre el impacto del programa ``Jornada Extendida'' en el clima esc
 \cite{ueicee2023jornada}, aplicado sobre diferentes escuelas primarias de la ciudad. El
 PSM fue empleado para seleccionar las escuelas del grupo de control en base a tres
 características: el ISSAP (Índice de Situación Socioeconómica de los/as Alumnos/as en
-Escuelas Primarias), la tasa de sobreedad y la tasa de repitencia.
+Escuelas Primarias), la tasa de sobreedad y la tasa de repitencia. Otro análisis en el
+que se utilizó PSM se encuentra en \cite{psm-case-maternal-healthcare}.
 
 Como mencionamos anteriormente, la gran ventaja del método de PSM es que es flexible,
 pudiéndose utilizar en numerosos contextos, independientemente de la regla de asignación
@@ -786,9 +803,9 @@ tratados que quedan sin emparejar. Esto implica que existirá un conjunto de ind
 para el cual no se puede decir nada acerca del efecto del programa \cite{bernal}.
 
 \bigskip
-En este trabajo, utilizaremos el PSM con el algoritmo de 1 vecino más cercano como
-referencia para compararlo con nuestro enfoque, lo cual se explicará con más detalle en la
-Sección \ref{sec:problema}.
+En este trabajo, utilizamos como punto de partida el PSM con una logit y el algoritmo de 1
+vecino más cercano para compararlo con nuestro enfoque, lo cual se explicará con más
+detalle en el Capítulo \ref{sec:problema} y en la Sección \ref{sec:comparacion}.
 
 A continuación, introducimos el área de Inteligencia Artificial, dentro de la cual se
 enmarcan los algoritmos propuestos en este trabajo.

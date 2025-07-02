@@ -2,10 +2,10 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-Como mencionamos anteriormente, las Redes Neuronales Convolucionales (RNCs) son un tipo
+Como mencionamos anteriormente, las redes neuronales Convolucionales (RNCs) son un tipo
 especializado de redes neuronales pensadas para el procesamiento de datos que tienen una
 estructura de grilla \cite{deep-learning}. Ejemplos de estos datos son las series de
-tiempo, que pueden pensarse como una grilla unidimensional y las imágenes, que pueden
+tiempo, que pueden pensarse como una grilla unidimensional, y las imágenes, que pueden
 verse como una grilla bidimiensional de píxeles.
 
 Si bien las RNCs se han usado principalmente para el procesamiento de imágenes, en este
@@ -13,22 +13,21 @@ trabajo nos enfocaremos en su uso para analizar series de tiempo, en particular
 unidimensionales. Veremos cómo su funcionamiento permite capturar patrones temporales en
 los datos.
 
-Sin entrar en detalles\footnotemark, una \textbf{serie de tiempo univariada o
+Sin entrar en detalles, una \textbf{serie de tiempo univariada o
 unidimensional} se puede representar como un vector ordenado \(U\) de valores reales, en
 el que cada valor corresponde a una medición en el tiempo sobre un determinado fenómeno:
 \[
     U = (x_1, x_2, ..., x_N)
 \]
-donde \(N\) es la cantidad de observaciones.
-\footnotetext{En una sección posterior, hablaremos más en profundidad sobre las
-series de tiempo unidimensionales.}
+donde \(N\) es la cantidad de observaciones, y \(x_i\) corresponde a la observación
+en el período \(i\), para \(i = 1,...,N\).
 
 Ahora bien, el término \textit{convolucionales} proviene del hecho que lo que caracteriza
 a estas redes es la utilización de una operación matemática llamada
 \textbf{convolución}\footnotemark \cite{deep-learning}. Las capas de la red que aplican
 esta operación son llamadas \textit{capas convolucionales}. \footnotetext{En realidad, la
 operación que está presente en estas redes es una relacionada con la convolución, llamada
-\textbf{correlación cruzada}.}
+\textbf{correlación cruzada}, pero el término que se utiliza sigue siendo convolucionales.}
 
 La convolución toma dos argumentos: por un lado, la \textit{entrada} y por otro lado, un
 \textit{filtro} o \textit{kernel}. En el contexto del ML, ambos son usualmente arreglos
@@ -47,9 +46,9 @@ y no en 0.}
 
 En la Figura \ref{fig:conv1d-example}, se puede ver cómo se computan \(z_2\) y \(z_3\). Un
 detalle a notar aquí es que al calcular \(z_2\) y \(z_3\), el filtro ``entra'' por
-completo en la entrada, pero si quisiéramos calcular \(z_1\), pareciera que \(w_1\) no
-tiene un valor de entrada con el cual multiplicarse. Existen alternativas para solucionar
-este problema, que detallaremos más adelante.
+completo en una región de la entrada, pero si quisiéramos calcular \(z_1\), pareciera que
+\(w_1\) no tiene un valor de entrada con el cual multiplicarse. Existen alternativas para
+solucionar este problema que detallaremos más adelante.
 
 \begin{figure}
     \centering
@@ -82,7 +81,7 @@ posición \(i\) de la salida:
     z_i &=\ \sum_{j=1}^3 w_j x_{j+i-(3+1)/2} \\
         &=\ \sum_{j=1}^3 w_j x_{j+i-2} \\
         &=\ w_1 x_{1+i-2} + w_2 x_{2+i-2} + w_3 x_{3+i-2} \\
-        &=\ 1 * x_{i-1} + 0 * x_i + (-1) * x_{i+1} \\
+        &=\ 1 \times x_{i-1} + 0 \times x_i + (-1) \times x_{i+1} \\
         &=\ x_{i-1} - x_{i+1}
 \end{align*}
 O sea, lo que hace es dada una posición \(i\) en la entrada, calcular la diferencia entre
@@ -106,11 +105,13 @@ en una sola dirección. Ahora bien, vimos que en las redes totalmente conectadas
 neurona de una capa está conectada con todas las de la capa anterior. En cambio, en las
 capas convolucionales lo que ocurre es que cada neurona está conectada con un subconjunto
 de neuronas (consecutivas) de la capa anterior, sobre las cuales aplicará el filtro, y que
-recibe el nombre de \textbf{campo receptivo}. Es importante notar que cada neurona de una
-capa convolucional aplica el mismo filtro, por lo tanto todas ellas comparten los mismos
-pesos. Esto significa que la cantidad de parámetros a aprender en una red convolucional es
-menor que en una red totalmente conectada, y es algo que caracteriza a las RNCs. Este
-comportamiento se puede ver en la Figura \ref{fig:fully-connected-vs-conv}.
+recibe el nombre de \textbf{campo receptivo}.
+
+Además, es importante notar que cada neurona de una capa convolucional aplica el mismo
+filtro, por lo tanto todas ellas comparten los mismos pesos. Esto significa que la
+cantidad de parámetros a aprender en una red convolucional es menor que en una red
+totalmente conectada, y es algo que caracteriza a las RNCs. Este comportamiento se puede
+ver en la Figura \ref{fig:fully-connected-vs-conv}.
 
 \begin{figure}
     \centering
@@ -170,12 +171,12 @@ hiperparámetros de las capas convolucionales: \vspace{-0.25cm}
 \begin{itemize}[noitemsep]
     \item El \textbf{paso} (\textit{stride}), que representa la distancia entre dos campos receptivos
     consecutivos. Un stride igual a 1 quiere decir que el filtro se aplica en cada
-    posición de la entrda.
+    posición de la entrada.
     \item El \textbf{relleno} (\textit{padding}), que controla cuántos valores
     ``fantasma'' se agregan artificialmente a los extremos de la entrada de forma tal que
     el tamaño de la salida de la convolución no sea tanto menor al de la entrada. En la
     práctica, se usa el 0 para este relleno (\textit{zero-padding}). Con esto, se
-    puede computar el valor de \(z_1\) que presentamos como ejemplo anteriormente.
+    puede computar el valor de \(z_1\) que presentamos en la Figura \ref{fig:conv1d-example}.
     \item La \textbf{dilatación} (\textit{dilation}), que determina cuántos 0s se
     intercalan en los pesos del filtro. Con este parámetro, se puede convertir un filtro
     de \(l=5\) a uno ``dilatado'' de tamaño 3 fijando el segundo y cuarto elementos en 0.
@@ -189,9 +190,7 @@ objetivo principal es reducir el tamaño del mapa producido por la convolución
 \cite{hands-on-ML-sklearn-tf}. Es decir, se aplican luego de la convolución y lo que hacen
 es reemplazar valores contiguos presentes en una determinada sección del mapa por una medida
 resumen de ellos, entre las cuales algunas comúnmente utilizadas son el máximo
-(\textit{max pooling}) y el promedio (\textit{average pooling}). Esta reducción de tamaño
-no solo disminuye la cantidad de parámetros sino que también hace a la red más robusta
-ante desplazamientos de la imagen \cite{hands-on-ML-sklearn-tf}.
+(\textit{max pooling}) y el promedio (\textit{average pooling}).
 
 Una capa convolucional típica de una RNC se compone de tres etapas: en primer lugar, se
 producen las convoluciones, que se encargan de producir activaciones lineales; luego, cada
@@ -204,10 +203,10 @@ particular que ha demostrado tener un efecto positivo al entrenar redes convoluc
 una conocida como \textbf{normalización de lote} (\textit{batch normalization})
 \cite{batch-norm}, introducida en 2015. Esta consiste en reescalar los valores generados
 en las capas intermedias de la red a partir de los ejemplos en el lote actual
-\cite{ai-a-modern-approach}. Esta operación suele agregarse antes de la aplicación de la
+\cite{ai-a-modern-approach}. La normalización suele agregarse antes de la aplicación de la
 función de activación y es importante notar que agrega nuevos parámetros a optimizar
 durante el entrenamiento de la red. Para ver los detalles concretos de esta técnica, se
-puede consultar el Capítulo ... de \cite{hands-on-ML-sklearn-tf}.
+puede consultar el Capítulo 11 de \cite{hands-on-ML-sklearn-tf}.
 
 \bigskip
 En este trabajo nosotros utilizaremos este tipo de redes para resolver la tarea de
@@ -217,12 +216,12 @@ se suele hacer en estas redes es agregar, luego de la última capa convolucional
 de \textbf{aplanado} (\textit{flatten}), la cual no posee pesos aprendibles y simplemente
 convierte el tensor resultante de la capa anterior en uno unidimensional. Por ejemplo, si
 esta consiste de \(k\) feature maps de longitud \(n\) cada uno, entonces la capa de
-flatten dará como resultado un vector unidimensional de tamaño \(kn\).
+flatten dará como resultado un vector unidimensional de tamaño \(k \times n\).
 
 El paso anterior es necesario ya que las capas siguientes que se agregan para hacer la
 clasificación son totalmente conectadas que, como vimos anteriormente, aceptan únicamente
-entradas unidimensionales. Entonces, lo que ocurre es que el vector de tamaño \(kn\) es
-procesado por las diferentes capas densas hasta llegar a la de salida.
+entradas unidimensionales. Entonces, lo que ocurre es que el vector de tamaño \(k \times
+n\) es procesado por las diferentes capas densas hasta llegar a la de salida.
 
 En problemas de clasificación con más de dos categorías, esta última capa suele tener
 tantas neuronas como clases haya. En cambio, para tareas de clasificación binaria, como en
