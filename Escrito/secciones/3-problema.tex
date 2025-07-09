@@ -1,11 +1,10 @@
 \documentclass[../main.tex]{subfiles}
-% \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
 Como explicamos anteriormente, en cualquier evaluación de impacto, para poder calcular el
 efecto de un programa, se debe obtener una estimación apropiada del contrafactual: ¿qué
 hubiera pasado con la variable de resultado de los beneficiarios del programa si el mismo
-no hubiera existido? Vimos también que para lograrlo, se construye un grupo de control,
+no hubiera existido? Vimos también que para lograrlo, se utiliza un grupo de control,
 formado por individuos que no han sido tratados pero que idealmente, son estadísticamente
 similares a los que sí lo fueron.
 
@@ -19,13 +18,13 @@ directamente tomando todos los individuos que no fueron tratados y el problema d
 autoselección se soluciona naturalmente. Sin embargo, en las evaluaciones
 cuasi-experimentales, hechas sobre tratamientos en donde la asignación al tratamiento no
 fue aleatoria y se desconocen los motivos que han llevado a los individuos a inscribirse o
-recibir el tratamiento, construir un grupo de control adecuado constituye un gran desafío.
-Este es uno de los temas centrales de este trabajo.
+recibir el tratamiento, seleccionar un grupo de control adecuado constituye un gran
+desafío. Este es uno de los temas centrales de este trabajo.
 
-Una técnica estadística para abordar este problema es el PSM, discutida anteriormente y
-que es la que tomamos como punto de partida aquí. Este método empareja individuos tratados
-con no tratados basándose en su probabilidad estimada de participación, calculada a partir
-de un conjunto de variables que se consideran influyentes en el programa bajo cuestión.
+Una técnica para abordar este problema es el PSM, discutida anteriormente y que es la que
+tomamos como punto de partida aquí. Este método empareja individuos tratados con no
+tratados basándose en su probabilidad estimada de participación, calculada a partir de un
+conjunto de variables que se consideran influyentes en el programa bajo cuestión.
 
 Estas variables son seleccionadas por los evaluadores y pueden representar tanto
 características observadas en un instante determinado como también compartamientos a lo
@@ -39,7 +38,7 @@ Esto permite capturar no solo un estado puntual de las unidades sino también c�
 su evolución, lo cual puede contribuir a un mejor emparejamiento y consecuentemente, a una
 estimación más precisa del efecto del tratamiento.
 
-Otra cuestión a tener en cuenta a la hora de identificar los individuos de control es la
+Otra aspecto a tener en cuenta a la hora de identificar los individuos de control es la
 forma de implementación del programa con respecto al tiempo. Hay unos en los que el
 ingreso al tratamiento por parte de los individuos se realiza en un único instante de
 tiempo, pero en otros la entrada al programa ocurre de manera secuencial. En este último
@@ -60,28 +59,28 @@ circunstancias, el PSM presenta ciertas limitaciones:
     \item Por otro lado, cuando las variables tenidas en cuenta en realidad representan
     una misma característica pero en distintos períodos de tiempo, la regresión logística,
     que es la forma en la que se calcula el puntaje de propensión, no es capaz de capturar
-    esta relación temporal entre ellas, sino que las ``ve'' como si fueran independientes.
+    esta relación temporal entre ellas, sino que las trata como si fueran independientes.
 \end{itemize}
 
-Con estos problemas en mente, el foco de nuestro trabajo está en explorar una alternativa
-para la identificación de grupos de control bajo las hipótesis mencionadas previamente.
-Esta se basa en la utilización de diferentes tipos de redes neuronales, concretamente:
-redes convolucionales, redes LSTM, y la combinación de ellas. Como explicamos en el
-capítulo anterior, estas incorporan naturalmente la relación temporal de los datos,
-permitiendo capturar patrones a lo largo del tiempo. En nuestro escenario, en donde
-suponemos que la dinámica previa a la intervención es un factor clave para entender la
-participación en el programa, consideramos que estas redes pueden resultar especialmente
-útiles.
+Con estos problemas en mente, el objetivo de este trabajo es explorar una alternativa
+basada en la utilización de redes neuronales para la identificación de grupos de control
+bajo las hipótesis mencionadas previamente. La estrategia propuesta se apoya en distintos
+tipos de arquitecturas, concretamente: redes convolucionales, redes LSTM, y la combinación
+de ellas. Como explicamos en el capítulo anterior, estas incorporan naturalmente la
+relación temporal de los datos, permitiendo capturar patrones a lo largo del tiempo. En
+los escenarios bajo estudio, donde suponemos que la dinámica previa a la intervención es
+un factor clave para entender la participación en el programa, consideramos que estas
+redes pueden resultar especialmente útiles.
 
-Para evaluar la estrategia presentada, desarrollamos diferentes conjuntos de datos
-sintéticos de tipo panel\footnotemark, ya que en los casos reales algunos comportamientos
-no pueden verificarse directamente. En estos escenarios, variamos la cantidad de
-\textbf{períodos observados} (previos al inicio del programa), la cantidad de
-\textbf{períodos de dependencia temporal} - que son aquellos dentro de los períodos
+Para evaluar la metodología propuesta, desarrollamos diferentes conjuntos de datos
+sintéticos de tipo panel\footnote{Los datos de tipo panel son aquellos en los que a cada
+unidad considerada le corresponde una serie de tiempo.}, ya que en los casos reales
+algunos comportamientos no pueden verificarse directamente. En estos escenarios, variamos
+la cantidad de \textbf{períodos observados} (previos al inicio del programa), la cantidad
+de \textbf{períodos de dependencia temporal} - que son aquellos dentro de los períodos
 observados en los que modelamos una tendencia específica -, y la \textbf{dinámica
-temporal} (tendencia) observada. Teniendo esto en cuenta, los objetivos de nuestro trabajo
-se pueden resumir en los siguientes puntos: \footnotetext{Los datos de tipo panel son
-aquellos en los que a cada unidad considerada le corresponde una serie de tiempo.}
+temporal} observada. Teniendo esto en cuenta, los objetivos de nuestro trabajo se pueden
+resumir en los siguientes puntos:
 \begin{itemize}
     \item Obtener resultados que permitan comparar el desempeño de las redes con
     el del PSM en los diferentes escenarios.
@@ -89,8 +88,7 @@ aquellos en los que a cada unidad considerada le corresponde una serie de tiempo
     ante diferentes dinámicas temporales de la variable observada.
     \item Superar las limitaciones observadas del PSM utilizando las redes neuronales.
     Esto es: incorporar de manera más efectiva la dependencia temporal de las covariables
-    y poder reconocer los controles por cohorte en un solo proceso, sin la necesidad de
-    tener que repetir la búsqueda por cohorte.
+    y agilizar la identificación de los grupos de control de cada cohorte.
 \end{itemize}
 
 Nuestras hipótesis son las siguientes:
