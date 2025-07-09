@@ -2,30 +2,46 @@
 
 \begin{document}
 
-\section{Experimento 6: 15 períodos observados, 8 de dependencia}
-Proporción entre períodos de dependencia y observados: 0.53.
+\section{Experimento 6: 25 períodos observados, 10 de dependencia} \label{sec:exp6}
+En este caso, redujimos aún más la cantidad de información disponible. Pasamos de tener 45
+períodos en el escenario más beneficioso a tener 25, casi un 50\% menos de información.
+Los períodos de dependencia son 10 con una cantidad máxima de incrementos de 3. Así, las
+proporciones de períodos de dependencia y observados es de 0.4 y de aumentos sobre
+períodos de dependencia de 0.33, similares a los del Experimento 1. Tomamos
+(\(\mu_{{EF}_{NiNi}} = 10\)).
+
+Como esperábamos, los valores obtenidos de las diferentes métricas son bastante peores que
+los de los experimentos \hyperref[sec:exp1]{1} y \hyperref[sec:exp5]{5}, en donde había
+más datos temporales, y muy similares a los del \hyperref[sec:exp2]{Experimento 2}, que
+contaba con la misma cantidad de períodos de dependencia, pero 45 de observación. Sin
+embargo, las redes neuronales siguen superando ampliamente al PSM.
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{|c|c|c|c|}
         \hline
-         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Sensibilidad} \\ \hline\hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Recuperación} \\ \hline\hline
         \textbf{LSTM}
-            & 0.615626 & 0.495604 & 0.815537 \\ \hline
+            & $0.57106 \pm 0.01913$ & $0.44636 \pm 0.02609$ & $0.79608 \pm 0.02930$ \\ \hline
         \textbf{Convolucional}
-            & \textbf{0.674658} & \textbf{0.548768} & \textbf{0.8796} \\ \hline
-        \textbf{LSTM + Convolucional}
-            & 0.667507 & 0.546976 & 0.8614 \\ \hline
+            & $\mathbf{0.62629 \pm 0.01736}$ & $\mathbf{0.50731 \pm 0.02557}$ & $\mathbf{0.82156 \pm 0.03511}$ \\ \hline
+        \makecell{\textbf{LSTM +} \\ \textbf{Convolucional}}
+            & $0.61837 \pm 0.01957$ & $0.50342 \pm 0.03310$ & $0.80676 \pm 0.03637$ \\ \hline
         \textbf{PSM}
-            & 0.378862 & 0.379361 & 0.378368 \\
+            & $0.36480 \pm 0.01572$ & $0.36531 \pm 0.01576$ & $0.36431 \pm 0.01569$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
+    \caption{Promedio de las métricas \(F_1\), precisión y recuperación sobre la
     clase positiva (controles) en el conjunto de test en las 100 simulaciones del
     Experimento 6.}
     \label{tab:results_exp6}
 \end{table}
+
+En la Tabla \ref{tab:hyperparams_exp6}, que muestra los valores de los hiperparámetros,
+la principal diferencia con respecto a los casos anteriores es que en el caso de la
+arquitectura LSTM + Convolucional, el número de neuronas en la capas ocultas del bloque LSTM
+fue 128, el máximo en el espacio de búsqueda.
 
 \begin{table}[H]
     \centering
@@ -37,11 +53,11 @@ Proporción entre períodos de dependencia y observados: 0.53.
             & \makecell{\textbf{Tasa de}\\\textbf{aprendizaje}}
             & \textbf{Dropout} \\ \hline\hline
         \textbf{LSTM}
-            & 64 (39\%) & 128 (80\%) & 0.001 (99\%) & 0.3 (49\%) \\ \hline
+            & 128 (38\%) & 128 (77\%) & 0.001 (98\%) & 0.5 (43\%) \\ \hline
         \textbf{Convolucional}
-            & 64 (39\%) & -          & 0.001 (99\%) & 0.3 (79\%) \\ \hline
+            & 64 (35\%) & -           & 0.001 (93\%) & 0.3 (78\%) \\ \hline
         \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
-            & 64 (40\%) & 128 (38\%) & 0.001 (98\%) & 0.3 (81\%) \\
+            & 64 (39\%) & 128 (38\%)  & 0.001 (95\%) & 0.3 (86\%) \\
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100

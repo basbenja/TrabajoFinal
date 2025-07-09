@@ -1,0 +1,70 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Experimento 7: 15 períodos observados, 8 de dependencia} \label{sec:exp7}
+En este último experimento, tomamos 15 períodos de observación, de los cuales 8 son de
+dependencia con una cantidad máxima de 2 incrementos. De esta manera, la proporción de
+períodos de dependencia y observados es de 0.53, un valor mayor al de los experimentos
+anteriores, y de aumentos sobre períodos de dependencia de 0.25, menor al de los otros
+escenarios. De nuevo, el valor de \(\mu_{{EF}_{NiNi}}\) es el mismo que para tratados
+y controles (10).
+
+Los resultados, que se reflejan en la Tabla \ref{tab:results_exp7}, muestran una leve
+mejoría con respecto a los del \hyperref[sec:exp6]{Experimento 6}. Esto puede deberse en
+gran parte a que, si bien hay una menor cantidad de datos, un poco más de la mitad de los
+períodos observados son de dependencia. Sin embargo, el caso de la precisión sigue siendo
+preocupante.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \label{tab:results_exp7}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Recuperación} \\ \hline\hline
+        \textbf{LSTM}
+            & $0.61563 \pm 0.01930$ & $0.49560 \pm 0.02659$ & $0.81554 \pm 0.03051$ \\ \hline
+        \textbf{Convolucional}
+            & $\mathbf{0.67466 \pm 0.02309}$ & $\mathbf{0.54877 \pm 0.03250}$ & $\mathbf{0.87960 \pm 0.03372}$ \\ \hline
+        \makecell{\textbf{LSTM +} \\ \textbf{Convolucional}}
+            & $0.66751 \pm 0.02285$ & $0.54698 \pm 0.03536$ & $0.86140 \pm 0.03752$ \\ \hline
+        \textbf{PSM}
+            & $0.37886 \pm 0.01287$ & $0.37936 \pm 0.01294$ & $0.37837 \pm 0.01282$ \\
+        \hline
+    \end{tabular}
+    \caption{Promedio de las métricas \(F_1\), precisión y recuperación sobre la
+    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
+    Experimento 7.}
+\end{table}
+
+Los hiperparámetros más seleccionados como los óptimos se encuentran en la Tabla
+\ref{tab:hyperparams_exp7}, donde se ve que los valores más elegidos resultaron ser los
+mismos para todas las arquitecturas. Además, con el número de neuronas de las capas
+ocultas de la arquitectura LSTM + Convolucional ocurrió lo mismo que en el experimento
+anterior, el valor más seleccionado fue el más alto en el espacio de búsqueda.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \label{tab:hyperparams_exp7}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+            & \makecell{\textbf{Tamaño}\\\textbf{de lote}}
+            & \makecell{\textbf{Neuronas en}\\\textbf{capas ocultas}}
+            & \makecell{\textbf{Tasa de}\\\textbf{aprendizaje}}
+            & \textbf{Dropout} \\ \hline\hline
+        \textbf{LSTM}
+            & 64 (39\%) & 128 (80\%) & 0.001 (99\%) & 0.3 (49\%) \\ \hline
+        \textbf{Convolucional}
+            & 64 (39\%) & -          & 0.001 (99\%) & 0.3 (79\%) \\ \hline
+        \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
+            & 64 (40\%) & 128 (38\%) & 0.001 (98\%) & 0.3 (81\%) \\
+        \hline
+    \end{tabular}
+    \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
+    simulaciones en cada arquitectura. El porcentaje entre paréntesis indica el porcentaje
+    de veces que fue elegido ese valor en las 100 simulaciones.}
+\end{table}
+
+\end{document}

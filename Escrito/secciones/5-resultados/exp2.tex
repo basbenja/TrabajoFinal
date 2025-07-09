@@ -2,15 +2,16 @@
 
 \begin{document}
 
-\section{Experimento 2: 45 períodos observados, 10 de dependencia}
+\section{Experimento 2: 45 períodos observados, 10 de dependencia} \label{sec:exp2} 
 En este, utilizamos la misma cantidad de períodos observados que en el escenario anterior,
 pero disminuimos los períodos de dependencia a la mitad, pasando de 20 a 10, y también la
-cantidad máxima de subidas en ellos, pasando de 6 a 3. De esta manera, la proporción entre
-períodos de dependencia y períodos observados es de 0.22, y la de subidas sobre períodos
-de dependencia se mantiene igual que antes.
+cantidad máxima de aumentos en ellos, pasando de 6 a 3. De esta manera, la proporción
+entre períodos de dependencia y períodos observados es de 0.22, y la de subidas sobre
+períodos de dependencia se mantiene igual que antes. Aquí también tomamos
+\(\mu_{{EF}_{NiNi}} = 10\), el mismo valor que para tratados y controles.
 
 % La Tabla \ref{tab:params_exp2} muestra todos los parámetros de este Experimento.
-% \begin{table}[H]
+% \begin{table}[ht]
 %     \centering
 %     \begin{tabular}{|c|c|c|c|c|c|c|}
 %         \hline
@@ -28,34 +29,39 @@ rendimiento del PSM fue muy bajo; y en el caso de las redes resulta particularme
 alarmante el caso de la precisión, que en todos las redes se ubicó cerca de 0.5, indicando
 que de los controles identificados por ellas, aproximadamente la mitad realmente lo era.
 
+Esto confirma en primera instancia nuestra hipótesis que con la misma cantidad de
+observaciones pero menor cantidad de períodos de dependencia, el rendimiento de los
+modelos empeora.
+
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{|c|c|c|c|}
         \hline
-         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Sensibilidad} \\ \hline\hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Recuperación} \\ \hline\hline
         \textbf{LSTM}
-            & 0.561542 & 0.436014 & 0.793377 \\ \hline
+            & $0.56154 \pm 0.01787$ & $0.43601 \pm 0.02619$ & $0.79338 \pm 0.03664$ \\ \hline
         \textbf{Convolucional}
-            & \textbf{0.603795} & \textbf{0.486965} & 0.797973 \\ \hline
-        \textbf{LSTM + Convolucional}
-            & 0.597708 & 0.47867 & \textbf{0.800186} \\ \hline
+            & $\mathbf{0.60380 \pm 0.01910}$ & $\mathbf{0.48697 \pm 0.02697}$ & $0.79797 \pm 0.03463$ \\ \hline
+        \makecell{\textbf{LSTM +} \\ \textbf{Convolucional}}
+            & $0.59771 \pm 0.01924$ & $0.47867 \pm 0.02921$ & $\mathbf{0.80019 \pm 0.03765}$ \\ \hline
         \textbf{PSM}
-            & 0.360865 & 0.361332 & 0.3604 \\
+            & $0.36086 \pm 0.01464$ & $0.36133 \pm 0.01465$ & $0.36040 \pm 0.01463$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
+    \caption{Promedio de las métricas \(F_1\), precisión y recuperación sobre la
     clase positiva (controles) en el conjunto de test en las 100 simulaciones del
     Experimento 2.}
     \label{tab:results_exp2}
 \end{table}
 
-Los valores de los hiperparámetros se encuentran en la Tabla \ref{tab:results_exp2},
-en donde sí se ve la misma tendencia que en el caso anterior: la mejor tasa de aprendizaje
-fue por lejos 0.001 en todos los casos, y el mejor dropout fue de 0.3.
+Los valores de los hiperparámetros se encuentran en la Tabla \ref{tab:results_exp2}, en
+donde sí se ve la misma tendencia que en el caso anterior: la mejor tasa de aprendizaje
+fue por lejos 0.001 en todos los casos, el mejor dropout fue de 0.3 y el número de
+neuronas en las capas ocultas del bloque LSTM se redujo cuando fue combinado con el
+convolucional.
 
-
-\begin{table}[H]
+\begin{table}[ht]
     \centering
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{|c|c|c|c|c|}
@@ -73,9 +79,9 @@ fue por lejos 0.001 en todos los casos, y el mejor dropout fue de 0.3.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura. Cada celda contiene dicho valor y entre paréntesis
-    el porcentaje de simulaciones en el resultó ser el mejor, de acuerdo a la optimización
-    realizada por Optuna mediante validación cruzada.}
+    simulaciones en cada arquitectura en el Experimento 2. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
+    acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp2}
 \end{table}
 

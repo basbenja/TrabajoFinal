@@ -2,30 +2,51 @@
 
 \begin{document}
 
-\section{Experimento 5: 25 períodos observados, 10 de dependencia}
-Proporción entre períodos de dependencia y observados: 0.4.
+\section{Experimento 5: 35 períodos observados, 15 de dependencia} \label{sec:exp5}
+En este experimento, tomamos 35 períodos observados, de los cuales 15 son de dependencia
+con un máximo de 4 incrementos. Así, el cociente entre períodos de dependencia sobre
+observados es de 0.43, y el de subidas sobre períodos de dependencia de 0.27, ambos muy
+parecidos a los del \hyperref[sec:exp1]{Experimento 1}. Tomamos para los NiNi el mismo
+valor de media de efectos fijos de tratados y controles (\(\mu_{{EF}_{NiNi}} = 10\)).
+
+En otras palabras, lo que ocurre es que se reduce la cantidad total de datos temporales
+pero se mantienen las proporciones previas. La idea de este escenario - y los siguientes -
+es evaluar el desempeño de los distintos modelos en casos en donde la información
+disponible sobre los períodos previos al tratamiento es más limitada.
+
+Los resultados obtenidos, resumidos en la Tabla \ref{tab:results_exp5}, muestran solamente
+un leve deterioro de todos los modelos en comparación con \hyperref[tab:results_exp1]{los
+del Experimento 1}. Consideramos que esto resulta bastante alentador, ya que sugiere que
+los modelos son robustos frente a una reducción en la cantidad de datos temporales
+pre-tratamiento.
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{|c|c|c|c|}
         \hline
-         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Sensibilidad} \\ \hline\hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Recuperación} \\ \hline\hline
         \textbf{LSTM}
-            & 0.571055 & 0.446358 & 0.796076 \\ \hline
+            & $0.78815 \pm 0.02252$ & $0.69409 \pm 0.03919$ & $0.91444 \pm 0.01953$ \\ \hline
         \textbf{Convolucional}
-            & \textbf{0.626289} & \textbf{0.507315} & \textbf{0.821558} \\ \hline
-        \textbf{LSTM + Convolucional}
-            & 0.618374 & 0.503425 & 0.806757 \\ \hline
+            & $\mathbf{0.81989 \pm 0.02092}$ & $0.73371 \pm 0.03725$ & $\mathbf{0.93110 \pm 0.01520}$ \\ \hline
+        \makecell{\textbf{LSTM +} \\ \textbf{Convolucional}}
+            & $0.81942 \pm 0.01833$ & $\mathbf{0.73744 \pm 0.03291}$ & $0.92359 \pm 0.01573$ \\ \hline
         \textbf{PSM}
-            & 0.364804 & 0.365307 & 0.364306 \\
+            & $0.61062 \pm 0.01661$ & $0.61155 \pm 0.01669$ & $0.60970 \pm 0.01656$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
+    \caption{Promedio de las métricas \(F_1\), precisión y recuperación sobre la
     clase positiva (controles) en el conjunto de test en las 100 simulaciones del
     Experimento 5.}
     \label{tab:results_exp5}
 \end{table}
+
+Los valores de los hiperparámetros, que se reflejan en la Tabla
+\ref{tab:hyperparams_exp5}, siguen mostrando los mismos patrones que antes. La tasa de
+aprendizaje más elegida fue 0.001, el dropout 0.3, los valores más elegidos de tamaños de
+lote lo fueron en menos de la mitad de las simulaciones, y las neuronas ocultas del bloque
+LSTM se reduce cuando se lo combina con el procesamiento convolucional.
 
 \begin{table}[H]
     \centering
@@ -37,15 +58,15 @@ Proporción entre períodos de dependencia y observados: 0.4.
             & \makecell{\textbf{Tasa de}\\\textbf{aprendizaje}}
             & \textbf{Dropout} \\ \hline\hline
         \textbf{LSTM}
-            & 128 (38\%) & 128 (77\%) & 0.001 (98\%) & 0.5 (43\%) \\ \hline
+            & 64 (39\%) & 128 (62\%) & 0.001 (99\%) & 0.3 (51\%) \\ \hline
         \textbf{Convolucional}
-            & 64 (35\%) & -           & 0.001 (93\%) & 0.3 (78\%) \\ \hline
+            & 64 (36\%) & -          & 0.001 (98\%) & 0.3 (77\%) \\ \hline
         \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
-            & 64 (39\%) & 128 (38\%)  & 0.001 (95\%) & 0.3 (86\%) \\
+            & 32 (41\%) & 32 (41\%)  & 0.001 (95\%) & 0.3 (78\%) \\
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura. El porcentaje entre paréntesis indica el porcentaje
+    simulaciones en cada arquitectura en el Experimento 5. El porcentaje entre paréntesis indica el porcentaje
     de veces que fue elegido ese valor en las 100 simulaciones.}
     \label{tab:hyperparams_exp5}
 \end{table}

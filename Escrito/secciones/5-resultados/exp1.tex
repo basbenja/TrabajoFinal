@@ -2,15 +2,16 @@
 
 \begin{document}
 
-\section{Experimento 1: 45 períodos observados, 20 de dependencia}
+\section{Experimento 1: 45 períodos observados, 20 de dependencia} \label{sec:exp1}
 En este primer escenario, tomamos 45 períodos observados previos al inicio del programa
 para cada individuo con 20 períodos de dependencia, en donde permitimos un máximo de 6
-``subidas''. Así, la proporción períodos de dependencia sobre períodos observados es de
-0.44, y de subidas sobre períodos de dependencia de 0.3. Al tener 45 períodos observados y
-3 cohortes, los inicios de programa son 46, 47 y 48.
+incrementos. Así, la proporción de períodos de dependencia sobre períodos observados es de
+0.44, y de subidas sobre períodos de dependencia de 0.3. Al tener 45 períodos observados
+pre-tratamiento y 3 cohortes, los inicios de programa son 46, 47 y 48. Además, el valor
+de \(\mu_{{EF}_{NiNi}}\) en este caso fue el mismo que para tratados y controles (10).
 
 % Todos los parámetros utilizados se encuentran en la Tabla \ref{tab:params_exp1}
-% \begin{table}[H]
+% \begin{table}[ht]
 %     \centering
 %     \begin{tabular}{|c|c|c|}
 %         \hline
@@ -22,30 +23,34 @@ para cada individuo con 20 períodos de dependencia, en donde permitimos un máx
 %     \label{tab:params_exp1}
 % \end{table}
 
-Consideramos que este escenario es el que más ``favorece'' a las redes ya que es en el que
-mayor cantidad de períodos observados y de períodos de dependencia hay, por lo que lo
-tomaremos como punto de referencia para comparar lo ocurrido en los otros. La Figura
-\ref{fig:time_series_exp1} muestra algunos ejemplos de las series de tiempo generadas para
-cada uno de los grupos, en donde se ve claramente la tendencia que estamos tratando de
-capturar en tratados y controles. En ellos, en los últimos 20 de los 45 períodos
-considerados se observa un comportamiento ``decreciente con ruido'', que en los NiNi no
-está presente.
+Consideramos que este escenario es el que más favorece a las redes ya que es en el que
+mayor cantidad de períodos observados y de dependencia hay, por lo que lo tomamos como
+punto de referencia para comparar lo ocurrido en los otros. Asimismo, creemos que tomar 45
+períodos como la cantidad máxima en todos los escenarios es acorde con la realidad, en
+donde en algunas situaciones puede resultar complicado tener información sobre más
+períodos, como suele ocurrir, por ejemplo, en el caso de pequeñas y medianas empresas.
 
-\begin{figure}[H]
+La Figura \ref{fig:time_series_exp1} muestra algunos ejemplos de las series de tiempo
+generadas para cada uno de los grupos, en donde se ve claramente la tendencia que estamos
+tratando de capturar en tratados y controles. En ellos, en los últimos 20 de los 45
+períodos considerados se observa un comportamiento ``decreciente con ruido'', que en los
+NiNi no está presente.
+
+\begin{figure}[ht]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[scale=0.3]{figs/Exp1/plot_time_series_Tratados.png}
+        \includegraphics[scale=0.3]{figs/Exp1/tratados_sim61.png}
     \end{minipage}
     \hfill
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[scale=0.3]{figs/Exp1/plot_time_series_de_Control.png}
+        \includegraphics[scale=0.3]{figs/Exp1/controles_sim61.png}
     \end{minipage}
     \vspace{0.5em}
     \begin{minipage}{0.6\textwidth}
         \centering
-        \includegraphics[scale=0.3]{figs/Exp1/plot_time_series_Ninis.png}
+        \includegraphics[scale=0.3]{figs/Exp1/ninis_sim61.png}
     \end{minipage}
     \caption{Ejemplos de series de tiempo generadas para cada grupo en el Experimento 1.
     Los períodos con un fondo rojo indican los períodos de dependencia para tratados y
@@ -57,25 +62,27 @@ está presente.
 
 La Tabla \ref{tab:results_exp1} muestra los resultados obtenidos en las métricas \(F_1\),
 precisión y sensibilidad por las diferentes redes y el PSM. Cada valor representa el
-promedio de esa métrica en las 100 simulaciones en el conjunto de test.
+promedio de esa métrica en las 100 simulaciones en el conjunto de test, junto con la
+desviación estándar.
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{|c|c|c|c|}
         \hline
-         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Sensibilidad} \\ \hline\hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Recuperación} \\ \hline\hline
         \textbf{LSTM}
-            & 0.809842 & 0.724083 & 0.922185 \\ \hline
+            & $0.80984 \pm 0.02679$ & $0.72408 \pm 0.04763$ & $0.92219 \pm 0.01823$ \\ \hline
         \textbf{Convolucional}
-            & \textbf{0.839449} & \textbf{0.762929} & \textbf{0.934678} \\ \hline
-        \textbf{LSTM + Convolucional}
-            & 0.836937 & 0.760843 & 0.931613 \\ \hline
+            & $\mathbf{0.83945 \pm 0.01999}$ & $\mathbf{0.76293 \pm 0.03537}$ & $\mathbf{0.93468 \pm 0.01383}$ \\ \hline
+        \makecell{\textbf{LSTM +}\\\textbf{Convolucional}}
+            & $0.83694 \pm 0.01836$ & $0.76084 \pm 0.03397$ & $0.93161 \pm 0.01418$ \\ \hline
         \textbf{PSM}
-            & 0.658819 & 0.65998 & 0.65767 \\
+            & $0.65882 \pm 0.01561$ & $0.65998 \pm 0.01556$ & $0.65767 \pm 0.01573$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
+
+    \caption{Promedio de las métricas \(F_1\), precisión y recuperación sobre la
     clase positiva (controles) en el conjunto de test en las 100 simulaciones del
     Experimento 1.}
     \label{tab:results_exp1}
@@ -83,14 +90,14 @@ promedio de esa métrica en las 100 simulaciones en el conjunto de test.
 
 En primer lugar, se puede ver que el desempeño de todas las redes fue superior al del PSM,
 y que los resultados obtenidos con ellas son satisfactorios. En segundo lugar, el
-desempeño de las redes fue parecido entre ellas; más aún entre la Convolucional y la LSTM
-+ Convolucional, siendo la primera apenas mejor. Algo que también se puede observar es que
-la sensibilidad obtenida con todas las redes es bastante alta, lo cual indica que la
-mayoría de los controles fueron identificados correctamente por la red; mientras que la
-precisión fue consistentemente menor, aunque con valores aceptables.
+rendimiento de las redes fue parecido entre ellas; más aún entre la Convolucional y la
+LSTM + Convolucional, siendo la primera apenas mejor. Algo que también se puede observar
+es que la recuperación obtenida con todas las redes es bastante alta, lo cual indica que
+la mayoría de los controles fueron identificados por la red; mientras que la precisión fue
+consistentemente menor, aunque con valores aceptables.
 
 La Tabla \ref{tab:hyperparams_exp1} muestra, para cada arquitectura, el valor de cada
-hiperparámetro que fue seleccionado con mayor frecuencia como el óptimo duarante la
+hiperparámetro que fue seleccionado con mayor frecuencia como el óptimo durante la
 búsqueda en las 100 simulaciones. Consideramos que de utilizar alguna de las
 arquitecturas, estos valores deberían ser los empleados para entrenarla.
 
@@ -112,15 +119,15 @@ arquitecturas, estos valores deberían ser los empleados para entrenarla.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura. Cada celda contiene dicho valor y entre paréntesis
-    el porcentaje de simulaciones en el resultó ser el mejor, de acuerdo a la optimización
-    realizada por Optuna mediante validación cruzada.}
+    simulaciones en cada arquitectura en el Experimento 1. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
+    acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp1}
 \end{table}
 
 Se puede observar a simple vista que para todas las arquitecturas, la tasa de aprendizaje
 de 0.001 resultó ser ampliamente la mejor y que en la mayoría de los casos se eligió un
-dropout de 0.3, el cual era el menor en el espacio de búsqueda establecido. Otro detalle
+dropout de 0.3, que era el menor en el espacio de búsqueda establecido. Otro detalle
 es que el tamaño de lote parece no haber sido tan relevante, ya que en cada modelo, el
 valor más seleccionado lo fue en menos de la mitad de las simulaciones. Algo que resulta
 interesante es que en la LSTM ``sola'', el número de neuronas por capa más elegido fue
