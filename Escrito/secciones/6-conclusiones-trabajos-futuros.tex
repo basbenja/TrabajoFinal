@@ -1,0 +1,136 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+En este trabajo se exploró la utilización de redes neuronales para la selección de grupos
+de control en evaluaciones de impacto sobre programas cuya asignación de beneficiarios no
+ha sido aleatoria, dependió potencialmente de resultados pasados y en los que hubo
+múltiples cohortes. Se evaluaron diferentes arquitecturas de redes neuronales y se comparó
+su desempeño con el del PSM, un método bastante utilizado para esta tarea. A continuación,
+desarrollamos las principales conclusiones obtenidas a partir de los resultados,
+proponemos una forma de aplicar los métodos explorados en la realidad, y mencionamos
+algunos aspectos de nuestro enfoque que podrían investigarse en trabajos futuros.
+
+\section{Conclusiones generales}
+% Desempeño de las redes VS Desempeño del PSM
+Para empezar, en todos los escenarios se vio que con las redes neuronales se obtuvieron
+mejores resultados que con el PSM. Utilizamos tests de hipótesis que nos permitieron
+concluir que las diferencias observadas en las métricas fueron estadísticamente
+significativas.
+
+% Comparar las diferentes arquitecturas
+Con respecto a la comparación entre las diferentes arquitecturas, contrario a nuestro
+pensamiento inicial, con la que mejores resultados obtuvimos en la gran mayoría de los
+escenarios fue la Convolucional. Para nuestra sorpresa, la combinación de LSTM +
+Convolucional no trajo mejoras sobre la Convolucional, aunque sí sobre la LSTM. Esto
+sugiere que en general, los operaciones aplicadas por las redes convolucionales
+permitieron una mejor captura de los patrones propuestos en los diferentes escenarios, y
+que la incorporación de un bloque LSTM no tiene un efecto significativo (al menos con la
+arquitectura específica y el espacio de búsqueda de hiperparámetros propuestos).
+
+% Hiperparametros mas utilizados en las 100 simulaciones
+Como presentamos en las diferentes tablas de hiperparámetros, con respecto a los de
+aprendizaje, la tendencia general que observamos a lo largo de los diferentes escenarios
+fue que la tasa de aprendizaje más seleccionada fue de 0.001, el dropout de 0.3, y que los
+valores más elegidos de tamaños de lote lo fueron en menos de la mitad de las
+simulaciones. Algo a notar es que el valor de 0.3 de dropout fue el menor dentro del
+espacio de búsqueda, lo cual puede indicar que con valores menores, se obtendrían aún
+mejores resultados.
+
+Por otro lado, si prestamos atención al número de neuronas en las capas LSTM, lo que vimos
+en la mayoría de los casos fue que el valor más seleccionado en la arquitectura LSTM fue
+de 128, pero que en la LSTM + Convolucional, este valor se reducía. Esto refuerza la
+hipótesis que el procesamiento hecho por las convoluciones es más efectivo que el hecho
+por las neuronas LSTM. Sin embargo, como en el caso de la arquitectura LSTM el valor más
+seleccionado (128) era el más alto en el espacio de búsqueda, se podría evaluar el uso de
+valores más altos.
+
+% Hablar de la relación resultados - períodos - tendencia - proporciones
+Considerando las características de los diferentes escenarios, podemos concluir que las
+redes demostraron un rendimiento prometedor en aquellos donde había una alta cantidad de
+períodos observados y las tendencias eran largas y con ``ruido'' (experimentos
+\hyperref[sec:exp1]{1} y \hyperref[sec:exp5]{5}), o cuando eran cortas y con un
+comportamiento monótono (\hyperref[sec:exp3]{experimento 3}). En escenarios donde no hay
+un patrón claro en los comportamientos pasados, sino que es una característica más
+``escondida'' la que distingue a tratados y controles de NiNi
+(\hyperref[sec:exp4]{experimento 4}), ninguno de los modelos mostró resultados aceptables.
+Además, prestando atención particularmente a los valores obtenidos en los experimentos
+\hyperref[sec:exp6]{6} y \hyperref[sec:exp7]{7}, donde la cantidad de períodos observados
+era baja (25 y 15 respectivamente), apuntan que ante una mayor proporción de períodos de
+dependencia sobre observados, el desempeño de las redes mejora.
+
+\section{Aplicación en casos reales}
+En nuestros experimentos, nosotros sabemos quiénes son los individuos que deberían ser
+identificados como controles y quiénes como NiNi. Sin embargo, en una situación real, a la
+hora de llevar a cabo una evaluación de impacto, solamente se conocen quiénes han sido los
+tratados y quiénes los no tratados; y dentro de este último conjunto, están mezclados NiNi
+e individuos que potencialmente podrían servir como controles. Entonces, nos surgió la
+pregunta de cómo podríamos hacer para aplicar la metodología presentada aquí en un entorno
+real. A continuación, detallamos nuestra propuesta.
+
+Para empezar, se deben satisfacer las condiciones que estamos asumiendo sobre los
+programas utilizadas este trabajo. Es decir, la asignación debe haber sido no aleatoria,
+la participación en el programa dependió potencialmente de alguna tendencia vista en una
+variable en períodos pasados, y hay una o más cohortes.
+
+Una vez que se tiene cierta seguridad que los supuestos anteriores se cumplen, la manera
+propuesta de seleccionar individuos de control con nuestra metodología es la siguiente:
+\begin{enumerate}[itemsep=0.1cm, label=\textbf{\arabic*.}]
+    \item Separar individuos tratados y no tratados, y para todos tomar los \(n\) períodos
+    que haya disponibles antes del tratamiento\footnote{Como mencionamos anteriormente,
+    según los resultados observados, mientras mayor sea este \(n\), mayores son las
+    probabilidades de identificar buenos controles.}.
+    \item Tomar \textbf{todos} los individuos tratados con etiqueta 1 y algunos de los no
+    tratados con etiqueta 0, y repetir estos últimos tantas veces como cohortes haya.
+    Luego, entrenar el modelo con todos estos\footnote{Lo ideal aquí sería entrenar el
+    modelo tomando los valores de hiperparámetros que resultaron seleccionados con mayor
+    frecuencia, como mostramos recién, según la arquitectura que se esté usando.}.
+    \item Una vez que el modelo haya sido entrenado, hacer inferencia sobre todos los
+    individuos no tratados, incluso con los que el modelo ha sido entrenado. Para llevar a
+    cabo esta inferencia, habría que repetir todos estas unidades con los diferentes
+    inicios de programa.
+    \item Los individuos para los cuales el modelo haya inferido un 1 serán los controles
+    y para los que haya inferido un 0 serán los NiNi. Puede ocurrir que el mismo individuo
+    sirva como control para diferentes cohortes.
+\end{enumerate}
+
+Ahora bien, un detalle es que en el paso 2, lo que muy probablemente ocurra es que algunos
+de los no tratados que ponemos en el conjunto de entrenamiento - a los cuales les
+colocamos la etiqueta 0 - puedan servir como controles. Es por esto que en el paso 3
+los incluimos en el conjunto sobre el cual se realiza la inferencia.
+
+Otra opción es, en lugar de entrenar la red con todos los tratados, se puede separar
+este grupo en dos, y usar una parte para entrenar la red, y la otra como \textit{proxy}
+para verificar la correcta identificación de 1s.
+
+Además, una vez hecha la inferencia, se puede realizar un chequeo para verificar que los
+controles identificados sean similares a los tratados. Por ejemplo, a través de pruebas de
+hipótesis de diferencia de medias entre los dos grupos en cada uno de los \(n\) períodos
+que se hayan tomado. Si las diferencias resultan significativas en la mayoría de los
+períodos, entonces el grupo de controles selecciones probablemente no sea válido.
+
+\section{Trabajos futuros}
+Una limitación de nuestro trabajo es que, al trabajar con datos sintéticos, sabemos
+quiénes deberían ser identificados como controles y quiénes como NiNi. Sin embargo, como
+mencionamos anteriormente, lo que ocurre en la realidad es que solamente tenemos
+conocimiento sobre quiénes fueron tratados y quiénes no. Por lo tanto, siguiendo la
+propuesta de aplicación, al entrenar el modelo utilizando algunos no tratados con etiqueta
+0, es muy probable que se excluyan posibles controles. En esta línea, se podrían explorar
+alternativas para evitar el uso de no tratados con etiqueta 0 durante el entrenamiento, y
+en su lugar generar artificialmente individuos que sean claramente distintos de los
+tratados.
+
+Otra mejora que consideramos consiste en el uso de arquitecturas de redes neuronales más
+recientes como los Transformers, que han demostrado tener un desempeño notable en tareas
+para las que anteriormente se utilizaban redes recurrentes, como el procesamiento de
+lenguaje natural.
+
+Asimismo, sería interesante investigar la utilización de técnicas de aprendizaje no
+supervisado, como el clustering, para evaluar si en los escenarios propuestos aquí,
+resulta posible separar al grupo de los controles de los NiNi.
+
+Por último, incorporar un mayor número de variables, tanto temporales como estáticas,
+podría complejizar los escenarios simulados y permitir una evaluación más robusta del
+desempeño de las arquitecturas propuestas.
+
+\end{document}
