@@ -9,15 +9,14 @@ la clasificación, combinar el resultado de este procesamiento con la entrada es
 La salida de cada modelo es un número real que representa la probabilidad que la entrada
 dada\footnote{En realidad, lo que producen las redes como salida es un valor real, y no
 una probabilidad propiamente dicha. Para interpretar este valor como una probabilidad, se
-debe aplicar una función sigmoide. PyTorch provee una función de pérdida llamada
-\texttt{BCEWithLogitsLoss}\cite{bcewithlogitsloss} que realiza internamente esta
-``conversión''.} - caracterizada por la serie de tiempo y el inicio de programa -
-pertenezca a la categoría con etiqueta 1, que en nuestro caso representa formar parte del
-grupo de control. Para obtener la clase final (0 o 1), se aplica - por fuera del modelo
-propiamente dicho - un \textbf{umbral de decisión} sobre esta probabilidad: si la
+debe aplicar una función sigmoide. Durante el entrenamiento, PyTorch provee una función de
+pérdida llamada \texttt{BCEWithLogitsLoss}\cite{bcewithlogitsloss} que realiza
+internamente esta ``conversión''.} - caracterizada por la serie de tiempo y el inicio de
+programa - pertenezca a la categoría con etiqueta 1, que en nuestro caso representa formar
+parte del grupo de control. Para obtener la clase final (0 o 1), se aplica (por fuera del
+modelo propiamente dicho) un \textbf{umbral de decisión} sobre esta probabilidad: si la
 probabilidad es mayor que dicho umbral, se considera que el modelo ha clasificado a la
 entrada como pertenceciente a la clase 1. En este trabajo, fijamos este umbral en 0.5.
-
 
 Dejamos algunos hiperparámetros fijos en todas los modelos:
 \begin{itemize}[itemsep=0cm, topsep=0cm, parsep=0cm, partopsep=0cm]
@@ -41,13 +40,15 @@ y 1s del conjunto de entrenamiento. La métrica que se buscó optimizar fue el p
 \ref{sec:metricas} - promediado sobre las tres iteraciones de la validación cruzada.
 
 En lo que sigue, incluimos ilustraciones y detallamos en profundidad las arquitecturas
-utilizadas.
+utilizadas. Para diseñarlas, tomamos como base las propuestas en
+\cite{wang2016timeseriesclassificationscratch}, \cite{Karim_2018} y
+\cite{timeseriesclass-with-rnn}.
 
 \subsection{Arquitectura 1: Red LSTM}
 Como se puede ver en la Figura \ref{fig:lstm_v2}, en la primera arquitectura propuesta, la
 serie de tiempo es procesada por dos capas LSTM con una capa intermedia de dropout.
 Posteriormente, se realiza una operación de concatenación, en la que se combina la salida
-de la ``parte'' LSTM con la característica correspondiente al inicio del programa en un
+del ``bloque'' LSTM con la característica correspondiente al inicio del programa en un
 vector unidimensional que puede ser ``alimentado'' a capas totalmente conectadas. De esta
 forma, el vector se introduce en una red densa compuesta por una capa oculta de 128
 neuronas con función de activación ReLU, seguida de una capa de dropout, y finaliza en una
@@ -82,7 +83,9 @@ Esta última arquitectura combina las otras dos: ahora, el procesamiento de la s
 temporal es llevado a cabo de manera paralela por las capas LSTM de la Arquitectura 1
 y las capas convolucionales de la Arquitectura 2. Luego, se combinan ambas salidas y
 el inicio de programa para posteriormente producir la predicción final a través de la
-red totalmente conectada.
+red totalmente conectada. La Figura \ref{fig:lstm_v2_conv} muestra un diagrama de esta
+arquitectura.
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{figs/lstm_conv.png}

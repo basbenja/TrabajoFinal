@@ -1,11 +1,11 @@
 \documentclass[../../main.tex]{subfiles}
 
 \begin{document}
-Como mencionamos en el \hyperref[sec:problema]{Capítulo anterior}, uno de nuestros objetivos es
-obtener resultados que permitan comparar el desempeño de las redes neuronales con el del
-PSM en los distintos escenarios. Las diferencias metodológicas inherentes a ambas técnicas
-hacen que esto sea un desafío. En esta sección, describimos la estrategia propuesta en
-este trabajo para abordarlo.
+Como mencionamos en el \hyperref[chap:problema]{Capítulo anterior}, uno de nuestros
+objetivos es obtener resultados que permitan comparar el desempeño de las redes neuronales
+con el del PSM en los distintos escenarios. Las diferencias metodológicas inherentes a
+ambas técnicas hacen que esto sea un desafío. En esta sección, describimos la estrategia
+propuesta en este trabajo para abordarlo.
 
 Para empezar, a partir de los datos generados, construimos los conjuntos de entrenamiento
 y test de la siguiente manera, con la idea que los modelos aprendan los patrones vistos en
@@ -14,7 +14,7 @@ los tratados para luego poder identificar los controles:
     \item \textbf{Conjunto de entrenamiento}: individuos tratados de todas las cohortes
     (1000 en total) y una muestra aleatoria de 1000 NiNi.
     \item \textbf{Conjunto de test}: individuos de control de todas las cohortes (1000 en
-    total) y los 1500 NiNi restantes (de los 2500 generados en cada escenario).
+    total) y los 2500 NiNi restantes (de los 3500 generados en cada escenario).
 \end{itemize}
 
 Un detalle a tener en cuenta es que tanto tratados como controles tienen una
@@ -30,22 +30,24 @@ los siguientes:
 \begin{itemize}
     \item \textbf{Conjunto de entrenamiento}:\vspace{-0.2cm}
         \begin{itemize}
-            \item Individuos tratados de todas las cohortes (1000).
+            \item Individuos tratados de todas las cohortes (1000) con etiqueta 1.
             \item 1000 individuos NiNi, cada uno repetido tantas veces como cohortes haya,
-            con los períodos previos al inicio de programa de cada cohorte.
+            con los períodos previos al inicio de programa de cada cohorte (tomando 3 cohortes,
+            terminan siendo 3000), y en todas las repeticiones con etiqueta 0.
         \end{itemize}
     \item \textbf{Conjunto de test}:\vspace{-0.2cm}
         \begin{itemize}
-            \item Individuos de control de todas las cohortes (1000).
+            \item Individuos de control de todas las cohortes (1000) con etiqueta 1.
             \item 2500 individuos NiNi, cada uno repetido tantas veces como cohortes haya,
-            con los períodos previos al inicio de programa de cada cohorte.
+            con los períodos previos al inicio de programa de cada cohorte (tomando 3
+            cohortes, terminan siendo 7500), y en todas las repeticiones con etiqueta 0.
         \end{itemize}
 \end{itemize}
 
 Ahora bien, para evaluar las redes, se toman los resultados obtenidos en el conjunto de
-test, el cual permanece ``oculto'' durante el proceso de entrenamiento. Sin embargo, en el
-PSM no existe esta noción: todos los individuos disponibles son utilizados para estimar
-los coeficientes de la regresión logística, calcular las probabilidades y hacer el
+test, el cual permanece oculto durante el proceso de entrenamiento. Sin embargo, en el PSM
+no existe esta noción: todos los individuos disponibles son utilizados para estimar los
+coeficientes de la regresión logística, calcular las probabilidades y hacer el
 emparejamiento.
 
 Además, otra distinción fundamental es que las redes, incluyendo la feature de inicio de
@@ -53,10 +55,12 @@ programa, posibilitan la utilización de un solo modelo para evaluarlo sobre las
 cohortes, mientras que el PSM requiere realizar una estimación por cohorte.
 
 Debido a estas diferencias identificadas, para poder hacer una comparación razonable,
-adaptamos los dos métodos, las redes y el PSM. Para el PSM, lo que hicimos fue modificarlo
-de tal forma que permita incorporar la noción de ``entrenamiento'' y ``test''; y para las
-redes, cambiamos la forma de evaluarlas para poder hacerlo por cohorte. Los detalles del
-procedimiento propuesto se encuentran en la Tabla \ref{tab:comparacion}.
+adaptamos los dos métodos. Para el PSM, lo que hicimos fue modificarlo de tal forma que
+permita incorporar la noción de ``entrenamiento'' y ``test''; y para las redes, cambiamos
+la forma de evaluarlas para poder hacerlo por cohorte. Los detalles del procedimiento
+propuesto se encuentran en la Tabla \ref{tab:comparacion}, donde es importante destacar
+que, para cada métrica, el valor reportado en una simulación corresponde al promedio de
+los obtenidos en las tres cohortes.
 
 \begin{table}[ht]
     \centering
@@ -76,15 +80,15 @@ procedimiento propuesto se encuentran en la Tabla \ref{tab:comparacion}.
         \\ \hline
         \textbf{Evaluación}
             & Se divide al conjunto de test en tantos subconjuntos como cohortes haya.
-            Cada uno de ellos está formado por los controles de cada cohorte y los NiNi
-            del conjunto de test correspondientes a cada cohorte.
+            Cada uno de ellos está formado por los controles de una cohorte y los NiNi
+            del conjunto de test correspondientes a esa cohorte.
 
             Con el modelo entrenado, se evalúa en cada uno de estos subconjuntos, y el
             resultado final es el promedio de los obtenidos en cada partición.
 
             & Se divide al conjunto de test en tantos subconjuntos como cohortes haya.
-            Cada uno de ellos está formado por los controles de cada cohorte y los NiNi
-            del conjunto de test correspondientes a cada cohorte.
+            Cada uno de ellos está formado por los controles de una cohorte y los NiNi
+            del conjunto de test correspondientes a esa cohorte.
 
             Con la regresión estimada en cada cohorte, se hace la inferencia de la
             probabilidad de participación sobre los tratados y la partición de test

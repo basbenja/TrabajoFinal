@@ -1,7 +1,7 @@
 \documentclass[../../main.tex]{subfiles}
 
 \begin{document}
-Como mencionamos en el Capítulo \ref{sec:problema}, los experimentos fueron realizados con
+Como mencionamos en el Capítulo \ref{chap:problema}, los experimentos fueron realizados con
 datos generados sintéticamente, diseñados para imitar situaciones reales. Para comprender
 cómo se construyeron estos datos, recordemos que nuestro objetivo es identificar
 unidades pertenecientes al grupo de control en escenarios donde la asignación de
@@ -19,7 +19,7 @@ de series de tiempo en donde el valor actual de la serie depende linealmente de 
 más reciente más una perturbación impredecible \cite{intro-econometria-wooldridge}. La
 fórmula de un AR(1) es la siguiente:
 \[
-    y_t = \rho * y_{t-1} + e_t
+    y_t = \rho \times y_{t-1} + e_t
 \]
 donde a \(\rho\) se lo denomina coeficiente autorregresivo y \(e_t\) para \(t=0,1,...,T\)
 es una secuencia de valores independiente e idénticamente distribuidos con media cero y
@@ -31,7 +31,7 @@ un factor denominado \textbf{efecto fijo}, el cual permanece invariante a lo lar
 todos los pasos de tiempo. Para una explicación más detallada, se puede consultar el
 Capítulo 13.3 de \cite{intro-econometria-wooldridge}. Similarmente, los efectos no
 observables que sí cambian con el tiempo pero que afectan a todos los individos por igual
-se se conocen como \textbf{efectos temporales}.}, resultando así en un conjunto de datos
+se conocen como \textbf{efectos temporales}.}, resultando así en un conjunto de datos
 de panel. Distinguimos entre tres tipos de individuos:
 
 \begin{itemize}[itemsep=0.1cm]
@@ -49,22 +49,22 @@ Para los tratados y los controles, agregamos una característica extra además d
 de tiempo, a la que llamamos ``\textit{inicio de programa} o \textit{tratamiento}''. Para
 los primeros, este representa el momento en que un individuo recibió el tratamiento; y
 para cada unidad de control, representa el momento en que se aplicó el programa a los
-individuos tratados para los cuales efectivamente ``sirve'' como control. Si por ejemplo
-para un individuo tratado consideramos 20 períodos de tiempo antes del tratamiento, esto
-quiere decir que su inicio de programa corresponde el período 21.
+individuos tratados para los cuales efectivamente sirve como control. Si por ejemplo para
+un individuo tratado consideramos 20 períodos de tiempo antes del tratamiento, esto quiere
+decir que su inicio de programa corresponde el período 21.
 
-Además, al estar en el marco del Aprendizaje Supervisado, también incluimos la etiqueta
+Además, al estar en el marco del aprendizaje supervisado, también incluimos la etiqueta
 que le corresponde a cada individuo: ``1'' para tratados y controles, y ``0'' para los
 NiNi. La razón por la cual tratados y controles comparten la misma etiqueta es que
-buscamos que el modelo aprenda durante su entrenamiento los patrones que tienen los
+buscamos que los modelos aprendan durante su entrenamiento los patrones que tienen los
 tratados para luego poder clasificar como 1 a aquellos que se les asemejen. Estos serán
 justamente los que identifique como potenciales individuos de control.
 
 La motivación detrás de esta construcción artificial es forzar que tanto tratados como
 controles compartan una determinada dinámica en su comportamiento temporal, mientras que
-los NiNi no. Nuevamente, cabe aclarar que esta es una hipótesis que en la práctica puede
-resultar difícil de verificar; y nuestro interés radica en evaluar si, al modelar este
-supuesto, los algoritmos son capaces de capturar tales patrones.
+los NiNi no. Cabe aclarar que la presencia de la dinámica exacta que modelamos constituye
+una hipótesis que en la práctica puede resultar difícil de verificar; y nuestro interés
+radica en evaluar si al simularla, los algoritmos son capaces de capturar tales patrones.
 
 Como mencionamos anteriormente, para cada individuo \(i\) generamos una serie de tiempo
 univariada \(y_i\) de una longitud \(L\). La fórmula que utilizamos para simular cada
@@ -81,8 +81,10 @@ donde:
 es una constante que depende del individuo \(i\) y:
 \begin{itemize}[itemsep=0.1cm]
     \item \(\mu_{EF}\) representa la media de los efectos fijos para todos los individuos
-    de un mismo grupo. En nuestros experimentos, usamos \(\mu_{EF} = 10\) para todos los
-    grupos.
+    de un mismo grupo. Denotamos con \(\mu_{{EF}_T}\), \(\mu_{{EF}_C}\) y
+    \(\mu_{{EF}_{NiNi}}\) la media de los efectos fijos para tratados, controles y NiNi
+    respectivamente. En todos nuestros experiementos, tomamos \(\mu_{{EF}_T} =
+    \mu_{{EF}_C} = 10\), y el que sí variamos es \(\mu_{{EF}_{NiNi}}\).
     \item \(\mu_{ET}\) representa la media de los efectos temporales en todos los pasos
     de la serie y es la misma para todos los grupos.
     \item \(EF_i\) representa el efecto fijo del individuo \(i\), constante en todos
@@ -107,14 +109,20 @@ determinados aspectos:
     mencionamos previamente, los llamamos ``\textbf{períodos de dependencia} (temporal)'',
     y son siempre los últimos de los períodos pre-tratamiento. Denotamos la cantidad de
     períodos de dependencia con \(n_{pd}\), y en nuestros escenarios, se va a cumplir
-    siempre que \(0 < n_{pd} < L\).
+    siempre que \(0 \le n_{pd} < L\).
     \item En los períodos de dependencia, modelos un comportamiento al que llamamos
     ``\textbf{decreciente con ruido}'': en dichos períodos, forzamos a que cada nuevo
     valor generado sea estrictamente menor al anterior, salvo en una cantidad \(m\) de
-    ocasiones en donde le permitimos que sea mayor, es decir que haya ``subidas'' o
+    ocasiones en donde permitimos que sea mayor, es decir que haya ``subidas'' o
     incrmentos. Este \(m\) también varía entre escenarios. Consideramos que esta tendencia
-    es representativa de fenómenos reales, y que puede influir en la decisión que
-    los individudos reciban un tratamiento o participen de un programa.
+    es representativa de fenómenos reales, y que puede influir en la decisión que los
+    individudos reciban un tratamiento o participen de un programa.
+    \item La media de los efectos temporales para los indiviudos NiNi. Puntualmente,
+    reducir este valor a la hora de generar los datos provoca que la media de la variable
+    dependiente en los NiNi en cada uno de los períodos esté por debajo de la de tratados
+    y controles\footnote{Este efecto se verá con mayor claridad en el
+    \hyperref[sec:exp4]{Experimento 4} del Capítulo de
+    \hyperref[chap:resultados]{Resultados}.}.
 \end{enumerate}
 Para cada escenario, generamos 100 simulaciones para poder garantizar que los resultados
 obtenidos sean estadísticamente significativos.
@@ -128,7 +136,7 @@ cada cohorte).
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{figs/series_tratados_exp1.png}
+    \includegraphics[width=0.8\textwidth]{figs/tratados_exp1_sim13.png}
     \caption{Gráfico de 15 series de tiempo generadas para individuos tratados con
     \(L=45\), \(n_{pd}=20\), y \(m=6\). Los tratados están divididos en cohortes, cada una
     de las cuales tiene su correspondiente inicio de programa, por lo que en el eje \(x\)
@@ -147,10 +155,10 @@ En todos los escenarios y simulaciones, la distribución de individuos fue la si
     primera y la segunda, y 332 en la restante).
     \item Cantidad de individuos de control: 1000, divididos en las 3 cohortes (334 en la
     primera y la segunda, y 332 en la restante).
-    \item Cantidad de individuos NiNi: 2500.
+    \item Cantidad de individuos NiNi: 3500.
 \end{itemize}
 
-En la sección \ref{sec:comparacion}, describimos cómo a partir de los datos generados,
+En la sección \ref{sec:comparacion}, explicamos cómo a partir de los datos generados,
 construimos los conjuntos de entrenamiento y test, y cómo fueron utilizados para obtener
 los resultados.
 
