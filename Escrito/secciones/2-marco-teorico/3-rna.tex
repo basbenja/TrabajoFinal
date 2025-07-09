@@ -2,7 +2,7 @@
 
 \begin{document}
 
-Las Redes Neuronales Artificiales (RNAs) son un modelo específico dentro del ML, cuya
+Las redes neuronales artificiales (RNAs) son un modelo específico dentro del ML, cuya
 estructura y funcionamiento estuvieron inspirados inicialmente por el intento de ser
 modelos computacionales del aprendizaje biológico, es decir modelos de cómo el aprendizaje
 podría ocurrir en el cerebro \cite{deep-learning}. Durante los últimos años, ha sido el
@@ -10,8 +10,8 @@ podría ocurrir en el cerebro \cite{deep-learning}. Durante los últimos años, 
 potencia y escalabilidad, cualidades que hacen que estos modelos sean capaces de enfrentar
 problemas grandes y complejos \cite{hands-on-ML-sklearn-tf}, y que sobre todo parecían
 extremadamente difíciles de resolver. Como mencionamos anteriormente, su avance se vio muy
-favorecido por principalemnte por la creciente disponibilidad de datos y el aumento en la
-capacidad computacional.
+favorecido por la creciente disponibilidad de datos y el aumento en la capacidad
+computacional.
 
 A continuación, damos un breve contexto histórico y luego ahondamos en su funcionamiento.
 
@@ -37,20 +37,20 @@ de la suma pesada) para poder llegar a la solución óptima.
 
 Más tarde, se descubrió que los problemas que no podían ser resueltos por el Perceptrón,
 sí podían ser resueltos ``apilando'' múltiples perceptrones, lo cual llevó a la invención
-del ``Perceptrón Multicapa'' (PMC), también conocido actualmente como ``Red Neuronal de
-Propagación Directa''\footnotemark (del inglés \textit{Feedforward Neural Networks}, FFNN)
+del ``Perceptrón Multicapa'', también conocido actualmente como ``red neuronal de
+propagación directa''\footnote{Si bien estos términos se suelen usar indistintamente, la
+realidad es que las redes neuronales feedforward presentan algunas diferencias con
+respecto al Perceptrón Multicapa.} (del inglés \textit{feedforward neural networks})
 \cite{deep-learning}, las cuales conforman el punto de partida de las redes neuronales
-actuales. \footnotetext{Si bien estos términos se suelen usar indistintamente, la realidad
-es que las redes neuronales Feedforward presentan algunas diferencias con respecto al
-Perceptrón Multicapa.}
+actuales.
 
 Para explicar la idea y los elementos presentes detrás de estos algoritmos, tomaremos como
 referencia las redes neuronales Feedforward, y en particular las llamadas ``totalmente
 conectadas'' (\textit{fully connected}), que definiremos a continuación.
 
-\subsection{Red Neuronal Feedforward}
-Como dijimos anteriormente, las redes neuronales son un modelo particular de Aprendizaje
-Automático. Aquí, las funciones hipótesis se caracterizan por incorporar \textbf{no
+\subsection{Red neuronal feedforward}
+Como dijimos anteriormente, las redes neuronales son un modelo particular de aprendizaje
+automático. Aquí, las funciones hipótesis se caracterizan por incorporar \textbf{no
 linealidad} y toman la forma de circuitos algebraicos complejos con conexiones que pueden
 tener diferentes ``intensidades'' \cite{ai-a-modern-approach}. La idea principal en estos
 circuitos es que el ``camino'' recorrido al realizar el cómputo tenga varios pasos como
@@ -80,9 +80,9 @@ Las RNAs tienen una capa de entrada y una de salida, pero el número de capas oc
 depende de quien la diseñe. Cuando tienen una capa oculta, se las llama ``superficiales''
 (o poco profundas, del inglés \textit{shallow}), y cuando tienen más de una,
 \textit{profundas}. Es por esto que al hablar de redes neuronales, muchas veces se
-hace referencia al término \textbf{Aprendizaje Profundo}.
+hace referencia al término \textbf{aprendizaje profundo}.
 
-Recordemos que uno de los elementos presentes en el Aprendizaje Supervisado es el conjunto
+Recordemos que uno de los elementos presentes en el aprendizaje supervisado es el conjunto
 de entrenamiento, compuesto por pares de entrada-etiqueta. Ahora bien, lo interesante de
 estos modelos es que si bien este conjunto especifica qué tiene que producir la capa de
 salida ante cada entrada particular, no determina cuál debe ser el comportamiento de las
@@ -118,10 +118,10 @@ siguiente manera:
 
 En este caso, la entrada \(\bm{x}\) va a la función \(f^{(1)}\), la salida de
 \(f^{(1)}(\bm{x})\) va a \(f^{(2)}\), y la salida de \(f^{(2)}(f^{(1)}(\bm{x}))\) va
-directamente a \(f^{(3)}\) para de esa forma producir el resultado final\footnotemark\
-\(\bm{\hat{y}} = f(\bm{x}) = f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))\). \footnotetext{Usamos
-\(\bm{\hat{y}}\) para referirnos a la aproximación de \(\bm{y}\), la
-etiqueta real para una entrada \(\bm{x}\), dada por el modelo.}
+directamente a \(f^{(3)}\) para de esa forma producir el resultado final\footnote{Usamos
+\(\bm{\hat{y}}\) para referirnos a la aproximación dada por el modelo de \(\bm{y}\), la
+etiqueta real para una entrada \(\bm{x}\).} \(\bm{\hat{y}} = f(\bm{x}) =
+f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))\).
 
 Es justamente el comportamiento anterior el que caracteriza a las redes neuronales de tipo
 \textbf{Feedforward}: los datos y resultados fluyen en una sola dirección; cada
@@ -192,7 +192,7 @@ número de capa y el subíndice hace referencia al número de neurona en esa cap
         \draw[connect arrow] (N\Nnodlen-1) -- (y1);
         \draw[connect arrow] (N\Nnodlen-2) -- (y2);
     \end{tikzpicture}
-    \caption{Red Neuronal de tipo Feedforward y totalmente conectada, con la capa de
+    \caption{Red neuronal de tipo feedforward y totalmente conectada, con la capa de
     entrada formada por 3 neuronas, dos capas ocultas, cada una formada por 4 y 3 neuronas
     respectivamente, y la capa de salida, formada por dos neuronas. En este caso, la red
     ``acepta'' entradas \(\bm{x} \in \mathbb{R}^3\) y produce salidas \(\bm{\hat{y}} \in
@@ -264,11 +264,12 @@ Volviendo a la Fórmula \ref{eq:neuron}, si en nuestro ejemplo tomamos la neuron
 En las redes, se estipula que cada unidad tiene una entrada extra desde una neurona
 \textit{dummy} de la capa anterior, para la cual utilizaremos el subíndice 0. El valor de
 salida de esta neurona se fija en 1, y el peso asociado con una neurona \(j\) de una capa
-\(k\) será \(w^{(k)}_{0,j}\). Este peso se suele llamar
-\textit{\textbf{bias}}\footnotemark\ y permite que la entrada a dicha neurona sea distinta
-de 0 incluso cuando todas las salidas de la capa anterior sean 0
-\cite{ai-a-modern-approach}. Agregándolo, podemos escribir la Ecuación \ref{eq:neuron} de
-forma vectorizada:
+\(k\) será \(w^{(k)}_{0,j}\). Este peso se suele llamar \textit{\textbf{bias}}\footnote{En
+la bibliografía sobre redes neuronales, también se suele presentar a este peso como un
+elemento ``aparte'' de la neurona, no como un peso extra, y se lo denota con
+\(b^{(k)}_j\).} y permite que la entrada a dicha neurona sea distinta de 0 incluso cuando
+todas las salidas de la capa anterior sean 0 \cite{ai-a-modern-approach}. Agregándolo,
+podemos escribir la Ecuación \ref{eq:neuron} de forma vectorizada:
 \begin{equation}
     s^{(k)}_j = a^{(k)}_j \left( \bm{w}^{(k-1)}_j \left( \bm{s}^{(k-1)}_j \right)^T \right)
 \end{equation}
@@ -279,9 +280,7 @@ donde: \vspace{-0.25cm}
     \item \(\bm{s}^{(k-1)}_j\) es el vector de todas las salidas de la capa anterior que se
 dirigen a la unidad \(j\) de la capa \(k\) (incluyendo el 1 fijo de la neurona dummy).
 \end{itemize}
-\footnotetext{En la bibliografía sobre redes neuronales, también se suele presentar a este
-peso como un elemento ``aparte'' de la neurona, no como un peso extra, y se lo denota con
-\(b^{(k)}_j\).}
+
 
 \vspace{-0.2cm}
 Con esta notación, si tomamos nuevamente a \(f^{(2)}_1\), los vectores involucrados van a
@@ -462,7 +461,7 @@ neuronas que actúan en cojunto. Estas neuronas están conectadas entre sí con 
 intensidades que, como veremos, son justamente los parámetros aprendibles de las redes.
 Además, introducen nuevos hiperparámetros referentes a la arquitectura. A continuación,
 describimos cómo se lleva a cabo su entrenamiento, siempre dentro del contexto del
-Aprendizaje Supervisado.
+aprendizaje supervisado.
 
 \subsubsection{Entrenamiento}
 Los parámetros a optimizar en las redes son las intensidades de las conexiones entre las
@@ -590,12 +589,12 @@ Existen varias estrategia de regularización, pero una puntual que utilizaremos 
 trabajo y que ha probado ser efectiva es llamada \textbf{\textit{dropout}}. El dropout se
 puede aplicar sobre la capa de entrada o las capas ocultas, pero no sobre la de salida.
 Una ventaja es que su implementación es relativamente sencilla: en cada paso de
-entrenamiento\footnotemark, cada neurona de la capa sobre la que se esté aplicando el
-dropout tiene una probabilidad \(p\) de ser temporalmente descartada, lo cual significa
-que su salida va a ser ignorada en este paso \cite{hands-on-ML-sklearn-tf}, normalmente
+entrenamiento\footnote{Cuando se utiliza DG Estocástico, un paso de entrenamiento equivale
+a procesar un lote.} , cada neurona de la capa sobre la que se esté aplicando el dropout
+tiene una probabilidad \(p\) de ser temporalmente descartada, lo cual significa que su
+salida va a ser ignorada en este paso \cite{hands-on-ML-sklearn-tf}, normalmente
 multiplicándola por 0. Aquí se introduce un nuevo hiperparámetro, \(p\), llamado ``tasa de
 dropout''.
-\footnotetext{Cuando se utiliza DG Estocástico, un paso de entrenamiento equivale a procesar un lote.}
 
 Este método fuerza a las neuronas a aprender no solo a ser útiles por sí solas,
 pero sino también a ser compatibles con muchos conjuntos posibles de neuronas que pueden
@@ -610,8 +609,8 @@ cada peso por (\(1-p\)) \cite{prince2024understanding}.
 
 \bigskip
 En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
-de las que hacemos uso en este trabajo: las redes neuronales Convolucionales y las redes
-neuronales Recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
+de las que hacemos uso en este trabajo: las redes neuronales convolucionales y las redes
+neuronales recurrentes. Cada una fue diseñada originalmente para trabajar con un tipo
 específico de datos. Las convolucionales son ideales para procesar datos estructurados en
 forma de grilla, mientras que las recurrentes son adecuadas para secuencias temporales.
 Presentaremos la intuición detrás de ellas y nos concentraremos en su aplicación sobre

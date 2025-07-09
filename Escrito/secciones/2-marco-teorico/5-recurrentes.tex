@@ -2,7 +2,7 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-Las redes neuronales Recurrentes (RNRs) son una familia de redes neuronales pensadas
+Las redes neuronales recurrentes (RNRs) son una familia de redes neuronales pensadas
 específicamente para trabajar con \textbf{datos secuenciales}, en donde el orden y la
 dinámica importan. Es por esto que han sido y continúan siendo muy útiles en tareas como
 análisis de series temporales y procesamiento de lenguaje natural. Se emplean por ejemplo
@@ -19,12 +19,12 @@ misma secuencia.
 
 Las RNRs proponen una forma alternativa de trabajar con datos de este tipo. Procesan las
 secuencias iterando sobre los distintos pasos de tiempo manteniendo \textbf{memoria} que
-contiene información relacionada con lo que ha visto hasta el momento\footnotemark. A esto
-lo logran introduciendo cíclos en su grafo, que permiten que las neuronas de la red puedan
-tomar como entradas sus propias salidas de pasos anteriores. Esto provoca que entradas
-recibidas en pasos más tempranos afecten la respuesta de la red ante la entrada actual
-\cite{ai-a-modern-approach} \footnotetext{Cabe aclarar que este estado interno se reinicia
-entre el procesamiento de diferentes secuencias.}.
+contiene información relacionada con lo que ha visto hasta el momento \footnote{Cabe
+aclarar que este estado interno se reinicia entre el procesamiento de diferentes
+secuencias.}. A esto lo logran introduciendo cíclos en su grafo, que permiten que las
+neuronas de la red puedan tomar como entradas sus propias salidas de pasos anteriores.
+Esto provoca que entradas recibidas en pasos más tempranos afecten la respuesta de la red
+ante la entrada actual \cite{ai-a-modern-approach}.
 
 Para comprender un poco más este comportamiento, tomemos la más simple de las RNRs,
 compuesta por una única neurona (oculta) que recibe la entrada correspondiente al tiempo
@@ -265,9 +265,9 @@ Intuitivamente, este ocurre cuando al calcular el gradiente de la función de p�
 respecto a un parámetro determinado, este resulta ser muy pequeño. Como consecuencia, la
 actualización de dicho parámetro durante el proceso de entrenamiento es insignificante, lo
 que puede provocar que la red aprenda muy lentamente o incluso que deje de entrenarse por
-completo\footnotemark. \footnotetext{También está el problema del gradiente explosivo, que
-ocurre cuando el gradiente de la función de pérdida con respecto a un parámetro
-determinado es muy grande, haciendo el aprendizaje sea muy inestable.}
+completo\footnote{También está el problema del gradiente explosivo, que ocurre cuando el
+gradiente de la función de pérdida con respecto a un parámetro determinado es muy grande,
+haciendo el aprendizaje sea muy inestable.}.
 
 El gradiente desvaneciente aparece principalmente cuando se aplica backpropagation en
 redes muy profundas, es decir de muchas capas. Este es justamente el caso de las redes
@@ -279,8 +279,8 @@ de muchos pasos de tiempo. La Sección 22.6 de \cite{ai-a-modern-approach} prove
 ejemplo simple con cálculos para entender exactamente cómo se produce el problema
 del gradiente desvaneciente en las RNNs estándar.
 
-\subsection{Long Short-Term Memory}
-Las redes conocidas como \textit{Long Short-Term Memory} (LSTM) son un tipo particular de
+\subsection{Long short-term memory}
+Las redes conocidas como \textit{long short-term memory} (LSTM) son un tipo particular de
 RNRs que fueron introducidas en el año 1997 \cite{lstm-paper-1997} para solucionar el
 problema del gradiente desvaneciente que tenían las RNRs estándar, haciéndolas capaces
 de aprender dependencias de largo plazo. Han demostrado funcionar de manera efectiva en
@@ -465,7 +465,7 @@ LSTM, que se encuentra en la Figura \ref{fig:lstm-cell}.
 
 Y ahora, como se puede deducir a partir de la Figura \ref{fig:lstm-cell}, vamos a tener
 varios conjuntos de pesos involucrados, cada uno de los cuales se puede representar como
-una matriz, como se mencionó en la Sección \ref{sec:rna}, y todas se aprenden durante el
+una matriz, como se mencionó en la Sección \ref{chap:rna}, y todas se aprenden durante el
 entrenamiento. Dejando de lado sus dimensiones, y asumiendo que todas incluyen el bias,
 las denotaremos de la siguiente forma:
 \begin{itemize}

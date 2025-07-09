@@ -13,36 +13,36 @@ para la compra de alimentos en un determinado sector de la población; aquí res
 importante analizar si, luego de un tiempo, esto ayudó a mejorar los niveles de salud de
 dicho sector.
 
-En este contexto, y particularmente en las políticas públicas o de desarrollo, aparece la
-metodología conocida como \textbf{evaluación de impacto}. La evaluación de impacto es una
-técnica que permite estimar cuantitativamente los efectos - positivos o negativos - que ha
-tenido la implementación de un programa, proyecto o tratamiento sobre determinadas
-variables de interés de la población ``receptora'' del mismo, la población objetivo. La
-forma en la que esto se logra es a través de un \textbf{análisis contrafactual}: ¿qué
-hubiera pasado con la población objetivo - los ``tratados'' - si el programa no hubiera
-existido?
+En este contexto, cobra relevancia la metodología conocida como \textbf{evaluación de
+impacto}. La evaluación de impacto es una técnica que permite estimar cuantitativamente
+los efectos - positivos o negativos - que ha tenido la implementación de un programa,
+proyecto o tratamiento sobre determinadas variables de interés - las variables objetivo -
+de la población receptora del mismo. La forma en la que esto se logra es a través de un
+\textbf{análisis contrafactual}: ¿qué hubiera pasado con las variables de la población
+receptora - los ``tratados'' - si el programa no hubiera existido?
 
 La situación anterior, que recibe comúnmente el nombre de ``el contrafactual'', es sin
 dudas un escenario hipotético, no observable en la realidad; y es por esto que es
-necesario aproximarlo de alguna forma. Para ello, se construye un \textbf{grupo de
-control} o \textbf{comparación}. Este debería estar formado por unidades que no han sido
-beneficiarias del programa pero que, idealmente, antes del inicio del mismo, eran muy
-similares a quienes sí lo fueron. Con el grupo de control identificado, se puede estimar
-el \textbf{efecto promedio del programa en los tratados} (ATT) comparando los resultados
-de ambos grupos.
+necesario aproximarlo de alguna forma. Para ello, una técnica consiste en construir un
+\textbf{grupo de control} o \textbf{comparación}. Este debería estar formado por unidades
+que no han sido beneficiarias del programa pero que, idealmente, antes del inicio del
+mismo, eran muy similares a quienes sí lo fueron. Con el grupo de control identificado, se
+puede estimar el \textbf{efecto promedio del programa en los tratados} (\(ATT\))
+comparando los resultados de ambos grupos.
 
 Dicho esto, el principal desafío en una evaluación de impacto es construir un grupo de
-control \textit{válido}, que permita asegurar que la diferencia observada en los
-resultados se debe pura y exclusivamente al tratamiento en cuestión, y no a otros
+control \textit{válido}. Esto es, uno que permita asegurar que la diferencia observada en
+los resultados se debe pura y exclusivamente al tratamiento en cuestión, y no a otros
 factores. Si la asignación al programa es aleatoria, este grupo es todo el conjunto de los
-no tratados. Sin embargo, en políticas donde la asignación no tiene reglas claras, y se
-desconocen cuáles son las verdaderas razones que han llevado a las unidades a participar o
-no del programa, tomar a los no tratados como grupo de comparación puede producir
-estimaciones sesgadas, resultantes de no haber considerado las diferencias preexistentes
-entre ambos grupos. Este problema es conocido como \textbf{sesgo de autoselección}.
+no tratados (dentro de la población elegible). Sin embargo, en políticas donde la
+asignación no tiene reglas claras, y se desconocen cuáles son las verdaderas razones que
+han llevado a las unidades a participar o no del programa, tomar a los no tratados como
+grupo de comparación puede producir estimaciones sesgadas, resultantes de no haber
+considerado las diferencias preexistentes entre ambos grupos. Este problema es conocido
+como \textbf{sesgo de autoselección}.
 
-Existen diferentes técnicas que buscan mitigar este sesgo, siendo una bastante utilizada
-el \textbf{Pareamiento por Puntaje de Propensión} (PSM) \cite{psm1983}. El PSM consiste en
+Existen diferentes métodos que buscan mitigar este sesgo, siendo una bastante utilizada
+el \textbf{pareamiento por puntaje de propensión} (PSM) \cite{psm1983}. El PSM consiste en
 estimar el puntaje de propensión - también llamado probabilidad de participación - tanto
 para tratados y no tratados, y construir un grupo de control emparejando a cada tratado
 con uno o varios individuos no tratados que tengan puntajes similares. Para el cálculo de
@@ -56,7 +56,7 @@ efectivos para capturar posibles patrones y dinámicas, y hacer un emparejamient
 
 Es en estos escenarios donde consideramos que los modelos de \textbf{aprendizaje
 automático} pueden contribuir a una mejor selección de unidades pertenecientes al grupo de
-control. El Aprendizaje Automático es un campo de la Inteligencia Artificial cuyo enfoque
+control. El aprendizaje automático es un campo de la inteligencia artificial cuyo enfoque
 está en desarrollar técnicas que permitan a las computadoras aprender automáticamente a
 partir de los datos, sin la necesidad de tener que proveerlas de reglas. Esta estrategia
 facilita la identificación de patrones, incluso cuando pueden parecer muy difíciles de
@@ -85,10 +85,10 @@ tipo de programas.
 
 
 \section{Estructura del trabajo}
-En el Capítulo 2 se presentan los conceptos fundamentales necesarios para comprender el
+En el Capítulo 2, se presentan los conceptos fundamentales necesarios para comprender el
 desarrollo de este trabajo. En particular, explicamos en profundidad la metodología de la
 evaluación de impacto, los problemas que aparecen y algunas de las técnicas utilizadas.
-Luego, nos enfocamos en el Aprendizaje Automático, centrándonos en las redes neuronales, y
+Luego, nos enfocamos en el aprendizaje automático, centrándonos en las redes neuronales, y
 más particularmente en las de tipo LSTM y convoluciones.
 
 Posteriormente, en el Capítulo 3, se describen algunas de las limitaciones que presenta el
@@ -100,13 +100,14 @@ decisiones tomadas en las diferentes etapas, desde la generación de datos sint�
 búsqueda de hiperparámetros, las métricas de importancia y la forma de comparar el
 desempeño de las redes neuronales con el del PSM.
 
-En el Capítulo 5 se muestran los resultados obtenidos en los diferentes experimentos
+En el Capítulo 5, se muestran los resultados obtenidos en los diferentes experimentos
 llevados a cabo, haciendo especial énfasis en el puntaje \(F_1\), la precisión y la
-sensibilidad y en los valores de los hiperparámetros hallados en las diferentes
+recuperación, y en los valores de los hiperparámetros hallados en las diferentes
 simulaciones.
 
 Finalmente, en el Capítulo 6, se presentan las conclusiones derivadas a partir de los
-resultados y se introducen algunos aspectos de nuestro desarrollo que podrían mejorarse en
-trabajos futuros.
+resultados, se propone una manera de aplicar nuestra alternativa en casos reales, y se
+introducen algunos aspectos de nuestro desarrollo que podrían mejorarse en trabajos
+futuros.
 
 \end{document}

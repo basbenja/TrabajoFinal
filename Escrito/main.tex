@@ -14,7 +14,7 @@
 \thispagestyle{empty}
 \chapter*{Agradecimientos}
 A David y Martín, por acompañarme a lo largo de estos meses enseñándome y guiándome,
-y por su disposición a responder todas las dudas que fueran surgiendo.
+y por su disposición a responder todas las dudas que fueron surgiendo.
 
 A mi familia, Andrés, María, Sofi y Feli, por su comprensión y apoyo incondicional a lo
 largo de toda la carrera, festejando mis logros y siempre motivándome a seguir adelante y
@@ -25,9 +25,13 @@ A Juli y Toni, mis amigos y compañeros desde el cursillo de ingreso hasta el ú
 cursado. Hicieron que este recorrido sea mucho más lindo; gracias por cada trabajo,
 explicación, consejo, charla y momento compartido. Espero que dure para toda la vida.
 
-A mis amigos en general, por siempre darme un espacio en donde poder distraerme
-cuando aparecía el estrés, festejar mis logros, apoyarme y muchas veces hacerme ver
-las cosas de otra manera.
+A mis amigos que me dio la facu, en especial a Seba, Valen, Lucas, Anna, Bruno,
+Lueme, Martín y Leo, por hacer más llevaderos los días largos, y ayudarme siempre que
+lo necesitaba.
+
+A resto de mis amigos, por siempre darme un espacio en donde poder distraerme cuando
+aparecía el estrés, festejar mis logros, apoyarme y muchas veces hacerme ver las cosas de
+otra manera.
 
 A todos los profesores y ayudantes que me crucé en estos años. Admiro profundamente su
 vocación y su esfuerzo constante por formar grandes profesionales y científicos, ayudando
@@ -45,8 +49,10 @@ nuestro país y que hay que defenderlo siempre.
 \thispagestyle{empty}
 \chapter*{Reconocimientos}
 Este trabajo utilizó recursos computacionales de UNC Supercómputo (CCAD) de la Universidad
-Nacional de Córdoba \cite{ccad}, que forman parte del Sistema Nacional de Computación de
-Alto Desempeño (SNCAD) de la República Argentina.
+Nacional de Córdoba
+({\href{https://supercomputo.unc.edu.ar}{https://supercomputo.unc.edu.ar}}), que forman
+parte del Sistema Nacional de Computación de Alto Desempeño (SNCAD) de la República
+Argentina.
 
 
 \tableofcontents
@@ -55,21 +61,21 @@ Alto Desempeño (SNCAD) de la República Argentina.
 \chapter{Introducción}
 \subfile{secciones/1-introduccion.tex}
 
-\chapter{Marco Teórico}
+\chapter{Marco teórico}
 En este capítulo, presentamos los conceptos teóricos necesarios para entender el contexto
 del problema y cuál es la solución que planteamos.
 
 Primeramente, explicamos la evaluación de impacto, que es el campo de aplicación sobre el
 que vamos a trabajar. Describimos qué es una evaluación de impacto, en qué consiste,
 cuáles son los problemas involucrados, y las distintas técnicas que se utilizan para
-llevarla a cabo. Al final de esta sección, presentamos el método de \textit{Propensity
-Score Matching}, que es el que tomaremos como parámetro para evaluar nuestra solución
+llevarla a cabo. Al final de esta sección, presentamos el método de \textit{propensity
+score matching}, que es el que tomaremos como parámetro para evaluar nuestra solución
 propuesta.
 
-Luego, abordamos el área de la Inteligencia Artificial, enfocándonos particularmente
-en el campo de los algoritmos de Aprendizaje Automático. Explicamos cómo funcionan estos y
-cuáles son los elementos presentes en ellos haciendo especial enfásis en los algoritmos de
-Aprendizaje Supervisado, dentro de los cuales se enmarca nuestra propuesta.
+Luego, abordamos el área de la inteligencia artificial, enfocándonos particularmente
+en el campo de los algoritmos de aprendizaje automático. Explicamos cómo funcionan y
+cuáles son los elementos presentes en ellos haciendo especial énfasis en los algoritmos de
+aprendizaje supervisado, dentro de los cuales se enmarca nuestra propuesta.
 
 A continuación, hablamos sobre un \textit{modelo} particular dentro del aprendizaje
 automático que ha cobrado particular importancia en los últimos años: las redes neuronales
@@ -80,25 +86,25 @@ haremos uso en nuestros experimentos.
 \section{Evaluación de impacto}
 \subfile{secciones/2-marco-teorico/1-eval-impacto}
 
-\section{Inteligencia Artificial}
+\section{Inteligencia artificial}
 \subfile{secciones/2-marco-teorico/2-ia}
 
-\section{Redes Neuronales Artificiales} \label{sec:rna}
+\section{Redes neuronales artificiales} \label{chap:rna}
 \subfile{secciones/2-marco-teorico/3-rna}
 
-\section{Redes Neuronales Convolucionales}
+\section{Redes neuronales convolucionales}
 \subfile{secciones/2-marco-teorico/4-convolucionales}
 
-\section{Redes Neuronales Recurrentes}
+\section{Redes neuronales recurrentes}
 \subfile{secciones/2-marco-teorico/5-recurrentes}
 
 % \section{Clasificación de Series de Tiempo}
 % \subfile{secciones/2-marco-teorico/6-series-de-tiempo}
 
-\chapter{Presentación del problema} \label{sec:problema}
+\chapter{Presentación del problema} \label{chap:problema}
 \subfile{secciones/3-problema}
 
-\chapter{Marco Experimental}
+\chapter{Marco experimental}
 El alcance del trabajo desarrollado comprende las siguientes etapas, de las cuales
 hablaremos en este capítulo:
 \begin{enumerate}[itemsep=0.1cm, label=\textbf{\arabic*.}]
@@ -112,10 +118,10 @@ hablaremos en este capítulo:
 También nombraremos las diferentes herramientas que nos ayudaron a llevar a cabo
 cada uno de estos pasos.
 
-\section{Conjuntos de Datos} \label{sec:datos}
+\section{Conjuntos de datos} \label{sec:datos}
 \subfile{secciones/4-marco-experimental/1-datos}
 
-\section{Arquitecturas de Redes Neuronales}
+\section{Arquitecturas de redes neuronales}
 \subfile{secciones/4-marco-experimental/2-arquitecturas}
 
 \section{Herramientas}
@@ -127,7 +133,7 @@ cada uno de estos pasos.
 \section{Comparación de técnicas} \label{sec:comparacion}
 \subfile{secciones/4-marco-experimental/5-comparacion.tex}
 
-\chapter{Resultados} \label{sec:resultados}
+\chapter{Resultados} \label{chap:resultados}
 \subfile{secciones/5-resultados/intro.tex}
 \subfile{secciones/5-resultados/exp1.tex}
 
@@ -136,21 +142,19 @@ cada uno de estos pasos.
 \subfile{secciones/5-resultados/exp4.tex}
 \subfile{secciones/5-resultados/exp5.tex}
 \subfile{secciones/5-resultados/exp6.tex}
+\subfile{secciones/5-resultados/exp7.tex}
 
-\chapter{Conclusiones y Trabajos Futuros}
+\chapter{Conclusiones y trabajos futuros}
 \subfile{secciones/6-conclusiones-trabajos-futuros.tex}
 
 \newpage
 \footnotesize
-\nocite{python-docs}
-\nocite{jupyter-docs}
-\nocite{nabu}
-\nocite{numpy-docs}
-\nocite{pandas-docs}
-\nocite{pytorch-docs}
-\nocite{mlflow-docs}
-\nocite{optuna-docs}
 \printbibliography[heading=bibintoc]
+
+\appendix
+\chapter*{Anexo}
+\label{chap:anexo}
+\subfile{secciones/7-anexo.tex}
 
 \newpage
 % \thispagestyle{empty} Los abajo firmantes, miembros del Tribunal de Evaluación de tesis,

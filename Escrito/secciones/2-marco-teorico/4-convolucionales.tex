@@ -2,7 +2,7 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-Como mencionamos anteriormente, las redes neuronales Convolucionales (RNCs) son un tipo
+Como mencionamos anteriormente, las redes neuronales convolucionales (RNCs) son un tipo
 especializado de redes neuronales pensadas para el procesamiento de datos que tienen una
 estructura de grilla \cite{deep-learning}. Ejemplos de estos datos son las series de
 tiempo, que pueden pensarse como una grilla unidimensional, y las imágenes, que pueden
@@ -24,10 +24,10 @@ en el período \(i\), para \(i = 1,...,N\).
 
 Ahora bien, el término \textit{convolucionales} proviene del hecho que lo que caracteriza
 a estas redes es la utilización de una operación matemática llamada
-\textbf{convolución}\footnotemark \cite{deep-learning}. Las capas de la red que aplican
-esta operación son llamadas \textit{capas convolucionales}. \footnotetext{En realidad, la
-operación que está presente en estas redes es una relacionada con la convolución, llamada
-\textbf{correlación cruzada}, pero el término que se utiliza sigue siendo convolucionales.}
+\textbf{convolución}\footnote{En realidad, la operación que está presente en estas redes
+es una relacionada con la convolución, llamada \textbf{correlación cruzada}, pero el
+término que se utiliza sigue siendo convolucionales.} \cite{deep-learning}. Las capas de
+la red que aplican esta operación son llamadas \textit{capas convolucionales}.
 
 La convolución toma dos argumentos: por un lado, la \textit{entrada} y por otro lado, un
 \textit{filtro} o \textit{kernel}. En el contexto del ML, ambos son usualmente arreglos
@@ -36,13 +36,13 @@ multidimensionales de números reales, también comúnmente llamados tensores
 sobre la entrada, y en cada momento calcular el producto escalar. Para verlo más
 claramente en el caso unidimensional, tomemos un ejemplo.
 
-Dado como entrada a la convolución un vector \(\bm{x}\), si tomamos un filtro de
-tamaño 3, dado por\footnotemark\ \(\bm{w}=(w_1, w_2, w_3)^T\), entonces el resultado de la convolución
-es un vector \(\bm{z}\) en donde cada componente \(z_i\) es una suma pesada de las
-entradas ``cercanas'':
+Dado como entrada a la convolución un vector \(\bm{x}\), si tomamos un filtro de tamaño 3,
+dado por\footnote{Por conveniencia, el primer elemento de los vectores será indexado en 1,
+y no en 0.} \(\bm{w}=(w_1, w_2, w_3)^T\), entonces el resultado de la convolución es un
+vector \(\bm{z}\) en donde cada componente \(z_i\) es una suma pesada de las entradas
+``cercanas'':
 \[z_i = w_1 x_{i-1} + w_2 x_{i} + w_3 x_{i+1}\]
-\footnotetext{Por conveniencia, el primer elemento de los vectores será indexado en 1,
-y no en 0.}
+
 
 En la Figura \ref{fig:conv1d-example}, se puede ver cómo se computan \(z_2\) y \(z_3\). Un
 detalle a notar aquí es que al calcular \(z_2\) y \(z_3\), el filtro ``entra'' por

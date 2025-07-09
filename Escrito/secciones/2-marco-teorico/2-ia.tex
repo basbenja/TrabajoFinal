@@ -2,12 +2,13 @@
 % \graphicspath{{\subfix{../images/}}}
 
 \begin{document}
-La definición más general acerca de la Inteligencia Artificial (IA) establece que es el
+La definición más general acerca de la inteligencia artificial (IA) establece que es el
 área de las Ciencias de la Computación que se enfoca tanto en entender como en crear
 sistemas que simulen comportamientos \textit{inteligentes}. Si bien existen distintas
 perspectivas sobre qué significa que una computadora actúe de manera inteligente, una que
-la resume adecuadamente es aquella que la relaciona la capacidad de computar cómo actuar
-de la mejor manera posible en una determinada situación \cite{ai-a-modern-approach}.
+la resume adecuadamente es aquella que la relaciona con la capacidad de computar cómo
+actuar de la mejor manera posible en una determinada situación
+\cite{ai-a-modern-approach}.
 
 En sus comienzos, los métodos desarrollados en el área de la IA estaban principalmente
 \textbf{basados en conocimiento}, es decir en reglas matemáticas formales que permitían a las
@@ -21,8 +22,8 @@ un enfoque en el que estos pudieran obtener su propio conocimiento aprendiendo p
 directamente a partir de los datos en lugar de depender exclusivamente de reglas
 predefinidas.
 
-Este cambio de paradigma dio lugar a lo que hoy se conoce como \textbf{Aprendizaje
-Automático}, la subdisciplina de la IA que permite a los algoritmos mejorar su desempeño
+Este cambio de paradigma dio lugar a lo que hoy se conoce como \textbf{aprendizaje
+automático}, la subdisciplina de la IA que permite a los algoritmos mejorar su desempeño
 en una tarea específica automáticamente a partir de la experiencia. Diversos factores como
 la creciente disponibilidad de datos, el aumento en la capacidad computacional, y los
 avances en los algoritmos de optimización \cite{deep-learning} han hecho que esta área sea
@@ -33,8 +34,8 @@ habilidades de aprendizaje, razonamiento, y percepción, entre otras; hasta lo e
 como probar teoremas matemáticos, manejar vehículos, mejorar procesos industriales o
 incluso diagnosticar enfermedades.
 
-\subsection{Aprendizaje Automático}
-El Aprendizaje Automático, más conocido por su nombre en inglés \textit{Machine Learning}
+\subsection{Aprendizaje automático}
+El aprendizaje automático, más conocido por su nombre en inglés \textit{machine learning}
 (ML), es un campo dentro de la IA cuyo objetivo es desarrollar técnicas que permitan que
 las computadoras \textit{aprendan} automáticamente a partir de la \textit{experiencia} -
 los datos -, sin la necesidad de ser explícitamente programadas para hacerlo.
@@ -71,7 +72,7 @@ subconjunto del \textit{dataset}, que es el conjunto de todos los ejemplos o dat
 que se cuenta. En base a la experiencia, los algoritmos de ML se clasifican en dos grandes
 categorías:
 \begin{itemize}
-    \item \textbf{Algoritmos de Aprendizaje Supervisado}: experimentan un dataset que
+    \item \textbf{Algoritmos de aprendizaje supervisado}: experimentan un dataset que
     contiene pares de entrada-salida. Cada ejemplo contiene sus características pero
     también su ``etiqueta'', que vendría a ser la ``respuesta correcta'' para dicha
     entrada. De esta forma, el algoritmo aprende una función que asigna (\textit{mapea})
@@ -79,15 +80,15 @@ categorías:
     aprendizaje son las de regresión, en donde la etiqueta corresponde a un valor
     continuo; y clasificación, en donde la solución viene dada por la categoría (dentro de
     un conjunto predefinido de categorías) a la que pertenece un ejemplo.
-    \item \textbf{Algoritmos de Aprendizaje No Supervisado}: ven un dataset que cuenta
+    \item \textbf{Algoritmos de aprendizaje no supervisado}: ven un dataset que cuenta
     solamente con features de cada entrada pero sin etiquetas, e intentan aprender
     automáticamente patrones y propiedades útiles de la estructura de los datos. Algunas
     tareas que se llevan a cabo con este tipo de aprendizaje son \textit{clustering},
     reducción de dimensionalidad, y detección de anomalías.
 \end{itemize}
-También existen otros tipos de algoritmos, como los de \textbf{Aprendizaje
-Semi-supervisado}, en donde el dataset contiene algunos ejemplos etiquetados y otros sin
-etiquetas; y los de \textbf{Aprendizaje por Refuerzo}, en donde el algoritmo aprende la
+También existen otros tipos de algoritmos, como los de \textbf{aprendizaje
+semi-supervisado}, en donde el dataset contiene algunos ejemplos etiquetados y otros sin
+etiquetas; y los de \textbf{aprendizaje por refuerzo}, en donde el algoritmo aprende la
 mejor estrategia para una situación a partir de la interacción con su entorno en forma de
 recompensas y castigos.
 
@@ -111,25 +112,25 @@ de generalización del algoritmo.
 
 \bigskip
 Habiendo presentado una idea general sobre cuál es el objetivo de los algoritmos de
-Aprendizaje Automático, ahora nos enfocaremos en los de Aprendizaje Supervisado, que son
+aprendizaje automático, ahora nos enfocaremos en los de aprendizaje supervisado, que son
 los que usaremos en este trabajo.
 
-\subsection{Aprendizaje Supervisado}
-Como mencionamos anteriormente, en el Aprendizaje Supervisado el algoritmo aprende una
+\subsection{Aprendizaje supervisado}
+Como mencionamos anteriormente, en el aprendizaje supervisado el algoritmo aprende una
 función que mapea entradas a salidas a partir de un conjunto de entrenamiento compuesto
 por datos etiquetados. El objetivo es que al presentarle a esta función una nueva entrada
 no vista previamente, esta sea capaz de computar la salida que mejor se ajusta a los
 \textbf{patrones} aprendidos durante el entrenamiento.
 
-Resulta conveniente introducir en este punto un término muy utilizado en el ML:
+Resulta conveniente introducir en este punto un término muy utilizado en el ML, el de
 \textbf{modelo}. Un modelo es simplemente una ecuación matemática, que se presenta como
-una forma simplificada de describir hechos de la realidad. En este contexto, será una
+una forma simplificada de describir hechos de la realidad. En este contexto, es una
 manera de intentar capturar las relaciones entre los datos, con el objetivo de hacer
 predicciones basadas en los patrones aprendidos de ejemplos previos. En general, se suele
 utilizar la palabra modelo para referirse a la función de la que hablamos en el párrafo
 anterior.
 
-Formalmente, una tarea de Aprendizaje Supervisado es la siguiente:
+Formalmente, una tarea de aprendizaje supervisado es la siguiente:
 \begin{quote}
     Dado un conjunto de entrenamiento de \(N\) ejemplos de entrada-salida:
     \[(\bm{x}_1, \bm{y}_1), (\bm{x}_2, \bm{y}_2), ..., (\bm{x}_N,
@@ -165,28 +166,27 @@ parámetros especifican la relación particular (el modelo).
 
 Por ejemplo, si suponemos que cada entrada \(\bm{x} \in \mathbb{R}\), y establecemos
 como espacio el conjunto de funciones lineales, entonces la forma de \(h\) será:
-\[h(\bm{x}) = w_1 \bm{x} + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1)\). Este caso
-es comúnmente conocido como regresión lineal unidimensional (ya que la entrada es
-simplemente un número real). Dentro de este espacio, distintas asignaciones de valores
-a los parámetros generan distintos modelos. Por ejemplo, tomando la asignación
-\(\bm{w}=(13, 5)\), tenemos el modelo \(h(x) = 5\bm{x} + 13\), y tomando \(\bm{w}=(1{.}25, \pi)\),
+\[h(\bm{x}) = w_1 \bm{x} + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1)\). Este caso es
+comúnmente conocido como regresión lineal univariada (ya que la entrada está compuesta
+solamente por una variable). Dentro de este espacio, distintas asignaciones de valores a
+los parámetros generan distintos modelos. Por ejemplo, tomando la asignación \(\bm{w}=(13,
+5)\), tenemos el modelo \(h(x) = 5\bm{x} + 13\), y tomando \(\bm{w}=(1{.}25, \pi)\),
 \(h(\bm{x}) = \pi \bm{x} + 1{.}25\), entre muchos otros.
 
 En cambio, si tomamos el conjunto de polinomios de grado 2 y seguimos suponiendo
 \(\bm{x} \in \mathbb{R}\), entonces la forma de \(h\) será:
-\[h(\bm{x}) = w_2 \bm{x}^2 + w_1 \bm{x} + w_0\] y sus parámetros
-\(\bm{w}=(w_0, w_1, w_2)\). A este caso se lo suele llamar regresión polinómica de segundo
-grado unidimensional.
+\[h(\bm{x}) = w_2 \bm{x}^2 + w_1 \bm{x} + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1,
+w_2)\). A este caso se lo suele llamar regresión polinomial (de segundo grado) univariada.
 
 Otro caso un poco más ``complejo'' podría ser en el que \(\bm{x} \in \mathbb{R}^3\), es decir
 \(\bm{x}=(x_1, x_2, x_3)\) y seguimos tomando una relación lineal. Aquí, \(h\) sería:
 \[h(\bm{x}) = w_1 x_1 + w_2 x_2 + w_3 x_3 + w_0\] y sus parámetros \(\bm{w}=(w_0, w_1,
-w_2, w_3)\)\footnotemark. \footnotetext{Para simplificar la notación, lo que se suele hacer
+w_2, w_3)\)\footnote{Para simplificar la notación, lo que se suele hacer
 es asumir que la entrada \(\bm{x}\) tiene un componente adicional constante \(x_0\)
 con el valor 1, es decir \(\bm{x}=(x_0, x_1, x_2, x_3)=(1, x_1, x_2, x_3)\). De esta
 forma, podríamos escribir: \(h(\bm{x}) = \bm{x} \cdot \bm{w}\), donde el operador
 \(\cdot\) representa el producto escalar. Retomaremos esta idea más adelante al hablar
-sobre Redes Neuronales.}
+sobre Redes Neuronales.}.
 
 Notemos entonces que, fijado un espacio de funciones, quienes van a determinar qué modelo
 es ``mejor'' que otro en este espacio, es decir qué modelo aproxima mejor a \(f\), son los
@@ -215,11 +215,11 @@ lejos están sus predicciones de las respuestas reales del conjunto de entrenami
 
 Como venimos enfatizando, lo que caracteriza al modelo en cada iteración es el valor de
 sus parámetros. Por lo tanto, tiene sentido tratar a la función de pérdida como una que
-depende de estos, es decir\footnotemark\ \(L(\bm{w})\). \footnotetext{En realidad la
-función de pérdida también depende de los datos de entrenamiento, por lo que si somos
-estrictos, deberíamos escribir \(L(\left\{\bm{X}, \bm{Y}\right\}, \bm{w}\)). Sin
-embargo, como estos datos están fijos durante todo el proceso de aprendizaje, podemos
-omitirlos.}A continuación, se mencionan dos ejemplos de funciones de error:
+depende de estos, es decir\footnote{En realidad la función de pérdida también depende de
+los datos de entrenamiento, por lo que si somos estrictos, deberíamos escribir
+\(L(\left\{\bm{X}, \bm{Y}\right\}, \bm{w}\)). Sin embargo, como estos datos están fijos
+durante todo el proceso de aprendizaje, podemos omitirlos.} \(L(\bm{w})\). A continuación,
+se mencionan dos ejemplos de funciones de error:
 \begin{itemize}
     \item Una función de pérdida que es común usar en problemas de regresión es la de
     Error Cuadrático Medio (ECM), dada por:
@@ -244,10 +244,10 @@ omitirlos.}A continuación, se mencionan dos ejemplos de funciones de error:
     y que la salida del modelo es \(h(\bm{x}', \bm{w}') = 0{.}95\). En primera instancia,
     vamos a tener que el lado derecho del término de la sumatoria directamente se anula
     (ya que \(1-\bm{y}' = 1-1 = 0\)). Y, para ver qué pasa con el lado izquierdo, notemos
-    que \(\ln(h(\bm{x}', \bm{w}')) = \ln(0{.}95) \approx -0{.}05\), por lo que multiplicando
-    por el (\(-1\)) del comienzo de la fórmula, vamos a tener como resultado \(0{.}05\),
-    lo cual es bajo e indica una buena predicción del modelo. Si en cambio la predicción
-    hubiera sido \(h(\bm{x}', \bm{w}') = 0{.}25\), tendríamos \(\ln(h(\bm{x}', \bm{w}')) =
+    que \(\ln(h(\bm{x}', \bm{w}')) = \ln(0{.}95) \approx -0{.}05\). Multiplicando por el
+    (\(-1\)) del comienzo de la fórmula, vamos a tener como resultado \(0{.}05\), lo cual
+    es bajo e indica una buena predicción del modelo. Si en cambio la predicción hubiera
+    sido \(h(\bm{x}', \bm{w}') = 0{.}25\), tendríamos \(\ln(h(\bm{x}', \bm{w}')) =
     \ln(0{.}25) \approx -1{.}39\), dando una pérdida de \(1{.}39\).
 
     Lo que se puede ver es que el lado izquierdo influye cuando la salida esperada para la
@@ -278,42 +278,42 @@ Sin embargo, si la función de costo tiene muchas variables o los modelos son co
 resulta más útil recurrir a métodos numéricos para aproximar este mínimo.
 
 El algoritmo por defecto que se utiliza para resolver este problema de optimización es el
-llamado \textbf{Descenso por el Gradiente} (DG), y es muy potente ya que se puede aplicar a
+llamado \textbf{descenso por el gradiente} (DG), y es muy potente ya que se puede aplicar a
 una gran variedad de funciones de pérdida \cite{ai-a-modern-approach}.
 
 La idea del DG es ir modificando los parámetros iterativamente hasta eventualmente llegar
-a un ``valle'' de la función de pérdida. El algoritmo se basa en que la dirección dada por
-el gradiente\footnotemark{} de una función en un punto es la de máximo crecimiento, y por
-lo tanto su opuesta es la de máximo decrecimiento. En este caso, la función de la cual se
-calcula el gradiente es la de error, con respecto a los parámetros en \(\bm{w}\).
-\footnotetext{Dada una función \(g\) de varias variables, es decir, \(g(v_1, v_2, ...,
-v_M)\), el \textbf{gradiente} de \(g\) es el vector formado por las derivadas parciales de
-\(g\) con respecto a cada uno de sus parámetros:
+a un ``valle'' de la función de pérdida, en donde su valor es bajo. El algoritmo se basa
+en que la dirección dada por el gradiente\footnote{Dada una función \(g\) de varias
+variables, es decir, \(g(v_1, v_2, ..., v_M)\), el \textbf{gradiente} de \(g\) es el
+vector formado por las derivadas parciales de \(g\) con respecto a cada uno de sus
+parámetros:
 \[
 \nabla g = \left( \frac{\partial g}{\partial v_1}, \frac{\partial g}{\partial v_2},
 \dots, \frac{\partial g}{\partial v_M} \right)
 \]
 donde la notación \(\frac{\partial g}{\partial v_i}\) representa la \textbf{derivada
 parcial} de \(g\) con respecto a \(v_i\), que mide cómo cambia \(g\) cuando se varía
-\(v_i\) mientras se mantienen constantes las demás variables. De aquí la razón por la cual
-es necesario que la función de pérdida sea derivable. Algo a notar es que el vector
-resultante es un vector de funciones, y cuando se lo evalúa en un punto, da la dirección
-de mayor crecimiento de \(g\) desde ese punto.}
+\(v_i\) mientras se mantienen constantes las demás variables. Algo a notar es que el
+vector resultante es un vector de funciones, y cuando se lo evalúa en un punto, da la
+dirección de mayor crecimiento de \(g\) desde ese punto.} de una función en un punto es la
+de máximo crecimiento, y por lo tanto su opuesta es la de máximo decrecimiento. En este
+caso, la función de la cual se calcula el gradiente es la de error, con respecto a los
+parámetros en \(\bm{w}\).
+
 
 Concretamente, se empieza con un vector de parámetros \(\bm{w}^{(0)}\) con valores arbitrarios
 que van mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente,
 con el objetivo de reducir el valor de la función de pérdida, hasta que el algoritmo
 \textit{converja} a un mínimo (local o global) de la función de pérdida.
 
-Un hiperparámetro\footnotemark{} determinante en el algoritmo del DG es el tamaño de los
-pasos, llamado \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\eta\) y
-supondremos por el momento que se mantiene constante en todo el proceso. Si el valor de
+Un hiperparámetro\footnote{Hablaremos más adelante sobre qué es un hiperparámetro, pero lo
+importante es que no es un parámetro que se aprende, como lo son los contenidos en el
+vector \(\bm{w}\).} determinante en el algoritmo del DG es el tamaño de los pasos, llamado
+\textbf{tasa de aprendizaje}, que denotaremos con la letra \(\eta\). Si el valor de
 \(\eta\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas iteraciones
 para converger \cite{hands-on-ML-sklearn-tf}. Si en cambio el valor es muy alto, entonces
 puede ser que vayamos ``saltando'' de un lado a otro de un valle de la función, haciendo
-que el algoritmo diverja \cite{hands-on-ML-sklearn-tf}. \footnotetext{Hablaremos más
-adelante sobre qué es un hiperparámetro, pero lo importante es que no es un parámetro que
-se aprende, como lo son los contenidos en el vector \(\bm{w}\).}
+que el algoritmo diverja \cite{hands-on-ML-sklearn-tf}.
 
 De esta forma, la regla del DG está dada por:
 \[
@@ -348,13 +348,13 @@ esto es un proceso llamado \textbf{búsqueda} u \textbf{optimización de hiperpa
 
 Esta búsqueda se hace de forma empírica: se entrenan distintos modelos con diferentes
 hiperparámetros sobre el mismo conjunto de entrenamiento, se mide el desempeño de cada uno
-de ellos, y se elige el mejor. Ahora bien, el desempeño\footnotemark no se mide sobre el
+de ellos, y se elige el mejor. Ahora bien, el desempeño\footnote{Cómo se mide
+exactamente el desempeño es una decisión de diseño. Generalmente interesa maximizar o
+minimizar una métrica puntual; y así lo que guiará la optimización de hiperparámetros
+serán los valores de esa métrica obtenidos por los distintos modelos.} no se mide sobre el
 conjunto de test, ya que esto provocaría que la evaluación final sobre la capacidad de
 generalización del modelo esté sesgada; no sabríamos realmente cómo funciona ante entradas
-nunca vistas. \footnotetext{Cómo se mide exactamente el desempeño es una decisión de
-diseño. Generalmente interesa maximizar o minimizar una métrica puntual; y así lo que
-guiará la optimización de hiperparámetros serán los valores de esa métrica obtenidos por
-los distintos modelos.}
+nunca vistas.
 
 Por lo tanto, una técnica para realizar correctamente esta búsqueda consiste en construir
 una tercera partición del conjunto de datos, además de la de entrenamiento y la de test,
@@ -384,7 +384,7 @@ de un modelo es una de las más costosas computacionalmente y en tiempo.
 
 \subsubsection{Resumen}
 Hasta aquí hemos hablado de cómo está compuesto prácticamente cualquier algoritmo de
-Aprendizaje Supervisado. Los distintos elementos presentes son:
+aprendizaje supervisado. Los distintos elementos presentes son:
 \begin{itemize}[noitemsep]
     \item Un \textbf{conjunto de entrenamiento}, que contiene ejemplos de entrada-salida.
     \item Un \textbf{conjunto de test}, que servirá para evaluar el desempeño real del modelo,
@@ -422,7 +422,7 @@ dimensionalidad de los datos. La capacidad de generalizar se vuelve aún más co
 cuando los datos son de altas dimensiones, es decir cada entrada contiene muchas
 características.
 
-En este contexto, aparecen los modelos conocidos como \textbf{Redes Neuronales}, que no
+En este contexto, aparecen los modelos conocidos como \textbf{redes neuronales}, que no
 solo permiten describir conjuntos de funciones complejas, expresivas, y no lineales sin la
 necesidad de tener un conocimiento profundo sobre la estructura subyacente de los datos,
 sino que también son capaces de trabajar con espacios de alta dimensión. En la Sección
