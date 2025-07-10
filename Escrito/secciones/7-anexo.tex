@@ -1,0 +1,67 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\section*{Resultados de pruebas de hipótesis}
+Como dijimos, utilizamos pruebas de hipótesis\footnote{Para una explicación más detallada
+sobre pruebas de hipótesis, se puede consultar el Capítulo 3 de \cite{giuliodori-2022}.}
+de diferencia de medias para verificar si las diferencias observadas en el puntaje \(F_1\)
+entre cada arquitectura y el PSM son estadísticamente significativas.
+
+Contamos con un modelo A y un modelo B, evaluados independientemente sobre el conjunto de
+test de cada una de 100 simulaciones. Ante este escenario, aplicamos la prueba t de
+Student para muestras independientes con varianza poblacional desconocida. El estadístico
+de prueba sigue una distribución t de Student con \(n_A + n_B - 2\) grados de libertad,
+donde \(n_A\) y \(n_B\) son los tamaños muestrales de cada modelo (ambos iguales a 100 en
+este caso).
+
+Concretamente, si denotamos con \(\mu^A_{F_1}\) y \(\mu^B_{F_1}\) a la media poblacional
+del puntaje \(F_1\) obtenido con los modelos A y B respectivamente, entonces las hipótesis
+nula (\(H_0\)) y alternativa (\(H_1\)) son:
+\begin{itemize}[itemsep=0.05cm]
+    \item \(H_0\): \(\mu^A_{F_1} = \mu^B_{F_1}\)
+    \item \(H_1\): \(\mu^A_{F_1} \ne \mu^B_{F_1}\)
+\end{itemize}
+
+En nuestro caso, tomamos un nivel de significancia \(\alpha = 0.05\). De esta forma, si el
+\(p\)-valor obtenido en la prueba es menor a \(0.05\) o si el valor absoluto del
+estadístico observado \(t_{\text{obs}}\) es mayor a 1.972\footnote{Este valor se obtuvo
+utilizando la función
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.t.html}{\texttt{scipy.stats.t.ppf}}.},
+se rechaza la hipótesis nula, concluyendo que la diferencia observada en el desempeño de
+los modelos es estadísticamente significativa.
+
+En la Tabla \ref{tab:pruebas_hipotesis}, se presentan los \(p\)-valores y los estadísticos
+observados en los diferentes experimentos al comparar las muestras de \(F_1\) obtenidas
+con cada red frente a las obtenidas con el PSM. En todos los casos, se rechaza la
+hipótesis nula, lo que permite concluir que las medias poblacionales son
+significativamente diferentes.
+
+\begin{table}[H]
+    \centering
+    \renewcommand\cellalign{c}
+    \begin{tabular}{|c||cc|cc|cc|}
+    \hline
+    \textbf{Experimento}
+        & \multicolumn{2}{c|}{\textbf{LSTM}}
+        & \multicolumn{2}{c|}{\textbf{Convolucional}}
+        & \multicolumn{2}{c|}{\makecell{\textbf{LSTM +} \\ \textbf{Convolucional}}} \\
+    \cline{2-7}
+        & \makecell{\(t_{\text{obs}}\)} & \makecell{\(p\)-valor}
+        & \makecell{\(t_{\text{obs}}\)} & \makecell{\(p\)-valor}
+        & \makecell{\(t_{\text{obs}}\)} & \makecell{\(p\)-valor} \\
+    \hline\hline
+    1 & -48.69896  & \(\approx\) 0.0 & -71.20134  & \(\approx\) 0.0 & -73.90965  & \(\approx\) 0.0 \\
+    2 & -86.86190  & \(\approx\) 0.0 & -100.94082 & \(\approx\) 0.0 & -97.97543  & \(\approx\) 0.0 \\
+    3 & -118.25474 & \(\approx\) 0.0 & -131.15133 & \(\approx\) 0.0 & -139.31947 & \(\approx\) 0.0 \\
+    4 & -31.31390  & \(\approx\) 0.0 & -53.40744  & \(\approx\) 0.0 & -55.37216  & \(\approx\) 0.0 \\
+    5 & -63.45210  & \(\approx\) 0.0 & -78.34732  & \(\approx\) 0.0 & -84.41686  & \(\approx\) 0.0 \\
+    6 & -83.30212  & \(\approx\) 0.0 & -111.66130 & \(\approx\) 0.0 & -101.00631 & \(\approx\) 0.0 \\
+    7 & -102.06262 & \(\approx\) 0.0 & -111.91466 & \(\approx\) 0.0 & -110.07937 & \(\approx\) 0.0 \\
+    \hline
+    \end{tabular}
+    \caption{\(p\)-valores y estadísticos observados en las pruebas de diferencias de
+    medias para el puntaje \(F_1\), comparando cada red con el PSM en cada experimento.}
+    \label{tab:pruebas_hipotesis}
+\end{table}
+\end{document}

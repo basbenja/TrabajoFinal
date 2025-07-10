@@ -10,13 +10,15 @@ La salida de cada modelo es un número real que representa la probabilidad que l
 dada\footnote{En realidad, lo que producen las redes como salida es un valor real, y no
 una probabilidad propiamente dicha. Para interpretar este valor como una probabilidad, se
 debe aplicar una función sigmoide. Durante el entrenamiento, PyTorch provee una función de
-pérdida llamada \texttt{BCEWithLogitsLoss}\cite{bcewithlogitsloss} que realiza
-internamente esta ``conversión''.} - caracterizada por la serie de tiempo y el inicio de
-programa - pertenezca a la categoría con etiqueta 1, que en nuestro caso representa formar
-parte del grupo de control. Para obtener la clase final (0 o 1), se aplica (por fuera del
-modelo propiamente dicho) un \textbf{umbral de decisión} sobre esta probabilidad: si la
-probabilidad es mayor que dicho umbral, se considera que el modelo ha clasificado a la
-entrada como pertenceciente a la clase 1. En este trabajo, fijamos este umbral en 0.5.
+pérdida llamada
+\href{https://pytorch.org/docs/stable/generated/torch.nn.BCEWithLogitsLoss.html}{\texttt{BCEWithLogitsLoss}}
+que realiza internamente esta ``conversión''.} - caracterizada por la serie de tiempo y el
+inicio de programa - pertenezca a la categoría con etiqueta 1, que en nuestro caso
+representa formar parte del grupo de control. Para obtener la clase final (0 o 1), se
+aplica (por fuera del modelo propiamente dicho) un \textbf{umbral de decisión} sobre esta
+probabilidad: si la probabilidad es mayor que dicho umbral, se considera que el modelo ha
+clasificado a la entrada como pertenceciente a la clase 1. En este trabajo, fijamos este
+umbral en 0.5.
 
 Dejamos algunos hiperparámetros fijos en todas los modelos:
 \begin{itemize}[itemsep=0cm, topsep=0cm, parsep=0cm, partopsep=0cm]
