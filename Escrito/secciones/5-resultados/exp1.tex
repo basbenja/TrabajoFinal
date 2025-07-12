@@ -70,7 +70,7 @@ desviación estándar.
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{|c|c|c|c|}
         \hline
-         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Recuperación} \\ \hline\hline
+         & \textbf{Puntaje} \(F_1\) & \textbf{Precisión} & \textbf{Cobertura} \\ \hline\hline
         \textbf{LSTM}
             & $0.80984 \pm 0.02679$ & $0.72408 \pm 0.04763$ & $0.92219 \pm 0.01823$ \\ \hline
         \textbf{Convolucional}
@@ -82,7 +82,7 @@ desviación estándar.
         \hline
     \end{tabular}
 
-    \caption{Promedio de las métricas \(F_1\), precisión y recuperación sobre la
+    \caption{Promedio de las métricas \(F_1\), precisión y cobertura sobre la
     clase positiva (controles) en el conjunto de test en las 100 simulaciones del
     experimento 1.}
     \label{tab:results_exp1}
@@ -92,7 +92,7 @@ En primer lugar, se puede ver que el desempeño de todas las redes fue superior 
 y que los resultados obtenidos con ellas son satisfactorios. En segundo lugar, el
 rendimiento de las redes fue parecido entre ellas; más aún entre la Convolucional y la
 LSTM + Convolucional, siendo la primera apenas mejor. Algo que también se puede observar
-es que la recuperación obtenida con todas las redes es bastante alta, lo cual indica que
+es que la cobertura obtenida con todas las redes es bastante alta, lo cual indica que
 la mayoría de los controles fueron identificados por la red; mientras que la precisión fue
 consistentemente menor, aunque con valores aceptables.
 
