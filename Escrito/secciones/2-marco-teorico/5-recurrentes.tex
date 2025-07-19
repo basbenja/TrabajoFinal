@@ -9,22 +9,28 @@ análisis de series temporales y procesamiento de lenguaje natural. Se emplean p
 para predecir cuáles van a ser los próximos valores en una serie de tiempo (tarea
 comúnmente conocida como \textit{forecasting}), cuáles van a ser las palabras que
 continúan una oración, y también para clasificar series de tiempo, que es para lo que las
-usaremos nosotros.
+usaremos nosotros\footnote{En
+\href{https://karpathy.github.io/2015/05/21/rnn-effectiveness/}{``\textit{The Unreasonable
+Effectiveness of Recurrent Neural Networks}''} se pueden encontrar algunas aplicaciones de
+RNRs.}.
 
-Una características de las redes que hemos presentado hasta el momento es que no tienen
+Una característica de las redes que hemos presentado hasta el momento es que no tienen
 memoria. Si quisieramos procesar una secuencia temporal de datos con estas redes, lo que
 deberíamos hacer es ``mostrársela'' entera como entrada, perdiendo la dependencia temporal
 que existe entre las distintas features, que en realidad son los pasos de tiempo de una
-misma secuencia.
+misma secuencia. Más aún, necesitaríamos que todas las secuencias tengan la misma
+longitud, ya que dichas redes toman entradas de tamaño fijo.
 
 Las RNRs proponen una forma alternativa de trabajar con datos de este tipo. Procesan las
-secuencias iterando sobre los distintos pasos de tiempo manteniendo \textbf{memoria} que
-contiene información relacionada con lo que ha visto hasta el momento \footnote{Cabe
+secuencias iterando sobre los distintos pasos de tiempo manteniendo una \textbf{memoria}
+que contiene información relacionada con lo que ha visto hasta el momento\footnote{Cabe
 aclarar que este estado interno se reinicia entre el procesamiento de diferentes
 secuencias.}. A esto lo logran introduciendo cíclos en su grafo, que permiten que las
-neuronas de la red puedan tomar como entradas sus propias salidas de pasos anteriores.
-Esto provoca que entradas recibidas en pasos más tempranos afecten la respuesta de la red
-ante la entrada actual \cite{ai-a-modern-approach}.
+neuronas de la red puedan tomar como entradas sus propias salidas de pasos anteriores, y
+provoca que entradas recibidas en pasos más tempranos afecten la respuesta de la red ante
+la entrada actual \cite{ai-a-modern-approach}. Además, al procesar cada paso de tiempo por
+separado, permiten trabajar con secuencias de longitud variable, lo cual es una gran
+ventaja a comparación de las totalmente conectadas y las convolucionales.
 
 Para comprender un poco más este comportamiento, tomemos la más simple de las RNRs,
 compuesta por una única neurona (oculta) que recibe la entrada correspondiente al tiempo
@@ -283,9 +289,9 @@ del gradiente desvaneciente en las RNNs estándar.
 Las redes conocidas como \textit{long short-term memory} (LSTM) son un tipo particular de
 RNRs que fueron introducidas en el año 1997 \cite{lstm-paper-1997} para solucionar el
 problema del gradiente desvaneciente que tenían las RNRs estándar, haciéndolas capaces
-de aprender dependencias de largo plazo. Han demostrado funcionar de manera efectiva en
+de aprender dependencias de largo plazo. Esta arquitectura ha sido utilizada con éxito en
 una gran variedad de problemas, y los mayores avances obtenidos con redes recurrentes se
-han logrado utilizando esta arquitectura \cite{colahs-blog-lstm-2015}.
+han logrado empleando este tipo de red \cite{colahs-blog-lstm-2015}.
 
 Como hemos visto hasta el momento, todas las redes recurrentes tienen una estructura de
 cadena de ``módulos'' o ``bloques'' \cite{colahs-blog-lstm-2015} - las neuronas

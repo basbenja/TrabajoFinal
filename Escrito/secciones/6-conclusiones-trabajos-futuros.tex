@@ -51,13 +51,13 @@ redes demostraron un rendimiento prometedor en aquellos donde había una alta ca
 períodos observados y las tendencias eran largas y con ``ruido'' (experimentos
 \hyperref[sec:exp1]{1} y \hyperref[sec:exp5]{5}), o cuando eran cortas y con un
 comportamiento monótono (\hyperref[sec:exp3]{experimento 3}). En escenarios donde no hay
-un patrón claro en los comportamientos pasados, sino que es una característica más
-``escondida'' la que distingue a tratados y controles de NiNi
+un patrón claro en los comportamientos pasados, sino que es una característica menos
+observable la que distingue a tratados y controles de NiNi
 (\hyperref[sec:exp4]{experimento 4}), ninguno de los modelos mostró resultados aceptables.
 Además, prestando atención particularmente a los valores obtenidos en los experimentos
 \hyperref[sec:exp6]{6} y \hyperref[sec:exp7]{7}, donde la cantidad de períodos observados
-era baja (25 y 15 respectivamente), apuntan que ante una mayor proporción de períodos de
-dependencia sobre observados, el desempeño de las redes mejora.
+era baja (25 y 15 respectivamente), apuntan que el desempeño de las redes mejora a medida
+que aumenta la relación entre períodos de dependencia y períodos observados.
 
 \section{Aplicación en casos reales}
 En nuestros experimentos, nosotros sabemos quiénes son los individuos que deberían ser
@@ -69,7 +69,7 @@ pregunta de cómo podríamos hacer para aplicar la metodología presentada aquí
 real. A continuación, detallamos nuestra propuesta.
 
 Para empezar, se deben satisfacer las condiciones que estamos asumiendo sobre los
-programas utilizadas este trabajo. Es decir, la asignación debe haber sido no aleatoria,
+programas utilizados este trabajo. Es decir, la asignación debe haber sido no aleatoria,
 la participación en el programa dependió potencialmente de alguna tendencia vista en una
 variable en períodos pasados, y hay una o más cohortes.
 
@@ -83,10 +83,11 @@ propuesta de seleccionar individuos de control con nuestra metodología es la si
     \item Tomar \textbf{todos} los individuos tratados con etiqueta 1 y algunos de los no
     tratados con etiqueta 0, y repetir estos últimos tantas veces como cohortes haya.
     Luego, entrenar el modelo con todos estos\footnote{Lo ideal aquí sería entrenar el
-    modelo tomando los valores de hiperparámetros que resultaron seleccionados con mayor
-    frecuencia, como mostramos recién, según la arquitectura que se esté usando.}.
+    modelo tomando los valores de hiperparámetros que resultaron seleccionados como los
+    óptimos con mayor frecuencia, como mostramos recién, según la arquitectura que se esté
+    usando.}.
     \item Una vez que el modelo haya sido entrenado, hacer inferencia sobre todos los
-    individuos no tratados, incluso con los que el modelo ha sido entrenado. Para llevar a
+    individuos no tratados, incluidos aquellos usados en el entrenamiento. Para llevar a
     cabo esta inferencia, habría que repetir todos estas unidades con los diferentes
     inicios de programa.
     \item Los individuos para los cuales el modelo haya inferido un 1 serán los controles
@@ -107,7 +108,15 @@ Además, una vez hecha la inferencia, se puede realizar un chequeo para verifica
 controles identificados sean similares a los tratados. Por ejemplo, a través de pruebas de
 hipótesis de diferencia de medias entre los dos grupos en cada uno de los \(n\) períodos
 que se hayan tomado. Si las diferencias resultan significativas en la mayoría de los
-períodos, entonces el grupo de controles selecciones probablemente no sea válido.
+períodos, entonces el grupo de controles seleccionado probablemente no sea válido.
+
+Si bien en nuestros escenarios obtuvimos mejores resultados con la arquitectura
+Convolucional que con la LSTM, es importante destacar una restricción de la primera:
+solamente puede procesar entradas de tamaño fijo, es decir secuencias de la misma
+longitud. En cambio, la LSTM, como mencionamos anteriormente, es capaz de manejar
+secuencias de longitud variable. Esta característica convierte a estas redes en una opción
+más flexible para ser usada en casos reales donde no se cuenta con la información completa
+de todos los períodos de tiempo considerados para todos los individuos.
 
 \section{Trabajos futuros}
 Una limitación de nuestro trabajo es que, al trabajar con datos sintéticos, sabemos
@@ -120,10 +129,9 @@ alternativas para evitar el uso de no tratados con etiqueta 0 durante el entrena
 en su lugar generar artificialmente individuos que sean claramente distintos de los
 tratados.
 
-Otra mejora que consideramos consiste en el uso de arquitecturas de redes neuronales más
-recientes como los Transformers, que han demostrado tener un desempeño notable en tareas
-para las que anteriormente se utilizaban redes recurrentes, como el procesamiento de
-lenguaje natural.
+Otra mejora consiste en el uso de arquitecturas de redes neuronales más recientes como los
+Transformers, que han demostrado tener un desempeño notable en tareas para las que
+anteriormente se utilizaban redes recurrentes, como el procesamiento de lenguaje natural.
 
 Asimismo, sería interesante investigar la utilización de técnicas de aprendizaje no
 supervisado, como el clustering, para evaluar si en los escenarios propuestos aquí,
@@ -131,6 +139,10 @@ resulta posible separar al grupo de los controles de los NiNi.
 
 Por último, incorporar un mayor número de variables, tanto temporales como estáticas,
 podría complejizar los escenarios simulados y permitir una evaluación más robusta del
-desempeño de las arquitecturas propuestas.
+desempeño de las arquitecturas propuestas. En particular, consideramos que tomar variables
+exógenas que también varían con el tiempo y conforman el contexto en el que se encuentran
+los individuos, como pueden ser la tasa de interés, el índice de inflación, el tipo de
+cambio de monedas extranjeras, el valor de los bonos, entre otras, podrían contribuir a
+que los modelos hagan una mejor identificación.
 
 \end{document}

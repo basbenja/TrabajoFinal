@@ -6,20 +6,21 @@ Cuando se invierten recursos en un proyecto, suele haber un propósito claro por
 con el paso del tiempo, surge la necesidad de cuestionarse si lo invertido tuvo algún
 efecto real sobre el objetivo que se estaba tratando de lograr. Por ejemplo, si uno decide
 dedicarle más horas fuera de clase al estudio de una materia, es normal que nos surja la
-pregunta de si realmente esas horas sirvieron. En el caso de una empresa, quizás se
-espera que contratando más empleados, se aumenten la productividad y las ganancias. Las
-políticas públicas tampoco son una excepción: tomemos el caso de un programa de subsidios
-para la compra de alimentos en un determinado sector de la población; aquí resulta aún más
+pregunta de si realmente esas horas sirvieron. En el caso de una empresa, quizás se espera
+que contratando más empleados, se aumenten la productividad y las ganancias. Las políticas
+públicas tampoco son una excepción: tomemos el caso de un programa de subsidios para la
+compra de alimentos en un determinado sector de la población; aquí resulta aún más
 importante analizar si, luego de un tiempo, esto ayudó a mejorar los niveles de salud de
 dicho sector.
 
 En este contexto, cobra relevancia la metodología conocida como \textbf{evaluación de
-impacto}. La evaluación de impacto es una técnica que permite estimar cuantitativamente
-los efectos - positivos o negativos - que ha tenido la implementación de un programa,
-proyecto o tratamiento sobre determinadas variables de interés - las variables objetivo -
-de la población receptora del mismo. La forma en la que esto se logra es a través de un
-\textbf{análisis contrafactual}: ¿qué hubiera pasado con las variables de la población
-receptora - los ``tratados'' - si el programa no hubiera existido?
+impacto} \cite{bernal}\cite{gertler-2016}. La evaluación de impacto es una técnica que
+permite estimar cuantitativamente los efectos - positivos o negativos - que ha tenido la
+implementación de un programa, proyecto o tratamiento sobre determinadas variables de
+interés - las variables objetivo - de la población receptora del mismo. La forma en la que
+esto se logra es a través de un \textbf{análisis contrafactual}: ¿qué hubiera pasado con
+las variables de la población receptora - los ``tratados'' - si el programa no hubiera
+existido?
 
 La situación anterior, que recibe comúnmente el nombre de ``el contrafactual'', es sin
 dudas un escenario hipotético, no observable en la realidad; y es por esto que es
@@ -28,7 +29,7 @@ necesario aproximarlo de alguna forma. Para ello, una técnica consiste en const
 que no han sido beneficiarias del programa pero que, idealmente, antes del inicio del
 mismo, eran muy similares a quienes sí lo fueron. Con el grupo de control identificado, se
 puede estimar el \textbf{efecto promedio del programa en los tratados} (\(ATT\))
-comparando los resultados de ambos grupos.
+comparando los resultados de ambos grupos \cite{rubin1974}.
 
 Dicho esto, el principal desafío en una evaluación de impacto es construir un grupo de
 control \textit{válido}. Esto es, uno que permita asegurar que la diferencia observada en
@@ -39,14 +40,15 @@ asignación no tiene reglas claras, y se desconocen cuáles son las verdaderas r
 han llevado a las unidades a participar o no del programa, tomar a los no tratados como
 grupo de comparación puede producir estimaciones sesgadas, resultantes de no haber
 considerado las diferencias preexistentes entre ambos grupos. Este problema es conocido
-como \textbf{sesgo de autoselección}.
+como \textbf{sesgo de autoselección} \cite{bernal}\cite{mostly-harmless-econometrics}.
 
-Existen diferentes métodos que buscan mitigar este sesgo, siendo una bastante utilizada
-el \textbf{pareamiento por puntaje de propensión} (PSM) \cite{psm1983}. El PSM consiste en
-estimar el puntaje de propensión - también llamado probabilidad de participación - tanto
-para tratados y no tratados, y construir un grupo de control emparejando a cada tratado
-con uno o varios individuos no tratados que tengan puntajes similares. Para el cálculo de
-esta probabilidad, los evaluadores deben seleccionar ciertas variables que consideren
+Existen diferentes métodos que buscan mitigar este sesgo, siendo una bastante utilizada el
+\textbf{pareamiento por puntaje de propensión} (PSM)
+\cite{psm1983}\cite{a-primer-for-applying-psm}. El PSM consiste en estimar el puntaje de
+propensión - también llamado probabilidad de participación - tanto para tratados y no
+tratados, y construir un grupo de control emparejando a cada tratado con uno o varios
+individuos no tratados que tengan puntajes similares. Para el cálculo de esta
+probabilidad, los evaluadores deben seleccionar ciertas variables que consideren
 determinantes en la decisión de participar.
 
 Ahora bien, cuando se cree que esta decisión puede estar influida por comportamientos
@@ -55,34 +57,51 @@ métodos estadísticos utilizados para calcular el puntaje de propensión no son
 efectivos para capturar posibles patrones y dinámicas, y hacer un emparejamiento adecuado.
 
 Es en estos escenarios donde consideramos que los modelos de \textbf{aprendizaje
-automático} pueden contribuir a una mejor selección de unidades pertenecientes al grupo de
-control. El aprendizaje automático es un campo de la inteligencia artificial cuyo enfoque
-está en desarrollar técnicas que permitan a las computadoras aprender automáticamente a
-partir de los datos, sin la necesidad de tener que proveerlas de reglas. Esta estrategia
-facilita la identificación de patrones, incluso cuando pueden parecer muy difíciles de
-identificar a simple vista.
+automático} \cite{deep-learning}\cite{ai-a-modern-approach} pueden contribuir a una mejor
+selección de unidades pertenecientes al grupo de control. El aprendizaje automático es un
+campo de la inteligencia artificial cuyo enfoque está en desarrollar técnicas que permitan
+a las computadoras aprender automáticamente a partir de los datos, sin la necesidad de
+tener que proveerlas de reglas. Esta estrategia facilita la identificación de patrones,
+incluso cuando pueden parecer muy difíciles de identificar a simple vista.
 
-Un modelo particular que ha tenido un gran desarrollo en los últimos años es el conocido
-como \textbf{redes neuronales artificiales}, cuya inspiración estuvo en el intento de
-modelar el aprendizaje en el cerebro humano. Dentro de estas, existen algunos tipos
-específicos adecuados para el procesamiento de datos temporales, como las \textbf{redes
-neuronales recurrentes} y las \textbf{redes neuronales convolucionales}.
+Cuando los datos a partir de los cuales los algoritmos aprenden consisten de pares de
+``entrada-salida esperada'' - donde la entrada es un conjunto de características que
+identifican a cada unidad y la salida esperada puede ser por ejemplo un número o una
+categoría -, se utiliza el término \textbf{aprendizaje supervisado}.
+
+Por ejemplo, si se intenta predecir si un alumno va a aprobar o no un examen, cada unidad
+sería justamente un alumno, y la entrada podría estar compuesta por sus condiciones
+socioeconómicas, su promedio de notas del año anterior, y el nivel de educación de sus
+padres. La salida esperada sería ``el alumno aprobó o no''. De esta forma, el algoritmo
+aprende a partir de muchos ejemplos de estos para poder predecir la aprobación del examen
+de un nuevo alumno.
+
+Un método muy potente dentro del aprendizaje automático que ha tenido un gran desarrollo
+en los últimos años es el conocido como \textbf{redes neuronales artificiales}
+\cite{nielsen}, cuya inspiración estuvo en el intento de modelar el aprendizaje en el
+cerebro humano. Dentro de estas, existen algunos tipos específicos adecuados para el
+procesamiento de datos temporales, como las \textbf{redes neuronales recurrentes} (en
+particular, las de tipo \textit{Long Short-Term Memory}\cite{lstm-paper-1997} ) y las
+\textbf{redes neuronales convolucionales} \cite{prince2024understanding}.
 
 En este trabajo, proponemos la utilización de estos dos tipos de redes neuronales para la
 identificación de grupos de control válidos en contextos donde la asignación al programa
-es no aleatoria, potencialmente dependiente de resultados pasados, y cuya implementación
-se desarrolla en múltiples períodos de tiempo. Para la evaluación de nuestro enfoque,
-generamos datos sintéticos diseñados para imitar situaciones reales, y comparamos los
-diferentes resultados con los obtenidos con el PSM. De esta manera, buscamos aportar una
-herramienta alternativa para mejorar la calidad de las evaluaciones de impacto en este
-tipo de programas.
+es no aleatoria, potencialmente dependiente de compartamientos temporales pasados, y cuya
+implementación se desarrolla en múltiples períodos de tiempo. Para la evaluación de
+nuestro enfoque, generamos datos sintéticos diseñados para imitar situaciones reales, y
+comparamos los diferentes resultados con los obtenidos con el PSM. De esta manera,
+buscamos aportar una herramienta alternativa para mejorar la calidad de las evaluaciones
+de impacto en este tipo de programas.
 
+Las métricas en los diferentes escenarios modelados indican que las redes superan
+consistentemente el desempeño del PSM, aunque no siempre con valores aceptables.
+Específicamente, los mejores resultados se vieron en situaciones con una alta cantidad de
+períodos observados y tendencias prolongadas con ``ruido'' y en aquellas con una menor
+cantidad de datos temporales pero con tendencias monótonas. De esta manera, consideramos
+que nuestro enfoque es prometedor y tiene potencial para aplicarse en casos reales.
 
-% Poner esto despues de la primera oracion del abstract?
-% Su aplicación es particularmente importante en el marco de políticas públicas ya que
-% permite aumentar la efectividad de las mismas, invertir mejor los recursos y rendir
-% cuentas a la ciudadanía.
-
+A continuación, se describe la estructura del trabajo, presentando a grandes rasgos
+sobre qué trata cada uno de los capítilos.
 
 \section{Estructura del trabajo}
 En el Capítulo 2, se presentan los conceptos fundamentales necesarios para comprender el
