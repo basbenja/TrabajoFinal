@@ -21,7 +21,7 @@ class MLflowLogger:
             self.active_run = self.set_active_run()
         else:
             self.active_run = None
-    
+
     def start_new_run(self):
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         run = mlflow.start_run(run_name=f"run_{timestamp}")
@@ -57,15 +57,19 @@ class MLflowLogger:
         if self.enable_logging:
             mlflow.log_metric(key, value)
 
-    def log_json(self, json_content, filename):
+    def log_artifact(self, path, artifact_path=None):
+        if self.enable_logging:
+            mlflow.log_artifact(path, artifact_path=artifact_path)
+
+    def log_json(self, json_content, filename, artifact_path=None):
         if self.enable_logging:
             with tempfile.TemporaryDirectory() as tmpdir:
                 file_path = os.path.join(tmpdir, filename)
                 with open(file_path, "w") as f:
                     json.dump(json_content, f)
-                mlflow.log_artifact(file_path)
+                mlflow.log_artifact(file_path, artifact_path=artifact_path)
 
-    def log_plot(self, fig, filename):
+    def log_plot(self, fig, filename, artifact_path=None):
         if self.enable_logging:
             with tempfile.TemporaryDirectory() as tmp:
                 path = Path(tmp, filename)
@@ -76,7 +80,7 @@ class MLflowLogger:
                     fig.write_image(path)
                 else:
                     raise ValueError(f"Unsupported figure type: {type(fig)}")
-                mlflow.log_artifact(path)
+                mlflow.log_artifact(path, artifact_path=artifact_path)
 
     def log_model_architecture(self, model):
         if self.enable_logging:

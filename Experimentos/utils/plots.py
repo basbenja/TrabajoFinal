@@ -20,7 +20,7 @@ def plot_time_series(df, n, label, n_per_dep, color=None, ax=None):
     time_steps = list(range(-n_time_steps, 0))  # Time steps leading up to t
 
     if not ax:
-        fig, ax = plt.subplots(figsize=(11, 6))
+        fig, ax = plt.subplots(figsize=(11, 5))
     else:
         fig = ax.figure
 
@@ -30,10 +30,10 @@ def plot_time_series(df, n, label, n_per_dep, color=None, ax=None):
     ax.set_xlabel("$t$ (relativo al inicio del tratamiento)", fontsize=12)
     ax.set_ylabel("$y(t)$", fontsize=12)
     ax.set_title(f"Individuos {label}", fontsize=14, fontweight='bold', pad=20)
-    
+
     if n_per_dep > 0:
         ax.axvspan(-n_per_dep, -1, color="red", alpha=0.2)
-    
+
     existing_vlines = [l.get_label() for l in ax.get_lines()]
     if "Inicio de tratamiento" not in existing_vlines:
         ax.axvline(x=0, color='r', linestyle='--', label="Inicio de tratamiento")
