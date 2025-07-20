@@ -1,7 +1,17 @@
 import json
 import os
 import papermill as pm
+import time
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+today = time.strftime("%Y%m%d")
 
 NOTEBOOK_NAME = "main.ipynb"
 NOTEBOOK_PATH = os.path.join(os.getcwd(), NOTEBOOK_NAME)
@@ -13,34 +23,31 @@ CONFIG_PATH = os.path.join(os.getcwd(), CONFIG_NAME)
 def modify_config(config_path, new_params):
     with open(config_path, 'r') as f:
         config = json.load(f)
-    
-    config.update(new_params)
-    
+        config.update(new_params)
     with open(config_path, 'w') as f:
         json.dump(config, f, indent=4)
 
+def create_sim_dir(base_path, timestamp):
+    sim_dir_path = os.path.join(base_path, f"simulations_{timestamp}")
+    os.makedirs(sim_dir_path, exist_ok=True)
+    return sim_dir_path
 
-GROUPS_REQUIRED_PERIODS = {
-    1: 45,
-    2: 45
-}
 
-N_SIMULATIONS = 10
-METRICS = ['f1_score', 'f_beta_score']
-MODELS = ['lstm_v2', 'conv', 'dense']
+GROUPS = [7]
+N_SIMULATIONS = 100
+METRICS = ['f1_score']
+MODELS = ['lstm_v2', 'conv', 'lstm_conv']
 
-for group, req_periods in GROUPS_REQUIRED_PERIODS.items():
-    print(f"🔧 Modifying config for group {group}")
-    modify_config(
-        CONFIG_PATH,
-        {"group": group, "required_periods": req_periods}
-    )
+sim_dir_path = create_sim_dir("/users/bbas/TrabajoFinal", today)
+modify_config(CONFIG_PATH, {"log_to_mlflow": "True", "scale_data": "False"})
+
+for group in GROUPS:
+    logger.info(f"🔧 Modifying config for group {group}")
+    modify_config(CONFIG_PATH, {"group": group})
     
-    group_notebooks = os.path.join(
-        "/users/bbas/TrabajoFinal", "notebooks_outputs", f"notebooks_Grupo{group}"
-    )
+    group_notebooks = os.path.join(sim_dir_path, f"notebooks_Grupo{group}")
     os.makedirs(group_notebooks, exist_ok=True)
-    print(f"📂 Created directory for group {group} notebooks")
+    logger.info(f"📂 Created notebooks directory for group {group} notebooks")
 
     for metric in METRICS:
         modify_config(CONFIG_PATH, {"metrics": [metric]})
@@ -48,19 +55,20 @@ for group, req_periods in GROUPS_REQUIRED_PERIODS.items():
             modify_config(CONFIG_PATH, {"beta": 0.5})
         
         for model in MODELS:
+            logger.info(f"🔧 Modifying config for model arch {model}")
             modify_config(CONFIG_PATH, {"model_arch": model})
 
             for sim in range(1, N_SIMULATIONS+1):
-                print(f"🔧 Modifying config for run {sim}")
+                logger.info(f"🔧 Modifying config for run {sim}")
                 modify_config(CONFIG_PATH, {"simulation": sim})
 
-                print(f"🚀 Running notebook for config: {sim}")
+                logger.info(f"🚀 Running notebook for config: {sim}")
                 pm.execute_notebook(
                     NOTEBOOK_PATH,
                     os.path.join(group_notebooks, f"output_Sim{sim}.ipynb"),
                     log_output=False
                 )
 
-                print(f"✅ Finished run {sim}\n")
+                logger.info(f"✅ Finished run {sim}\n")
 
-    print(f"✅ Finished group {group}\n")
+    logger.info(f"✅ Finished group {group}\n")
