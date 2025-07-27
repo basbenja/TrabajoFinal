@@ -10,8 +10,8 @@ pregunta de si realmente esas horas sirvieron. En el caso de una empresa, quizá
 que contratando más empleados, se aumenten la productividad y las ganancias. Las políticas
 públicas tampoco son una excepción: tomemos el caso de un programa de subsidios para la
 compra de alimentos en un determinado sector de la población; aquí resulta aún más
-importante analizar si, luego de un tiempo, esto ayudó a mejorar los niveles de salud de
-dicho sector.
+importante analizar si luego de un tiempo, esto ayudó a mejorar, por ejemplo, los niveles
+de salud de dicho sector.
 
 En este contexto, cobra relevancia la metodología conocida como \textbf{evaluación de
 impacto} \cite{bernal}\cite{gertler-2016}. La evaluación de impacto es una técnica que
@@ -42,7 +42,7 @@ grupo de comparación puede producir estimaciones sesgadas, resultantes de no ha
 considerado las diferencias preexistentes entre ambos grupos. Este problema es conocido
 como \textbf{sesgo de autoselección} \cite{bernal}\cite{mostly-harmless-econometrics}.
 
-Existen diferentes métodos que buscan mitigar este sesgo, siendo una bastante utilizada el
+Existen diferentes métodos que buscan mitigar este sesgo, siendo uno bastante utilizada el
 \textbf{pareamiento por puntaje de propensión} (PSM)
 \cite{psm1983}\cite{a-primer-for-applying-psm}. El PSM consiste en estimar el puntaje de
 propensión - también llamado probabilidad de participación - tanto para tratados y no
@@ -81,29 +81,29 @@ en los últimos años es el conocido como \textbf{redes neuronales artificiales}
 \cite{nielsen}, cuya inspiración estuvo en el intento de modelar el aprendizaje en el
 cerebro humano. Dentro de estas, existen algunos tipos específicos adecuados para el
 procesamiento de datos temporales, como las \textbf{redes neuronales recurrentes} (en
-particular, las de tipo \textit{Long Short-Term Memory}\cite{lstm-paper-1997} ) y las
+particular, las de tipo \textit{long short-term memory}\cite{lstm-paper-1997} ) y las
 \textbf{redes neuronales convolucionales} \cite{prince2024understanding}.
 
-En este trabajo, proponemos la utilización de estos dos tipos de redes neuronales para la
-identificación de grupos de control válidos en contextos donde la asignación al programa
-es no aleatoria, potencialmente dependiente de compartamientos temporales pasados, y cuya
-implementación se desarrolla en múltiples períodos de tiempo. Para la evaluación de
-nuestro enfoque, generamos datos sintéticos diseñados para imitar situaciones reales, y
-comparamos los diferentes resultados con los obtenidos con el PSM. De esta manera,
+En el presente trabajo, proponemos la utilización de estos dos tipos de redes neuronales
+para la identificación de grupos de control válidos en contextos donde la asignación al
+programa es no aleatoria, potencialmente dependiente de compartamientos temporales
+pasados, y cuya implementación se desarrolla en múltiples períodos de tiempo. Con esto,
 buscamos aportar una herramienta alternativa para mejorar la calidad de las evaluaciones
-de impacto en este tipo de programas.
+de impacto en este tipo de tratamientos.
 
-Las métricas en los diferentes escenarios modelados indican que las redes superan
-consistentemente el desempeño del PSM, aunque no siempre con valores aceptables.
-Específicamente, los mejores resultados se vieron en situaciones con una alta cantidad de
-períodos observados y tendencias prolongadas con ``ruido'' y en aquellas con una menor
-cantidad de datos temporales pero con tendencias monótonas. De esta manera, consideramos
-que nuestro enfoque es prometedor y tiene potencial para aplicarse en casos reales.
+Para la evaluación de nuestro enfoque, generamos datos sintéticos diseñados para imitar
+situaciones reales, y comparamos el desempeño de las redes con el del PSM. Los resultados
+obtenidos en los diferentes escenarios modelados indican que las redes superan
+consistentemente al PSM, aunque no siempre con valores aceptables. Específicamente, los
+mejores valores se vieron en situaciones con una alta cantidad de períodos observados y
+tendencias prolongadas con ``ruido'' y en aquellas con una menor cantidad de datos
+temporales pero con tendencias monótonas. De esta manera, consideramos que nuestro enfoque
+es prometedor y tiene potencial para aplicarse en casos reales.
 
 A continuación, se describe la estructura del trabajo, presentando a grandes rasgos
 sobre qué trata cada uno de los capítilos.
 
-\section{Estructura del trabajo}
+\section*{Estructura del trabajo}
 En el Capítulo 2, se presentan los conceptos fundamentales necesarios para comprender el
 desarrollo de este trabajo. En particular, explicamos en profundidad la metodología de la
 evaluación de impacto, los problemas que aparecen y algunas de las técnicas utilizadas.
