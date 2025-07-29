@@ -27,7 +27,7 @@ automático}, la subdisciplina de la IA que permite a los algoritmos mejorar su 
 en una tarea específica automáticamente a partir de la experiencia. Diversos factores como
 la creciente disponibilidad de datos, el aumento en la capacidad computacional, y los
 avances en los algoritmos de optimización \cite{deep-learning} han hecho que esta área sea
-la que mayor desarrollo e impacto ha tenido durante las últimas décadas.
+la que mayor desarrollo e impacto ha tenido en el último tiempo.
 
 Actualmente, la IA abarca una diversidad de tareas, que van desde lo general, como son las
 habilidades de aprendizaje, razonamiento, y percepción, entre otras; hasta lo específico,
@@ -52,8 +52,8 @@ P, si su desempeño en las tareas de T, medido por P, mejora con la experiencia 
 tener un mejor entendimiento, nos enfocamos a continuación en cada uno de estos tres
 componentes.
 
-Las tareas de ML se describen usualmente en términos de cómo el sistema debería procesar
-un \textit{ejemplo} o \textit{entrada}, entendiendo a esta como un conjunto de
+Las \textbf{tareas} de ML se describen usualmente en términos de cómo el sistema debería
+procesar un \textit{ejemplo} o \textit{entrada}, entendiendo a esta como un conjunto de
 características (o en inglés, \textit{features}) medidas cuantitativamente a partir de un
 cierto objeto o evento \cite{deep-learning}. Por ejemplo, una entrada puede estar
 compuesta por los datos de un hogar, como la cantidad de habitaciones y de baños, si tiene
@@ -61,16 +61,16 @@ patio o no, el tamaño de la cocina, etcétera. Dentro de las tareas que pueden 
 resueltas por un sistema de ML se encuentran la clasificación, la regresión, la
 traducción, la detección de objetos en imágenes, la generación de nuevos datos, la
 detección de valores atípicos, entre muchas otras. Siguiendo con el ejemplo, podríamos
-querer que, en base a las features de las casas, el sistema nos provea un estimado
-de su valor (regresión) o nos diga si corresponde a una vivienda adecuada para una
-familia o no (clasificación).
+querer que, en base a las features de las casas, el sistema nos provea un estimado de su
+valor (regresión) o nos diga si corresponde a una vivienda adecuada para una familia o no
+(clasificación).
 
-La experiencia hace referencia al tipo de información que el algoritmo ``puede ver''
-durante su proceso de aprendizaje o \textit{entrenamiento} \cite{hands-on-ML-sklearn-tf}.
-A esta información se la conoce como ``conjunto (de datos) de entrenamiento'', y es un
-subconjunto del \textit{dataset}, que es el conjunto de todos los ejemplos o datos con los
-que se cuenta. En base a la experiencia, los algoritmos de ML se clasifican en dos grandes
-categorías:
+La \textbf{experiencia} hace referencia al tipo de información que el algoritmo ``puede
+ver'' durante su proceso de aprendizaje o \textit{entrenamiento}
+\cite{hands-on-ML-sklearn-tf}. A esta información se la conoce como ``conjunto (de datos)
+de entrenamiento'', y es un subconjunto del \textit{dataset}, que es el conjunto de todos
+los ejemplos o datos con los que se cuenta. En base a la experiencia, los algoritmos de ML
+se clasifican en dos grandes categorías:
 \begin{itemize}
     \item \textbf{Algoritmos de aprendizaje supervisado}: experimentan un dataset que
     contiene pares de entrada-salida. Cada ejemplo contiene sus características pero
@@ -81,7 +81,7 @@ categorías:
     continuo; y clasificación, en donde la solución viene dada por la categoría (dentro de
     un conjunto predefinido de categorías) a la que pertenece un ejemplo.
     \item \textbf{Algoritmos de aprendizaje no supervisado}: ven un dataset que cuenta
-    solamente con features de cada entrada pero sin etiquetas, e intentan aprender
+    solamente con características de cada entrada pero sin etiquetas, e intentan aprender
     automáticamente patrones y propiedades útiles de la estructura de los datos. Algunas
     tareas que se llevan a cabo con este tipo de aprendizaje son \textit{clustering},
     reducción de dimensionalidad, y detección de anomalías.
@@ -92,14 +92,14 @@ etiquetas; y los de \textbf{aprendizaje por refuerzo}, en donde el algoritmo apr
 mejor estrategia para una situación a partir de la interacción con su entorno en forma de
 recompensas y castigos.
 
-Por último, para medir el desempeño de estos algoritmos, se definen métricas cuantitativas
-que dependen de la tarea que se esté realizando y del objetivo que se intente lograr. Por
-ejemplo, en clasificación, una de las más comunes es la de exactitud (\textit{accuracy}),
-que es la proporción de ejemplos para los cuales se predijo la salida correcta (dada por
-el dataset); aunque también existen otras como la precisión, sensibilidad, especificidad,
-y el puntaje \(F_1\), que pueden resultar más adecuadas según el dominio del problema. Por otro
-lado, en tareas de regresión, algunas métricas que se suelen utilizar son el Error
-Cuadrático Medio y el Error Absoluto Medio.
+Por último, para medir el \textbf{desempeño} de estos algoritmos, se definen
+\textbf{métricas} cuantitativas que dependen de la tarea que se esté realizando y del
+objetivo que se intente lograr. Por ejemplo, en clasificación, una de las más comunes es
+la de exactitud (\textit{accuracy}), que es la proporción de ejemplos para los cuales se
+predijo la salida correcta (dada por el dataset); aunque también existen otras como la
+precisión, sensibilidad, especificidad, y el puntaje \(F_1\), que pueden resultar más
+adecuadas según el dominio del problema. Por otro lado, en tareas de regresión, algunas
+métricas que se suelen utilizar son el error cuadrático medio y el error absoluto medio.
 
 El objetivo fundamental del ML es que un algoritmo actúe correctamente ante nuevas
 entradas desconocidas, es decir que \textbf{generalice} más allá de los ejemplos del
@@ -119,7 +119,7 @@ los que usaremos en este trabajo.
 Como mencionamos anteriormente, en el aprendizaje supervisado el algoritmo aprende una
 función que mapea entradas a salidas a partir de un conjunto de entrenamiento compuesto
 por datos etiquetados. El objetivo es que al presentarle a esta función una nueva entrada
-no vista previamente, esta sea capaz de computar la salida que mejor se ajusta a los
+no vista previamente, esta sea capaz de computar la salida que mejor se ajuste a los
 \textbf{patrones} aprendidos durante el entrenamiento.
 
 Resulta conveniente introducir en este punto un término muy utilizado en el ML, el de
@@ -152,7 +152,7 @@ De esta forma, el modelo es la función \(h\), que toma un vector de entrada \(\
 devuelve una salida \(\bm{y}\), y se presenta como una \textbf{hipótesis} de \(f\). La
 suposición sobre la que se trabaja es que si el modelo funciona bien para los pares de
 entrenamiento (es decir \(h(\bm{x}_i) \simeq \bm{y}_i\) para \(i=1,...N\)), entonces se
-espera que va a realizar buenas predicciones para nuevas entradas cuya etiqueta se
+espera que va a realizar predicciones adecuadas para nuevas entradas cuya etiqueta se
 desconoce.
 
 Ahora bien, esta función \(h\) se obtiene a partir de un \textbf{espacio de funciones},
@@ -186,7 +186,7 @@ es asumir que la entrada \(\bm{x}\) tiene un componente adicional constante \(x_
 con el valor 1, es decir \(\bm{x}=(x_0, x_1, x_2, x_3)=(1, x_1, x_2, x_3)\). De esta
 forma, podríamos escribir: \(h(\bm{x}) = \bm{x} \cdot \bm{w}\), donde el operador
 \(\cdot\) representa el producto escalar. Retomaremos esta idea más adelante al hablar
-sobre Redes Neuronales.}.
+sobre redes neuronales artificiales.}.
 
 Notemos entonces que, fijado un espacio de funciones, quienes van a determinar qué modelo
 es ``mejor'' que otro en este espacio, es decir qué modelo aproxima mejor a \(f\), son los
@@ -222,12 +222,12 @@ durante todo el proceso de aprendizaje, podemos omitirlos.} \(L(\bm{w})\). A con
 se mencionan dos ejemplos de funciones de error:
 \begin{itemize}
     \item Una función de pérdida que es común usar en problemas de regresión es la de
-    Error Cuadrático Medio (ECM), dada por:
+    error cuadrático medio (ECM), dada por:
     \[
     ECM(\bm{w}) = \frac{1}{N} \sum_{i=1}^{N} \left(h(\bm{x}_i, \bm{w}) - \bm{y}_i\right)^2
     \]
     \item Para problemas de clasificación binaria como el que tratamos en este trabajo, vamos a tener
-    (generalmente) \(\bm{y}_i \in \{0,1\}\), y se suele emplear la Entropía Cruzada Binaria (ECB), dada por:
+    (generalmente) \(\bm{y}_i \in \{0,1\}\), y se suele emplear la entropía cruzada binaria (ECB), dada por:
     \[
     ECB(\bm{w}) = -\frac{1}{N} \sum_{i=1}^{N}
         \left[
@@ -255,7 +255,7 @@ se mencionan dos ejemplos de funciones de error:
 \end{itemize}
 
 En general, se asume que un valor más bajo de \(L(\bm{w})\) indica un mejor desempeño del
-modelo, y por lo tanto el objetivo del proceso de entrenamiento se convierte en
+modelo. Por lo tanto, el objetivo del proceso de entrenamiento se convierte en
 \textbf{encontrar los parámetros \(\bm{w}^*\) que minimicen la función de pérdida}
 (en los datos del conjunto de entrenamiento):
 \[
@@ -300,14 +300,14 @@ de máximo crecimiento, y por lo tanto su opuesta es la de máximo decrecimiento
 caso, la función de la cual se calcula el gradiente es la de error, con respecto a los
 parámetros en \(\bm{w}\).
 
+Concretamente, se empieza con un vector de parámetros \(\bm{w}^{(0)}\) con valores
+arbitrarios. Luego, con el objetivo de reducir el valor de la función de pérdida, estos
+valores se van mejorando tomando un paso a la vez en dirección opuesta al gradiente. Este
+proceso se realiza hasta que el algoritmo \textit{converja} a un mínimo (local o global)
+de la función de pérdida.
 
-Concretamente, se empieza con un vector de parámetros \(\bm{w}^{(0)}\) con valores arbitrarios
-que van mejorando gradualmente, tomando un paso a la vez en dirección opuesta al gradiente,
-con el objetivo de reducir el valor de la función de pérdida, hasta que el algoritmo
-\textit{converja} a un mínimo (local o global) de la función de pérdida.
-
-Un hiperparámetro\footnote{Hablaremos más adelante sobre qué es un hiperparámetro, pero lo
-importante es que no es un parámetro que se aprende, como lo son los contenidos en el
+Un hiperparámetro\footnote{Hablaremos a continuación sobre qué es un hiperparámetro, pero
+lo importante es que no es un parámetro que se aprende, como lo son los contenidos en el
 vector \(\bm{w}\).} determinante en el algoritmo del DG es el tamaño de los pasos, llamado
 \textbf{tasa de aprendizaje}, que denotaremos con la letra \(\eta\). Si el valor de
 \(\eta\) es muy pequeño, entonces el algoritmo va a tener que realizar muchas iteraciones
@@ -334,9 +334,10 @@ valores de los pesos de la iteración actual.
 
 \subsubsection{Hiperparámetros}
 La mayoría de los algoritmos de ML tienen \textbf{hiperparámetros}, que son ajustes que
-permiten controlar tanto la capacidad del modelo como el proceso de entrenamiento. Los
-valores de los hiperparámetros no son aprendidos por el algoritmo \cite{deep-learning},
-sino que se fijan de antemano y no se modifican a lo largo del entrenamiento.
+permiten controlar tanto la capacidad expresiva del modelo como el proceso de
+entrenamiento. Los valores de los hiperparámetros no son optimizados por el algoritmo de
+aprendizaje \cite{deep-learning}, sino que se fijan de antemano y no se modifican a lo
+largo del entrenamiento.
 
 Con lo visto hasta ahora, podemos pensar en dos ejemplos: el grado del polinomio con el
 cual ajustar los datos, y la tasa de aprendizaje del DG. En la sección siguiente, veremos
@@ -350,7 +351,7 @@ Esta búsqueda se hace de forma empírica: se entrenan distintos modelos con dif
 hiperparámetros sobre el mismo conjunto de entrenamiento, se mide el desempeño de cada uno
 de ellos, y se elige el mejor. Ahora bien, el desempeño\footnote{Cómo se mide
 exactamente el desempeño es una decisión de diseño. Generalmente interesa maximizar o
-minimizar una métrica puntual; y así lo que guiará la optimización de hiperparámetros
+minimizar una métrica puntual; y así lo que ``guiará'' la optimización de hiperparámetros
 serán los valores de esa métrica obtenidos por los distintos modelos.} no se mide sobre el
 conjunto de test, ya que esto provocaría que la evaluación final sobre la capacidad de
 generalización del modelo esté sesgada; no sabríamos realmente cómo funciona ante entradas
@@ -359,7 +360,7 @@ nunca vistas.
 Por lo tanto, una técnica para realizar correctamente esta búsqueda consiste en construir
 una tercera partición del conjunto de datos, además de la de entrenamiento y la de test,
 llamada \textbf{conjunto de validación}. De esta forma, en la búsqueda de hiperparámetros,
-el modelo se sigue entrenando con el conjunto de entrenamiento, pero su performance se
+el modelo se sigue entrenando con el conjunto de entrenamiento, pero su rendimiento se
 mide en el de validación, dejando al de test como si no existiese. Una vez que se han
 elegido los mejores hiperparámetros, se entrena el modelo con el conjunto de entrenamiento
 y se mide su capacidad real de generalización sobre el conjunto de test.
@@ -394,8 +395,9 @@ aprendizaje supervisado. Los distintos elementos presentes son:
     \item Una \textbf{función de pérdida} \(L(\bm{w})\), que da una medida de qué tan bien
     está funcionando el modelo y ayuda a guiar el entrenamiento.
     \item Un \textbf{algoritmo de optimización}, que busca minimizar la función de pérdida,
-    siendo el más común el Descenso por el Gradiente.
-    \item \textbf{Hiperparámetros}, que permiten controlar el proceso de entrenamiento.
+    siendo el más común el descenso por el gradiente.
+    \item \textbf{Hiperparámetros}, que permiten controlar el proceso de entrenamiento y la
+    capacidad expresiva del modelo.
 \end{itemize}
 
 Con esto, el objetivo es encontrar los parámetros \(\bm{w}^*\) que minimicen la función de

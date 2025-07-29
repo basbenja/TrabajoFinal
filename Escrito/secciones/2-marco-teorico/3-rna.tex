@@ -40,12 +40,11 @@ sí podían ser resueltos ``apilando'' múltiples perceptrones, lo cual llevó a
 del ``Perceptrón Multicapa'', también conocido actualmente como ``red neuronal de
 propagación directa''\footnote{Si bien estos términos se suelen usar indistintamente, la
 realidad es que las redes neuronales feedforward presentan algunas diferencias con
-respecto al Perceptrón Multicapa.} (del inglés \textit{feedforward neural networks})
-\cite{deep-learning}, las cuales conforman el punto de partida de las redes neuronales
-actuales.
+respecto al Perceptrón Multicapa.} (del inglés \textit{feedforward neural network})
+\cite{deep-learning}.
 
 Para explicar la idea y los elementos presentes detrás de estos algoritmos, tomaremos como
-referencia las redes neuronales Feedforward, y en particular las llamadas ``totalmente
+referencia las redes neuronales feedforward, y en particular las llamadas ``totalmente
 conectadas'' (\textit{fully connected}), que definiremos a continuación.
 
 \subsection{Red neuronal feedforward}
@@ -124,7 +123,7 @@ etiqueta real para una entrada \(\bm{x}\).} \(\bm{\hat{y}} = f(\bm{x}) =
 f^{(3)}(f^{(2)}(f^{(1)}(\bm{x})))\).
 
 Es justamente el comportamiento anterior el que caracteriza a las redes neuronales de tipo
-\textbf{Feedforward}: los datos y resultados fluyen en una sola dirección; cada
+\textbf{feedforward}: los datos y resultados fluyen en una sola dirección; cada
 nodo computa su resultado y se lo pasa a su sucesor (o sucesores, como veremos más
 adelante). En el grafo, esta situación se refleja en el hecho que no hay ciclos, por lo
 que las redes de este tipo se representan por medio de grafos dirigidos y acíclicos.
@@ -152,9 +151,9 @@ a todas ellas.
 Con esto en mente, podemos concretizar un poco más el ejemplo con el que venimos
 trabajando suponiendo que \(\bm{x}\) es un vector de dimensión 3, las capas ocultas dadas
 por \(f^{(1)}\) y \(f^{(2)}\) tienen 4 y 3 neuronas respectivamente y la capa de salida
-tiene 2. Así, suponiendo que nuestra red es fully connected, nuestro grafo resultaría en
-el de la Figura \ref{fig:ff-neural-network}, donde el superíndice de cada nodo indica el
-número de capa y el subíndice hace referencia al número de neurona en esa capa.
+tiene 2. Así, suponiendo que nuestra red es totalmente conectada, nuestro grafo resultaría
+en el de la Figura \ref{fig:ff-neural-network}, donde el superíndice de cada nodo indica
+el número de capa y el subíndice hace referencia al número de neurona en esa capa.
 \begin{figure}
     \centering
     % NEURAL NETWORK with coefficients, arrows
@@ -202,8 +201,8 @@ número de capa y el subíndice hace referencia al número de neurona en esa cap
 
 A partir de la Figura \ref{fig:ff-neural-network}, se puede ver que cada neurona de la
 capa de entrada representa un elemento del vector de entrada, pero las neuronas de tanto
-la capa oculta como la de salida reciben las salidas de las neuronas de la capa anterior.
-Veamos entonces qué hace concretamente una neurona o unidad.
+las capas ocultas como la de salida reciben las salidas de las neuronas de la capa
+anterior. Veamos entonces qué hace concretamente una neurona o unidad.
 
 Una neurona simplemente calcula una suma pesada de sus entradas, provenientes de las
 unidades de la capa anterior, y luego aplica una función \textbf{no lineal} para producir
@@ -262,14 +261,15 @@ Volviendo a la Fórmula \ref{eq:neuron}, si en nuestro ejemplo tomamos la neuron
 \end{align*}
 
 En las redes, se estipula que cada unidad tiene una entrada extra desde una neurona
-\textit{dummy} de la capa anterior, para la cual utilizaremos el subíndice 0. El valor de
-salida de esta neurona se fija en 1, y el peso asociado con una neurona \(j\) de una capa
-\(k\) será \(w^{(k)}_{0,j}\). Este peso se suele llamar \textit{\textbf{bias}}\footnote{En
-la bibliografía sobre redes neuronales, también se suele presentar a este peso como un
-elemento ``aparte'' de la neurona, no como un peso extra, y se lo denota con
-\(b^{(k)}_j\).} y permite que la entrada a dicha neurona sea distinta de 0 incluso cuando
-todas las salidas de la capa anterior sean 0 \cite{ai-a-modern-approach}. Agregándolo,
-podemos escribir la Ecuación \ref{eq:neuron} de forma vectorizada:
+``ficticia'' (\textit{dummy}) de la capa anterior, para la cual utilizaremos el subíndice
+0. El valor de salida de esta neurona se fija en 1, y el peso asociado con una neurona
+\(j\) de una capa \(k\) será \(w^{(k)}_{0,j}\). Este peso se suele llamar \textbf{sesgo} o
+\textit{\textbf{bias}}\footnote{En la bibliografía sobre redes neuronales, también se
+suele presentar a este peso como un elemento ``aparte'' de la neurona, no como un peso
+extra, y se lo denota con \(b^{(k)}_j\).} y permite que la entrada a dicha neurona sea
+distinta de 0 incluso cuando todas las salidas de la capa anterior sean 0
+\cite{ai-a-modern-approach}. Agregándolo, podemos escribir la Ecuación \ref{eq:neuron} de
+forma vectorizada:
 \begin{equation}
     s^{(k)}_j = a^{(k)}_j \left( \bm{w}^{(k-1)}_j \left( \bm{s}^{(k-1)}_j \right)^T \right)
 \end{equation}
@@ -457,7 +457,7 @@ con matrices.
 \bigskip
 En resumen, las redes neuronales constituyen una forma de modelar funciones altamente
 expresivas, capaces de capturar patrones complejos a través de la composición de capas de
-neuronas que actúan en cojunto. Estas neuronas están conectadas entre sí con distintas
+neuronas que actúan en conjunto. Estas neuronas están conectadas entre sí con distintas
 intensidades que, como veremos, son justamente los parámetros aprendibles de las redes.
 Además, introducen nuevos hiperparámetros referentes a la arquitectura. A continuación,
 describimos cómo se lleva a cabo su entrenamiento, siempre dentro del contexto del
@@ -468,16 +468,21 @@ Los parámetros a optimizar en las redes son las intensidades de las conexiones 
 neuronas, que también venimos llamando pesos. Los algoritmos de optimización que se
 emplean actualmente se basan en la regla del DG, aunque con algunas mejoras.
 
-Lo costoso de la regla clásica del DG presentada hasta el momento es que requiere calcular
-el gradiente de la función de pérdida considerando \textit{todas} las muestras del
-conjunto de entrenamiento. Para reducir esta carga, en la práctica se recurre a una
-aproximación: en lugar de usar todas las muestras, se selecciona aleatoriamente un
-subconjunto de ellas, llamado \textbf{lote} (\textit{batch}), y se calcula el gradiente
-usando únicamente ese lote. Luego, se actualizan los pesos en base a esta estimación. Cabe
-aclarar que el tamaño de lote, es decir la cantidad de ejemplos que se eligen cada vez, se
-mantiene fijo en todo el entrenamiento y constituye un hiperparámetro. Esta técnica suele
-llamarse optimización por \textbf{mini-lotes} o \textbf{estocástica}, ya que introduce
-cierto grado de aletoriedad en el cálculo del gradiente.
+Como vimos anteriormente, el DG requiere calcular el gradiente de la función de pérdida
+con respecto a cada uno de los pesos del modelo. Ahora bien, si prestamos atención a los
+ejemplos presentados de funciones de pérdida, estas recorren todas las muestras del
+conjunto de entrenamiento. Por lo tanto, si este conjunto tiene un gran número de
+ejemplos, calcular el gradiente sobre todos ellos puede volverse una tarea
+computacionalmente costosa, y más aún si se lleva a cabo en cada paso de actualización.
+
+Para reducir esta carga, en la práctica se recurre a una aproximación: en lugar de usar
+todas las muestras, se selecciona aleatoriamente un subconjunto de ellas, llamado
+\textbf{lote} (\textit{batch}), y se calcula el gradiente usando únicamente ese lote.
+Luego, se actualizan los pesos en base a esta estimación. Cabe aclarar que el tamaño de
+lote, es decir la cantidad de ejemplos que se eligen cada vez, se mantiene fijo en todo el
+entrenamiento y constituye un hiperparámetro. Esta técnica suele llamarse optimización por
+\textbf{mini-lotes} o \textbf{estocástica}, ya que introduce cierto grado de aletoriedad
+en el cálculo del gradiente.
 
 Otra mejora aplicada sobre el método del DG estándar, diseñada para acelerar el
 aprendizaje, es la técnica conocida como \textbf{momentum}. A grandes rasgos, consiste en
@@ -514,9 +519,9 @@ grandes rasgos, los pasos involucrados en una época son los siguientes:
 
 Ahora bien, un paso fundamental en el entrenamiento de las redes neuronales y del que vale
 la pena profundizar es el del cálculo del gradiente. De hecho, no encontrar una solución
-eficiente para lograrlo detuvo el avance de estos modelos durante varios años. El algoritmo
-que vino a dar respuesta y que es el utilizado hasta hoy es conocido como
-\textbf{retropropagación} (del inglés \textit{backpropagation}) y fue presentado en el año
+eficiente para lograrlo detuvo el avance de estos modelos durante varios años. El
+algoritmo que vino a dar respuesta y que es el utilizado hasta hoy es conocido como
+\textbf{retropropagación del error} (\textit{backpropagation}) y fue presentado en el año
 1986 \cite{backprop-1986}.
 
 El backpropagation se basa fundamentalmente en la regla de la cadena para derivadas de
@@ -524,18 +529,19 @@ funciones compuestas y se divide en dos etapas: primero, el paso hacia adelante
 (\textit{forward pass}) y luego, el paso hacia atras (\textit{backward pass}). Para
 entender estas etapas, supondremos que solamente una entrada es provista a la red.
 
-En el forward pass, la red simplemente lleva a cabo una predicción para la entrada,
+En el paso hacia adelante, la red simplemente lleva a cabo una predicción para la entrada,
 realizando todo el cómputo intermedio necesario para llegar a producir una salida, y
 guardando la salida de cada neurona.
 
-El backward pass comienza por calcular el error cometido por la red para la entrada dada,
-y consiste en propagar este error desde la capa de salida hasta la de entrada, midiendo la
-contribución al error de cada conexión \cite{hands-on-ML-sklearn-tf}. Este paso se basa
-fuertemente en la idea que un pequeño cambio en uno de los pesos causa un efecto cadena
-sobre el cómputo restante de la red \cite{prince2024understanding}. Para verlo, supongamos
-que tenemos una red neuronal con tres capas ocultas, que denotaremos con \(\bm{h}^{(1)}\),
-\(\bm{h}^{(2)}\) y \(\bm{h}^{(3)}\) (la cantidad de neuronas en cada capa es irrelevante),
-y veamos cómo computaríamos el efecto de un cambio en un peso de manera intuitiva
+El paso hacia atrás comienza por calcular el error cometido por la red para la entrada
+dada, y consiste en propagar este error desde la capa de salida hasta la de entrada,
+midiendo la contribución de cada conexión al error total \cite{hands-on-ML-sklearn-tf}.
+Este paso se basa fuertemente en la idea que un pequeño cambio en uno de los pesos afecta
+indirectamente el resultado final a través de todas las capas sucesivas
+\cite{prince2024understanding}. Para verlo, supongamos que tenemos una red neuronal con
+tres capas ocultas, que denotaremos con \(\bm{h}^{(1)}\), \(\bm{h}^{(2)}\) y
+\(\bm{h}^{(3)}\) (la cantidad de neuronas en cada capa es irrelevante), y veamos cómo
+computaríamos el efecto de un cambio en un peso de manera intuitiva
 \cite{prince2024understanding}:
 \begin{itemize}
     \item Para calcular cómo un cambio en un peso que se dirige a \(\bm{h}^{(3)}\)
@@ -554,16 +560,17 @@ y veamos cómo computaríamos el efecto de un cambio en un peso de manera intuit
 \end{itemize}
 Mientras nos movemos hacia las primeras capas de la red, vemos que la mayoría de los
 términos que se necesitan ya han sido calculados en pasos anteriores, por lo que no es
-necesario recomputarlos. Justamente calcular los efectos de los cambios - que son en otras
-palabras las derivadas parciales - de esta manera es conocido como el backward pass.
+necesario recomputarlos. Por lo tanto, no es necesario recomputarlos, lo cual hace que el
+algoritmo sea eficiente. Calcular de este modo los efectos de los cambios —es decir, las
+derivadas parciales de la pérdida con respecto a cada peso— es lo que constituye el paso
+hacia atrás del algoritmo.
 
-El paso final del backpropagation es actualizar los pesos con los gradientes calculados
-en el backward pass utilizando la regla del DG (con las optimizaciones que se hayan
-incluido).
+Finalmente, con todos los gradientes calculados, se actualizan los pesos utilizando la
+regla del DG (con las optimizaciones que se hayan incluido).
 
 \bigskip
 Para finalizar, hablaremos de un problema bastante conocido al entrenar redes neuronales,
-conocido como \textbf{sobreajuste} (en inglés \textit{overfitting}).
+conocido como \textbf{sobreajuste} (\textit{overfitting}).
 
 A grandes rasgos, los factores que determinan qué tan bueno es un modelo son sus capacidades
 para \cite{deep-learning}:
@@ -573,12 +580,13 @@ para \cite{deep-learning}:
     test.
 \end{itemize}
 
-Las redes neuronales son bastante capaces de lograr lo primero, principalmente gracias a
-su habilidad de modelar una gran variedad de funciones, pero muchas veces puede ocurrir
-que no logren alcanzar lo segundo, y esto es lo que se conoce como sobreajuste. Es decir,
-el overfitting ocurre cuando la brecha entre el error en el conjunto de entrenamiento y en
-el de test es significativa. Esto signficia que el modelo ha aprendido los patrones vistos
-durante su entrenamiento ``de memoria'' y no está siendo capaz de generalizar correctamente.
+En muchos casos, las redes neuronales son capaces de lograr lo primero, principalmente
+gracias a su habilidad de modelar una gran variedad de funciones. Sin embargo, no siempre
+logran alcanzar lo segundo, y cuando esto ocurre, hablamos de sobreajuste. Es decir, este
+fenómeno se produce cuando la brecha entre el error en el conjunto de entrenamiento y en
+el de test es considerable. En general, esto es una señal que el modelo ha aprendido los
+patrones vistos durante su entrenamiento ``de memoria'' y no está siendo capaz de
+generalizar correctamente.
 
 Por suerte, para solucionar este problema, existen técnicas llamadas \textbf{de
 regularización}. Una regularización es cualquier modificación hecha sobre un algoritmo de
@@ -589,23 +597,23 @@ Existen varias estrategia de regularización, pero una puntual que utilizaremos 
 trabajo y que ha probado ser efectiva es llamada \textbf{\textit{dropout}}. El dropout se
 puede aplicar sobre la capa de entrada o las capas ocultas, pero no sobre la de salida.
 Una ventaja es que su implementación es relativamente sencilla: en cada paso de
-entrenamiento\footnote{Cuando se utiliza DG Estocástico, un paso de entrenamiento equivale
-a procesar un lote.} , cada neurona de la capa sobre la que se esté aplicando el dropout
+entrenamiento\footnote{Cuando se utiliza DG estocástico, un paso de entrenamiento equivale
+a procesar un lote.}, cada neurona de la capa sobre la que se esté aplicando el dropout
 tiene una probabilidad \(p\) de ser temporalmente descartada, lo cual significa que su
 salida va a ser ignorada en este paso \cite{hands-on-ML-sklearn-tf}, normalmente
 multiplicándola por 0. Aquí se introduce un nuevo hiperparámetro, \(p\), llamado ``tasa de
 dropout''.
 
-Este método fuerza a las neuronas a aprender no solo a ser útiles por sí solas,
+Este método obliga a las neuronas a aprender no solo a ser útiles por sí solas,
 pero sino también a ser compatibles con muchos conjuntos posibles de neuronas que pueden
-estar o no incluidas en la red \cite{ai-a-modern-approach}. En resumen, contribuye
+estar o no activas en la red \cite{ai-a-modern-approach}. En resumen, contribuye
 a que la red no dependa de unidades específicas y la fuerza a aprender diversas
 explicaciones para cada entrada \cite{ai-a-modern-approach}.
 
-Luego del entrenamiento, no se aplica más el dropout y todas las neuronas de la red
+Luego del entrenamiento, el dropout deja de aplicarse y todas las neuronas de la red
 contribuyen a la inferencia. Sin embargo, como en este momento la red tiene más neuronas
-ocultas que cuando fue entrenada, lo que se hace para compensar este hecho es multiplicar
-cada peso por (\(1-p\)) \cite{prince2024understanding}.
+activas que durante el entrenamiento, lo que se hace para compensar este hecho es
+multiplicar cada peso por (\(1-p\)) \cite{prince2024understanding}.
 
 \bigskip
 En las siguientes secciones, hablaremos sobre dos tipos particulares de redes neuronales
