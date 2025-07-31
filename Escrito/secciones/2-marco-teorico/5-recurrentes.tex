@@ -14,47 +14,41 @@ usaremos nosotros\footnote{En
 Effectiveness of Recurrent Neural Networks}''} se pueden encontrar algunas aplicaciones de
 RNRs.}.
 
-Una característica de las redes que hemos presentado hasta el momento es que no tienen
-memoria. Si quisieramos procesar una secuencia temporal de datos con estas redes, lo que
-deberíamos hacer es ``mostrársela'' entera como entrada, perdiendo la dependencia temporal
-que existe entre las distintas features, que en realidad son los pasos de tiempo de una
-misma secuencia. Más aún, necesitaríamos que todas las secuencias tengan la misma
-longitud, ya que dichas redes toman entradas de tamaño fijo.
+Una limitación de las redes que hemos presentado hasta el momento (totalmente conectadas y
+convolucionales) es que no tienen memoria. Si quisieramos procesar una secuencia temporal
+de datos con estas redes, deberíamos ``mostrárselas'' entera como una entrada fija,
+perdiendo la dependencia temporal que existe entre los elementos de la secuencia. Lo que
+ocurriría es que las distintas características de la entrada representarían los pasos de
+tiempo, pero la red las trataría como si fueran atributos independientes.
 
 Las RNRs proponen una forma alternativa de trabajar con datos de este tipo. Procesan las
 secuencias iterando sobre los distintos pasos de tiempo manteniendo una \textbf{memoria}
 que contiene información relacionada con lo que ha visto hasta el momento\footnote{Cabe
 aclarar que este estado interno se reinicia entre el procesamiento de diferentes
-secuencias.}. A esto lo logran introduciendo cíclos en su grafo, que permiten que las
-neuronas de la red puedan tomar como entradas sus propias salidas de pasos anteriores, y
-provoca que entradas recibidas en pasos más tempranos afecten la respuesta de la red ante
-la entrada actual \cite{ai-a-modern-approach}. Además, al procesar cada paso de tiempo por
-separado, permiten trabajar con secuencias de longitud variable, lo cual es una gran
-ventaja a comparación de las totalmente conectadas y las convolucionales.
+secuencias.}. Esto se logra introduciendo cíclos en los grafos de estas redes, que
+permiten que las neuronas puedan tomar como entradas sus propias salidas de pasos
+anteriores, y provoca que entradas recibidas en pasos más tempranos afecten la respuesta
+de la red ante la entrada actual \cite{ai-a-modern-approach}. Además, al procesar cada
+paso de tiempo por separado, permiten trabajar con secuencias de longitud variable, lo
+cual es una gran ventaja a comparación de las totalmente conectadas y las convolucionales.
 
-Para comprender un poco más este comportamiento, tomemos la más simple de las RNRs,
-compuesta por una única neurona (oculta) que recibe la entrada correspondiente al tiempo
-\(t\), produce una salida y se la envía tanto a la capa de salida como a sí misma
-\cite{hands-on-ML-sklearn-tf}, como se puede ver a la izquierda de la Figura
-\ref{fig:simple-rnn}. Así, en cada paso \(t\), la neurona ``recurrente'' \(f\)
-recibe no solo la entrada \(x_t\) sino también su propia salida computada en el paso
-anterior, \(f_{t-1}\). Esto se hace aún más evidente cuando ``desenrollamos'' la red a lo
-largo del tiempo, cuya representación se encuentra a la derecha de la Figura
-\ref{fig:simple-rnn} y se asemeja a la de una feedforward.
+Para comprender un poco más este comportamiento, tomemos una RNR simple, compuesta por una
+única neurona (oculta) \(f\) que recibe la entrada correspondiente al tiempo \(t\)
+(\(x_t\)), produce una salida (\(y_t\)) y se la envía tanto a la capa de salida como a sí
+misma \cite{hands-on-ML-sklearn-tf}, como se puede ver a la izquierda de la Figura
+\ref{fig:simple-rnn}. Así, en cada paso \(t\), la neurona ``recurrente'' \(f\) recibe no
+solo la entrada \(x_t\) sino también su propia salida computada en el paso anterior,
+(\(f_{t-1}\)). Esto se hace aún más evidente cuando ``desenrollamos'' la red a lo largo del
+tiempo, cuya representación se encuentra a la derecha de la Figura \ref{fig:simple-rnn} y
+se asemeja a la de una feedforward.
 
-% Ponerlo acá?
 Otro detalle a tener en cuenta en estas redes es que, como se puede ver en la Figura
 \ref{fig:simple-rnn}, en cada paso de tiempo de una misma secuencia, la red genera una
-salida. Es decir, si tenemos una secuencia de largo \(T\) y nuestra red produce en cada
-paso de tiempo una salida de tamaño \(o\), entonces al terminar de procesar una secuencia
-entera, tendremos una salida ``total'' de tamaño \(T \times o\). Sin embargo,
-la salida en cada paso de tiempo contiene información de los pasos de tiempo previos,
-por lo que en general se suele utilizar la salida producida en el último paso, ya
-que contiene información sobre toda la secuencia.
-
-% Dónde agregarlo?
-% Y además, permite procesar secuencias de longitud variable; a diferencia de las
-% feedforward cuyo tamaño de entrada es fijo.
+salida. Es decir, si tenemos una secuencia de largo \(T\) y la red produce en cada paso de
+tiempo una salida de tamaño \(o\), entonces al terminar de procesar una secuencia entera,
+se tendría una salida ``total'' de tamaño \(T \times o\). Sin embargo, como la salida en
+cada paso de tiempo contiene información de los pasos de tiempo previos, se suele utilizar
+la producida en el último paso.
 
 \begin{figure}[ht]
     \centering
@@ -116,31 +110,31 @@ que contiene información sobre toda la secuencia.
             node[node in,below,item] {\(x_t\)}
             node[pos=0.6,fill=white] {\footnotesize\shortstack{\(w_{0_x,f}\)\\\(w_{x, f}\)}};
     \end{tikzpicture}
-    \caption{A la izquierda, se ve la más simple de las RNRs, con solamente la capa de
-    entrada, una capa oculta formada por una neurona con su respectiva conexión
-    recurrente, y la capa de salida. A la derecha, se ve la misma red pero
+    \caption{A la izquierda, se ve el grafo correspondiente a una RNR simple, con la capa
+    de entrada, una capa oculta formada solamente por una neurona con su respectiva
+    conexión recurrente, y la capa de salida. A la derecha, se ve la misma red pero
     ``desenrollada'' a lo largo del tiempo. Asumiremos por simplicidad que tanto la
     entrada como la salida en cada momento \(t\) son simplemente números reales, es decir
     \(x_t, y_t \in \mathbb{R} \ \forall t\). Denotamos con \(w_{0_x,f}\) y \(w_{x,f}\) al
-    bias y al peso respectivamente que van desde la entrada a la neurona oculta, con
+    sesgo y al peso respectivamente que van desde la entrada a la neurona oculta, con
     \(w_{0_f,f_s}\) y \(w_{f,f_s}\) a los que van desde la neurona oculta hasta la capa de
     salida, y con \(w_{f,f}\) al peso que aplica la neurona sobre su propia salida del
     paso anterior.}
     \label{fig:simple-rnn}
 \end{figure}
 
-Cada neurona realiza lo mismo que en una red Feedforward, en el sentido que computan una
+Cada neurona realiza lo mismo que en una red feedforward, en el sentido que computan una
 suma pesada de sus entradas y aplican una función de activación sobre esta. Sin embargo, a
 partir de la Figura \ref{fig:simple-rnn}, podemos notar algunas particularidades con
 respecto a las redes recurrentes:
 \begin{itemize}
     \item Por un lado, cada neurona tiene un peso extra además del que se aplica sobre la
-    entrada \(x_t\) (\(w_{x,f}\)) y el bias correspondiente (\(w_{0_x,f}\)). Este peso
-    extra es el que se aplica sobre la salida de la neurona en el paso anterior
-    \(f_{t-1}\), denotado con \(w_{f,f}\).
+    entrada \(x_t\) (\(w_{x,f}\)) y el sesgo correspondiente (\(w_{0_x,f}\)). Este peso
+    extra, denotado con \(w_{f,f}\), es el que se aplica sobre \(f_{t-1}\), la salida de
+    la neurona en el paso anterior.
     \item Por otro lado, la red utiliza los mismos pesos \(w_{x,f}\), \(w_{f,f}\) y
-    \(w_{f, f_s}\), y biases \(w_{0_x,f}\) y \(w_{0_f, f_s}\) en \textit{todos} los pasos de
-    tiempo.
+    \(w_{f, f_s}\), y sesgos \(w_{0_x,f}\) y \(w_{0_f, f_s}\) en \textit{todos} los pasos
+    de tiempo.
 \end{itemize}
 
 Con esto en cuenta, vamos a tener que el cómputo llevado a cabo por la red
@@ -166,12 +160,12 @@ tanto la entrada en el tiempo actual \(x_t\) y de su salida en el paso anterior
     \item y así sucesivamente.
 \end{itemize}
 Este comportamiento hace que \(f_{t'}\) sea una función de todas las entradas vistas desde
-\(t=0\), constituyendo de esta la memoria de la que venimos hablando, que se le suele
-llamar \textbf{estado oculto} o \textbf{interno} de la neurona. En este caso, como la red
-solamente tiene una capa oculta con una neurona recurrente, el estado oculto de la neurona
-coincide con el estado oculto de la red.
+\(t=0\), constituyendo de esta forma la memoria de la que venimos hablando, a la que se
+suele llamar \textbf{estado oculto} o \textbf{interno} de la neurona. En este caso, como
+la red solamente tiene una capa oculta con una neurona recurrente, el estado oculto de la
+neurona coincide con el estado oculto de la red.
 
-De la misma forma en que lo hicimos anteriormente para las redes Feedforward, podemos
+De la misma forma en que lo hicimos anteriormente para las redes feedforward, podemos
 empezar a complejizar esta red agregando varias neuronas recurrentes en la capa oculta,
 cada una con su propio ciclo, como se puede ver en la Figura \ref{fig:simple-rnn-2}.
 \begin{figure}[ht]
@@ -212,14 +206,14 @@ cada una con su propio ciclo, como se puede ver en la Figura \ref{fig:simple-rnn
     Similarmente a la Figura anterior, denotamos con \(w_{x,f_i}\) al peso que va desde la
     capa de entrada a la neurona oculta \(f_i\), con \(w_{f_i, f_i}\) al peso de cada
     neurona oculta a sí misma, y con \(w_{f_i, f_s}\) al que va desde la neurona oculta
-    \(f_i\) a la capa de salida (\(i=1,2,3,4,5\)). En este caso, omitimos los biases.}
+    \(f_i\) a la capa de salida (\(i=1,2,3,4,5\)). En este caso, omitimos los sesgos.}
     \label{fig:simple-rnn-2}
 \end{figure}
 
 Con esto, vamos a tener que el estado oculto de la red va a ser un vector formado por el
-estado oculto de las 5 neuronas. O sea, si denotamos con \(f_t\) al estado oculto
-de la red en el tiempo \(t\) y con \(f_{i_t}\) al estado oculto de la neurona oculta
-\(i\), en el tiempo \(t\) vamos a tener que:
+estado oculto de las 5 neuronas. O sea, si denotamos con \(f_t\) al estado oculto de la
+red en el tiempo \(t\) y con \(f_{i_t}\) al estado oculto de la neurona oculta \(i\) en el
+mismo tiempo, vamos a tener que:
 \begin{equation*}
     f_t = (f_{1_t}, f_{2_t}, f_{3_t}, f_{4_t}, f_{5_t})
 \end{equation*}
@@ -261,9 +255,10 @@ la entrada de las neuronas de la siguiente capa, estando las capas totalmente co
 entre sí.
 
 Para entrenar este tipo de redes, el truco está en ``desenrollarlas'' como vimos
-anteriormente y luego utilizar el algoritmo de backpropagation presentado en la sección de
-Redes Neuronales. Esta estrategia es conocida como \textbf{\textit{backpropagation through
-time}}.
+anteriormente y luego utilizar el algoritmo de retropropagación del error presentado en la
+\hyperref[chap:rna]{sección de redes neuronales}. Esta estrategia es conocida como
+\textbf{retropropagación del error a lo largo del tiempo} (\textit{backpropagation through
+time}).
 
 Ahora bien, estas redes en su forma estándar sufren de un problema conocido como
 \textbf{el problema del gradiente desvaneciente} \cite{vanishing-gradient}.
@@ -273,17 +268,18 @@ actualización de dicho parámetro durante el proceso de entrenamiento es insign
 que puede provocar que la red aprenda muy lentamente o incluso que deje de entrenarse por
 completo\footnote{También está el problema del gradiente explosivo, que ocurre cuando el
 gradiente de la función de pérdida con respecto a un parámetro determinado es muy grande,
-haciendo el aprendizaje sea muy inestable.}.
+causando que el aprendizaje sea muy inestable.}.
 
-El gradiente desvaneciente aparece principalmente cuando se aplica backpropagation en
-redes muy profundas, es decir de muchas capas. Este es justamente el caso de las redes
-recurrentes en su forma desenrollada, en las que aún se acentúa más ya que los pesos son
-compartidos en todos los pasos de tiempo. Por lo tanto, mientras más largas sean las
-series de tiempo, más chances hay que nos enfrentemos a este problema. Esto provoca que
-estas redes sean incapaces de capturar dependencias de largo plazo al procesar secuencias
-de muchos pasos de tiempo. La Sección 22.6 de \cite{ai-a-modern-approach} provee un
-ejemplo simple con cálculos para entender exactamente cómo se produce el problema
-del gradiente desvaneciente en las RNNs estándar.
+El gradiente desvaneciente aparece principalmente cuando se aplica el algoritmo de
+retropropagación en redes muy profundas, es decir de muchas capas. Este es justamente el
+caso de las redes recurrentes en su forma desenrollada, en las que aún se acentúa más ya
+que los pesos son compartidos en todos los pasos de tiempo \cite{deep-learning}. Por lo
+tanto, mientras más largas sean las series de tiempo, más chances hay que nos enfrentemos
+a este problema. Esto provoca que estas redes sean incapaces de capturar dependencias de
+largo plazo al procesar secuencias de muchos pasos de tiempo\footnote{La Sección 22.6 de
+\cite{ai-a-modern-approach} provee un ejemplo simple con cálculos para entender
+exactamente cómo se produce el problema del gradiente desvaneciente en las RNRs
+estándar.}.
 
 \subsection{Long short-term memory}
 Las redes conocidas como \textit{long short-term memory} (LSTM) son un tipo particular de
