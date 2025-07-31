@@ -1,22 +1,25 @@
 \documentclass[../main.tex]{subfiles}
 
 \begin{document}
-Como explicamos anteriormente, en cualquier evaluación de impacto, para poder calcular el
-efecto de un programa, se debe obtener una estimación apropiada del contrafactual: ¿qué
-hubiera pasado con la variable de resultado de los beneficiarios del programa si el mismo
-no hubiera existido? Vimos también que para lograrlo, se utiliza un grupo de control,
-formado por individuos que no han sido tratados pero que idealmente, son estadísticamente
-similares a los que sí lo fueron.
+El objetivo principal de toda evaluación de impacto es calcular el efecto de un programa o
+intervención sobre la población receptora. Para ello, es necesario obtener una estimación
+apropiada del contrafactual: ¿qué habría pasado con la variable de resultado de los
+beneficiarios del programa si el mismo no hubiera existido? Como esta es una situación
+hipotética, no observable en la realidad, se recurre a la conformación de un grupo de
+control, que debería estar formado, idelamente, por individuos que eran estadísticamentes
+similares a los tratados antes de la implementación del programa — es decir, en la línea
+de base — pero que no fueron expuestos a la intervención en cuestión.
 
-En esto, aparece el problema del sesgo de autoselección, que consiste en no tomar en
-cuenta las diferencias preexistentes entre tratados y no tratados, que pueden haber
-afectado tanto a la decisión de participar en el programa como a los resultados
-potenciales posteriores.
+En esta tarea, aparece el problema del sesgo de autoselección, que ocurre cuando no se
+toman en cuenta las diferencias preexistentes entre tratados y no tratados. Estas
+diferencias pueden haber influido tanto en la decisión de participar en el programa como
+en los resultados potenciales posteriores, por lo que no considerarlas podría afectar la
+validez de las comparaciones entre ambos grupos.
 
 En evaluaciones sobre programas con asignación aleatoria, el grupo de control se obtiene
 directamente tomando todos los individuos que no fueron tratados y el problema de
 autoselección se soluciona naturalmente. Sin embargo, en las evaluaciones
-cuasi-experimentales, hechas sobre tratamientos en donde la asignación al tratamiento no
+cuasi-experimentales, hechas sobre intervenciones en donde la asignación al tratamiento no
 fue aleatoria y se desconocen los motivos que han llevado a los individuos a inscribirse o
 recibir el tratamiento, seleccionar un grupo de control adecuado constituye un gran
 desafío. Este es uno de los temas centrales de este trabajo.
@@ -33,38 +36,44 @@ puede tomar como variable el número de empleados y los ingresos mensuales de so
 mes anterior al inicio del programa, o se podría tomar esta cantidad observada durante
 diez meses previos al comienzo, siempre y cuando el investigador considere que es
 relevante hacerlo. De esta forma, es posible incluir series de tiempo en el cálculo del
-puntaje de propensión, tomando como variables varios períodos de la misma característica.
-Esto permite capturar no solo un estado puntual de las unidades sino también cómo ha sido
-su evolución, lo cual puede contribuir a un mejor emparejamiento y consecuentemente, a una
-estimación más precisa del efecto del tratamiento.
+puntaje de propensión, tomando como variables explicativas varios períodos de la misma
+característica. Esto permite capturar no solo un estado puntual de las unidades sino
+también cómo ha sido su evolución antes del inicio del programa, lo cual puede contribuir
+a un mejor emparejamiento y consecuentemente, a una estimación más precisa del
+contrafactual.
 
 Otra aspecto a tener en cuenta a la hora de identificar los individuos de control es la
-forma de implementación del programa con respecto al tiempo. Hay unos en los que el
-ingreso al tratamiento por parte de los individuos se realiza en un único instante de
-tiempo, pero en otros la entrada al programa ocurre de manera secuencial. En este último
-caso, se habla de una \textbf{cohorte} o una \textbf{camada} para referirse al conjunto de
-individuos que ingresaron al programa en el mismo momento.
+forma de implementación del programa a lo largo del tiempo. En algunos casos, el ingreso
+al tratamiento por parte de los individuos se realiza en un único instante de tiempo, pero
+en otros la entrada al programa ocurre de manera secuencial. En este último caso, se habla
+de una \textbf{cohorte} o una \textbf{camada} para referirse al conjunto de individuos que
+ingresaron al programa en el mismo momento. Por ejemplo, si los ingresos al programa se
+dieron en dos meses distintos de un determinado año, entonces los individuos que
+ingresaron en primer mes conforman una cohorte, y los que ingresaron en el segundo forman
+otra cohorte distinta.
 
 Habiendo presentado estas cuestiones, nuestro trabajo se enfoca en programas con entrada
-secuencial y en los que supondremos que los individuos tratados resultaron ser tratados (o
-decidieron inscribirse al programa) por la dinámica temporal observada en una
-característica en períodos anteriores a la asignación al programa. Bajo estas
-circunstancias, el PSM presenta ciertas limitaciones:
+secuencial y en los que suponemos que los individuos tratados resultaron ser tratados (o
+decidieron inscribirse al programa) debido a la dinámica temporal observada en la variable
+objetivo\footnote{Recordemos que la variable objetivo es aquella sobre la que se espera
+que el programa tenga un efecto.} de cada uno en períodos anteriores a la asignación al
+programa. Bajo estas circunstancias, el PSM presenta ciertas limitaciones:
 \begin{itemize}
     \item Por un lado, cuando existen múltiples cohortes, la forma en la que se aplica la
-    técnica es por cohorte. Es decir, lo que se hace es estimar la probabilidad de ingreso
-    al programa por camada, y se buscan controles separadamente para cada una de estas
-    camadas. Dicho de otra manera, el proceso de emparejamiento se realiza tantas veces
-    como cohortes haya.
+    técnica es de a una cohorte a la vez. Es decir, se estima un modelo para calcular la
+    probabilidad de participación por camada, y se buscan controles por separado para cada
+    una de ellas. Dicho de otra manera, el proceso completo de emparejamiento se realiza
+    tantas veces como cohortes haya.
     \item Por otro lado, cuando las variables tenidas en cuenta en realidad representan
-    una misma característica pero en distintos períodos de tiempo, la regresión logística,
-    que es la forma en la que se calcula el puntaje de propensión, no es capaz de capturar
-    esta relación temporal entre ellas, sino que las trata como si fueran independientes.
+    una misma característica observada en distintos períodos de tiempo, la regresión
+    logística — que es es una de las formas más comunes en la que se calcula el puntaje de
+    propensión (y la que usamos en este trabajo) — no es capaz de capturar la relación
+    temporal entre ellas, sino que las trata como si fueran independientes.
 \end{itemize}
 
 Con estos problemas en mente, el objetivo de este trabajo es explorar una alternativa
 basada en la utilización de redes neuronales para la identificación de grupos de control
-bajo las hipótesis mencionadas previamente. La estrategia propuesta se apoya en distintos
+bajo los supuestos mencionados previamente. La estrategia propuesta se apoya en distintos
 tipos de arquitecturas, concretamente: redes convolucionales, redes LSTM, y la combinación
 de ellas. Como explicamos en el capítulo anterior, estas incorporan naturalmente la
 relación temporal de los datos, permitiendo capturar patrones a lo largo del tiempo. En
@@ -75,17 +84,19 @@ redes pueden resultar especialmente útiles.
 Para evaluar la metodología propuesta, desarrollamos diferentes conjuntos de datos
 sintéticos de tipo panel\footnote{Los datos de tipo panel son aquellos en los que a cada
 unidad considerada le corresponde una serie de tiempo.}, ya que en los casos reales
-algunos comportamientos no pueden verificarse directamente. En estos escenarios, variamos
+algunos comportamientos no pueden observarse directamente. En estos escenarios, variamos
 la cantidad de \textbf{períodos observados} (previos al inicio del programa), la cantidad
-de \textbf{períodos de dependencia temporal} - que son aquellos dentro de los períodos
-observados en los que modelamos una tendencia específica -, y la \textbf{dinámica
-temporal} observada. Teniendo esto en cuenta, los objetivos de nuestro trabajo se pueden
-resumir en los siguientes puntos:
+de \textbf{períodos de dependencia temporal} — que son aquellos dentro de los períodos
+observados en los que modelamos una tendencia específica —, y la \textbf{dinámica
+temporal} observada en la variable. Teniendo esto en cuenta, los objetivos de nuestro
+trabajo se pueden resumir en los siguientes puntos:
 \begin{itemize}
-    \item Obtener resultados que permitan comparar el desempeño de las redes con
-    el del PSM en los diferentes escenarios.
-    \item Evaluar la capacidad de las redes neuronales de reconocer individuos de control
-    ante diferentes dinámicas temporales de la variable observada.
+    \item Obtener resultados que permitan comparar el desempeño de las diferentes
+    arquitecturas de redes neuronales propuestas con el del PSM en los escenarios
+    simulados.
+    \item Evaluar la capacidad de las redes neuronales para identificar individuos de
+    control ante variaciones en la cantidad de períodos observados, los períodos de
+    dependencia y la dinámica temporal de la variable observada.
     \item Superar las limitaciones observadas del PSM utilizando las redes neuronales.
     Esto es: incorporar de manera más efectiva la dependencia temporal de las covariables
     y agilizar la identificación de los grupos de control de cada cohorte.
@@ -93,18 +104,24 @@ resumir en los siguientes puntos:
 
 Nuestras hipótesis son las siguientes:
 \begin{itemize}
-    \item Con una cantidad de períodos pre-tratamiento fija, a medida que reducimos
-    la cantidad de períodos de dependencia temporal, las redes van a tener cada
-    vez un peor desempeño y se va a asemejar al del PSM.
-    \item A medida que haya menos períodos pre-tratamiento, tanto las redes como el
-    PSM van a ir teniendo un peor rendimiento.
-    \item Las redes LSTM tienen un mejor desmpeño que las convolucionales, y la combinación
-    de las dos es mejor que ambas.
+    \item Con una cantidad fija de períodos observados pre-tratamiento, esperamos que las
+    redes neuronales sean más capaces de capturar la tendencia de los períodos de
+    dependencia para obtener un mejor rendimiento que el PSM. Sin embargo, a medida que
+    reducimos la cantidad de períodos de dependencia temporal, consideramos que su
+    desempeño se degradará y se asemejará al del PSM.
+    \item A medida que haya más períodos pre-tratamiento — en otras palabras, mayor
+    disponibilidad de datos —, ambos métodos mejorarán sus resultados, pero siempre
+    el de las redes será consistentemente superior.
+    \item Las redes neuronales permitirán entrenar un único modelo que pueda utilizarse en
+    diferentes cohortes, a diferencia del PSM, que requiere una estimación por cohorte.
+    \item Las redes LSTM superarán el desempeño de las convolucionales, y la combinación de
+    ambas dará un mejor rendimiento que el de cada una por separado.
 \end{itemize}
 
-A continuación, presentamos el marco sobre el cual llevamos a cabo los experimentos,
-detallando el alcance de nuestro trabajo, la forma en que construimos las diferentes
-simulaciones, las arquitecturas de redes, las métricas para evaluar los modelos,
-y las herramientas que nos ayudaron en todo este proceso.
+A continuación, presentamos el marco sobre el cual llevamos a cabo los experimentos.
+Detallamos el alcance de nuestro trabajo, el diseño de las diferentes simulaciones, las
+arquitecturas de redes propuestas, las métricas de interés para evaluar los modelos, la
+estrategia de comparación entre los dos enfoques, y las herramientas empleadas en todo
+este proceso.
 
 \end{document}
