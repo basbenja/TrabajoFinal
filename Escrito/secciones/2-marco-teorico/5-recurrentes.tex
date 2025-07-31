@@ -16,7 +16,7 @@ RNRs.}.
 
 Una limitación de las redes que hemos presentado hasta el momento (totalmente conectadas y
 convolucionales) es que no tienen memoria. Si quisieramos procesar una secuencia temporal
-de datos con estas redes, deberíamos ``mostrárselas'' entera como una entrada fija,
+de datos con estas redes, deberíamos ``mostrársela'' entera como una entrada fija,
 perdiendo la dependencia temporal que existe entre los elementos de la secuencia. Lo que
 ocurriría es que las distintas características de la entrada representarían los pasos de
 tiempo, pero la red las trataría como si fueran atributos independientes.
@@ -123,8 +123,8 @@ la producida en el último paso.
     \label{fig:simple-rnn}
 \end{figure}
 
-Cada neurona realiza lo mismo que en una red feedforward, en el sentido que computan una
-suma pesada de sus entradas y aplican una función de activación sobre esta. Sin embargo, a
+Cada neurona realiza lo mismo que en una red feedforward, en el sentido que computa una
+suma pesada de sus entradas y aplica una función de activación sobre esta. Sin embargo, a
 partir de la Figura \ref{fig:simple-rnn}, podemos notar algunas particularidades con
 respecto a las redes recurrentes:
 \begin{itemize}

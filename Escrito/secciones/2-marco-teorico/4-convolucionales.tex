@@ -63,7 +63,8 @@ problema que detallaremos más adelante.
     \centering
     \includegraphics[width=0.55\textwidth]{figs/conv1d-example1.png}
     \caption{Fuente: \cite{prince2024understanding}. Ejemplo de convolución unidimensional
-    con un filtro \(\bm{w}\) de tamaño 3.}
+    aplicada sobre una entrada de tamaño 6 con un filtro \(\bm{w} = (w_1, w_2, w_3)\) de
+    tamaño 3. El símbolo \(\otimes\) indica la multiplicación, y el \(\oplus\) la suma.}
     \label{fig:conv1d-example}
 \end{figure}
 
@@ -114,28 +115,28 @@ se puede ver más claramente en la Figura \ref{fig:conv-example}.
     \label{fig:conv-example}
 \end{figure}
 
-Con esto, podemos ver que un filtro se encarga de identificar una característica
-específica en la entrada, y que dicha característica depende de los valores del filtro.
-Así, diferentes filtros actuando en conjunto podrán detectar diferentes características
-puntuales sobre la entrada.
+A partir de esto, podemos ver que cada filtro se encarga de identificar una característica
+específica en la entrada, y que dicha característica depende de los valores del filtro. En
+las RNCs, estos valores - los pesos involucrados en cada filtro - son justamente los
+parámetros a optimizar durante el proceso de entrenamiento. El objetivo es que el modelo
+aprenda exactamente qué filtros le son más útiles para capturar los rasgos relevantes
+presentes en los datos.
 
-Ahora que ya tenemos una intuición clara sobre qué hace una convolución, veamos cómo esta
-operación se traslada a las redes neuronales. Para empezar, lo que va a ocurrir ahora es
-que los parámetros a optimizar van a ser los pesos involucrados en cada filtro.
-
-Las redes convolucionales son un ejemplo de red neuronal feedforward, ya que la
-información fluye en una sola dirección. A diferencia de las redes totalmente conectadas,
-donde cada neurona de una capa está conectada con todas las de la capa anterior, lo que
-ocurre en las capas convolucionales es que cada neurona se conecta únicamente con un
-subconjunto de neuronas (consecutivas) de la capa anterior. Este subconjunto recibe
-comúnmente el nombre de \textbf{campo receptivo} y es sobre el que cada neurona aplicará
-el filtro correspondiente. Por ejemplo, en la Figura \ref{fig:conv1d-example}, el campo
-receptivo de la neurona \(z_2\) está formado por \(x_1\), \(x_2\) y \(x_3\), y el de la
-neurona \(z_3\) por \(x_2\), \(x_3\) y \(x_4\).
+Para entender cómo se aplican estos filtros en las RNCs, es importante describir el
+funcionamiento de las capas convolucionales, que son las responsables de realizar la
+operación de convolución. A diferencia de las redes totalmente conectadas, donde cada
+neurona de una capa está conectada con todas las de la capa anterior, lo que ocurre en las
+capas convolucionales es que cada neurona se conecta únicamente con un subconjunto de
+neuronas (consecutivas) de la capa anterior. Este subconjunto recibe comúnmente el nombre
+de \textbf{campo receptivo} y es sobre el que cada neurona aplicará el filtro
+correspondiente. Por ejemplo, en la Figura \ref{fig:conv1d-example}, si vemos a la columna
+de la izquierda como las entradas, y la de la derecha como una capa convolucional, el
+campo receptivo de la neurona \(z_2\) está formado por \(x_1\), \(x_2\) y \(x_3\), y el de
+la neurona \(z_3\) por \(x_2\), \(x_3\) y \(x_4\).
 
 Además, es importante notar que cada neurona de una capa convolucional aplica el mismo
 filtro, por lo que todas las neuronas de una misma capa comparten los mismos pesos. Esto
-se puede observar clarament en la Figura \ref{fig:conv1d-example}, donde tanto la neurona
+se puede observar claramente en la Figura \ref{fig:conv1d-example}, donde tanto la neurona
 \(z_2\) como la \(z_3\) aplican el mismo filtro (\(w_1, w_2, w_3\)) sobre sus respectivos
 campos receptivos. Como consecuencia, la cantidad de parámetros a aprender en una red
 convolucional es menor que en una red totalmente conectada. Esta diferencia puede verse en
@@ -146,12 +147,13 @@ la Figura \ref{fig:fully-connected-vs-conv}.
     \includegraphics[width=0.55\textwidth]{figs/fully-connected-vs-conv.png}
     \caption{Fuente: \cite{prince2024understanding}. Capas de una red totalmente conectada
     (izquierda) y capas convolucionales (derecha). Denotamos con \(x\) a la capa de la
-    izquierda, y con \(h\) a la de la derecha, en ambos casos. En las capas de la totalmente
-    conectada, vemos que cada neurona de la capa \(x\) está conectada con todas las
+    izquierda, y con \(h\) a la de la derecha, en ambos casos. En la arquitectura
+    totalmente conectada, cada neurona de la capa \(x\) está conectada con todas las
     neuronas de la capa \(h\), habiendo un total de \(6 \cdot 6 = 36\) pesos entre ellas.
     En cambio, en la convolucional, asumiendo que se aplica un filtro de tamaño \(l=3\),
-    tenemos que cada neurona de la capa \(h\) computa una suma pesada (con los mismos
-    pesos) de \(l=3\) neuronas consecutivas de la capa \(x\).}
+    cada neurona de la capa \(h\) computa una suma pesada de \(l=3\) neuronas consecutivas
+    de la capa \(x\), usando los mismos pesos. Esto reduce la cantidad de parámetros entre
+    ambas capas de 36 a 3.}
     \label{fig:fully-connected-vs-conv}
 \end{figure}
 
