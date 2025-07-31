@@ -291,25 +291,27 @@ han logrado empleando este tipo de red \cite{colahs-blog-lstm-2015}.
 
 Como hemos visto hasta el momento, todas las redes recurrentes tienen una estructura de
 cadena de ``módulos'' o ``bloques'' \cite{colahs-blog-lstm-2015} - las neuronas
-recurrentes -, es decir, unidades que se repiten a lo largo de la secuencia temporal. En
-una RNR estándar, este módulo es simplemente una aplicación de una función de activación,
-particularmente la tangente hiperbólica, sobre una suma pesada de sus entradas. En las
-LSTM, estas neuronas se complejizan para incorporar mecanismos que permiten mantener
-una memoria a largo plazo en la red. Las llamaremos ``celdas'' o neuronas LSTM.
+recurrentes - que se repiten a lo largo de la secuencia temporal. En una RNR estándar,
+este módulo es simplemente una aplicación de una función de activación, particularmente la
+tangente hiperbólica, sobre una suma pesada de sus entradas. En las LSTM, estas neuronas
+se complejizan para incorporar mecanismos que permiten mantener una memoria a largo plazo
+en la red. Las llamaremos ``celdas'' o neuronas LSTM.
 
 El principal componente que introducen las LSTM para poder retener información por largos
 períodos de tiempo es el \textbf{estado de celda}. La particularidad de este estado es que
-a medida que ``fluye'' por la red, se mantiene prácticamente intacto, salvo por algunas
-interacciones lineales \cite{colahs-blog-lstm-2015}, pero no es afectado por ningún peso o
-bias, lo que permite justamente solucionar el desvanecimiento del gradiente.
+se transmite a lo largo del tiempo de manera casi inalterada, salvo por algunas
+interacciones lineales \cite{colahs-blog-lstm-2015} \cite{ai-a-modern-approach}. Esto es
+lo que permite justamente solucionar el desvanecimiento del gradiente y aprender
+dependencias de largo plazo.
 
 Así, vamos a tener dos estados que interactúan entre sí para realizar predicciones:
 \begin{itemize}
-    \item Por un lado, el \textbf{estado de celda}, que representa la \textbf{memoria a largo
-    plazo} de la red, y no es afectado por ningún peso o bias.
+    \item Por un lado, el \textbf{estado de celda}, que representa la \textbf{memoria a
+    largo plazo} de la red. y no es afectado de manera directa por ninguna activación no
+    lineal ni ningún peso o sesgo.
     \item Por otro lado, el \textbf{estado oculto} (del que hablamos previamente), que
-    representa la \textbf{memoria a corto plazo} de la red, y sí es calculado por medio
-    de sumas pesadas.
+    representa la \textbf{memoria a corto plazo} de la red, y es el que se utiliza para
+    generar las salidas de la red en cada paso de tiempo.
 \end{itemize}
 
 Ahora bien, con esto, la idea es que la red aprenda qué almacenar en el estado de celda,
@@ -325,7 +327,7 @@ tipos de compuertas en la celda LSTM:
     el estado de celda a partir de la entrada actual y del estado oculto actual.
     \item \textbf{La compuerta de salida \(\bm{o}\)} (del inglés \textit{output}):
     determina qué partes de la memoria de largo plazo son transferidas a la memoria
-    de corto plazo, el estado oculto.
+    de corto plazo.
 \end{itemize}
 
 De esta forma, las compuertas son una manera de regular el paso de información
@@ -334,14 +336,14 @@ el rango \([0,1]\). Estos se obtienen como la salida de una pequeña red neurona
 totalmente conectada en la que las entradas son los datos del paso de tiempo actual y el
 estado oculto anterior, y cuya capa de salida aplica una función de activación sigmoide.
 
-A continuación, detallamos las operaciones producidas por una celda LSTM en un paso de
-tiempo. Utilizaremos la siguiente notación para un tiempo \(t\):
+A continuación, describimos los elementos presentes en el cómputo efectuado por una celda
+LSTM. Utilizaremos la siguiente notación para un tiempo \(t\):
 \begin{itemize}[itemsep=0.1cm]
     \item \(x_t\) para el vector de entrada.
     \item \(h_t\) para el estado oculto.
     \item \(C_t\) para el estado de celda.
-    \item \(\tilde{C}_t\) para el ``potencial'' estado de celda (veremos a continuación
-    qué significa esto).
+    \item \(\tilde{C}_t\) para el ``potencial'' estado de celda (veremos enseguida qué
+    significa esto).
     \item \(f_t\), \(i_t\), \(o_t\) para las salidas de las compuertas de olvido,
     entrada y salida respectivamente.
 \end{itemize}
@@ -349,7 +351,7 @@ Cabe aclarar que \(h_t\), \(C_t\), \(\tilde{C}_t\), \(f_t\), \(i_t\) y \(o_t\) s
 vectores de la misma dimensión. Con estos elementos, podemos dar un diagrama de una celda
 LSTM, que se encuentra en la Figura \ref{fig:lstm-cell}.
 
-\begin{figure}
+\begin{figure}[ht]
     % Fuente: https://tex.stackexchange.com/a/432344
     \centering
     \begin{tikzpicture}[
@@ -455,21 +457,21 @@ LSTM, que se encuentra en la Figura \ref{fig:lstm-cell}.
         \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
     \end{tikzpicture}
     \caption{Diagrama de una celda LSTM adaptado de \cite{colahs-blog-lstm-2015}.
-    \(\sigma\) representa la función sigmoide, tanh la tangente hiperbólica, el signo
-    ``+'' una suma, y el signo \(\odot\) el producto de Hadamard, también conocido como
-    ``multiplicación elemento a elemento''. Toma como entradas \(x_t\), el vector de
-    variables del paso de tiempo \(t\); \(C_{t-1}\), el estado de celda del paso anterior;
-    y \(h_{t-1}\), el estado oculto del paso anterior. Produce como salidas un nuevo
-    estado de celda \(C_t\) y un nuevo estado oculto \(h_t\), que se usa tanto en el paso
-    de tiempo siguiente como en una hipótetica capa sucesiva.}
+    \(\sigma\) representa la función sigmoide, tanh la tangente hiperbólica, y el signo
+    \(\odot\) el producto de Hadamard, también conocido como ``multiplicación elemento a
+    elemento''. Toma como entradas \(x_t\), el vector de variables del paso de tiempo
+    \(t\); \(C_{t-1}\), el estado de celda del paso anterior; y \(h_{t-1}\), el estado
+    oculto del paso anterior. Produce como salidas un nuevo estado de celda \(C_t\) y un
+    nuevo estado oculto \(h_t\), que se usa tanto en el paso de tiempo siguiente como en
+    una hipótetica capa sucesiva.}
     \label{fig:lstm-cell}
 \end{figure}
 
-Y ahora, como se puede deducir a partir de la Figura \ref{fig:lstm-cell}, vamos a tener
-varios conjuntos de pesos involucrados, cada uno de los cuales se puede representar como
-una matriz, como se mencionó en la Sección \ref{chap:rna}, y todas se aprenden durante el
-entrenamiento. Dejando de lado sus dimensiones, y asumiendo que todas incluyen el bias,
-las denotaremos de la siguiente forma:
+Como se puede deducir a partir de dicha Figura, ahora vamos a tener varios conjuntos de
+pesos involucrados, cada uno de los cuales se puede representar como una matriz, como se
+mencionó en la Sección \ref{chap:rna}, y todas se aprenden durante el entrenamiento.
+Dejando de lado sus dimensiones, y asumiendo que todas incluyen los sesgos, las
+denotaremos de la siguiente forma:
 \begin{itemize}
     \item \(\bm{W}_{x,f}\) y \(\bm{W}_{h,f}\) para los pesos de la compuerta de olvido.
     \item \(\bm{W}_{x,i}\) y \(\bm{W}_{h,i}\) para los pesos de la compuerta de entrada.
@@ -515,9 +517,10 @@ de entrada. Esta etapa se puede ver como compuesta por dos partes:
 Con estas tres cantidades (\(f_t\), \(\tilde{C}_t\), \(i_t\)), es momento de
 efectivamente actualizar el estado de celda:
 \begin{enumerate}
-    \item En primer lugar, se multiplica elemento a elemento \(C_{t-1}\) por \(f_t\). Esto
-    provoca que un valor cercano a 0 en \(f_t\) haga que el valor correspondiene en
-    \(C_{t-1}\) se ``olvide'', y que un valor cercano a 1 haga que se siga recordando.
+    \item En primer lugar, se multiplica elemento a elemento (\(\odot\)) \(C_{t-1}\) por
+    \(f_t\). Esto provoca que un valor cercano a 0 en \(f_t\) haga que el valor
+    correspondiene en \(C_{t-1}\) se ``olvide'', y que un valor cercano a 1 haga que se
+    siga recordando.
     \item Y luego, se le suma la nueva información, dada por la multiplicación
     elemento a elemento entre \(\tilde{C}_t\) e \(i_t\), que intuitivamente representa qué
     valores se van a actualizar y en qué medida.
@@ -533,8 +536,9 @@ uso del valor de la compuerta de salida:
 \[
     o_t = \sigma \left( \bm{W}_{x,o} x_t + \bm{W}_{h,o} h_{t-1} \right)
 \]
-que, combinado con una aplicación de tanh sobre el nuevo estado de celda para situar a
-todos los valores en el rango \([-1,1]\), da la nueva memoria a corto plazo:
+Combinando \(o_t\) con una aplicación de tangente hiperbólica sobre el nuevo estado de
+celda \(C_t\), que coloca a todos los valores allí presentes en el rango \([-1,1]\), da la
+nueva memoria a corto plazo:
 \[
     h_t = o_t \odot \text{tanh}(C_t)
 \]
