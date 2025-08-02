@@ -5,7 +5,7 @@
 A continuación, nombramos las herramientas que más nos ayudaron a llevar a cabo los
 experimentos, desde la generación de datos sintéticos hasta el diseño, entrenamiento y
 evaluación de los modelos, junto con la búsqueda de hiperparámetros óptimos. En la
-sección de bibliografía, se incluye el enlace a su documentación.
+bilbiografía, se incluye el enlace a su documentación.
 
 \subsection{Hardware}
 Para el entrenamiento de los modelos y la búsqueda de hiperparámetros, utilizamos recursos
@@ -26,7 +26,7 @@ abierto y multiplataforma, por lo que puede ejecutarse en diferentes sistemas op
 
 Durante los últimos años, ha sido el lenguaje más utilizado en las áreas de ciencia
 de datos y aprendizaje automático, principalmente por el desarrollo de librerías
-como pandas, numpy, PyTorch, TensorFlow, y Scikit-learn, que facilitan el manejo
+como pandas, NumPy, PyTorch, TensorFlow, y Scikit-learn, que facilitan el manejo
 de grandes volúmenes de datos y la utilización de algoritmos de ML.
 
 En nuestro caso, utilizamos Python para toda la implementación de este trabajo.
@@ -56,7 +56,7 @@ datos tabulares. Las dos principales estructuras de datos de pandas son las
 una, se pueden utilizar diferentes tipos de datos, como números enteros, decimales,
 palabras, fechas, entre otros. Algunas de sus capacidades destacadas incluyen la lectura y
 escritura de datos en diferentes formatos (CSV, Microsoft Excel, Stata, etcétera), el
-manejo de datos faltantes, y la simple y eficiente transofrmación de datos.
+manejo de datos faltantes, y la simple y eficiente transformación de datos.
 
 Utilizamos \texttt{DataFrames} para almacenar los datos sintéticos en archivos y luego
 cargarlos, y para construir los conjuntos de entrenamiento y test.
@@ -69,15 +69,14 @@ por lo que combina la flexiblidad de Python con la rapidez propia del código co
 Estas características hacen que sea la base de muchas otras librerías utilizadas en
 ámbitos muy diversos.
 
-Empleamos numpy principalmente para crear las series de tiempo de los diferentes
+Empleamos NumPy principalmente para crear las series de tiempo de los diferentes
 individuos en matrices, que luego pasamos a \texttt{DataFrames}.
 
 \subsection{PyTorch}
 PyTorch \cite{pytorch-docs} es una librería de Python que facilita la utilización de redes
 neuronales, tanto en su diseño como en su entrenamiento. Provee cómputo acelerado mediante
-el uso de placas gráficas, e implementa internamente las optimizaciones numéricas
-necesarias para entrenar un modelo, siendo la más importante la del algoritmo de
-backpropagation. La mayoría de PyTorch está escrito en C++ y CUDA.
+el uso de placas gráficas, e implementa el algoritmo de retropropagación del error de
+manera eficiente. La mayoría de PyTorch está escrito en C++ y CUDA.
 
 Aquí, utilizamos PyTorch justamente para diseñar las diferentes arquitecturas de redes
 neuronales, que se implementan como clases en Python, y para llevar a cabo el ciclo de
@@ -91,8 +90,7 @@ métricas, la búsqueda de hiperparámetros, entre otros.
 
 En nuestro caso, usamos Scikit-learn para automatizar el proceso de validación cruzada
 durante la búsqueda de hiperparámetros, y para la evaluación final de los modelos mediante
-
-el cálculo automático de diversas métricas, incluyendo la matriz de confusión.
+el cálculo automático de diversas métricas.
 
 \subsection{Optuna}
 Optuna \cite{optuna-docs} es una librería de Python que permite realizar la optimización
@@ -100,10 +98,9 @@ automática de hiperparámetros de una manera eficiente. Resulta intuitiva de ut
 incorporación en un pipeline es bastante directa. Un aspecto muy útil es que incluye un
 \textit{dashboard} interactivo que posibilita la visualización en tiempo real de los
 valores de hiperparámetros evaluados en los diferentes ensayos, como así también de
-gráficos que reflejan la relación entre estos valores y el resultado obtenido con ellos
-(medido a través de una métrica específica, determinada por el usuario). Otra
-característica relevante es que Optuna permite la paralelización de las evaluaciones, lo
-que contribuye a acelerar el proceso de optimización.
+gráficos que reflejan la relación entre estos valores y el resultado obtenido con ellos.
+Otra característica relevante es que Optuna permite la paralelización de las evaluaciones,
+lo que contribuye a acelerar el proceso de optimización.
 
 \subsection{MLflow}
 MLflow \cite{mlflow-docs} es una librería de Python que permite llevar un registro fino de
@@ -123,6 +120,7 @@ compatibilidad con Python mediante la biblioteca pystata, la cual permite integr
 forma eficiente los objetos DataFrame de pandas con las funcionalidades de Stata.
 
 En este trabajo, utilizamos Stata para la implementación del PSM, específicamente a través
-de las funciones \texttt{logit} y \texttt{psmatch2}.
+de las funciones \href{https://www.stata.com/manuals/rlogit.pdf}{\texttt{logit}} y
+\href{http://repec.org/bocode/p/psmatch2.html}{\texttt{psmatch2}}.
 
 \end{document}
