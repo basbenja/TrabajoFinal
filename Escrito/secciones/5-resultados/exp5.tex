@@ -6,18 +6,18 @@
 En este experimento, tomamos 35 períodos observados, de los cuales 15 son de dependencia
 con un máximo de 4 incrementos. Así, el cociente entre períodos de dependencia sobre
 observados es de 0.43, y el de subidas sobre períodos de dependencia de 0.27, ambos muy
-parecidos a los del \hyperref[sec:exp1]{wxperimento 1}. Tomamos para los NiNi el mismo
+parecidos a los del \hyperref[sec:exp1]{Experimento 1}. Tomamos para los NiNi el mismo
 valor de media de efectos fijos de tratados y controles (\(\mu_{{EF}_{NiNi}} = 10\)).
 
 En otras palabras, lo que ocurre es que se reduce la cantidad total de datos temporales
-pero se mantienen las proporciones previas. La idea de este escenario - y los siguientes -
+pero se mantienen las proporciones previas. La idea de este escenario — y los siguientes —
 es evaluar el desempeño de los distintos modelos en casos en donde la información
 disponible sobre los períodos previos al tratamiento es más limitada.
 
 Los resultados obtenidos, resumidos en la Tabla \ref{tab:results_exp5}, muestran solamente
 un leve deterioro de todos los modelos en comparación con \hyperref[tab:results_exp1]{los
-del experimento 1}. Consideramos que esto resulta bastante alentador, ya que sugiere que
-los modelos son robustos frente a una reducción en la cantidad de datos temporales
+del Experimento 1}. Consideramos que esto resulta bastante alentador, ya que sugiere que
+los modelos son robustos frente a esta reducción en la cantidad de datos temporales
 pre-tratamiento.
 
 \begin{table}[H]
@@ -36,9 +36,10 @@ pre-tratamiento.
             & $0.61062 \pm 0.01661$ & $0.61155 \pm 0.01669$ & $0.60970 \pm 0.01656$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y cobertura sobre la
-    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
-    experimento 5.}
+    \caption{Promedios y desviaciones estándar de las métricas \(F_1\), precisión y
+    cobertura sobre la clase positiva (controles), evaluadas en el conjunto de test en las
+    100 simulaciones del Experimento 5 con las diferentes arquitecturas de redes
+    neuronales y el PSM.}
     \label{tab:results_exp5}
 \end{table}
 
@@ -66,8 +67,9 @@ LSTM se reduce cuando se lo combina con el procesamiento convolucional.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura en el experimento 5. El porcentaje entre paréntesis
-    indica el porcentaje de veces que fue elegido ese valor en las 100 simulaciones.}
+    simulaciones en cada arquitectura en el Experimento 5. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
+    acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp5}
 \end{table}
 

@@ -2,7 +2,7 @@
 
 \begin{document}
 
-\section{Experimento 2: 45 períodos observados, 10 de dependencia} \label{sec:exp2} 
+\section{Experimento 2: 45 períodos observados, 10 de dependencia} \label{sec:exp2}
 En este, utilizamos la misma cantidad de períodos observados que en el escenario anterior,
 pero disminuimos los períodos de dependencia a la mitad, pasando de 20 a 10, y también la
 cantidad máxima de aumentos en ellos, pasando de 6 a 3. De esta manera, la proporción
@@ -10,24 +10,11 @@ entre períodos de dependencia y períodos observados es de 0.22, y la de subida
 períodos de dependencia se mantiene igual que antes. Aquí también tomamos
 \(\mu_{{EF}_{NiNi}} = 10\), el mismo valor que para tratados y controles.
 
-% La Tabla \ref{tab:params_exp2} muestra todos los parámetros de este Experimento.
-% \begin{table}[ht]
-%     \centering
-%     \begin{tabular}{|c|c|c|c|c|c|c|}
-%         \hline
-%         \(L\) & \(n_{pd}\) & \(m\) & \(c\) & \(\mu_{EF_T}\) & \(\mu_{EF_C}\) & \(\mu_{EF_{NiNi}}\) \\ \hline\hline
-%         45 & 20 & 6 & 3 & 10 & 10 & 10 \\
-%         \hline
-%     \end{tabular}
-%     \caption{Parámetros para la generación de datos utilizados en el Experimento 2.}
-%     \label{tab:params_exp2}
-% \end{table}
-
 Los resultados obtenidos se encuentran en la Tabla \ref{tab:results_exp2}. Vemos que todas
 las métricas disminuyeron considerablemente en comparación al escenario anterior. El
 rendimiento del PSM fue muy bajo; y en el caso de las redes resulta particularmente
-alarmante el caso de la precisión, que en todos las redes se ubicó cerca de 0.5, indicando
-que de los controles identificados por ellas, aproximadamente la mitad realmente lo era.
+alarmante el caso de la precisión, que en todas se ubicó cerca de 0.5, indicando que de
+los controles identificados por ellas, aproximadamente la mitad realmente lo era.
 
 Esto confirma en primera instancia nuestra hipótesis que con la misma cantidad de
 observaciones pero menor cantidad de períodos de dependencia, el rendimiento de los
@@ -49,9 +36,10 @@ modelos empeora.
             & $0.36086 \pm 0.01464$ & $0.36133 \pm 0.01465$ & $0.36040 \pm 0.01463$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y cobertura sobre la
-    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
-    experimento 2.}
+    \caption{Promedios y desviaciones estándar de las métricas \(F_1\), precisión y
+    cobertura sobre la clase positiva (controles), evaluadas en el conjunto de test en las
+    100 simulaciones del Experimento 2 con las diferentes arquitecturas de redes
+    neuronales y el PSM.}
     \label{tab:results_exp2}
 \end{table}
 
@@ -79,7 +67,7 @@ convolucional.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura en el experimento 2. Cada celda contiene dicho valor
+    simulaciones en cada arquitectura en el Experimento 2. Cada celda contiene dicho valor
     y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
     acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp2}

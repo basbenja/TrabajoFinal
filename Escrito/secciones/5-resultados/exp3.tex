@@ -25,7 +25,7 @@ como se observa en la Figura \ref{fig:time_series_exp3}. Nuevamente, tomamos
         \centering
         \includegraphics[scale=0.3]{figs/Exp3/ninis_sim63.png}
     \end{minipage}
-    \caption{Ejemplos de series de tiempo generadas para cada grupo en el experimento 3.
+    \caption{Ejemplos de series de tiempo generadas para cada grupo en el Experimento 3.
     Los períodos con un fondo rojo indican los períodos de dependencia para tratados y
     controles, en donde se ve el comportamiento monótono decreciente. La línea
     punteada roja indica el inicio de tratamiento para cada individuo.}
@@ -33,8 +33,8 @@ como se observa en la Figura \ref{fig:time_series_exp3}. Nuevamente, tomamos
 \end{figure}
 
 La Tabla \ref{tab:results_exp3} muestra los valores obtenidos de las diferentes métricas.
-Para nuestra sorpresa, en el caso de las redes, fueron bastante similares - y hasta en
-algunos casos mejores - que los obtenidos en el \hyperref[sec:exp1]{experimento 1}, en
+Para nuestra sorpresa, en el caso de las redes, fueron bastante similares — y hasta en
+algunos casos mejores — que los obtenidos en el \hyperref[sec:exp1]{Experimento 1}, en
 donde teníamos la misma cantidad de períodos observados, de los cuales casi la mitad
 mostraban un compartamiento decreciente con ruido. Esto parece indicar que quitar los
 incrementos en los períodos de dependencia, lo cual disminuye la complejidad del patrón a
@@ -57,9 +57,10 @@ rendimiento menor al visto en dicho escenario, contrario a nuestra hipótesis.
             & $0.53324 \pm 0.01634$ & $0.53398 \pm 0.01638$ & $0.53251 \pm 0.01633$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y sensibilidad sobre la
-    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
-    experimento 3.}
+    \caption{Promedios y desviaciones estándar de las métricas \(F_1\), precisión y
+    cobertura sobre la clase positiva (controles), evaluadas en el conjunto de test en las
+    100 simulaciones del Experimento 3 con las diferentes arquitecturas de redes
+    neuronales y el PSM.}
     \label{tab:results_exp3}
 \end{table}
 
@@ -84,8 +85,8 @@ a los hiperparámetros, en donde nuevamente se observa lo mismo que antes.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura en el experimento 3. Cada celda contiene dicho valor
-    y entre paréntesis el porcentaje de simulaciones en el resultó ser el mejor, de
+    simulaciones en cada arquitectura en el Experimento 3. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
     acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp3}
 \end{table}

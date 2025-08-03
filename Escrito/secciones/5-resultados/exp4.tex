@@ -16,7 +16,7 @@ Sin embargo, al graficar el promedio por grupo de la variable en cada uno de los
 de tiempo, los promedios de tratados y controles se ubican siempre por encima de los de
 los NiNi, como muestra la Figura \ref{fig:mean_time_series_exp4}.
 
-\begin{figure}[H]
+\begin{figure}[ht]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
@@ -32,7 +32,7 @@ los NiNi, como muestra la Figura \ref{fig:mean_time_series_exp4}.
         \centering
         \includegraphics[scale=0.3]{figs/Exp4/ninis_sim13.png}
     \end{minipage}
-    \caption{Ejemplos de series de tiempo generadas para cada grupo en el experimento 4.
+    \caption{Ejemplos de series de tiempo generadas para cada grupo en el Experimento 4.
     La línea punteada roja indica el inicio de tratamiento para cada individuo. En este
     caso, no hay períodos de dependencia y no se observa ninguna tendencia ni en tratados
     ni en controles. A simple vista, no hay nada que diferencie a los individuos
@@ -47,7 +47,7 @@ los NiNi, como muestra la Figura \ref{fig:mean_time_series_exp4}.
     distintos grupos. El promedio se calcula por período con todos los individuos de cada
     grupo. Aquí se puede ver claramente que al disminuir el valor de la media de los
     efectos fijos en el grupo de los NiNi, los promedios por período están todos por
-    debajdo de los de los tratados y controles.}
+    debajo de los de los tratados y controles.}
     \label{fig:mean_time_series_exp4}
 \end{figure}
 
@@ -79,17 +79,19 @@ modelados.
             & $0.20161 \pm 0.01254$ & $0.20182 \pm 0.01252$ & $0.20140 \pm 0.01255$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y cobertura sobre la
-    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
-    experimento 4.}
+    \caption{Promedios y desviaciones estándar de las métricas \(F_1\), precisión y
+    cobertura sobre la clase positiva (controles), evaluadas en el conjunto de test en las
+    100 simulaciones del Experimento 4 con las diferentes arquitecturas de redes
+    neuronales y el PSM.}
     \label{tab:results_exp4}
 \end{table}
 
-Los valores más seleccionados de los hiperparámetros se encuentran en la Tabla
-\ref{tab:hyperparams_exp4}. La principal diferencia con respecto a los escenarios
-anteriores es que aquí la tasa de aprendizaje de 0.0001 resultó como la más elegida. Sin
-embargo, en este escenario no se obtuvieron buenos resultados, por lo que una alternativa
-sería probar con un espacio de búsqueda más amplio.
+Los valores de los hiperparámetros seleccionados con mayor frecuencia como los óptimos se
+encuentran en la Tabla \ref{tab:hyperparams_exp4}. La principal diferencia con respecto a
+los escenarios anteriores es que aquí la tasa de aprendizaje de 0.0001 resultó como la más
+elegida. Sin embargo, en este escenario no se obtuvieron buenos resultados, por lo que una
+alternativa sería probar con un espacio de búsqueda más amplio, o incluso con otras
+arquitecturas de redes neuronales.
 
 \begin{table}[H]
     \centering
@@ -109,8 +111,8 @@ sería probar con un espacio de búsqueda más amplio.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura en el experimento 4. Cada celda contiene dicho valor
-    y entre paréntesis el porcentaje de simulaciones en el resultó ser el mejor, de
+    simulaciones en cada arquitectura en el Experimento 4. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
     acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp4}
 \end{table}

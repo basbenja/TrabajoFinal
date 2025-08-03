@@ -11,10 +11,10 @@ escenarios. De nuevo, el valor de \(\mu_{{EF}_{NiNi}}\) es el mismo que para tra
 y controles (10).
 
 Los resultados, que se reflejan en la Tabla \ref{tab:results_exp7}, muestran una leve
-mejoría con respecto a los del \hyperref[sec:exp6]{experimento 6}. Esto puede deberse en
-gran parte a que, si bien hay una menor cantidad de datos, un poco más de la mitad de los
-períodos observados son de dependencia. Sin embargo, el caso de la precisión sigue siendo
-preocupante.
+mejora con respecto a los del \hyperref[sec:exp6]{Experimento 6}. Esto podría explicarse,
+al menos en parte, por el hecho de que si bien hay una menor cantidad de datos, poco más
+de la mitad de los períodos observados son de dependencia. Sin embargo, la baja precisión
+sigue siendo un aspecto preocupante.
 
 \begin{table}[H]
     \centering
@@ -33,9 +33,10 @@ preocupante.
             & $0.37886 \pm 0.01287$ & $0.37936 \pm 0.01294$ & $0.37837 \pm 0.01282$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y cobertura sobre la
-    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
-    experimento 7.}
+    \caption{Promedios y desviaciones estándar de las métricas \(F_1\), precisión y
+    cobertura sobre la clase positiva (controles), evaluadas en el conjunto de test en las
+    100 simulaciones del Experimento 7 con las diferentes arquitecturas de redes
+    neuronales y el PSM.}
 \end{table}
 
 Los hiperparámetros más seleccionados como los óptimos se encuentran en la Tabla
@@ -63,8 +64,9 @@ anterior, el valor más seleccionado fue el más alto en el espacio de búsqueda
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura. El porcentaje entre paréntesis indica el porcentaje
-    de veces que fue elegido ese valor en las 100 simulaciones.}
+    simulaciones en cada arquitectura en el Experimento 7. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
+    acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
 \end{table}
 
 \end{document}

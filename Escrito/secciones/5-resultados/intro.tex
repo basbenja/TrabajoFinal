@@ -1,44 +1,34 @@
 \documentclass[../../main.tex]{subfiles}
 
 \begin{document}
-En lo que sigue, detallamos las diferentes características presentes en cada uno de los
-escenarios (períodos observados, períodos de dependencia, máxima cantidad de incrementos
-en los períodos de dependencia y media de los efectos fijos de los NiNi) junto con los
-resultados obtenidos con las diferentes arquitecturas de redes neuronales como con el
-método de PSM.
+En lo que sigue, presentamos los resultados obtenidos con las diferentes arquitecturas de
+redes neuronales y con el método de PSM en los escenarios modelados. Para cada uno,
+detallamos los parámetros utilizados: períodos observados (\(L\)), períodos de dependencia
+(\(n_{pd}\)), cantidad máxima de incrementos en los períodos de dependencia (\(m\)) y
+media de los efectos fijos de los NiNi (\(\mu_{{EF}_{NiNi}}\)).
 
-Recordemos que fijados los parámetros de un escenario, generamos 100 simulaciones
-del mismo para poder garantizar resultados estadísticamente significativos. Tanto para
-las diferentes arquitecturas de redes como para el PSM, se midió su rendimiento en
-cada una de las 100 simulaciones para luego poder promediarlo.
+Recordemos que, fijados los parámetros de un escenario, se generaron 100 simulaciones del
+mismo con el objetivo de obtener resultados estadísticamente significativos. Tanto para
+las diferentes arquitecturas de redes como para el PSM, se midió su rendimiento en cada
+una de las 100 simulaciones, y luego se calculó el promedio.
 
 En el caso de las redes neuronales, cada simulación incluyó una búsqueda de
 hiperparámetros sobre 16 combinaciones distintas, realizada automáticamente por Optuna. El
 resultado en cada simulación corresponde a la red entrenada con la mejor combinación de
 hiperparámetros hallada para esa simulación.
 
-Mostramos los promedios del puntaje \(F_1\), la precisión y la cobertura en el conjunto
-de test a lo largo de las 100 simulaciones. Cabe aclarar que, siguiendo lo explicado en la
+Mostramos los promedios del puntaje \(F_1\), la precisión y la cobertura en el conjunto de
+test a lo largo de las 100 simulaciones. Cabe aclarar que, siguiendo lo explicado en la
 Sección \ref{sec:comparacion}, dada una métrica determinada, el resultado obtenido en una
 simulación es el promedio de esa métrica entre las cohortes. Además, para las redes
-neuronales, de cada hiperparámetro, mostramos el valor que fue seleccionado como el óptimo
-con mayor frecuencia.
+neuronales, de cada hiperparámetro mostramos el valor que fue seleccionado como el óptimo
+con mayor frecuencia en las simulaciones correspondientes a un escenario.
 
-Dado que nuestra métrica principal es el puntaje \(F_1\), para verificar que las
-diferencias observadas en dicha métrica entre cada arquitectura y el PSM son
-estadísticamente signficativas, llevamos a cabo pruebas de hipótesis de diferencia de
-medias. Los detalles y resultados de estas pruebas se encuentran en el
-\hyperref[chap:anexo]{Anexo}. En todos los casos, rechazamos la hipótesis nula que
-establece que las medias poblaciones son iguales, lo cual implica que las diferencias
-observadas son estadísticamente signficativas.
+Dado que nuestra métrica principal es el puntaje \(F_1\), verificamos si las diferencias
+observadas en dicha métrica entre cada arquitectura y el PSM son estadísticamente
+significativas mediante pruebas de hipótesis de diferencia de medias. Los detalles y
+resultados de estas pruebas se encuentran en el \hyperref[chap:anexo]{Anexo}. En todos los
+casos, rechazamos la hipótesis nula que plantea la igualdad de las medias poblacionales,
+lo cual implica que las diferencias observadas resultan estadísticamente significativas.
 
-% Como mencionamos previamente, denotamos con:
-% \begin{itemize}[itemsep=0.1cm]
-%     \item \(L\) a la cantidad de períodos observados antes del inicio del programa.
-%     \item \(n_{pd}\) a la cantidad de períodos de dependencia, con \(0 \le n_{pd} < L\).
-%     \item \(m\) a la cantidad de veces, dentro de los períodos de dependencia, en los que
-%     permitimos que el valor de la variable sea mayor al inmediato anterior.
-%     \item \(\mu_{{EF}_{NiNi}}\) a la media de los efectos fijos para los individuos
-%     NiNi.
-% \end{itemize}
 \end{document}

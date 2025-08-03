@@ -2,19 +2,20 @@
 
 \begin{document}
 
-\section{Experimento 6: 25 períodos observados, 10 de dependencia} \label{sec:exp6} En
-este caso, redujimos aún más la cantidad de información disponible. Pasamos de tener 45
-períodos en el escenario más beneficioso a tener 25, casi un 50\% menos de información.
-Los períodos de dependencia son 10 con una cantidad máxima de incrementos de 3. Así, las
-proporciones de períodos de dependencia y observados es de 0.4 y de aumentos sobre
-períodos de dependencia de 0.33, similares a los del \hyperref[sec:exp1]{experimento 1}.
-Tomamos (\(\mu_{{EF}_{NiNi}} = 10\)).
+\section{Experimento 6: 25 períodos observados, 10 de dependencia} \label{sec:exp6}
 
-Como esperábamos, los valores obtenidos de las diferentes métricas son bastante peores que
-los de los experimentos \hyperref[sec:exp1]{1} y \hyperref[sec:exp5]{5}, en donde había
-más datos temporales, y muy similares a los del \hyperref[sec:exp2]{experimento 2}, que
-contaba con la misma cantidad de períodos de dependencia, pero 45 de observación. Sin
-embargo, las redes neuronales siguen superando ampliamente al PSM.
+En este caso, redujimos aún más la cantidad de información disponible. Pasamos de tener 45
+períodos en el escenario más beneficioso a tener 25, casi un 50\% menos de datos. Los
+períodos de dependencia son 10 con una cantidad máxima de incrementos de 3. Así, las
+proporciones de períodos de dependencia y observados es de 0.4 y de aumentos sobre
+períodos de dependencia de 0.33, similares a los del \hyperref[sec:exp1]{Experimento 1}.
+Tomamos \(\mu_{{EF}_{NiNi}} = 10\), igual que en tratados y controles.
+
+Como esperábamos, los valores obtenidos de las diferentes métricas son peores que los de
+los experimentos \hyperref[sec:exp1]{1} y \hyperref[sec:exp5]{5}, en donde había más datos
+temporales; y similares a los del \hyperref[sec:exp2]{Experimento 2}, con la misma
+cantidad de períodos de dependencia pero 45 de observación. Sin embargo, las redes
+neuronales siguen superando ampliamente al PSM.
 
 \begin{table}[H]
     \centering
@@ -32,9 +33,10 @@ embargo, las redes neuronales siguen superando ampliamente al PSM.
             & $0.36480 \pm 0.01572$ & $0.36531 \pm 0.01576$ & $0.36431 \pm 0.01569$ \\
         \hline
     \end{tabular}
-    \caption{Promedio de las métricas \(F_1\), precisión y cobertura sobre la
-    clase positiva (controles) en el conjunto de test en las 100 simulaciones del
-    experimento 6.}
+    \caption{Promedios y desviaciones estándar de las métricas \(F_1\), precisión y
+    cobertura sobre la clase positiva (controles), evaluadas en el conjunto de test en las
+    100 simulaciones del Experimento 6 con las diferentes arquitecturas de redes
+    neuronales y el PSM.}
     \label{tab:results_exp6}
 \end{table}
 
@@ -61,8 +63,9 @@ fue 128, el máximo en el espacio de búsqueda.
         \hline
     \end{tabular}
     \caption{Valores de hiperparámetros seleccionados con mayor frecuencia en las 100
-    simulaciones en cada arquitectura. El porcentaje entre paréntesis indica el porcentaje
-    de veces que fue elegido ese valor en las 100 simulaciones.}
+    simulaciones en cada arquitectura en el Experimento 6. Cada celda contiene dicho valor
+    y entre paréntesis el porcentaje de simulaciones en el que resultó ser el mejor, de
+    acuerdo a la optimización realizada por Optuna mediante validación cruzada.}
     \label{tab:hyperparams_exp6}
 \end{table}
 
