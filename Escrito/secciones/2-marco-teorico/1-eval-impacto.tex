@@ -531,26 +531,38 @@ es que puede aplicarse en el contexto de casi todas las reglas de asignación de
 programa, siempre que se cuente con un grupo que no haya participado en el mismo
 \cite{gertler-2016}.
 
-El supuesto que utilizan estas técnicas para basarse en determinadas características
-observables al construir el grupo de control es que tanto la participación en el programa
-como los resultados potenciales están \textit{únicamente} determinados por estas.
+El supuesto que utilizan estas técnicas para construir el grupo de control en base a
+determinadas características observables es que, condicionando en estas, la participación
+en el programa es independiente de los resultados potenciales. Este supuesto se conoce
+como \textbf{supuesto de independencia condicional} (IC) y establece que, al controlar por
+estas variables, se logra simular una asignación aleatoria al tratamiento, eliminando
+de esta forma el sesgo de autoselección entre tratados y no tratados.
 
-De esta forma, se asume que al condicionar los resultados potenciales de tratados y no
-tratados en determinadas características observables (pertinentes en el programa bajo
-estudio), se logra simular una aleatorización y entonces el sesgo de autoselección es
-igual a cero. Formalmente, si denotamos con \(X\) a los rasgos observables que se están
-teniendo en cuenta, este supuesto se escribe de la siguiente forma\footnote{Nuevamente,
-omitimos el subíndice \(i\) por comodidad.}:
+Formalmente, si denotamos con \(X\) a las variables tenidas en cuenta, este supuesto se
+expresa de la siguiente forma:
 \begin{equation}
-    \mathbb{E}\left[Y(0)|D=1, X\right] = \mathbb{E}\left[Y(0)|D=0, X\right],
+    Y(1), Y(0) \perp D \mid X
 \end{equation}
-y se lo conoce como \textbf{supuesto de independencia condicional} (IC).
+donde \(A \perp B \mid C\) indica que ``\(A\) es independiente de \(B\) condicional en \(C\)''.
 
-Por ejemplo, si se considera que las características en cuestión son el nivel
-socioeconómico (bajo, medio y alto) y la cantidad de hijos, entonces lo que supone este
-método es que individuos con el mismo nivel socioeconómico y la misma cantidad de hijos
-tendrían, en promedio, el mismo resultado si no hubieran recibido el tratamiento,
-independientemente de si efectivamente lo recibieron o no.
+Por ejemplo, supongamos que se quiere evaluar el efecto de un programa de capacitación en
+empleados de una empresa sobre su sueldo. Si se considera que las características
+relevantes son los años de formación académica y de experiencia laboral, entonces el
+supuesto de IC establece que entre empleados con los mismos años de formación y
+experiencia, la decisión de inscribirse en la capacitación es independiente del sueldo que
+obtendrían tanto si participaran del programa como si no lo hicieran. Así, se asume que la
+asignación entre ellos es aleatoria y se puede utilizar a los no tratados como grupo de
+control.
+
+Relacionado al cálculo del ATT, este supuesto implica que \cite{bernal}:
+\begin{equation}
+    \mathbb{E}\left[Y_i(0)|D_i=1, X_i\right] = \mathbb{E}\left[Y_i(0)|D_i=0, X_i\right] = \mathbb{E}\left[Y_i(0)|X_i\right]
+\end{equation}
+
+Siguiendo con el ejemplo, esto significa que, entre empleados con los mismos años de
+formación y experiencia, el resultado que habrían obtenido si no hubieran participado de
+la capacitación (\(Y_i(0)\)) es, en promedio, el mismo tanto para quienes efectivamente
+participaron (\(D_i=1\)) como para quienes no lo hicieron (\(D_i=0\)).
 
 Con esto en mente, la versión más directa de esta metodología consiste en encontrar un
 ``clon'' \textit{para cada individuo tratado} en el grupo de no tratados y contrastar las
