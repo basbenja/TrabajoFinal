@@ -49,15 +49,15 @@ en otros la entrada al programa ocurre de manera secuencial. En este último cas
 de una \textbf{cohorte} o una \textbf{camada} para referirse al conjunto de individuos que
 ingresaron al programa en el mismo momento. Por ejemplo, si los ingresos al programa se
 dieron en dos meses distintos de un determinado año, entonces los individuos que
-ingresaron en primer mes conforman una cohorte, y los que ingresaron en el segundo forman
+ingresaron en el primer mes conforman una cohorte, y los que ingresaron en el segundo forman
 otra cohorte distinta.
 
 Habiendo presentado estas cuestiones, nuestro trabajo se enfoca en programas con entrada
-secuencial y en los que suponemos que los individuos tratados resultaron ser tratados (o
-decidieron inscribirse al programa) debido a la dinámica temporal observada en la variable
+secuencial y en los que se supone que los individuos son tratados (o deciden inscribirse
+al programa) debido a la dinámica temporal observada en la variable
 objetivo\footnote{Recordemos que la variable objetivo es aquella sobre la que se espera
-que el programa tenga un efecto.} de cada uno en períodos anteriores a la asignación al
-programa. Bajo estas circunstancias, el PSM presenta ciertas limitaciones:
+que el programa tenga un efecto.} de cada uno durante períodos previos a la asignación.
+Bajo estas circunstancias, el PSM presenta ciertas limitaciones:
 \begin{itemize}
     \item Por un lado, cuando existen múltiples cohortes, la forma en la que se aplica la
     técnica es de a una cohorte a la vez. Es decir, se estima un modelo para calcular la
@@ -104,14 +104,14 @@ trabajo se pueden resumir en los siguientes puntos:
 
 Nuestras hipótesis son las siguientes:
 \begin{itemize}
-    \item Con una cantidad fija de períodos observados pre-tratamiento, esperamos que las
-    redes neuronales sean más capaces de capturar la tendencia de los períodos de
-    dependencia para obtener un mejor rendimiento que el PSM. Sin embargo, a medida que
-    reducimos la cantidad de períodos de dependencia temporal, consideramos que su
-    desempeño se degradará y se asemejará al del PSM.
+    \item Dada una cantidad fija de períodos observados pre-tratamiento, cuanto mayor sea
+    la cantidad de períodos de dependencia, mayor será la diferencia de desempeño entre
+    las redes neuronales y el PSM, siempre a favor de las redes. Sin embargo, a medida que
+    se reduzca la cantidad de períodos de dependencia, consideramos que su rendimeinto se
+    degradará y tenderá a acercarse al del PSM.
     \item A medida que haya más períodos pre-tratamiento — en otras palabras, mayor
-    disponibilidad de datos —, ambos métodos mejorarán sus resultados, pero siempre
-    el de las redes será consistentemente superior.
+    disponibilidad de datos —, ambos métodos mejorarán sus resultados, aunque el de las
+    redes será consistentemente superior.
     \item Las redes neuronales permitirán entrenar un único modelo que pueda utilizarse en
     diferentes cohortes, a diferencia del PSM, que requiere una estimación por cohorte.
     \item Las redes LSTM superarán el desempeño de las convolucionales, y la combinación de
