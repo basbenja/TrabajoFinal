@@ -3,15 +3,21 @@
 
 \begin{document}
 
+% Carátula
 \input{caratula.tex}
-\cleardoublepage
+\thispagestyle{empty} % sin número en carátula
+\clearpage
+
+% Página en blanco sin número
+\thispagestyle{empty}
+\null
+\clearpage
 
 % Resumen - Palabras clave - Abstract - Keywords
 \subfile{secciones/0-abstract.tex}
 \clearpage
 
 % Agradecimientos
-\thispagestyle{empty}
 \chapter*{Agradecimientos}
 A David y Martín, por acompañarme a lo largo de estos meses enseñándome y guiándome,
 y por su disposición a responder todas las dudas que fueron surgiendo.
@@ -49,7 +55,6 @@ personas para que puedan alcanzar sus sueños. Es un recurso invaluable que nos 
 nuestro país y que hay que defenderlo siempre.
 \clearpage
 
-\thispagestyle{empty}
 \chapter*{Reconocimientos}
 Este trabajo utilizó recursos computacionales de UNC Supercómputo (CCAD) de la Universidad
 Nacional de Córdoba
