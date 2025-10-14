@@ -1,3 +1,15 @@
+import os
+
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+# Relevant paths
+THIS_DIR = os.path.join(BASE_DIR, "Experimentos")
+
+DATA_DIR = os.path.join(BASE_DIR, "data")
+DATA_PARAMS_PATH = os.path.join(BASE_DIR, "data_params.json")
+
+RESULTS_DIR = os.path.join(THIS_DIR, "results")
+
 # optuna related
 OPTUNA_STORAGE = "sqlite:////users/bbas/TrabajoFinal/optuna_db.sqlite3"
 
@@ -16,12 +28,6 @@ EXPERIMENT_TAGS = {
     "author": "bbas",
     "mlflow.note.content": EXPERIMENT_DESCRIPTION
 }
-
-# Simulated databases related
-DATA_DIR = "/home/basbenja/Facultad/TrabajoFinal/data"
-
-# Collected results related
-RESULTS_PATH = "/home/basbenja/Facultad/TrabajoFinal/results"
 
 # Stata related
 STATA_PATH = "/usr/local/stata17"
