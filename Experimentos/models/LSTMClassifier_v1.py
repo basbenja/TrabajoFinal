@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 
 from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
-from models.blocks.lstm_block import LSTMBlock
-from models.blocks.fc_block import FCBlock
+from models.blocks.LSTMBlock import LSTMBlock
+from models.blocks.FCBlock import FCBlock
 
 class LSTMClassifier_v1(nn.Module):
     def __init__(self, input_size, num_layers, hidden_size, dropout):

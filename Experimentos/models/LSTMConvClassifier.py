@@ -3,9 +3,9 @@ import torch.nn as nn
 
 from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
 
-from models.blocks.lstm_block import LSTMBlock
-from models.blocks.conv_block import ConvBlock
-from models.blocks.fc_block import FCBlock
+from models.blocks.LSTMBlock import LSTMBlock
+from models.blocks.ConvBlock import ConvBlock
+from models.blocks.FCBlock import FCBlock
 
 class LSTMConvClassifier(nn.Module):
     def __init__(

@@ -2,24 +2,24 @@ import torch
 import torch.nn as nn
 
 from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
-from models.blocks.lstm_block import LSTMBlock
-from models.blocks.fc_block import FCBlock
 
-class BiLSTMClassifier(nn.Module):
+from models.blocks.LSTMBlock import LSTMBlock
+from models.blocks.FCBlock import FCBlock
+
+class LSTMClassifier_v2(nn.Module):
     def __init__(
         self, lstm_input_size, lstm_hidden_size, lstm_num_layers, n_static_feats, dropout
     ):
-        super(BiLSTMClassifier, self).__init__()
+        super(LSTMClassifier_v2, self).__init__()
 
         self.lstm = LSTMBlock(
             input_size=lstm_input_size,
             hidden_size=lstm_hidden_size,
             num_layers=lstm_num_layers,
-            dropout=dropout,
-            bidirectional=True
+            dropout=dropout
         )
         self.fc = FCBlock(
-            input_size=2*lstm_hidden_size + n_static_feats,
+            input_size=lstm_hidden_size+n_static_feats,
             hidden_sizes=[128],
             dropout=dropout
         )
@@ -31,10 +31,10 @@ class BiLSTMClassifier(nn.Module):
         return logits
 
 
-def define_bilstm_model(trial, input_size):
+def define_lstm_v2_model(trial, input_size):
     hidden_size = trial.suggest_categorical("hidden_size", HIDDEN_SIZES)
     dropout = trial.suggest_categorical("dropout", DROPOUTS)
-    return BiLSTMClassifier(
+    return LSTMClassifier_v2(
         lstm_input_size=input_size,
         lstm_hidden_size=hidden_size,
         lstm_num_layers=N_LAYERS,

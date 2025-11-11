@@ -2,7 +2,7 @@ import torch.nn as nn
 
 from constants import N_LAYERS, HIDDEN_SIZES, DROPOUTS
 
-from models.blocks.fc_block import FCBlock
+from models.blocks.FCBlock import FCBlock
 
 class DenseClassifier(nn.Module):
     def __init__(self, input_size, hidden_sizes, dropout):

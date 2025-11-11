@@ -3,8 +3,8 @@ import torch.nn as nn
 
 from constants import DROPOUTS
 
-from models.blocks.conv_block import ConvBlock
-from models.blocks.fc_block import FCBlock
+from models.blocks.ConvBlock import ConvBlock
+from models.blocks.FCBlock import FCBlock
 
 class Conv_FC(nn.Module):
     def __init__(self, dropout, n_static_feats, conv_out_dim):

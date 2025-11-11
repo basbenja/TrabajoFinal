@@ -1,10 +1,10 @@
-from models.dense import DenseClassifier
-from models.lstm_v1 import LSTMClassifier_v1
-from models.lstm_v2 import LSTMClassifier_v2
-from models.lstm_conv import LSTMConvClassifier
-from models.conv import Conv_FC
-from models.gru import GRUCLassifier
-from models.bilstm import BiLSTMClassifier
+from models.DenseClassifier import DenseClassifier
+from models.LSTMClassifier_v1 import LSTMClassifier_v1
+from models.LSTMClassifier_v2 import LSTMClassifier_v2
+from models.LSTMConvClassifier import LSTMConvClassifier
+from models.Conv_FC import Conv_FC
+from models.GRUClassifier import GRUCLassifier
+from models.BiLSTMClassifier import BiLSTMClassifier
 
 def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
     match model_arch.lower():
