@@ -11,7 +11,8 @@ DATA_PARAMS_PATH = os.path.join(THIS_DIR, "data_params.json")
 RESULTS_DIR = os.path.join(THIS_DIR, "results")
 
 # optuna related
-OPTUNA_STORAGE = "sqlite:////users/bbas/TrabajoFinal/optuna_db.sqlite3"
+SQLITE_DB_PATH = "/users/bbas/TrabajoFinal/optuna_db.sqlite3"
+OPTUNA_STORAGE = f"sqlite:///{SQLITE_DB_PATH}"
 
 # mlflow related
 HOST = "0.0.0.0"
