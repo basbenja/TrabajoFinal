@@ -1,7 +1,9 @@
 import json
+import numpy as np
 import os
 import pandas as pd
 
+from utils.load_data import get_dfs
 from constants import DATA_DIR, TRACKING_SERVER_URI, EXPERIMENT_PREFIX
 from logger import MLflowLogger
 
@@ -86,3 +88,30 @@ class Trainer:
 
         if 'f_beta_score' in self.metrics:
             self.mlflow_logger.log_param("beta", self.beta)
+
+    def _split_train_test(self):
+        type1_df, type2_df, type3_df = get_dfs(self.df, self.req_periods)
+
+        type1_ids = type1_df.index.unique()
+        n_type1_train = 1000
+        type1_train_ids = np.random.choice(type1_ids, n_type1_train, replace=False)
+        type1_train_df = type1_df.loc[type1_train_ids]
+
+        type3_ids = type3_df.index.unique()
+        n_type3_train = 1000
+        type3_train_ids = np.random.choice(type3_ids, n_type3_train, replace=False)
+        type3_train_df = type3_df.loc[type3_train_ids]
+
+        # Los ids que no están en type3_train son para el conjunto de testeo
+        n_type3_test = 2500
+        type3_test_ids = list(set(type3_ids) - set(type3_train_ids))
+        type3_test_ids = np.random.choice(type3_test_ids, n_type3_test, replace=False)
+        type3_test_df = type3_df.loc[type3_test_ids]
+
+        self.train_df = pd.concat([type1_train_df, type3_train_df])
+        self.X_train_df, self.y_train_df = self.train_df[self.feats], self.train_df['target']
+
+        self.test_df = pd.concat([type2_df, type3_test_df])
+        self.X_test_df, self.y_test_df = self.test_df[self.feats], self.test_df['target']
+
+        return self.X_train_df, self.y_train_df, self.X_test_df, self.y_test_df

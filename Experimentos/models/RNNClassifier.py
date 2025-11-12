@@ -29,7 +29,7 @@ class RNNClassifier(nn.Module):
         return out
 
 
-def define_model(trial, input_size):
+def define_rnn_model(trial, input_size):
     hidden_size = trial.suggest_categorical("hidden_size", HIDDEN_SIZES)
     dropout = trial.suggest_categorical("dropout", DROPOUTS)
     return RNNClassifier(input_size, hidden_size, N_LAYERS, dropout)

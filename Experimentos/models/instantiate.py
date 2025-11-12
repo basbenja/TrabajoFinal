@@ -1,10 +1,8 @@
-from models.DenseClassifier import DenseClassifier
-from models.LSTMClassifier_v1 import LSTMClassifier_v1
-from models.LSTMClassifier_v2 import LSTMClassifier_v2
-from models.LSTMConvClassifier import LSTMConvClassifier
-from models.Conv_FC import Conv_FC
-from models.GRUClassifier import GRUCLassifier
-from models.BiLSTMClassifier import BiLSTMClassifier
+import torch
+
+from models import *
+
+from models.blocks.ConvBlock import ConvBlock
 
 def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
     match model_arch.lower():
@@ -72,3 +70,38 @@ def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
             )
 
     return model
+
+
+def get_model_definition_function_and_input_size(model_arch: str) -> tuple[callable, int]:
+    match model_arch.lower():
+        case "lstm_v1":
+            function = define_lstm_v1_model
+            input_size = 2
+        case "lstm_v2":
+            function = define_lstm_v2_model
+            input_size = 1
+        case "gru":
+            function = define_gru_model
+            input_size = 2
+        case "dense":
+            function = define_dense_model
+            input_size = len(FEATS)
+        case "conv":
+            dummy_input = torch.zeros(
+                (1, train_set.temporal_data.shape[1], train_set.temporal_data.shape[2]),
+            )
+            conv_out_dim = ConvBlock(dropout=0)(dummy_input).shape[1]
+            function = lambda trial, input_size: define_conv_model(trial, input_size, conv_out_dim)
+            input_size = 1
+        case "lstm_conv":
+            dummy_input = torch.zeros(
+                (1, train_set.temporal_data.shape[1], train_set.temporal_data.shape[2]),
+            )
+            conv_out_dim = ConvBlock(dropout=0)(dummy_input).shape[1]
+            function = lambda trial, input_size: define_lstm_conv_model(trial, input_size, conv_out_dim)
+            input_size = 1
+        case "bilstm":
+            function = define_bilstm_model
+            input_size = 1
+
+    return function, input_size
