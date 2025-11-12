@@ -1,24 +1,45 @@
 import numpy as np
 
-def gen_next_time_step(base_mean, phi, previous, std_error):
+def gen_next_time_step(
+    base_mean: float,
+    phi: float,
+    previous: float,
+    std_error: float
+) -> float:
+    """
+    Generate the next value in a time series based on an autoregressive model.
+
+    Parameters:
+        - base_mean: The base mean value for the time series.
+        - phi: The autoregressive coefficient.
+        - previous: The previous value in the time series.
+        - std_error: The standard deviation of the error term.
+
+    Returns:
+        - The next value in the time series.
+    """
     return (
         (1 - phi) * base_mean + phi * previous + np.random.normal(0, 1) * std_error
     )
 
+
 def gen_time_series_with_trend(
-    steps,
-    n_per_dep,
-    mean_fixed_effects,
-    std_error,
-    fixed_effect_i,
-    mean_temp_effects,
-    phi,
-    treatment_start,
-    ups_max_count
-):
+    steps: int,
+    n_per_dep: int,
+    treatment_start: int,
+    ups_max_count: int,
+    phi: float,
+    mean_fixed_effects: float,
+    mean_time_effects: float,
+    fixed_effect_i: float,
+    std_error: float
+) -> np.ndarray:
+    """
+    Generate a time series with a trend component.
+    """
     y = np.zeros(steps)
 
-    base_mean = mean_fixed_effects + fixed_effect_i + mean_temp_effects
+    base_mean = mean_fixed_effects + fixed_effect_i + mean_time_effects
     y[0] = base_mean + np.random.normal(0, 1) * std_error
 
     trend_start = treatment_start - n_per_dep

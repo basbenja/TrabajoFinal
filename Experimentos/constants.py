@@ -5,8 +5,8 @@ BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 # Relevant paths
 THIS_DIR = os.path.join(BASE_DIR, "Experimentos")
 
-DATA_DIR = os.path.join(BASE_DIR, "data")
-DATA_PARAMS_PATH = os.path.join(BASE_DIR, "data_params.json")
+DATA_DIR = os.path.join(THIS_DIR, "datasets")
+DATA_PARAMS_PATH = os.path.join(THIS_DIR, "data_params.json")
 
 RESULTS_DIR = os.path.join(THIS_DIR, "results")
 
