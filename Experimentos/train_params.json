@@ -10,6 +10,5 @@
     ],
     "beta": 0.5,
     "log_to_mlflow": "True",
-    "scale_data": "False",
-    "comparison": "ML"
+    "scale_data": "False"
 }
