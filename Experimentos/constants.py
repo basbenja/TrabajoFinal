@@ -8,6 +8,8 @@ THIS_DIR = os.path.join(BASE_DIR, "Experimentos")
 DATA_DIR = os.path.join(THIS_DIR, "datasets")
 DATA_PARAMS_PATH = os.path.join(THIS_DIR, "data_params.json")
 
+TRAIN_PARAMS_PATH = os.path.join(THIS_DIR, "train_params.json")
+
 RESULTS_DIR = os.path.join(THIS_DIR, "results")
 
 # optuna related
@@ -19,13 +21,8 @@ HOST = "0.0.0.0"
 PORT = 8080
 TRACKING_SERVER_URI = f"http://{HOST}:{PORT}"
 
-EXPERIMENT_PREFIX = "TF"
-EXPERIMENT_DESCRIPTION = (
-    "Final Project of Computer Science MS at FAMAF-UNC: Control Group Identification "
-    "with Neural Networks"
-)
+EXPERIMENT_DESCRIPTION = "Control Group Identification with Neural Networks"
 EXPERIMENT_TAGS = {
-    "project_name": "Trabajo Final",
     "author": "bbas",
     "mlflow.note.content": EXPERIMENT_DESCRIPTION
 }

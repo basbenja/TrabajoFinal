@@ -10,7 +10,7 @@ from statsmodels.tsa.arima_process import arma_generate_sample
 from constants import DATA_DIR
 from data.helpers import gen_next_time_step, gen_time_series_with_trend
 
-class DataGenerator():
+class DataGenerator:
     DF_COLUMNS = [
         'sim', 'id', 'inicio_prog', 't', 'y', 'y_cf', 'tratado', 'control'
     ]
@@ -269,5 +269,5 @@ class DataGenerator():
         for sim in range(1, self.n_simulations+1):
             print(f"Generating simulation {sim} of {self.n_simulations}...")
             df = self._generate_single_simulation(sim)
-            sim_path = os.path.join(self.group_path, f"Simulacion{sim}.dta")
+            sim_path = os.path.join(self.group_path, f"simulation_{sim}.dta")
             df.to_stata(sim_path, write_index=False)

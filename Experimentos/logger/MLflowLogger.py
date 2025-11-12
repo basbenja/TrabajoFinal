@@ -8,7 +8,11 @@ from pathlib import Path
 
 class MLflowLogger:
     def __init__(
-        self, enable_logging, tracking_server_uri, experiment_name, experiment_tags
+        self,
+        enable_logging: bool,
+        tracking_server_uri: str,
+        experiment_name: str,
+        experiment_tags: dict = None
     ):
         self.enable_logging = enable_logging
         if enable_logging:
