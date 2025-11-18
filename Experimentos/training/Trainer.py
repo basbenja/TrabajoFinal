@@ -3,9 +3,12 @@ import numpy as np
 import os
 import pandas as pd
 
-from utils.load_data import get_dfs
 from constants import DATA_DIR, TRACKING_SERVER_URI, EXPERIMENT_PREFIX
+from data import ModelDatasetPreparer
 from logger import MLflowLogger
+from sklearn.utils.class_weight import compute_class_weight
+from torch.utils.data import Dataset
+from utils.load_data import get_groups_dfs
 
 class Trainer:
     def __init__(self, params: dict) -> "Trainer":
@@ -90,7 +93,7 @@ class Trainer:
             self.mlflow_logger.log_param("beta", self.beta)
 
     def _split_train_test(self):
-        type1_df, type2_df, type3_df = get_dfs(self.df, self.req_periods)
+        type1_df, type2_df, type3_df = get_groups_dfs(self.df, self.req_periods)
 
         type1_ids = type1_df.index.unique()
         n_type1_train = 1000
@@ -114,4 +117,22 @@ class Trainer:
         self.test_df = pd.concat([type2_df, type3_test_df])
         self.X_test_df, self.y_test_df = self.test_df[self.feats], self.test_df['target']
 
+        self.weights = compute_class_weight(
+            class_weight="balanced", classes=np.unique(self.y_train_df), y=self.y_train_df
+        )
+
         return self.X_train_df, self.y_train_df, self.X_test_df, self.y_test_df
+
+    def get_datasets(self) -> tuple[Dataset, Dataset]:
+        preparer = ModelDatasetPreparer(
+            static_feats=self.stat_feats,
+            temp_feats=self.temp_feats,
+            model=self.model_arch
+        )
+        train_set, test_set = preparer.build_datasets(
+            self.X_train_df,
+            self.X_test_df,
+            self.y_train_df,
+            self.y_test_df
+        )
+        return train_set, test_set

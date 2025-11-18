@@ -18,5 +18,5 @@ if __name__ == "__main__":
     trainer = Trainer(params)
     print(f"Training model for group: {trainer.group}, simulation: {trainer.simulation}\n")
 
-    # 3. ...
-    # 4. ...
+    # 3. Get test and train datasets
+    train_set, test_set = trainer.get_datasets()
