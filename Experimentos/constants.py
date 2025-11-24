@@ -1,11 +1,14 @@
 import os
 
+from dotenv import load_dotenv
+_ = load_dotenv(override=True)
+
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 # Relevant paths
 THIS_DIR = os.path.join(BASE_DIR, "Experimentos")
 
-DATA_DIR = os.path.join(THIS_DIR, "datasets")
+DATA_DIR = os.getenv("DATA_DIR", os.path.join(THIS_DIR, "datasets"))
 DATA_PARAMS_PATH = os.path.join(THIS_DIR, "data_params.json")
 
 TRAIN_PARAMS_PATH = os.path.join(THIS_DIR, "train_params.json")
@@ -13,8 +16,8 @@ TRAIN_PARAMS_PATH = os.path.join(THIS_DIR, "train_params.json")
 RESULTS_DIR = os.path.join(THIS_DIR, "results")
 
 # optuna related
-SQLITE_DB_PATH = os.path.join(THIS_DIR, "optuna_studies.sqlite3")
-OPTUNA_STORAGE = f"sqlite:///{SQLITE_DB_PATH}"
+OPTUNA_SQLITE_PATH = os.getenv("OPTUNA_SQLITE_PATH", os.path.join(THIS_DIR, "optuna_studies.sqlite3"))
+OPTUNA_STORAGE = f"sqlite:///{OPTUNA_SQLITE_PATH}"
 
 # mlflow related
 HOST = "0.0.0.0"
@@ -41,5 +44,5 @@ BATCH_SIZES = [32, 64, 128]
 LEARNING_RATES = [1e-4, 1e-3, 1e-2]
 
 # Hyperparameter Optimization Parallelization
-N_PROCESSES = 8
+N_PROCESSES = 3
 TRIALS_PER_PROCESS = 2
