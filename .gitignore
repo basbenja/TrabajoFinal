@@ -1,9 +1,14 @@
-__pycache__/
-*.sqlite3
-*.dta
-*.log
-playground.ipynb
+# Escrito
 *.gz
 *.bbl
+*.log
 Escrito/secciones/**/*.pdf
+
+# Experimentos
+__pycache__/
+*.sqlite3
+Experimentos/test.ipynb
+Experimentos/datasets/
 Experimentos/output_simulations/
+Experimentos/train_params.json
+Experimentos/data_params.json
