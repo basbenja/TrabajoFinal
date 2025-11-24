@@ -1,8 +1,18 @@
 import torch
 
-from models import *
+from torch.utils.data import Dataset
 
+from models import *
 from models.blocks.ConvBlock import ConvBlock
+from utils.data_classes import TemporalStaticDataset
+
+# TODO: pensar cómo se puede mejorar todo esto. Creo que lo mejor sería que cada
+# modelo tenga como su propia configuración.
+# La función `define_...` se necesita para hacer la optimización de hiperparámetros
+# con Optuna
+# El input_size se necesita para definir el modelo (número de features de entrada)
+# y varía según el modelo. Se necesita para la optimización y para la instancia final.
+
 
 def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
     match model_arch.lower():
@@ -72,7 +82,19 @@ def instantiate_model(model_arch, input_size, hyperparams, **kwargs):
     return model
 
 
-def get_model_definition_function_and_input_size(model_arch: str) -> tuple[callable, int]:
+def compute_conv_output_dim(train_set: Dataset) -> int:
+    """Compute the output dimension of the conv block."""
+    dummy_input = torch.zeros(
+        (1, train_set.temporal_data.shape[1], train_set.temporal_data.shape[2])
+    )
+    conv_out_dim = ConvBlock(dropout=0)(dummy_input).shape[1]
+    return conv_out_dim
+
+
+def get_model_factory(model_arch: str, train_set: Dataset, feats: list[str]) -> tuple[callable, int]:
+    if 'conv' in model_arch.lower() and not isinstance(train_set, TemporalStaticDataset):
+        raise ValueError(f"Model architecture {model_arch} requires temporal and static features.")
+
     match model_arch.lower():
         case "lstm_v1":
             function = define_lstm_v1_model
@@ -85,19 +107,13 @@ def get_model_definition_function_and_input_size(model_arch: str) -> tuple[calla
             input_size = 2
         case "dense":
             function = define_dense_model
-            input_size = len(FEATS)
+            input_size = len(feats)
         case "conv":
-            dummy_input = torch.zeros(
-                (1, train_set.temporal_data.shape[1], train_set.temporal_data.shape[2]),
-            )
-            conv_out_dim = ConvBlock(dropout=0)(dummy_input).shape[1]
+            conv_out_dim = compute_conv_output_dim(train_set)
             function = lambda trial, input_size: define_conv_model(trial, input_size, conv_out_dim)
             input_size = 1
         case "lstm_conv":
-            dummy_input = torch.zeros(
-                (1, train_set.temporal_data.shape[1], train_set.temporal_data.shape[2]),
-            )
-            conv_out_dim = ConvBlock(dropout=0)(dummy_input).shape[1]
+            conv_out_dim = compute_conv_output_dim(train_set)
             function = lambda trial, input_size: define_lstm_conv_model(trial, input_size, conv_out_dim)
             input_size = 1
         case "bilstm":

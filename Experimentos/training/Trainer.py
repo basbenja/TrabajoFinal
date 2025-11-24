@@ -9,7 +9,8 @@ from torch.utils.data import Dataset
 from constants import DATA_DIR, TRACKING_SERVER_URI, EXPERIMENT_PREFIX
 from data import ModelDatasetPreparer
 from logger import MLflowLogger
-from training import Optimizer
+from models import *
+from .Optimizer import Optimizer
 from utils.load_data import get_groups_dfs
 
 class Trainer:
@@ -148,3 +149,16 @@ class Trainer:
         )
 
         return train_set, test_set
+
+    def optimize(self, train_set: Dataset, model_factory: callable, input_size: int) -> dict:
+        """Run hyperparameter optimization."""
+        optimizer = Optimizer(
+            model_factory=model_factory,
+            input_size=input_size,
+            train_set=train_set,
+            metrics=self.metrics,
+            weights=self.weights,
+            beta=self.beta,
+        )
+
+        return optimizer.run()

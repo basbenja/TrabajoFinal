@@ -44,7 +44,7 @@ def objective_cv(
             model, valid_loader, loss_fn, metrics,
             train_features_mean=None, beta=kwargs['beta']
         )
-        
+
         for metric, value in metrics_values.items():
             scores[metric].append(round(value, 6))
 
@@ -137,6 +137,6 @@ def pareto_front(study, metrics, directions):
         print(f"\tTrial number: {best_trial.number}")
         print(f"\tValues: {best_trial.values}")
         print(f"\tParams: {best_trial.params}")
-    
+
     fig = plot_pareto_front(study, target_names=metrics)
     return fig
