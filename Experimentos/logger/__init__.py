@@ -1,3 +1,3 @@
-from MLflowLogger import MLflowLogger
+from .MLflowLogger import MLflowLogger
 
 __all__ = ["MLflowLogger"]
