@@ -179,16 +179,16 @@ class DataGenerator:
         mean_TE = TEs.mean()
 
         # Generate groups
-        y_treated, tr_starts = self._generate_group(label='tratados' , mean_TE=mean_TE)
-        y_control, _         = self._generate_group(label='controles', mean_TE=mean_TE)
-        y_nini               = self._generate_nini(mean_TE=mean_TE)
+        y_treated, tr_starts_indexes = self._generate_group(label='tratados' , mean_TE=mean_TE)
+        y_control, _                 = self._generate_group(label='controles', mean_TE=mean_TE)
+        y_nini                       = self._generate_nini(mean_TE=mean_TE)
 
         # Apply treatment
         y_treated_cf = y_treated.copy()
 
         # Apply treatment only to the treated units
         for i in range(self.n_treated):
-            tr_start_index = tr_starts[i]
+            tr_start_index = tr_starts_indexes[i]
             tr_length = self.T - tr_start_index
             if self.hetecohorte == 1:
                 arparams = np.array([self.phi_treated, 0])
@@ -221,7 +221,7 @@ class DataGenerator:
             y_cf = np.zeros((n*self.T, 1))
             for i in range(n):
                 ids[(i*self.T):((i+1)*self.T)] = i if label == 'tratados' else i + self.n_treated
-                tr_starts[(i*self.T):((i+1)*self.T)] = tr_starts[i]
+                tr_starts[(i*self.T):((i+1)*self.T)] = tr_starts_indexes[i]
                 steps[(i*self.T):((i+1)*self.T)] = np.arange(self.T).reshape(self.T, 1)
                 y[(i*self.T):((i+1)*self.T)] = np.reshape(dataset[i,:], (self.T, 1))
                 y_cf[(i*self.T):((i+1)*self.T)] = (
