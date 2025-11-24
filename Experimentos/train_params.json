@@ -1,14 +1,13 @@
 {
     "group": 1,
-    "simulation": 86,
+    "simulation": 3,
     "model_arch": "lstm_v2",
-    "metrics": [
-        "f1_score"
-    ],
-    "directions": [
-        "maximize"
-    ],
+    "metrics": {
+        "f1_score": "maximize"
+    },
     "beta": 0.5,
-    "log_to_mlflow": "True",
-    "scale_data": "False"
+    "log_to_mlflow": "False",
+
+    "n_type3_train": 100,
+    "n_type3_test": 100
 }

@@ -1,5 +1,4 @@
 import json
-import os
 
 from pprint import pp
 
@@ -7,16 +6,22 @@ from training import Trainer
 from constants import TRAIN_PARAMS_PATH
 
 if __name__ == "__main__":
-    # 1. Read the params for the training process
+    # 1. Read params
     with open(TRAIN_PARAMS_PATH, 'r') as f:
         params = json.load(f)
     print("Parameters for training:")
     pp(params)
-    print()
 
-    # 2. Instatiate a Trainer
+    # 2. Create trainer (fast, safe)
     trainer = Trainer(params)
-    print(f"Training model for group: {trainer.group}, simulation: {trainer.simulation}\n")
+    print(
+        f"Training model {trainer.model_arch} for group: {trainer.group}, "
+        f"simulation: {trainer.simulation}\n"
+    )
 
-    # 3. Get test and train datasets
+    # 3. Load and prepare data (explicit steps)
+    trainer.load_data()
+    trainer.prepare_train_test_split()
+
+    # 4. Get datasets
     train_set, test_set = trainer.get_datasets()

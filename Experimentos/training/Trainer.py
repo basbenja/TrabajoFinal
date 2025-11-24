@@ -3,24 +3,42 @@ import numpy as np
 import os
 import pandas as pd
 
+from sklearn.utils.class_weight import compute_class_weight
+from torch.utils.data import Dataset
+
 from constants import DATA_DIR, TRACKING_SERVER_URI, EXPERIMENT_PREFIX
 from data import ModelDatasetPreparer
 from logger import MLflowLogger
-from sklearn.utils.class_weight import compute_class_weight
-from torch.utils.data import Dataset
+from training import Optimizer
 from utils.load_data import get_groups_dfs
 
 class Trainer:
-    def __init__(self, params: dict) -> "Trainer":
+    def __init__(self, params: dict):
+        """Lightweight initialization - validation and setup only."""
         self.params = params
 
         self._parse_params()
+        self._validate_paths()
+
         self._set_up_logger()
+
         self._load_group_params()
 
-        self.df = pd.read_stata(self.dataset_path)
+    def _validate_paths(self) -> None:
+        """Validate paths exist without loading data."""
+        if not os.path.exists(self.group_path):
+            raise ValueError(f"Group path {self.group_path} does not exist.")
+        if not os.path.exists(self.dataset_path):
+            raise ValueError(f"Dataset path {self.dataset_path} does not exist.")
 
-        self._log_params()
+    def load_data(self) -> None:
+        """Explicitly load the dataset when needed."""
+        if hasattr(self, 'df') and self.df is not None:
+            return  # Already loaded
+
+        print(f"Loading data from {self.dataset_path}...")
+        self.df = pd.read_stata(self.dataset_path)
+        print(f"Loaded {len(self.df)} rows")
 
     def _parse_params(self) -> None:
         """
@@ -30,24 +48,18 @@ class Trainer:
 
         self.group = f"group_{p["group"]}"
         self.group_path = os.path.join(DATA_DIR, self.group)
-        if not os.path.exists(self.group_path):
-            raise ValueError(f"Group path {self.group_path} does not exist.")
 
         self.simulation = p["simulation"]
         self.dataset_path = os.path.join(self.group_path, f"simulation_{self.simulation}.dta")
-        if not os.path.exists(self.dataset_path):
-            raise ValueError(f"Dataset path {self.dataset_path} does not exist.")
 
         self.model_arch = p["model_arch"]
         self.metrics: list[str] = p["metrics"]
-        self.directions: list[str] = p["directions"]
-        if len(self.metrics) != len(self.directions):
-            raise ValueError("Length of metrics and directions must be the same.")
-
         self.beta = p["beta"]
 
         self.log_to_mlflow = (p['log_to_mlflow'] == "True")
-        self.scale_data = (p['scale_data'] == "True")
+
+        self.n_type3_train = p["n_type3_train"]
+        self.n_type3_test = p["n_type3_test"]
 
     def _set_up_logger(self) -> None:
         """
@@ -83,7 +95,6 @@ class Trainer:
             "filepath": self.dataset_path,
             "required_periods": self.req_periods,
             "n_per_dep": self.n_per_dep,
-            "scale_data": self.scale_data,
             "model_arch": self.model_arch,
             "metrics": self.metrics,
             "ups_max_count": self.group_params['ups_max_count']
@@ -92,47 +103,48 @@ class Trainer:
         if 'f_beta_score' in self.metrics:
             self.mlflow_logger.log_param("beta", self.beta)
 
-    def _split_train_test(self):
+    def prepare_train_test_split(self) -> None:
+        if not hasattr(self, 'df') or self.df is None:
+            self.load_data()
+
+        self._log_params()
+
         type1_df, type2_df, type3_df = get_groups_dfs(self.df, self.req_periods)
 
-        type1_ids = type1_df.index.unique()
-        n_type1_train = 1000
-        type1_train_ids = np.random.choice(type1_ids, n_type1_train, replace=False)
-        type1_train_df = type1_df.loc[type1_train_ids]
-
         type3_ids = type3_df.index.unique()
-        n_type3_train = 1000
-        type3_train_ids = np.random.choice(type3_ids, n_type3_train, replace=False)
+        type3_train_ids = np.random.choice(type3_ids, self.n_type3_train, replace=False)
         type3_train_df = type3_df.loc[type3_train_ids]
 
         # Los ids que no están en type3_train son para el conjunto de testeo
-        n_type3_test = 2500
         type3_test_ids = list(set(type3_ids) - set(type3_train_ids))
-        type3_test_ids = np.random.choice(type3_test_ids, n_type3_test, replace=False)
+        type3_test_ids = np.random.choice(type3_test_ids, self.n_type3_test, replace=False)
         type3_test_df = type3_df.loc[type3_test_ids]
 
-        self.train_df = pd.concat([type1_train_df, type3_train_df])
+        self.train_df = pd.concat([type1_df, type3_train_df])
         self.X_train_df, self.y_train_df = self.train_df[self.feats], self.train_df['target']
 
         self.test_df = pd.concat([type2_df, type3_test_df])
         self.X_test_df, self.y_test_df = self.test_df[self.feats], self.test_df['target']
 
         self.weights = compute_class_weight(
-            class_weight="balanced", classes=np.unique(self.y_train_df), y=self.y_train_df
+            class_weight="balanced",
+            classes=np.unique(self.y_train_df),
+            y=self.y_train_df
         )
 
-        return self.X_train_df, self.y_train_df, self.X_test_df, self.y_test_df
-
     def get_datasets(self) -> tuple[Dataset, Dataset]:
+        """Build PyTorch datasets from prepared data."""
         preparer = ModelDatasetPreparer(
             static_feats=self.stat_feats,
             temp_feats=self.temp_feats,
             model=self.model_arch
         )
+
         train_set, test_set = preparer.build_datasets(
             self.X_train_df,
             self.X_test_df,
             self.y_train_df,
             self.y_test_df
         )
+
         return train_set, test_set

@@ -13,7 +13,7 @@ TRAIN_PARAMS_PATH = os.path.join(THIS_DIR, "train_params.json")
 RESULTS_DIR = os.path.join(THIS_DIR, "results")
 
 # optuna related
-SQLITE_DB_PATH = "/users/bbas/TrabajoFinal/optuna_db.sqlite3"
+SQLITE_DB_PATH = os.path.join(THIS_DIR, "optuna_studies.sqlite3")
 OPTUNA_STORAGE = f"sqlite:///{SQLITE_DB_PATH}"
 
 # mlflow related
@@ -21,6 +21,7 @@ HOST = "0.0.0.0"
 PORT = 8080
 TRACKING_SERVER_URI = f"http://{HOST}:{PORT}"
 
+EXPERIMENT_PREFIX = "Control_Group_Identification"
 EXPERIMENT_DESCRIPTION = "Control Group Identification with Neural Networks"
 EXPERIMENT_TAGS = {
     "author": "bbas",
